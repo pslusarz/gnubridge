@@ -1,0 +1,369 @@
+package org.gnubridge.search;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.gnubridge.core.Card;
+import org.gnubridge.core.Game;
+import org.gnubridge.core.Player;
+import org.gnubridge.core.Trick;
+
+public class Node {
+	public static final int UNITNITIALIZED = -1;
+
+	public static final int PRUNE_ALPHA = 0;
+
+	public static final int PRUNE_BETA = 1;
+
+	private static final int ALPHA_UNINIT = -1;
+
+	static final int BETA_UNINIT = 14;
+
+	int value;
+
+	Node parent;
+	
+
+	List<Node> children;
+
+	private int playerTurn;
+
+	private int[] tricksTaken = new int[2];
+
+	private Card cardPlayed;
+
+	boolean trimmed = false;
+
+	private boolean isLeaf = false;
+
+	private boolean pruned = false;
+
+	private int pruneType;
+
+
+	private Player playerCardPlayed;
+
+	public Node(Node parent) {
+		this.parent = parent;
+		children = new ArrayList<Node>();
+		if (parent != null) {
+			parent.children.add(this);
+		}
+		tricksTaken[Player.WEST_EAST] = UNITNITIALIZED;
+		tricksTaken[Player.NORTH_SOUTH] = UNITNITIALIZED;
+	}
+
+	public Node(Node parent, int playerTurn) {
+		this(parent);
+		setPlayerTurn(playerTurn);
+	}
+
+	public List<Integer> getMoves() {
+		if (parent == null) {
+			return new ArrayList<Integer>();
+		} else {
+			List<Integer> result = parent.getMoves();
+			result.add(new Integer(parent.getMyIndex(this)));
+			return result;
+		}
+	}
+
+	private int getMyIndex(Node node) {
+		return children.indexOf(node);
+	}
+
+	public void setPlayerTurn(int direction) {
+		this.playerTurn = direction;
+
+	}
+
+	public void setTricksTaken(int pair, int i) {
+		tricksTaken[pair] = i;
+	}
+
+	public boolean isLastVisitedChild(Node child) {
+		boolean hasThisChild = false;
+		for (Node sibling : children) {
+			if (sibling == null) {
+				continue;
+			}
+			if (sibling == child) {
+				hasThisChild = true;
+			} else {
+				if (!sibling.isLeaf() && !sibling.trimmed()
+						&& !sibling.isPruned()) {
+					return false;
+				}
+			}
+		}
+		return hasThisChild;
+	}
+
+	private boolean isLeaf() {
+		return isLeaf;
+	}
+
+
+
+	public boolean trimmed() {
+		return trimmed;
+	}
+
+	public void trimAllPriorChildren(int i) {
+		for (int j = 0; j < i; j++) {
+			if (children.get(j) != null ) {
+				children.get(j).trimmed = true;
+			}
+			children.set(j, null);
+		}
+
+	}
+
+	public int getCurrentPair() {
+		return Player.matchPair(getPlayerTurn());
+	}
+
+	int getPlayerTurn() {
+		return this.playerTurn;
+	}
+
+	public int getTricksTaken(int pair) {
+		return tricksTaken[pair];
+	}
+
+	public void setCardPlayed(Card card) {
+		this.cardPlayed = card;
+
+	}
+
+	public Card getCardPlayed() {
+		return this.cardPlayed;
+	}
+
+	public Node getBestMove() {
+		for (Node move : children) {
+			if (move != null && !move.isPruned()) {
+				return move;
+			}
+		}
+		return null;
+	}
+
+	public void printOptimalPath(Game g) {
+		Node move = getBestMove();
+		if (move == null) {
+			for (int moveIdx : getMoves()) {
+				Trick currentTrick = g.getCurrentTrick();
+				System.out.println(g.getNextToPlay()
+						+ ": "
+						+ g.getNextToPlay().getPossibleMoves(currentTrick).get(
+								moveIdx));
+				g.doNextCard(moveIdx);
+				if (currentTrick.isDone()) {
+					System.out.println("  Trick taken by "
+							+ g.getPlayer(g.getWinnerIndex(currentTrick)));
+				}
+			}
+		} else {
+			move.printOptimalPath(g);
+		}
+
+	}
+
+	public void printLeafs() {
+		if (isLeaf()) {
+			System.out.println("*********\nNode: " + getMoves());
+			System.out.println(printMoves());
+		} else {
+			for (Node child : children) {
+				if (child != null) {
+					child.printLeafs();
+				}
+			}
+		}
+	}
+
+	public String printMoves() {
+		if (isRoot()) {
+			return "";
+		} else {
+			return parent.printMoves() + getPlayerCardPlayed() + ": "
+					+ getCardPlayed() + (isPruned() ? " (pruned)" : "") + "\n";
+		}
+	}
+
+	private boolean isRoot() {
+		return parent == null;
+	}
+
+	public void setLeaf(boolean b) {
+		isLeaf = b;
+
+	}
+
+	public void setPruned(boolean b, int type) {
+		this.pruned = b;
+		this.pruneType = type;
+	}
+
+	public boolean isPruned() {
+		if (parent == null) {
+			return pruned;
+		} else if (pruned) {
+			return true;
+		} else {
+			return parent.isPruned();
+		}
+	}
+
+	public boolean isAlpha() {
+		return getMaxPlayer() == getCurrentPair();
+	}
+
+	Node getRoot() {
+
+		if (parent == null) {
+			return this;
+		} else {
+			return parent.getRoot();
+		}
+	}
+
+	public boolean isAlphaPruned() {
+		return isPruned() && (getPruneType() == PRUNE_ALPHA);
+	}
+
+	public boolean isBetaPruned() {
+		return isPruned() && (getPruneType() == PRUNE_BETA);
+	}
+
+	public int getPruneType() {
+		if (parent == null) {
+			return pruneType;
+		} else if (pruned) {
+			return pruneType;
+		} else {
+			return parent.getPruneType();
+		}
+	}
+
+
+	public boolean hasAlphaAncestor() {
+		if (parent == null) {
+			return false;
+		} else if (parent.isAlpha()) {
+			return true;
+		} else {
+			return parent.hasAlphaAncestor();
+		}
+	}
+
+
+
+
+	public boolean hasBetaAncestor() {
+		if (parent == null) {
+			return false;
+		} else if (parent.isBeta()) {
+			return true;
+		} else {
+			return parent.hasBetaAncestor();
+		}
+	}
+
+	boolean isBeta() {
+		return !isAlpha();
+	}
+
+	public void betaPrune() {
+		if (parent != null && !parent.isBeta()) {
+			parent.setTricksTaken(Player.WEST_EAST, getTricksTaken(Player.WEST_EAST));
+			parent.setTricksTaken(Player.NORTH_SOUTH, getTricksTaken(Player.NORTH_SOUTH));
+			parent.setPruned(true, Node.PRUNE_BETA);
+			parent.betaPrune();
+		}
+
+	}
+
+	public void setPlayerCardPlayed(Player player) {
+		playerCardPlayed = player;
+
+	}
+
+	public Player getPlayerCardPlayed() {
+		return playerCardPlayed;
+	}
+
+	public boolean hasAncestor(Node ancestor) {
+		if (this == ancestor) {
+			return true;
+		} else if (parent == null) {
+			return false;
+		} else {
+			return parent.hasAncestor(ancestor);
+		}
+	}
+	
+	public void alphaPrune() {
+
+		if (parent != null && !parent.isAlpha()) {
+			parent.setTricksTaken(Player.WEST_EAST, getTricksTaken(Player.WEST_EAST));
+			parent.setTricksTaken(Player.NORTH_SOUTH, getTricksTaken(Player.NORTH_SOUTH));
+			parent.setPruned(true, Node.PRUNE_ALPHA);
+			parent.alphaPrune();
+		}
+
+	}
+
+	public int getLocalAlpha() {
+		if (isAlpha()) {
+			int max = ALPHA_UNINIT;
+			for (Node child : children) {
+			  if (child.getTricksTaken(getMaxPlayer()) > max) {
+				  max = child.getTricksTaken(getMaxPlayer());
+			  }
+			}
+			return max;
+		} else {
+			return parent.getLocalAlpha();
+		}
+	}
+	
+	public int getLocalBeta() {
+		if (isBeta()) {
+			int min = BETA_UNINIT;
+			for (Node child : children) {
+			  if (child.getTricksTaken(getMaxPlayer()) != -1 && 
+					  child.getTricksTaken(getMaxPlayer()) < min) {
+				  min = child.getTricksTaken(getMaxPlayer());
+			  }
+			}
+			return min;
+		} else {
+			return parent.getLocalBeta();
+		}
+	}
+
+	private int getMaxPlayer() {
+		return getRoot().getCurrentPair();
+	}
+	
+	
+
+	public boolean shouldBeAlphaPruned() {
+		return parent != null && parent.parent != null && hasAlphaAncestor() && !parent.isAlpha()
+	    && (getTricksTaken(getMaxPlayer()) <= parent.getLocalAlpha());
+	}
+
+	public boolean shouldBeBetaPruned() {
+		return parent != null && parent.parent != null && hasBetaAncestor() && !parent.isBeta()
+	    && (getTricksTaken(getMaxPlayer()) >= parent.getLocalBeta());
+	
+	}
+	
+	@Override
+	public String toString() {
+		return "Node "+getMoves().toString();
+	}
+
+}

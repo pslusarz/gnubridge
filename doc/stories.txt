@@ -1,0 +1,21 @@
+1. Initial release
+Game is initialized with the following information:
+- contract color
+- each player's cards
+For each trick, game asks players in clockwise order for a card from his suit.  
+If a player plays an illegal card, game does not accept it and asks again. First trick starts with E, 
+every other trick starts with the player who took the previous trick. Game keeps track of who took what tricks. 
+Game ends when players have no more cards. 
+
+2. Add human player to initialization. Human can be E, N/S (N is dummy), or W. Display a basic game state, and 
+prompt human for his move(s).
+
+3. Each computer player plays a card that lets him or his partner take the trick. Computer players see everyone's cards.
+
+4. Minimax, alpha-beta pruning, per-move time limit.
+
+5. Implement computer players that can't see other players' unplayed cards.   
+
+
+
+ 
