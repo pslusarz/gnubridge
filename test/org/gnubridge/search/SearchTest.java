@@ -471,7 +471,9 @@ public class SearchTest extends TestCase {
 		Node root = new Node(null);
 		root.setPlayerTurn(Player.WEST);
 		root.setPruned(true, Node.PRUNE_ALPHA);
+		@SuppressWarnings("unused")
 		Node child1 = new Node(root);
+		@SuppressWarnings("unused")
 		Node child2 = new Node(root);
 		Search s = new Search(root);
 		s.trim(root);

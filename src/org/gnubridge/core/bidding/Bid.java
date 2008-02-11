@@ -11,7 +11,7 @@ public class Bid {
 	private int value;
 	private Trump trump;
 
-	protected Bid(int v, Trump c) {
+	public Bid(int v, Trump c) {
 		value = v;
 		trump = c;
 	}

@@ -19,6 +19,7 @@ public class NodeTest extends TestCase {
 
 	public void testGetMovesSecondChild() {
 		Node root = new Node(null);
+		@SuppressWarnings("unused")
 		Node child1 = new Node(root);
 		Node child2 = new Node(root);
 		assertEquals(1, child2.getMoves().size());
@@ -27,6 +28,7 @@ public class NodeTest extends TestCase {
 
 	public void testGetMovesGrandchild() {
 		Node root = new Node(null);
+		@SuppressWarnings("unused")
 		Node child1 = new Node(root);
 		Node child2 = new Node(root);
 		Node grandChild = new Node(child2);

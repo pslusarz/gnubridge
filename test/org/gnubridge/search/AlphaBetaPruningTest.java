@@ -21,6 +21,7 @@ public class AlphaBetaPruningTest extends TestCase {
 		node_0.setTricksTaken(Player.WEST_EAST, 1);
 		Node node_1 = new Node(root, Player.SOUTH);
 		Node node_1_0 = new Node(node_1, Player.EAST);
+		@SuppressWarnings("unused")
 		Node node_1_1 = new Node(node_1, Player.EAST);
 
 		MockGame g = new MockGame();
@@ -47,6 +48,7 @@ public class AlphaBetaPruningTest extends TestCase {
 		node_0.setTricksTaken(Player.WEST_EAST, 1);
 		Node node_1 = new Node(root, Player.SOUTH);
 		Node node_1_0 = new Node(node_1, Player.EAST);
+		@SuppressWarnings("unused")
 		Node node_1_1 = new Node(node_1, Player.EAST);
 
 		MockGame g = new MockGame();
@@ -100,6 +102,7 @@ public class AlphaBetaPruningTest extends TestCase {
 		node_0.setTricksTaken(Player.NORTH_SOUTH, 1);
 		Node node_1 = new Node(root, Player.WEST);
 		Node node_1_0 = new Node(node_1, Player.EAST);
+		@SuppressWarnings("unused")
 		Node node_1_1 = new Node(node_1, Player.EAST);
 
 		MockGame g = new MockGame();
@@ -125,6 +128,7 @@ public class AlphaBetaPruningTest extends TestCase {
 		Node node_0 = new Node(root, Player.NORTH);
 		node_0.setTricksTaken(Player.WEST_EAST, 1);
 		Node node_1 = new Node(root, Player.NORTH);
+		@SuppressWarnings("unused")
 		Node node_1_0 = new Node(node_1, Player.WEST);
 		Node node_1_1 = new Node(node_1, Player.WEST);
 		Node node_1_1_0 = new Node(node_1_1, Player.WEST);
@@ -162,6 +166,7 @@ public class AlphaBetaPruningTest extends TestCase {
 		Node node_1_0 = new Node(node_1, Player.NORTH);
 
 		Node node_1_0_0 = new Node(node_1_0, Player.EAST);
+		@SuppressWarnings("unused")
 		Node node_1_0_1 = new Node(node_1_0, Player.EAST);
 
 		MockGame g = new MockGame();
@@ -207,6 +212,7 @@ public class AlphaBetaPruningTest extends TestCase {
 		node_0_0.setTricksTaken(Player.WEST_EAST, 1);
 		Node node_0_1 = new Node(node_0, Player.EAST);
 		Node node_0_1_0 = new Node(node_0_1, Player.EAST);
+		@SuppressWarnings("unused")
 		Node node_0_1_1 = new Node(node_0_1, Player.EAST);
 
 		MockGame g = new MockGame();
@@ -267,6 +273,7 @@ public class AlphaBetaPruningTest extends TestCase {
 		Node node_0 = new Node(node_00, Player.EAST);
 		node_0.setTricksTaken(Player.WEST_EAST, 0);
 		Node node_1 = new Node(node_00, Player.EAST);
+		@SuppressWarnings("unused")
 		Node node_1_0 = new Node(node_1, Player.SOUTH);
 		Node node_1_1 = new Node(node_1, Player.SOUTH);
 		Node node_1_1_0 = new Node(node_1_1, Player.SOUTH);
@@ -300,6 +307,7 @@ public class AlphaBetaPruningTest extends TestCase {
 		Node node_0 = new Node(node_00, Player.EAST);
 		node_0.setTricksTaken(Player.WEST_EAST, 0);
 		Node node_1 = new Node(node_00, Player.EAST);
+		@SuppressWarnings("unused")
 		Node node_1_0 = new Node(node_1, Player.SOUTH);
 		Node node_1_1 = new Node(node_1, Player.EAST);
 		Node node_1_1_0 = new Node(node_1_1, Player.SOUTH);

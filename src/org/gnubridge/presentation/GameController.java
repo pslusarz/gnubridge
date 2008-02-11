@@ -7,14 +7,14 @@ import org.gnubridge.core.deck.NoTrump;
 public class GameController {
 	private Game game;
 
-	private TextDisplay display;
+	//private TextDisplay display;
 
 	Player human;
 
 	public GameController() {
 		game = new Game(NoTrump.i());
 		GameUtils.initializeRandom(game, 13);
-		display = new TextDisplay();
+		//display = new TextDisplay();
 	}
 
 //	public void run() {
