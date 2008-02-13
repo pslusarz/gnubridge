@@ -5,11 +5,8 @@ import java.util.List;
 
 import org.gnubridge.core.Hand;
 import org.gnubridge.core.bidding.rules.BiddingRule;
+import org.gnubridge.core.bidding.rules.Open1Color;
 import org.gnubridge.core.bidding.rules.Open1NT;
-import org.gnubridge.core.deck.Clubs;
-import org.gnubridge.core.deck.Color;
-import org.gnubridge.core.deck.Diamonds;
-import org.gnubridge.core.deck.Trump;
 
 public class BiddingAgent {
 

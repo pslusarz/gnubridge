@@ -1,7 +1,9 @@
-package org.gnubridge.core.bidding;
+package org.gnubridge.core.bidding.rules;
 
 import org.gnubridge.core.Hand;
-import org.gnubridge.core.bidding.rules.BiddingRule;
+import org.gnubridge.core.bidding.Auctioneer;
+import org.gnubridge.core.bidding.Bid;
+import org.gnubridge.core.bidding.PointCalculator;
 import org.gnubridge.core.deck.Clubs;
 import org.gnubridge.core.deck.Color;
 import org.gnubridge.core.deck.Diamonds;
@@ -19,7 +21,7 @@ public class Open1Color extends BiddingRule {
 	@Override
 	protected Bid prepareBid() {
       Bid result = null;
-		if (pc.getCombinedPoints() >= 13) {
+		if (auction.isOpeningBid() && pc.getCombinedPoints() >= 13) {
 			Color highest = null;
 			for (Color color : Color.list) {
 				if (hand.getColorLength(color) >= 5) {

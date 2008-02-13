@@ -18,7 +18,7 @@ public class Open1NT extends BiddingRule {
 
 	@Override
 	protected Bid prepareBid() {
-		if (pc.getHighCardPoints() >= 16 && pc.getHighCardPoints() <= 18 && pc.isBalanced()) {
+		if (auction.isOpeningBid() && pc.getHighCardPoints() >= 16 && pc.getHighCardPoints() <= 18 && pc.isBalanced()) {
 			return new Bid(1, NoTrump.i());
 		} else {
 			return null;
