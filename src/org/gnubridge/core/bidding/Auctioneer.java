@@ -64,4 +64,8 @@ public class Auctioneer {
 			return false;
 		}
 	}
+	
+	public Bid getPartnersBid() {
+		return beforeLast;
+	}
 }
