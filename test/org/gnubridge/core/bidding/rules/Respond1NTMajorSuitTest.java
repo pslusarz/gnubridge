@@ -57,4 +57,8 @@ public class Respond1NTMajorSuitTest extends TestCase {
 	  assertNull(rule.getBid());
   }
   
+  public void testFourOfColor() {
+	  fail("todo");
+  }
+  
 }

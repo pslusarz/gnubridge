@@ -7,6 +7,7 @@ import org.gnubridge.core.Hand;
 import org.gnubridge.core.bidding.rules.BiddingRule;
 import org.gnubridge.core.bidding.rules.Open1Color;
 import org.gnubridge.core.bidding.rules.Open1NT;
+import org.gnubridge.core.bidding.rules.Opener1NTRespondsToPArtnersMajorSuitResponse;
 import org.gnubridge.core.bidding.rules.Respond1NTMajorSuit;
 
 public class BiddingAgent {
@@ -18,6 +19,7 @@ public class BiddingAgent {
 		rules.add(new Open1NT(a, h));
 		rules.add(new Open1Color(a,h));
 		rules.add(new Respond1NTMajorSuit(a,h));
+		rules.add(new Opener1NTRespondsToPArtnersMajorSuitResponse(a,h));
 		rules.add(new AlwaysPass());
 	}
 

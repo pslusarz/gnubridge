@@ -64,8 +64,10 @@ public class AuctioneerTest extends TestCase {
 		a.bid(new Pass());
 		assertFalse("South responding to partners 1NT is not an opening bid", a.isOpeningBid());
 		a.bid(new Bid(2, Clubs.i()));
-		assertFalse("West already passed on 1st round, so it is not an opening bid", a.isOpeningBid());
-		
-		
+		assertFalse("West already passed on 1st round, so it is not an opening bid", a.isOpeningBid());	
+	}
+	
+	public void testCanTraversePairsHistoryWithGetPartnersBid() {
+		fail("todo");
 	}
 }

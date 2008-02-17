@@ -68,4 +68,9 @@ public class Auctioneer {
 	public Bid getPartnersBid() {
 		return beforeLast;
 	}
+
+	public Bid getPartnersBid(Bid partnersBid) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

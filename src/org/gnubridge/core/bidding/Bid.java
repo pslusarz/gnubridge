@@ -26,11 +26,11 @@ public class Bid {
 		}
 	}
 
-	private int getValue() {
+	public int getValue() {
 		return value;
 	}
 
-	private Trump getTrump() {
+	public Trump getTrump() {
 		return trump;
 	}
 
