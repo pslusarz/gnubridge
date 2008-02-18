@@ -1,5 +1,8 @@
 package org.gnubridge.core.bidding;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.gnubridge.core.Direction;
 import org.gnubridge.core.East;
 import org.gnubridge.core.North;
@@ -12,14 +15,16 @@ public class Auctioneer {
 	private int passCount;
 	private Bid highBid;
 	private int bidCount;
-	private Bid last;
-	private Bid beforeLast;
+	private Call last;
+	private Call beforeLast;
+	private List<Call> calls;
 
 	public Auctioneer(Direction firstToBid) {
 		this.nextToBid = firstToBid;
 		bidCount = 0;
 		last = null;
 		beforeLast = null;
+		calls = new ArrayList<Call>();
 	}
 
 	public Direction getNextToBid() {
@@ -27,9 +32,10 @@ public class Auctioneer {
 	}
 
 	public void bid(Bid bid) {
-		bidCount++;
 		beforeLast = last;
-		last = bid;
+		last = new Call(bid, nextToBid, bidCount);
+		calls.add(last);
+		bidCount++;
 		if (new Pass().equals(bid)) {
 			passCount++;
 		} else {
@@ -58,19 +64,27 @@ public class Auctioneer {
 	public boolean isOpeningBid() {
 		if (bidCount > 3) {
 			return false;
-		} else if (beforeLast == null || beforeLast.equals(new Pass())) {
+		} else if (beforeLast == null || beforeLast.getBid().equals(new Pass())) {
 			return true;
 		} else {
 			return false;
 		}
 	}
-	
-	public Bid getPartnersBid() {
+
+	public Call getPartnersLastCall() {
 		return beforeLast;
 	}
 
-	public Bid getPartnersBid(Bid partnersBid) {
-		// TODO Auto-generated method stub
-		return null;
+	public Call getPartnersCall(Call playerCall) {
+		int current = calls.indexOf(playerCall);
+		if (current >= 2) {
+			return calls.get(current - 2);
+		} else {
+			return null;
+		}
+	}
+
+	public Call getLastCall() {
+		return last;
 	}
 }

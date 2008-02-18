@@ -19,7 +19,7 @@ public class Opener1NTRespondsToPArtnersMajorSuitResponseTest extends TestCase {
 		a.bid(new Pass());
 		a.bid(new Bid(3, Hearts.i()));
 		a.bid(new Pass());
-		Opener1NTRespondsToPArtnersMajorSuitResponse rule = new Opener1NTRespondsToPArtnersMajorSuitResponse(
+		Opener1NTRespondsToPartnersMajorSuitResponse rule = new Opener1NTRespondsToPartnersMajorSuitResponse(
 				a, new Hand("K,2", "A,3,2", "A,Q,8,6", "K,J,5,3"));
 		assertEquals(new Bid(4, Hearts.i()), rule.getBid());
 
@@ -28,7 +28,7 @@ public class Opener1NTRespondsToPArtnersMajorSuitResponseTest extends TestCase {
 		a2.bid(new Pass());
 		a2.bid(new Bid(3, Spades.i()));
 		a2.bid(new Pass());
-		Opener1NTRespondsToPArtnersMajorSuitResponse triangulate = new Opener1NTRespondsToPArtnersMajorSuitResponse(
+		Opener1NTRespondsToPartnersMajorSuitResponse triangulate = new Opener1NTRespondsToPartnersMajorSuitResponse(
 				a2, new Hand("A,Q,3", "K,2", "A,8,6,3", "K,J,5,3"));
 		assertEquals(new Bid(4, Spades.i()), triangulate.getBid());
 	}
@@ -39,7 +39,7 @@ public class Opener1NTRespondsToPArtnersMajorSuitResponseTest extends TestCase {
 		a.bid(new Pass());
 		a.bid(new Bid(3, Hearts.i()));
 		a.bid(new Pass());
-		Opener1NTRespondsToPArtnersMajorSuitResponse rule = new Opener1NTRespondsToPArtnersMajorSuitResponse(
+		Opener1NTRespondsToPartnersMajorSuitResponse rule = new Opener1NTRespondsToPartnersMajorSuitResponse(
 				a, new Hand("K,3,2", "A,3", "A,Q,8,6", "K,J,5,3"));
 		assertEquals(new Bid(3, NoTrump.i()), rule.getBid());
 	}
@@ -49,7 +49,7 @@ public class Opener1NTRespondsToPArtnersMajorSuitResponseTest extends TestCase {
 		a.bid(new Pass());
 		a.bid(new Bid(3, Diamonds.i()));
 		a.bid(new Pass());
-		Opener1NTRespondsToPArtnersMajorSuitResponse rule = new Opener1NTRespondsToPArtnersMajorSuitResponse(
+		Opener1NTRespondsToPartnersMajorSuitResponse rule = new Opener1NTRespondsToPartnersMajorSuitResponse(
 				a, new Hand("K,3,2", "A,3", "A,Q,8,6", "K,J,5,3"));
 		assertNull(rule.getBid());
 	}
@@ -59,28 +59,58 @@ public class Opener1NTRespondsToPArtnersMajorSuitResponseTest extends TestCase {
 		a.bid(new Pass());
 		a.bid(new Bid(2, Spades.i()));
 		a.bid(new Pass());
-		Opener1NTRespondsToPArtnersMajorSuitResponse rule = new Opener1NTRespondsToPArtnersMajorSuitResponse(
+		Opener1NTRespondsToPartnersMajorSuitResponse rule = new Opener1NTRespondsToPartnersMajorSuitResponse(
 				a, new Hand("K,3,2", "A,3", "A,Q,8,6", "K,J,5,3"));
+		assertEquals(new Pass(), rule.getBid());
+	}
+	public void test2NTInvitational16HCP() {
+		Auctioneer a = new Auctioneer(West.i());
+		a.bid(new Bid(1, NoTrump.i()));
+		a.bid(new Pass());
+		a.bid(new Bid(2, NoTrump.i()));
+		a.bid(new Pass());
+		Opener1NTRespondsToPartnersMajorSuitResponse rule = new Opener1NTRespondsToPartnersMajorSuitResponse(
+				a, new Hand("K,3,2", "A,3", "A,J,8,6", "K,J,5,3"));
+		assertEquals(new Pass(), rule.getBid());
+	}
+	public void test2NTInvitational18HCP() {
+		Auctioneer a = new Auctioneer(West.i());
+		a.bid(new Bid(1, NoTrump.i()));
+		a.bid(new Pass());
+		a.bid(new Bid(2, NoTrump.i()));
+		a.bid(new Pass());
+		Opener1NTRespondsToPartnersMajorSuitResponse rule = new Opener1NTRespondsToPartnersMajorSuitResponse(
+				a, new Hand("K,3,2", "A,3", "A,K,8,6", "K,J,5,3"));
+		assertEquals(new Bid(3, NoTrump.i()), rule.getBid());
+	}
+	public void test3NTSignoff() {
+		Auctioneer a = new Auctioneer(West.i());
+		a.bid(new Bid(1, NoTrump.i()));
+		a.bid(new Pass());
+		a.bid(new Bid(3, NoTrump.i()));
+		a.bid(new Pass());
+		Opener1NTRespondsToPartnersMajorSuitResponse rule = new Opener1NTRespondsToPartnersMajorSuitResponse(
+				a, new Hand("K,3,2", "A,3", "A,K,8,6", "K,J,5,3"));
 		assertEquals(new Pass(), rule.getBid());
 	}
 	public void testDoNotRespondIfPartnersBidWasAnOpening() {
 		Auctioneer a = new Auctioneer(West.i());
 		a.bid(new Bid(3, Spades.i()));
 		a.bid(new Pass());
-		Opener1NTRespondsToPArtnersMajorSuitResponse rule = new Opener1NTRespondsToPArtnersMajorSuitResponse(
+		Opener1NTRespondsToPartnersMajorSuitResponse rule = new Opener1NTRespondsToPartnersMajorSuitResponse(
 				a, new Hand("K,3,2", "A,3", "A,Q,8,6", "K,J,5,3"));
 		assertNull(rule.getBid());
 	}
-//	public void testDoNotRespondIfPartnersBidWasNotRespondingTo1NT() {
-//		Auctioneer a = new Auctioneer(West.i());
-//		a.bid(new Bid(1, NoTrump.i()));
-//		a.bid(new Pass());
-//		a.bid(new Bid(4, Spades.i()));
-//		a.bid(new Pass());
-//		Opener1NTRespondsToPArtnersMajorSuitResponse rule = new Opener1NTRespondsToPArtnersMajorSuitResponse(
-//				a, new Hand("K,3,2", "A,3", "A,Q,8,6", "K,J,5,3"));
-//		assertEquals(new Pass(), rule.getBid());
-//	}
+	public void testDoNotRespondIfPartnersBidWasNotRespondingTo1NT() {
+		Auctioneer a = new Auctioneer(West.i());
+		a.bid(new Bid(1, Spades.i()));
+		a.bid(new Pass());
+		a.bid(new Bid(3, Spades.i()));
+		a.bid(new Pass());
+		Opener1NTRespondsToPartnersMajorSuitResponse rule = new Opener1NTRespondsToPartnersMajorSuitResponse(
+				a, new Hand("K,3,2", "A,3", "A,Q,8,6", "K,J,5,3"));
+		assertEquals(null, rule.getBid());
+	}
 
 	// test that no bid occurs if prior bids are out of order
 }

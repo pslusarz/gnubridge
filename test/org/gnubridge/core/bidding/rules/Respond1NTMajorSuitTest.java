@@ -28,12 +28,7 @@ public class Respond1NTMajorSuitTest extends TestCase {
 			  "6,5,3", "Q,4,3"));
 	  assertEquals(new Bid(2, Hearts.i()), triangulate.getBid());
   }
-  
-  public void testSevenPointColorTooShort() {
-	  Respond1NTMajorSuit rule = new Respond1NTMajorSuit(a, new Hand("9,8,7,6", "A,3",
-			  "7,6,5,3,2", "Q,4,3"));
-	  assertNull(rule.getBid());
-  } 
+
   
   public void testTenPoint() {
 	  Respond1NTMajorSuit rule = new Respond1NTMajorSuit(a, new Hand("9,8,7,6,2", "A,3",
@@ -44,12 +39,6 @@ public class Respond1NTMajorSuitTest extends TestCase {
 	  assertEquals(new Bid(3, Hearts.i()), triangulate.getBid());
   }
   
-  public void testTenPointColorTooShort() {
-	  Respond1NTMajorSuit rule = new Respond1NTMajorSuit(a, new Hand("9,8,7,6", "A,3",
-			  "K,6,5,3,2", "Q,4,3"));
-	  assertNull(rule.getBid());
-  }
-  
   public void testDoNotFireWhenNotRespondingTo1NT() {
 	  Auctioneer not1NT = new Auctioneer(West.i());
 	  Respond1NTMajorSuit rule = new Respond1NTMajorSuit(not1NT, new Hand("9,8,7,6,2", "A,3",
@@ -58,7 +47,27 @@ public class Respond1NTMajorSuitTest extends TestCase {
   }
   
   public void testFourOfColor() {
-	  fail("todo");
+	  Respond1NTMajorSuit rule = new Respond1NTMajorSuit(a, new Hand("10,9,8,7,6,2", "A,3",
+			  "K,5,3", "Q,4,3"));
+	  assertEquals(new Bid(4, Spades.i()), rule.getBid());
+	  Respond1NTMajorSuit triangulate = new Respond1NTMajorSuit(a, new Hand("A,3", "10,9,8,7,6,2", 
+			  "K,5,3", "Q,4,3"));
+	  assertEquals(new Bid(4, Hearts.i()), triangulate.getBid());
+  }
+  public void testSevenPointUnder5CardsMajor() {
+	  Respond1NTMajorSuit rule = new Respond1NTMajorSuit(a, new Hand("9,8,7,6", "A,3,2",
+			  "6,5,3", "K,4,3"));
+	  assertEquals(new Pass(), rule.getBid());
+  }
+  public void test8To9PointUnder5CardsMajor() {
+	  Respond1NTMajorSuit rule = new Respond1NTMajorSuit(a, new Hand("K,8,7,6", "A,3,2",
+			  "6,5,3", "Q,4,3"));
+	  assertEquals(new Bid(2, NoTrump.i()), rule.getBid());
+  }
+  public void testUpTo14PointsUnder5CardsMajor() {
+	  Respond1NTMajorSuit rule = new Respond1NTMajorSuit(a, new Hand("K,8,7,6", "A,3,2",
+			  "A,J,3", "Q,4,3"));
+	  assertEquals(new Bid(3, NoTrump.i()), rule.getBid());
   }
   
 }

@@ -1,6 +1,7 @@
-package org.gnubridge.core.bidding;
+package org.gnubridge.core.bidding.rules;
 
-import org.gnubridge.core.bidding.rules.BiddingRule;
+import org.gnubridge.core.bidding.Bid;
+import org.gnubridge.core.bidding.Pass;
 
 public class AlwaysPass extends BiddingRule {
 

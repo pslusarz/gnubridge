@@ -7,8 +7,10 @@ import org.gnubridge.core.North;
 import org.gnubridge.core.South;
 import org.gnubridge.core.West;
 import org.gnubridge.core.deck.Clubs;
+import org.gnubridge.core.deck.Diamonds;
 import org.gnubridge.core.deck.Hearts;
 import org.gnubridge.core.deck.NoTrump;
+import org.gnubridge.core.deck.Spades;
 
 public class AuctioneerTest extends TestCase {
 	public void testFirstToBid() {
@@ -68,6 +70,27 @@ public class AuctioneerTest extends TestCase {
 	}
 	
 	public void testCanTraversePairsHistoryWithGetPartnersBid() {
-		fail("todo");
+		Auctioneer a = new Auctioneer(West.i());
+		a.bid(new Bid(1, Clubs.i()));
+		a.bid(new Pass());
+		a.bid(new Bid(1, Diamonds.i()));
+		a.bid(new Bid(1, Hearts.i()));
+		a.bid(new Pass());
+		a.bid(new Pass());
+		a.bid(new Bid(1, Spades.i()));
+		a.bid(new Bid(1, NoTrump.i()));
+		Call c8 = a.getLastCall();
+		assertEquals(new Bid(1, NoTrump.i()), c8.getBid());
+		Call c6 = a.getPartnersCall(c8);
+		assertNotNull(c6);
+		assertEquals(new Pass(), c6.getBid());
+		Call c4 = a.getPartnersCall(c6);
+		assertEquals(new Bid(1, Hearts.i()), c4.getBid());
+		Call c2 = a.getPartnersCall(c4);
+		assertEquals(new Pass(), c2.getBid());
+		assertNull(a.getPartnersCall(c2));
+		
+		Call c7 = a.getPartnersLastCall();
+		assertEquals(new Bid(1, Spades.i()), c7.getBid());
 	}
 }
