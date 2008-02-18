@@ -10,11 +10,11 @@ import org.gnubridge.core.deck.Hearts;
 import org.gnubridge.core.deck.NoTrump;
 import org.gnubridge.core.deck.Spades;
 
-public class Respond1NTMajorSuit extends BiddingRule {
+public class Respond1NT extends BiddingRule {
 
 	private PointCalculator pc;
 
-	public Respond1NTMajorSuit(Auctioneer a, Hand h) {
+	public Respond1NT(Auctioneer a, Hand h) {
 		super(a, h);
 		pc = new PointCalculator(hand);
 	}

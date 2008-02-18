@@ -11,9 +11,9 @@ import org.gnubridge.core.deck.Hearts;
 import org.gnubridge.core.deck.NoTrump;
 import org.gnubridge.core.deck.Spades;
 
-public class Opener1NTRespondsToPartnersMajorSuitResponse extends BiddingRule {
+public class Opener1NTRespondsToPartner extends BiddingRule {
 
-	public Opener1NTRespondsToPartnersMajorSuitResponse(Auctioneer a, Hand h) {
+	public Opener1NTRespondsToPartner(Auctioneer a, Hand h) {
 		super(a, h);
 	}
 

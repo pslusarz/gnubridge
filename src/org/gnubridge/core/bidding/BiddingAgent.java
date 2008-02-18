@@ -8,8 +8,8 @@ import org.gnubridge.core.bidding.rules.AlwaysPass;
 import org.gnubridge.core.bidding.rules.BiddingRule;
 import org.gnubridge.core.bidding.rules.Open1Color;
 import org.gnubridge.core.bidding.rules.Open1NT;
-import org.gnubridge.core.bidding.rules.Opener1NTRespondsToPartnersMajorSuitResponse;
-import org.gnubridge.core.bidding.rules.Respond1NTMajorSuit;
+import org.gnubridge.core.bidding.rules.Opener1NTRespondsToPartner;
+import org.gnubridge.core.bidding.rules.Respond1NT;
 
 public class BiddingAgent {
 
@@ -19,8 +19,8 @@ public class BiddingAgent {
 		rules = new ArrayList<BiddingRule>();
 		rules.add(new Open1NT(a, h));
 		rules.add(new Open1Color(a,h));
-		rules.add(new Respond1NTMajorSuit(a,h));
-		rules.add(new Opener1NTRespondsToPartnersMajorSuitResponse(a,h));
+		rules.add(new Respond1NT(a,h));
+		rules.add(new Opener1NTRespondsToPartner(a,h));
 		rules.add(new AlwaysPass());
 	}
 
