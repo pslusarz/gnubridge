@@ -112,5 +112,4 @@ public class Opener1NTRespondsToPartnerTest extends TestCase {
 		assertEquals(null, rule.getBid());
 	}
 
-	// test that no bid occurs if prior bids are out of order
 }
