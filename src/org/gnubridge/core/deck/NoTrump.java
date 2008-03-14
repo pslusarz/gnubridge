@@ -12,11 +12,6 @@ public class NoTrump extends Trump {
 	public static NoTrump i() {
 		return instance ;
 	}	
-	
-//	@Override
-//	public int toInt() {
-//		throw new RuntimeException("No Trump has no unicode char");
-//	}
 
 	@Override
 	public String toString() {
