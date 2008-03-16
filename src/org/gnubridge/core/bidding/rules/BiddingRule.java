@@ -18,12 +18,11 @@ public abstract class BiddingRule {
 	
 	public Bid getBid() {
 		Bid candidate = prepareBid();
-		if (candidate != null) {
-			if (!candidate.equals(new Pass()) && !candidate.greaterThan(auction.getHighBid())) {
-				candidate = null;
-			}
+		if (auction == null || auction.isValid(candidate)) {
+			return candidate;
+		} else {
+			return null;
 		}
-		return candidate;
 	}
 	
 }

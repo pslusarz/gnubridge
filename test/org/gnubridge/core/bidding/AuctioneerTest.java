@@ -93,4 +93,8 @@ public class AuctioneerTest extends TestCase {
 		Call c7 = a.getPartnersLastCall();
 		assertEquals(new Bid(1, Spades.i()), c7.getBid());
 	}
+	
+	/**
+	 * TODO: test isValid()
+	 */
 }

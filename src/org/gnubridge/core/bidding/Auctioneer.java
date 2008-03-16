@@ -31,6 +31,8 @@ public class Auctioneer {
 		return nextToBid;
 	}
 
+	
+	 
 	public void bid(Bid bid) {
 		beforeLast = last;
 		last = new Call(bid, nextToBid, bidCount);
@@ -86,5 +88,15 @@ public class Auctioneer {
 
 	public Call getLastCall() {
 		return last;
+	}
+
+	public boolean isValid(Bid candidate) {
+		boolean result = false;
+		if (candidate != null) {
+			if (candidate.equals(new Pass()) || candidate.greaterThan(getHighBid())) {
+				result = true;
+			}
+		}
+		return result;
 	}
 }

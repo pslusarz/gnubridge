@@ -87,9 +87,18 @@ public class Bid {
 			return false;
 		}
 	}
-	
+
 	@Override
 	public String toString() {
-		return Integer.toString(getValue())+" "+trump.toString();
+		return Integer.toString(getValue()) + " " + trump.toString();
+	}
+
+	public static Bid makeBid(int bidSize, String t) {
+		Trump tr = Trump.instance(t);
+		if (tr == null) {
+			return new Pass();
+		} else {
+			return new Bid(bidSize, tr);
+		}
 	}
 }

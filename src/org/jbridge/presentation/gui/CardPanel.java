@@ -22,7 +22,6 @@ public class CardPanel extends JPanel {
 	@Override
     public void paint(Graphics g) {
        Image image = new ImageIcon("./data/images/cards/jfitz/"+card.toString().replaceAll(" ", "-")+".png").getImage();
-       System.out.println(card);
        g.drawImage(image, 0, 0, IMAGE_WIDTH, IMAGE_HEIGHT, null);
     }
 

@@ -198,4 +198,8 @@ public class Player {
 		return matchPair((direction + 1) % 4);
 	}
 
+	public Direction getDirection2() {
+		return Direction.instance(direction);
+	}
+
 }

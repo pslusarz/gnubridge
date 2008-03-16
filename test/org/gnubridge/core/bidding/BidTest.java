@@ -48,6 +48,9 @@ public class BidTest extends TestCase {
 		assertTrue(new Bid(1, Diamonds.i()).greaterThan(new Pass()));
 	}
 	
-
+/**
+ * TODO: test makeBid
+ * TODO: test Trump.instance()
+ */
 
 }

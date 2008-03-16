@@ -25,4 +25,8 @@ public class Call {
 	public int getSequence() {
 		return sequence;
 	}
+	@Override
+	public String toString() {
+		return direction.toString()+": "+bid;
+	}
 }
