@@ -13,7 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
 public class GBContainer {
-	private JPanel panel;
+	protected JPanel panel;
 	private final MainWindow owner;
 	private String message = "";
 	private ButtonGroup radioButtons;
@@ -33,7 +33,7 @@ public class GBContainer {
 		};
 		panel.setLayout(new BoxLayout(panel,BoxLayout.Y_AXIS));
 		panel.setMinimumSize(new Dimension(200,200));
-		panel.setSize(200,200);
+		//panel.setSize(200,200);
 		
 		panel.setAlignmentX(JPanel.LEFT_ALIGNMENT);
 		subpanels = new ArrayList<JPanel>();
@@ -41,8 +41,6 @@ public class GBContainer {
 
 	public void placeOn(JFrame parent) {
 	  parent.getContentPane().add(panel);
-	  //panel.setLayout(parent.getLayout());
-		
 	}
 
 	public void addSelection(String... selections) {
@@ -55,10 +53,6 @@ public class GBContainer {
 			radioButtons.add(button);
 			subpanel.add(button);
 		}
-
-
-		
-		
 		
 	}
 

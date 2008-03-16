@@ -10,15 +10,24 @@ import org.gnubridge.core.deck.Color;
 public class Hand {
 	List<Card> cards;
 
-	public Hand(Card... cards) {
+	private Hand() {
 		this.cards = new ArrayList<Card>();
+	}
+	
+	public Hand(Card... cards) {
+		this();
 		for (Card card : cards) {
 			this.cards.add(card);
 		}
 	}
+	
+	public Hand(List<Card> cards) {
+	  this();
+	  this.cards.addAll(cards);
+	}
 
 	public Hand(String... colorSuits) {
-		this.cards = new ArrayList<Card>();
+		this();
 		int i = 0;
 		for (String colorSuit : colorSuits) {
 			cards.addAll(createCards(colorSuit, Color.list[i]));
@@ -73,6 +82,14 @@ public class Hand {
 
 	public int getColorLength(Color color) {
 		return getColorHi2Low(color).size();
+	}
+
+	public List<Card> getCardsHighToLow() {
+		List<Card> orderedCards = new ArrayList<Card>();
+		for (Color color : Color.list) {
+		  orderedCards.addAll(getColorHi2Low(color));	
+		}
+		return orderedCards;
 	}
 
 	

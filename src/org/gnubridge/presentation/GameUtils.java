@@ -45,16 +45,20 @@ public class GameUtils {
 	}
 	
 	public static void initializeRandom(Game g, int cardCount) {
+      initializeRandom(g.getPlayers(), cardCount);
+		
+	}
+	
+	public static void initializeRandom(List<Player> players, int cardCount) {
 		List<Card> deck = buildDeck();
-		for (int i = Player.WEST; i <= Player.SOUTH; i++) {
+		for (Player player : players) {
 			List<Card> hand = new ArrayList<Card>();
 			for(int j=0; j < cardCount; j++) {
 				hand.add(dealRandom(deck));
 			}
-			g.getPlayer(i).init(hand);
+			player.init(hand);
 			
-		}
-		
+		}		
 	}
 
 	private static Card dealRandom(List<Card> deck) {

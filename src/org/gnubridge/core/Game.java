@@ -1,5 +1,6 @@
 package org.gnubridge.core;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.gnubridge.core.deck.Trump;
@@ -35,6 +36,19 @@ public class Game {
 
 	public Player getPlayer(int i) {
 		return players[i];
+	}
+	
+	public Player getWest() {
+		return players[Player.WEST];
+	}
+	public Player getNorth() {
+		return players[Player.NORTH];
+	}
+	public Player getEAST() {
+		return players[Player.EAST];
+	}
+	public Player getSouth() {
+		return players[Player.SOUTH];
 	}
 
 	public void setPlayer(int i, Player p) {
@@ -151,6 +165,14 @@ public class Game {
 
 	public int getTricksPlayed() {
 		return tricksPlayed;
+	}
+
+	public List<Player> getPlayers() {
+		List<Player> result = new ArrayList<Player>();
+		for (int i = 0; i< players.length ; i++) {
+		result.add(players[i]);
+		}
+		return result;
 	}
 
 
