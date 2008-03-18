@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.gnubridge.core.Card;
+import org.gnubridge.core.Direction;
 import org.gnubridge.core.Game;
 import org.gnubridge.core.Player;
 import org.gnubridge.core.deck.Color;
@@ -15,7 +16,7 @@ public class GameUtils {
 	}
 
 	public static void initializeSingleColorSuits(Game g, int cardCount) {
-		for (int i = Player.WEST; i <= Player.SOUTH; i++) {
+		for (int i = Direction.WEST; i <= Direction.SOUTH; i++) {
 			String[] spades = {};
 			String[] hearts = {};
 			String[] diamonds = {};
@@ -25,16 +26,16 @@ public class GameUtils {
 				currentHand[j] = Card.FullSuit[j];
 			}
 			switch (i) {
-			case Player.WEST:
+			case Direction.WEST:
 				spades = currentHand;
 				break;
-			case Player.NORTH:
+			case Direction.NORTH:
 				hearts = currentHand;
 				break;
-			case Player.EAST:
+			case Direction.EAST:
 				diamonds = currentHand;
 				break;
-			case Player.SOUTH:
+			case Direction.SOUTH:
 				clubs = currentHand;
 				break;
 			}

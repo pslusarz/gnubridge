@@ -2,7 +2,7 @@ package org.gnubridge.search;
 
 import junit.framework.TestCase;
 
-import org.gnubridge.core.Player;
+import org.gnubridge.core.Direction;
 
 public class NodeTest extends TestCase {
 	public void testGetMovesRoot() {
@@ -61,17 +61,17 @@ public class NodeTest extends TestCase {
 	
 	public void testIsAlpha() {
 	    Node root = new Node(null);
-	    root.setPlayerTurn(Player.WEST);
+	    root.setPlayerTurn(Direction.WEST);
 	    Node n_1 = new Node(root);
-	    n_1.setPlayerTurn(Player.NORTH);
+	    n_1.setPlayerTurn(Direction.NORTH);
 	    Node n_1_1 = new Node(n_1);
-	    n_1_1.setPlayerTurn(Player.EAST);	    
+	    n_1_1.setPlayerTurn(Direction.EAST);	    
 	    Node n_1_1_1 = new Node(n_1_1);
-	    n_1_1_1.setPlayerTurn(Player.SOUTH);
+	    n_1_1_1.setPlayerTurn(Direction.SOUTH);
 	    Node n_1_1_1_1 = new Node(n_1_1_1);
-	    n_1_1_1_1.setPlayerTurn(Player.SOUTH);
+	    n_1_1_1_1.setPlayerTurn(Direction.SOUTH);
 	    Node n_1_1_1_2 = new Node(n_1_1_1);
-	    n_1_1_1_2.setPlayerTurn(Player.EAST);
+	    n_1_1_1_2.setPlayerTurn(Direction.EAST);
 	    assertTrue(root.isAlpha());
 	    assertFalse(n_1.isAlpha());
 	    assertTrue(n_1_1.isAlpha());

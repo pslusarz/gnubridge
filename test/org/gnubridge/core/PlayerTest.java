@@ -26,7 +26,7 @@ public class PlayerTest extends TestCase {
 		String[] westHearts = {};
 		String[] westDiamonds = {};
 		String[] westClubs = {};
-		Player west = new Player(Player.WEST);
+		Player west = new Player(Direction.WEST);
 		west.init(westSpades, westHearts, westDiamonds, westClubs);
 		for (int i = 0; i < westSpades.length; i++) {
 			assertTrue(west.hasUnplayedCard(new Card(westSpades[i], Spades.i())));
@@ -45,7 +45,7 @@ public class PlayerTest extends TestCase {
 		String[] westHearts = {};
 		String[] westDiamonds = {};
 		String[] westClubs = {};
-		Player west = new Player(Player.WEST);
+		Player west = new Player(Direction.WEST);
 		west.init(westSpades, westHearts, westDiamonds, westClubs);
         westSpades[0] = "3";
         assertFalse(west.hasUnplayedCard(new Card("3", Spades.i())));
@@ -56,7 +56,7 @@ public class PlayerTest extends TestCase {
 		String[] westHearts = {"J", "Q"};
 		String[] westDiamonds = {};
 		String[] westClubs = {"10", "K"};
-		Player west = new Player(Player.WEST);
+		Player west = new Player(Direction.WEST);
 		west.init(westSpades, westHearts, westDiamonds, westClubs);	
 		Trick trick = new Trick(NoTrump.i());
 		trick.addCard(Three.of(Hearts.i()));
@@ -72,7 +72,7 @@ public class PlayerTest extends TestCase {
 		String[] westHearts = {"J", "Q"};
 		String[] westDiamonds = {};
 		String[] westClubs = {"10", "K"};
-		Player west = new Player(Player.WEST);
+		Player west = new Player(Direction.WEST);
 		west.init(westSpades, westHearts, westDiamonds, westClubs);	
 		Trick trick = new Trick(NoTrump.i());
 		trick.addCard(Three.of(Diamonds.i()));
@@ -92,7 +92,7 @@ public class PlayerTest extends TestCase {
 		String[] westHearts = {"J", "Q"};
 		String[] westDiamonds = {};
 		String[] westClubs = {"10", "K"};
-		Player west = new Player(Player.WEST);
+		Player west = new Player(Direction.WEST);
 		west.init(westSpades, westHearts, westDiamonds, westClubs);	
 		Trick trick = new Trick(NoTrump.i());
 		List<Card> moves = west.getPossibleMoves(trick);
@@ -111,7 +111,7 @@ public class PlayerTest extends TestCase {
 		String[] westHearts = {"J", "Q"};
 		String[] westDiamonds = {};
 		String[] westClubs = {"10", "K"};
-		Player west = new Player(Player.WEST);
+		Player west = new Player(Direction.WEST);
 		west.init(westSpades, westHearts, westDiamonds, westClubs);	
 		Trick trick = new Trick(NoTrump.i());
 		trick.addCard(Three.of(Diamonds.i()));

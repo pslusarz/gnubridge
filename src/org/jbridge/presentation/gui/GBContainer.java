@@ -12,32 +12,25 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
-public class GBContainer {
+public abstract class GBContainer {
 	protected JPanel panel;
 	private final MainWindow owner;
-	private String message = "";
+	protected String message = "";
 	private ButtonGroup radioButtons;
 	private List<JPanel> subpanels;
 
 	public GBContainer(MainWindow owner) {
 
 		this.owner = owner;
-		panel = new JPanel() {
-
-			public void paintComponent(Graphics g) {
-		         super.paintComponent(g);
-		         g.drawString( message , 5, 30 );
-		         g.drawRect(1,1,getWidth()-10, getHeight()-10);
-		         
-		      }
-		};
+		panel = createDisplayPanel();
 		panel.setLayout(new BoxLayout(panel,BoxLayout.Y_AXIS));
-		panel.setMinimumSize(new Dimension(200,200));
-		//panel.setSize(200,200);
-		
+		panel.setMinimumSize(new Dimension(100,200));
+		panel.setPreferredSize(new Dimension(100,200));
 		panel.setAlignmentX(JPanel.LEFT_ALIGNMENT);
 		subpanels = new ArrayList<JPanel>();
 	}
+
+	protected abstract JPanel createDisplayPanel();
 
 	public void placeOn(JFrame parent) {
 	  parent.getContentPane().add(panel);
@@ -47,7 +40,7 @@ public class GBContainer {
 		radioButtons = new ButtonGroup();
 		JPanel subpanel = createSubpanel();
 		for (String selection : selections) {
-			JRadioButton button = new JRadioButton(selection);
+			JRadioButton button = new JRadioButton("       "+selection);
 			button.setActionCommand(selection);
 			button.addActionListener(owner);		
 			radioButtons.add(button);
@@ -78,7 +71,6 @@ public class GBContainer {
 
 			public void paintComponent(Graphics g) {
 		         super.paintComponent(g);
-		         g.drawRect(1,1,getWidth()-10, getHeight()-10);
 		         
 		      }
 		};

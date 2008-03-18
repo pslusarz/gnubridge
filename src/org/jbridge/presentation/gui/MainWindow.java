@@ -10,6 +10,9 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JSplitPane;
 
+import org.gnubridge.core.Hand;
+import org.gnubridge.core.bidding.Auctioneer;
+
 public class MainWindow implements ActionListener {
 
 	private JFrame theWindow;
@@ -24,7 +27,7 @@ public class MainWindow implements ActionListener {
 		JPanel content = new JPanel();
 
 		theWindow.setContentPane(content);
-		int width = 700;
+		int width = 600;
 		int height = 500;
 		theWindow.setBounds(new Rectangle(GraphicsEnvironment
 				.getLocalGraphicsEnvironment().getCenterPoint().x
@@ -45,7 +48,7 @@ public class MainWindow implements ActionListener {
 		biddingDisplay.placeOn(theWindow);
 		biddingControls.placeOn(theWindow);
 		//theWindow.pack();
-		content.setDividerLocation(700);
+		content.setDividerLocation(500);
 
 	}
 
@@ -66,6 +69,21 @@ public class MainWindow implements ActionListener {
 
 	public void show() {
 		theWindow.setVisible(true);
+		
+	}
+
+	public void setCards(Hand hand) {
+		getBiddingDisplay().setCards(hand);
+		
+	}
+
+	public void setAuction(Auctioneer auction) {
+		getBiddingDisplay().setAuction(auction);
+		
+	}
+
+	public void auctionStateChanged() {
+		getBiddingDisplay().auctionStateChanged();
 		
 	}
 }

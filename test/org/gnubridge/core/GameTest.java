@@ -23,7 +23,7 @@ public class GameTest extends TestCase {
 	}
 
 	public void testConstructorCreatesPlayers() {
-		for (int i = Player.WEST; i <= Player.SOUTH; i++) {
+		for (int i = Direction.WEST; i <= Direction.SOUTH; i++) {
 			assertNotNull(game.getPlayer(i));
 			assertEquals(i, game.getPlayer(i).getDirection());
 		}
@@ -32,40 +32,40 @@ public class GameTest extends TestCase {
 	public void testFirstTrickPlayedClockwise() {
 		GameUtils.initializeSingleColorSuits(game);
 		game.doNextCard();
-		assertEquals(12, game.getPlayer(Player.WEST).getUnplayedCardsCount());
-		assertEquals(13, game.getPlayer(Player.NORTH).getUnplayedCardsCount());
-		assertEquals(13, game.getPlayer(Player.EAST).getUnplayedCardsCount());
-		assertEquals(13, game.getPlayer(Player.SOUTH).getUnplayedCardsCount());
+		assertEquals(12, game.getPlayer(Direction.WEST).getUnplayedCardsCount());
+		assertEquals(13, game.getPlayer(Direction.NORTH).getUnplayedCardsCount());
+		assertEquals(13, game.getPlayer(Direction.EAST).getUnplayedCardsCount());
+		assertEquals(13, game.getPlayer(Direction.SOUTH).getUnplayedCardsCount());
 		game.doNextCard();
-		assertEquals(12, game.getPlayer(Player.WEST).getUnplayedCardsCount());
-		assertEquals(12, game.getPlayer(Player.NORTH).getUnplayedCardsCount());
-		assertEquals(13, game.getPlayer(Player.EAST).getUnplayedCardsCount());
-		assertEquals(13, game.getPlayer(Player.SOUTH).getUnplayedCardsCount());
+		assertEquals(12, game.getPlayer(Direction.WEST).getUnplayedCardsCount());
+		assertEquals(12, game.getPlayer(Direction.NORTH).getUnplayedCardsCount());
+		assertEquals(13, game.getPlayer(Direction.EAST).getUnplayedCardsCount());
+		assertEquals(13, game.getPlayer(Direction.SOUTH).getUnplayedCardsCount());
 		game.doNextCard();
-		assertEquals(12, game.getPlayer(Player.WEST).getUnplayedCardsCount());
-		assertEquals(12, game.getPlayer(Player.NORTH).getUnplayedCardsCount());
-		assertEquals(12, game.getPlayer(Player.EAST).getUnplayedCardsCount());
-		assertEquals(13, game.getPlayer(Player.SOUTH).getUnplayedCardsCount());
+		assertEquals(12, game.getPlayer(Direction.WEST).getUnplayedCardsCount());
+		assertEquals(12, game.getPlayer(Direction.NORTH).getUnplayedCardsCount());
+		assertEquals(12, game.getPlayer(Direction.EAST).getUnplayedCardsCount());
+		assertEquals(13, game.getPlayer(Direction.SOUTH).getUnplayedCardsCount());
 		game.doNextCard();
-		assertEquals(12, game.getPlayer(Player.WEST).getUnplayedCardsCount());
-		assertEquals(12, game.getPlayer(Player.NORTH).getUnplayedCardsCount());
-		assertEquals(12, game.getPlayer(Player.EAST).getUnplayedCardsCount());
-		assertEquals(12, game.getPlayer(Player.SOUTH).getUnplayedCardsCount());
+		assertEquals(12, game.getPlayer(Direction.WEST).getUnplayedCardsCount());
+		assertEquals(12, game.getPlayer(Direction.NORTH).getUnplayedCardsCount());
+		assertEquals(12, game.getPlayer(Direction.EAST).getUnplayedCardsCount());
+		assertEquals(12, game.getPlayer(Direction.SOUTH).getUnplayedCardsCount());
 		game.doNextCard();
-		assertEquals(11, game.getPlayer(Player.WEST).getUnplayedCardsCount());
-		assertEquals(12, game.getPlayer(Player.NORTH).getUnplayedCardsCount());
-		assertEquals(12, game.getPlayer(Player.EAST).getUnplayedCardsCount());
-		assertEquals(12, game.getPlayer(Player.SOUTH).getUnplayedCardsCount());
+		assertEquals(11, game.getPlayer(Direction.WEST).getUnplayedCardsCount());
+		assertEquals(12, game.getPlayer(Direction.NORTH).getUnplayedCardsCount());
+		assertEquals(12, game.getPlayer(Direction.EAST).getUnplayedCardsCount());
+		assertEquals(12, game.getPlayer(Direction.SOUTH).getUnplayedCardsCount());
 	}
 
 	public void testGameEndsWhenPlayersRunOutOfCards() {
-		game.getPlayer(Player.WEST).init(
+		game.getPlayer(Direction.WEST).init(
 				new Card[] { Two.of(Spades.i()) });
-		game.getPlayer(Player.NORTH).init(
+		game.getPlayer(Direction.NORTH).init(
 				new Card[] { Two.of(Hearts.i()) });
-		game.getPlayer(Player.SOUTH).init(
+		game.getPlayer(Direction.SOUTH).init(
 				new Card[] { Two.of(Diamonds.i()) });
-		game.getPlayer(Player.EAST).init(
+		game.getPlayer(Direction.EAST).init(
 				new Card[] { Two.of(Clubs.i()) });
 		for (int i = 0; i < 4; i++) {
 			assertFalse("game ended before all cards were played", game
@@ -89,43 +89,43 @@ public class GameTest extends TestCase {
 	}
 
 	public void testPreviousTrickTakerFirstToPlay() {
-		game.getPlayer(Player.WEST).init(Ace.of(Hearts.i()),
+		game.getPlayer(Direction.WEST).init(Ace.of(Hearts.i()),
 				Two.of(Spades.i()));
-		game.getPlayer(Player.NORTH).init(Ace.of(Diamonds.i()),
+		game.getPlayer(Direction.NORTH).init(Ace.of(Diamonds.i()),
 				Two.of(Hearts.i()));
-		game.getPlayer(Player.SOUTH).init(Two.of(Diamonds.i()),
+		game.getPlayer(Direction.SOUTH).init(Two.of(Diamonds.i()),
 				Ace.of(Spades.i()));
-		game.getPlayer(Player.EAST).init(Ace.of(Clubs.i()),
+		game.getPlayer(Direction.EAST).init(Ace.of(Clubs.i()),
 				Two.of(Clubs.i()));
-		assertEquals(game.getPlayer(Player.WEST), game.getNextToPlay());
+		assertEquals(game.getPlayer(Direction.WEST), game.getNextToPlay());
 		playTrick(game);
-		assertEquals(game.getPlayer(Player.SOUTH), game.getNextToPlay());
+		assertEquals(game.getPlayer(Direction.SOUTH), game.getNextToPlay());
 
 	}
 
 	public void testGameKeepsTrackOfTricksTaken() {
-		game.getPlayer(Player.WEST).init(Ace.of(Hearts.i()),
+		game.getPlayer(Direction.WEST).init(Ace.of(Hearts.i()),
 				Two.of(Spades.i()));
-		game.getPlayer(Player.NORTH).init(Ace.of(Diamonds.i()),
+		game.getPlayer(Direction.NORTH).init(Ace.of(Diamonds.i()),
 				Two.of(Hearts.i()));
-		game.getPlayer(Player.SOUTH).init(Two.of(Diamonds.i()),
+		game.getPlayer(Direction.SOUTH).init(Two.of(Diamonds.i()),
 				Ace.of(Spades.i()));
-		game.getPlayer(Player.EAST).init(Ace.of(Clubs.i()),
+		game.getPlayer(Direction.EAST).init(Ace.of(Clubs.i()),
 				Two.of(Clubs.i()));
-		assertEquals(game.getPlayer(Player.WEST), game.getNextToPlay());
+		assertEquals(game.getPlayer(Direction.WEST), game.getNextToPlay());
 		playTrick(game);
 		assertFalse(game.isDone());
 		playTrick(game);
 		assertTrue(game.isDone());
-		assertEquals(1, game.getPlayer(Player.SOUTH).countTricksTaken());
-		assertEquals(1, game.getPlayer(Player.NORTH).countTricksTaken());
+		assertEquals(1, game.getPlayer(Direction.SOUTH).countTricksTaken());
+		assertEquals(1, game.getPlayer(Direction.NORTH).countTricksTaken());
 	}
 
 	public void testDuplicateReproducesHands() {
 		Game original = new Game(NoTrump.i());
 		GameUtils.initializeSingleColorSuits(original);
 		Game clone = original.duplicate();
-		for (int i = Player.WEST; i <= Player.SOUTH; i++) {
+		for (int i = Direction.WEST; i <= Direction.SOUTH; i++) {
 			List<Card> originalHand = original.getPlayer(i).getHand();
 			List<Card> clonedHand = clone.getPlayer(i).getHand();
 			assertEquals(originalHand, clonedHand);
@@ -208,9 +208,9 @@ public class GameTest extends TestCase {
 		Game game = new Game(NoTrump.i());
 		GameUtils.initializeSingleColorSuits(game);
 		game.playMoves(newList(0,1,2,3));
-		assertEquals(1, game.getPlayer(Player.WEST).countTricksTaken());
+		assertEquals(1, game.getPlayer(Direction.WEST).countTricksTaken());
 		game.playMoves(newList(1,1,2,3,4,5,6,0,6));
-		assertEquals(3, game.getPlayer(Player.WEST).countTricksTaken());
+		assertEquals(3, game.getPlayer(Direction.WEST).countTricksTaken());
 	}
 
 	public void testPlayMovesOneByOneSameAsList() {
@@ -228,7 +228,7 @@ public class GameTest extends TestCase {
 
 		clone.playMoves(moves);
 		
-		for (int i = Player.WEST; i <= Player.SOUTH; i++) {
+		for (int i = Direction.WEST; i <= Direction.SOUTH; i++) {
 		  assertTrue(clone.getPlayer(i).hasPlayedCard(cards.get(i)));	
 		}
 		

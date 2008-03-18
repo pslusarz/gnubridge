@@ -16,6 +16,6 @@ public class West extends Direction {
 
 	@Override
 	public int getValue() {
-		return Player.WEST;
+		return Direction.WEST;
 	}
 }

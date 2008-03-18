@@ -7,14 +7,6 @@ import org.gnubridge.core.deck.Color;
 
 public class Player {
 
-	public static final int WEST = 0;
-
-	public static final int NORTH = 1;
-
-	public static final int EAST = 2;
-
-	public static final int SOUTH = 3;
-
 	public static final int WEST_EAST = 0;
 	public static final int NORTH_SOUTH = 1;
 	
@@ -58,23 +50,8 @@ public class Player {
 	}
 	
 	public String toString() {
-		return directionToString(direction);
+		return getDirection2().toString();
 		
-	}
-
-	public static String directionToString(int dir) {
-		switch (dir) {
-		case WEST:
-			return "West";
-		case NORTH:
-			return "North";
-		case EAST:
-			return "East";
-		case SOUTH:
-			return "South";
-		default:
-			throw new RuntimeException("Player uninitialized");
-		}
 	}
 
 	public void init(Card... cards) {
@@ -180,12 +157,12 @@ public class Player {
 	public static int matchPair(int player) {
 		int result;
 		switch (player) {
-		case Player.WEST:
-		case Player.EAST:
+		case Direction.WEST:
+		case Direction.EAST:
 			result = Player.WEST_EAST;
 			break;
-		case Player.NORTH:
-		case Player.SOUTH:
+		case Direction.NORTH:
+		case Direction.SOUTH:
 			result = Player.NORTH_SOUTH;
 			break;
 		default:

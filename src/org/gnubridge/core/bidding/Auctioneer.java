@@ -1,6 +1,7 @@
 package org.gnubridge.core.bidding;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.gnubridge.core.Direction;
@@ -31,11 +32,15 @@ public class Auctioneer {
 		return nextToBid;
 	}
 
-	
+	public List<Call> getCalls() {
+		ArrayList<Call> result = new ArrayList<Call>();
+		result.addAll(calls);
+		return result;
+	}
 	 
 	public void bid(Bid bid) {
 		beforeLast = last;
-		last = new Call(bid, nextToBid, bidCount);
+		last = new Call(bid, nextToBid);
 		calls.add(last);
 		bidCount++;
 		if (new Pass().equals(bid)) {

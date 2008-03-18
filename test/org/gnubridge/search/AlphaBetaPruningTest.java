@@ -1,5 +1,6 @@
 package org.gnubridge.search;
 
+import org.gnubridge.core.Direction;
 import org.gnubridge.core.Player;
 
 import junit.framework.TestCase;
@@ -16,13 +17,13 @@ public class AlphaBetaPruningTest extends TestCase {
 	 */
 
 	public void testOneLevelAlphaPrune() {
-		Node root = new Node(null, Player.WEST);
-		Node node_0 = new Node(root, Player.SOUTH);
+		Node root = new Node(null, Direction.WEST);
+		Node node_0 = new Node(root, Direction.SOUTH);
 		node_0.setTricksTaken(Player.WEST_EAST, 1);
-		Node node_1 = new Node(root, Player.SOUTH);
-		Node node_1_0 = new Node(node_1, Player.EAST);
+		Node node_1 = new Node(root, Direction.SOUTH);
+		Node node_1_0 = new Node(node_1, Direction.EAST);
 		@SuppressWarnings("unused")
-		Node node_1_1 = new Node(node_1, Player.EAST);
+		Node node_1_1 = new Node(node_1, Direction.EAST);
 
 		MockGame g = new MockGame();
 		g.setPositionValue(node_1_0.getMoves(), 0, 2);
@@ -43,13 +44,13 @@ public class AlphaBetaPruningTest extends TestCase {
 	 */
 
 	public void testAlphaPruneAlphaIsLocal() {
-		Node root = new Node(null, Player.WEST);
-		Node node_0 = new Node(root, Player.SOUTH);
+		Node root = new Node(null, Direction.WEST);
+		Node node_0 = new Node(root, Direction.SOUTH);
 		node_0.setTricksTaken(Player.WEST_EAST, 1);
-		Node node_1 = new Node(root, Player.SOUTH);
-		Node node_1_0 = new Node(node_1, Player.EAST);
+		Node node_1 = new Node(root, Direction.SOUTH);
+		Node node_1_0 = new Node(node_1, Direction.EAST);
 		@SuppressWarnings("unused")
-		Node node_1_1 = new Node(node_1, Player.EAST);
+		Node node_1_1 = new Node(node_1, Direction.EAST);
 
 		MockGame g = new MockGame();
 		g.setPositionValue(node_1_0.getMoves(), 0, 2);
@@ -71,11 +72,11 @@ public class AlphaBetaPruningTest extends TestCase {
 
 	public void testNoAlphaPruneSubsequentChildren() {
 
-		Node root = new Node(null, Player.WEST);
-		Node node_0 = new Node(root, Player.NORTH);
-		Node node_0_0 = new Node(node_0, Player.EAST);
+		Node root = new Node(null, Direction.WEST);
+		Node node_0 = new Node(root, Direction.NORTH);
+		Node node_0_0 = new Node(node_0, Direction.EAST);
 		node_0_0.setTricksTaken(Player.WEST_EAST, 1);
-		Node node_0_1 = new Node(node_0, Player.EAST);
+		Node node_0_1 = new Node(node_0, Direction.EAST);
 
 		MockGame g = new MockGame();
 		g.setPositionValue(node_0_1.getMoves(), 0, 1);
@@ -96,14 +97,14 @@ public class AlphaBetaPruningTest extends TestCase {
 	 */
 
 	public void testAlphaPruneOnlyMinNodes() {
-		Node root = new Node(null, Player.WEST);
-		Node node_0 = new Node(root, Player.WEST);
+		Node root = new Node(null, Direction.WEST);
+		Node node_0 = new Node(root, Direction.WEST);
 		node_0.setTricksTaken(Player.WEST_EAST, 1);
 		node_0.setTricksTaken(Player.NORTH_SOUTH, 1);
-		Node node_1 = new Node(root, Player.WEST);
-		Node node_1_0 = new Node(node_1, Player.EAST);
+		Node node_1 = new Node(root, Direction.WEST);
+		Node node_1_0 = new Node(node_1, Direction.EAST);
 		@SuppressWarnings("unused")
-		Node node_1_1 = new Node(node_1, Player.EAST);
+		Node node_1_1 = new Node(node_1, Direction.EAST);
 
 		MockGame g = new MockGame();
 		g.setPositionValue(node_1_0.getMoves(), 0, 2);
@@ -124,17 +125,17 @@ public class AlphaBetaPruningTest extends TestCase {
 	 */
 
 	public void testAlphaPruneWhenTrimming() {
-		Node root = new Node(null, Player.WEST);
-		Node node_0 = new Node(root, Player.NORTH);
+		Node root = new Node(null, Direction.WEST);
+		Node node_0 = new Node(root, Direction.NORTH);
 		node_0.setTricksTaken(Player.WEST_EAST, 1);
-		Node node_1 = new Node(root, Player.NORTH);
+		Node node_1 = new Node(root, Direction.NORTH);
 		@SuppressWarnings("unused")
-		Node node_1_0 = new Node(node_1, Player.WEST);
-		Node node_1_1 = new Node(node_1, Player.WEST);
-		Node node_1_1_0 = new Node(node_1_1, Player.WEST);
+		Node node_1_0 = new Node(node_1, Direction.WEST);
+		Node node_1_1 = new Node(node_1, Direction.WEST);
+		Node node_1_1_0 = new Node(node_1_1, Direction.WEST);
 		node_1_1_0.setLeaf(true);
 		node_1_1_0.setTricksTaken(Player.WEST_EAST, 0);
-		Node node_1_1_1 = new Node(node_1_1, Player.WEST);
+		Node node_1_1_1 = new Node(node_1_1, Direction.WEST);
 
 		MockGame g = new MockGame();
 		g.setPositionValue(node_1_1_1.getMoves(), 1, 2);
@@ -158,16 +159,16 @@ public class AlphaBetaPruningTest extends TestCase {
 	 */
 
 	public void testAlphaPruneToNearestAlphaAncestor() {
-		Node root = new Node(null, Player.WEST);
-		Node node_0 = new Node(root, Player.NORTH);
+		Node root = new Node(null, Direction.WEST);
+		Node node_0 = new Node(root, Direction.NORTH);
 		node_0.setTricksTaken(Player.WEST_EAST, 1);
 		node_0.setTricksTaken(Player.NORTH_SOUTH, 1);
-		Node node_1 = new Node(root, Player.NORTH);
-		Node node_1_0 = new Node(node_1, Player.NORTH);
+		Node node_1 = new Node(root, Direction.NORTH);
+		Node node_1_0 = new Node(node_1, Direction.NORTH);
 
-		Node node_1_0_0 = new Node(node_1_0, Player.EAST);
+		Node node_1_0_0 = new Node(node_1_0, Direction.EAST);
 		@SuppressWarnings("unused")
-		Node node_1_0_1 = new Node(node_1_0, Player.EAST);
+		Node node_1_0_1 = new Node(node_1_0, Direction.EAST);
 
 		MockGame g = new MockGame();
 		g.setPositionValue(node_1_0_0.getMoves(), 0, 2);
@@ -181,9 +182,9 @@ public class AlphaBetaPruningTest extends TestCase {
 
 	public void testLocalAlphaGrows() {
 		Node root = new Node(null);
-		root.setPlayerTurn(Player.WEST);
+		root.setPlayerTurn(Direction.WEST);
 		Node node_0 = new Node(root);
-		node_0.setPlayerTurn(Player.NORTH);
+		node_0.setPlayerTurn(Direction.NORTH);
 		node_0.setTricksTaken(Player.WEST_EAST, 1);
 		Node node_1 = new Node(root);
 		MockGame g = new MockGame();
@@ -206,14 +207,14 @@ public class AlphaBetaPruningTest extends TestCase {
 	 */
 
 	public void testOneLevelBetaPrune() {
-		Node root = new Node(null, Player.WEST);
-		Node node_0 = new Node(root, Player.NORTH);
-		Node node_0_0 = new Node(node_0, Player.EAST);
+		Node root = new Node(null, Direction.WEST);
+		Node node_0 = new Node(root, Direction.NORTH);
+		Node node_0_0 = new Node(node_0, Direction.EAST);
 		node_0_0.setTricksTaken(Player.WEST_EAST, 1);
-		Node node_0_1 = new Node(node_0, Player.EAST);
-		Node node_0_1_0 = new Node(node_0_1, Player.EAST);
+		Node node_0_1 = new Node(node_0, Direction.EAST);
+		Node node_0_1_0 = new Node(node_0_1, Direction.EAST);
 		@SuppressWarnings("unused")
-		Node node_0_1_1 = new Node(node_0_1, Player.EAST);
+		Node node_0_1_1 = new Node(node_0_1, Direction.EAST);
 
 		MockGame g = new MockGame();
 		g.setPositionValue(node_0_1_0.getMoves(), 2, 0);
@@ -225,9 +226,9 @@ public class AlphaBetaPruningTest extends TestCase {
 
 	public void testBetaGetsReduced() {
 		Node root = new Node(null);
-		root.setPlayerTurn(Player.WEST);
+		root.setPlayerTurn(Direction.WEST);
 		Node node_0 = new Node(root);
-		node_0.setPlayerTurn(Player.NORTH);
+		node_0.setPlayerTurn(Direction.NORTH);
 		Node child = new Node(node_0);
 		child.setTricksTaken(Player.WEST_EAST, 4);
 		Node grandchild = new Node(node_0);
@@ -241,9 +242,9 @@ public class AlphaBetaPruningTest extends TestCase {
 
 	public void testUnvisitedNodeIgnoredInLocalBeta() {
 		Node root = new Node(null);
-		root.setPlayerTurn(Player.WEST);
+		root.setPlayerTurn(Direction.WEST);
 		Node node_0 = new Node(root);
-		node_0.setPlayerTurn(Player.NORTH);
+		node_0.setPlayerTurn(Direction.NORTH);
 		Node child = new Node(node_0);
 		child.setTricksTaken(Player.WEST_EAST, -1);
 		Node grandchild = new Node(node_0);
@@ -268,18 +269,18 @@ public class AlphaBetaPruningTest extends TestCase {
 	 */
 
 	public void testBetaPruneWhenTrimming() {
-		Node root = new Node(null, Player.WEST);
-		Node node_00 = new Node(root, Player.NORTH);
-		Node node_0 = new Node(node_00, Player.EAST);
+		Node root = new Node(null, Direction.WEST);
+		Node node_00 = new Node(root, Direction.NORTH);
+		Node node_0 = new Node(node_00, Direction.EAST);
 		node_0.setTricksTaken(Player.WEST_EAST, 0);
-		Node node_1 = new Node(node_00, Player.EAST);
+		Node node_1 = new Node(node_00, Direction.EAST);
 		@SuppressWarnings("unused")
-		Node node_1_0 = new Node(node_1, Player.SOUTH);
-		Node node_1_1 = new Node(node_1, Player.SOUTH);
-		Node node_1_1_0 = new Node(node_1_1, Player.SOUTH);
+		Node node_1_0 = new Node(node_1, Direction.SOUTH);
+		Node node_1_1 = new Node(node_1, Direction.SOUTH);
+		Node node_1_1_0 = new Node(node_1_1, Direction.SOUTH);
 		node_1_1_0.setLeaf(true);
 		node_1_1_0.setTricksTaken(Player.WEST_EAST, 1);
-		Node node_1_1_1 = new Node(node_1_1, Player.SOUTH);
+		Node node_1_1_1 = new Node(node_1_1, Direction.SOUTH);
 
 		MockGame g = new MockGame();
 		g.setPositionValue(node_1_1_1.getMoves(), 2, 1);
@@ -302,17 +303,17 @@ public class AlphaBetaPruningTest extends TestCase {
 	 */
 
 	public void testBetaPruneToNearestBetaAncestor() {
-		Node root = new Node(null, Player.WEST);
-		Node node_00 = new Node(root, Player.NORTH);
-		Node node_0 = new Node(node_00, Player.EAST);
+		Node root = new Node(null, Direction.WEST);
+		Node node_00 = new Node(root, Direction.NORTH);
+		Node node_0 = new Node(node_00, Direction.EAST);
 		node_0.setTricksTaken(Player.WEST_EAST, 0);
-		Node node_1 = new Node(node_00, Player.EAST);
+		Node node_1 = new Node(node_00, Direction.EAST);
 		@SuppressWarnings("unused")
-		Node node_1_0 = new Node(node_1, Player.SOUTH);
-		Node node_1_1 = new Node(node_1, Player.EAST);
-		Node node_1_1_0 = new Node(node_1_1, Player.SOUTH);
+		Node node_1_0 = new Node(node_1, Direction.SOUTH);
+		Node node_1_1 = new Node(node_1, Direction.EAST);
+		Node node_1_1_0 = new Node(node_1_1, Direction.SOUTH);
 		node_1_1_0.setLeaf(true);
-		Node node_1_1_1 = new Node(node_1_1, Player.SOUTH);
+		Node node_1_1_1 = new Node(node_1_1, Direction.SOUTH);
 
 		MockGame g = new MockGame();
 		g.setPositionValue(node_1_1_1.getMoves(), 2, 1);
