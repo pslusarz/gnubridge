@@ -47,7 +47,6 @@ public class MainWindow implements ActionListener {
 		theWindow.setContentPane(content);
 		biddingDisplay.placeOn(theWindow);
 		biddingControls.placeOn(theWindow);
-		//theWindow.pack();
 		content.setDividerLocation(500);
 
 	}
@@ -57,6 +56,8 @@ public class MainWindow implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() instanceof JRadioButton) {
 			bidSize = Integer.valueOf(e.getActionCommand()).intValue();
+		} else if ("Play game...".equals(e.getActionCommand())) {
+			controller.playGame();
 		} else {
 			controller.placeBid(bidSize, e.getActionCommand());
 		}
@@ -84,6 +85,7 @@ public class MainWindow implements ActionListener {
 
 	public void auctionStateChanged() {
 		getBiddingDisplay().auctionStateChanged();
+		
 		
 	}
 }

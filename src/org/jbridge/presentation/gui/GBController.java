@@ -1,5 +1,6 @@
 package org.jbridge.presentation.gui;
 
+import org.gnubridge.core.Direction;
 import org.gnubridge.core.Game;
 import org.gnubridge.core.Hand;
 import org.gnubridge.core.Player;
@@ -16,6 +17,7 @@ public class GBController {
 	private Auctioneer auction;
 	Player human;
 	Game game;
+	private Game game2;
 
 	public GBController(MainWindow view) {
 		this.view = view;
@@ -36,9 +38,6 @@ public class GBController {
 					auction.getNextToBid().getValue()).getHand());
 			BiddingAgent ba = new BiddingAgent(auction, hand);
 			auction.bid(ba.getBid());
-			view.getBiddingDisplay().display(
-					"High bid: " + auction.getHighBid() + ", last bid: "
-							+ auction.getLastCall());
 			view.auctionStateChanged();
 		}
 
@@ -63,6 +62,23 @@ public class GBController {
 			view.getBiddingDisplay().display(
 					"BIDDING COMPLETE. High bid: " + auction.getHighBid());
 		}
+	}
+
+	public void playGame() {
+		view.getBiddingDisplay().display("Play game not implemented");
+//		game2 = new Game(auction.getHighBid().getTrump());
+//		Direction dummyDir = auction.getDummy();
+//		
+//		game2.getNorth().init(game.getPlayer(dummyDir.getValue()).getHand());
+//		Direction east = Direction.clockwise(dummyDir);
+//		game2.getEAST().init(game.getPlayer(east.getValue()).getHand());
+//		Direction south = Direction.clockwise(east);
+//		game2.getSouth().init(game.getPlayer(south.getValue()).getHand());
+//		Direction west = Direction.clockwise(south);
+//		game2.getSouth().init(game.getPlayer(west.getValue()).getHand());
+//		game2.setNextToPlay(west.getValue());
+//		view.setGame(game2);
+//		doAutomatedPlay();
 	}
 
 }

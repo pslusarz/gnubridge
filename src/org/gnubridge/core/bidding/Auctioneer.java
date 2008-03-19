@@ -104,4 +104,8 @@ public class Auctioneer {
 		}
 		return result;
 	}
+
+	public Direction getDummy() {
+		return null;
+	}
 }

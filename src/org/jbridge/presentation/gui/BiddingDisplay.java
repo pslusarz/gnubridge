@@ -3,6 +3,7 @@ package org.jbridge.presentation.gui;
 import java.awt.Dimension;
 import java.awt.Graphics;
 
+import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import org.gnubridge.core.Card;
@@ -14,11 +15,24 @@ import org.gnubridge.core.bidding.Call;
 public class BiddingDisplay extends GBContainer {
 
 	private Auctioneer auction;
+	private JButton playGameButton;
 
 	public BiddingDisplay(MainWindow owner) {
 		super(owner);
 		panel.setLayout(null);
 		panel.setPreferredSize(new Dimension(500, 500));
+		addPlayGameButton();
+	}
+
+	private void addPlayGameButton() {
+		playGameButton = new JButton("Play game...");
+		playGameButton.setActionCommand("Play game...");
+		playGameButton.addActionListener(owner);
+		panel.add(playGameButton);
+		playGameButton.setLocation(175, getTopOfCards()-125);
+		playGameButton.setSize(125, 25);
+		playGameButton.setVisible(false);
+		
 	}
 
 	public void setCards(Hand h) {
@@ -43,13 +57,16 @@ public class BiddingDisplay extends GBContainer {
 	}
 
 	public void auctionStateChanged() {
+		if (auction.biddingFinished()) {
+			playGameButton.setVisible(true);
+		}
 		panel.repaint();
 	}
 
 	@Override
 	protected JPanel createDisplayPanel() {
 		return new JPanel() {
-			int colWidth = 75;
+			int colWidth = 80;
 
 			public void paintComponent(Graphics g) {
 				super.paintComponent(g);
@@ -76,7 +93,6 @@ public class BiddingDisplay extends GBContainer {
 
 				g.drawString(message, 5, getTopOfCards() - 20);
 				auction.getLastCall();
-				//g.drawRect(1, 1, getWidth() - 10, getHeight() - 10);
 
 			}
 

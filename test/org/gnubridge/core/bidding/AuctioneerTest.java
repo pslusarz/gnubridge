@@ -97,4 +97,8 @@ public class AuctioneerTest extends TestCase {
 	/**
 	 * TODO: test isValid()
 	 */
+	
+//	public void testGetDummy() {
+//		fail("todo");
+//	}
 }
