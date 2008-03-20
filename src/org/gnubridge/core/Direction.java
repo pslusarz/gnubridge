@@ -39,4 +39,23 @@ public abstract class Direction {
 		}
 	}
 
+	public Direction clockwise() {
+		return Direction.clockwise(getValue());
+	}
+
+	private static Direction clockwise(int value) {
+		switch (value) {
+		case WEST:
+			return North.i();
+		case NORTH:
+			return East.i();
+		case EAST:
+			return South.i();
+		case SOUTH:
+			return West.i();
+		default:
+			throw new RuntimeException("Uninitialized direction");
+		}
+	}
+
 }

@@ -94,11 +94,88 @@ public class AuctioneerTest extends TestCase {
 		assertEquals(new Bid(1, Spades.i()), c7.getBid());
 	}
 	
-	/**
-	 * TODO: test isValid()
-	 */
+	public void testIsValidAnyBidValidAtStart() {
+		Auctioneer a = new Auctioneer(West.i());
+		assertTrue(a.isValid(new Pass()));
+		assertTrue(a.isValid(new Bid(1, NoTrump.i())));
+		assertTrue(a.isValid(new Bid(7, Diamonds.i())));
+	}
 	
-//	public void testGetDummy() {
-//		fail("todo");
+	public void testIsValidPassAlwaysValid() {
+		Auctioneer a = new Auctioneer(West.i());
+		a.bid(new Bid(1, NoTrump.i()));
+		assertTrue(a.isValid(new Pass()));
+	}
+	
+	public void testIsValidOnlyHigherThanCurrent() {
+		Auctioneer a = new Auctioneer(West.i());
+		a.bid(new Bid(1, NoTrump.i()));
+		assertFalse(a.isValid(new Bid(1, Clubs.i())));
+		assertFalse(a.isValid(new Bid(1, NoTrump.i())));
+		assertTrue(a.isValid(new Bid(2, Clubs.i())));
+	}
+	
+	public void testGetDummyNullIfAuctionNotFinished() {
+		Auctioneer a = new Auctioneer(West.i());
+		assertNull(a.getDummy());
+		a.bid(new Bid(1, NoTrump.i()));
+		assertEquals(null, a.getDummy());
+	}
+	
+	public void testGetDummyNullIfNoContract() {
+		Auctioneer a = new Auctioneer(West.i());
+		a.bid(new Pass());
+		a.bid(new Pass());
+		a.bid(new Pass());
+		a.bid(new Pass());
+		assertEquals(null, a.getDummy());
+	}
+	
+	public void testGetDummySimpleContract() {
+		Auctioneer a = new Auctioneer(West.i());
+		a.bid(new Pass());
+		a.bid(new Bid(1, NoTrump.i()));
+		a.bid(new Pass());
+		a.bid(new Pass());
+		a.bid(new Pass());
+		assertEquals(South.i(), a.getDummy());
+	}
+	public void testGetDummyOverbidContract() {
+		Auctioneer a = new Auctioneer(West.i());
+		a.bid(new Bid(1, NoTrump.i()));
+		a.bid(new Bid(2, NoTrump.i()));
+		a.bid(new Pass());
+		a.bid(new Pass());
+		a.bid(new Pass());
+		assertEquals(South.i(), a.getDummy());
+	}
+	public void testGetDummyRaisedPartnersContract() {
+		Auctioneer a = new Auctioneer(West.i());
+		a.bid(new Bid(1, NoTrump.i()));
+		a.bid(new Pass());
+		a.bid(new Bid(2, NoTrump.i()));
+		a.bid(new Pass());
+		a.bid(new Pass());
+		a.bid(new Pass());
+		assertEquals(East.i(), a.getDummy());
+	}
+	//TODO : make this test pass
+//	public void testGetDummyTwoRoundContract() {
+//		Auctioneer a = new Auctioneer(West.i());
+//		a.bid(new Bid(1, NoTrump.i()));
+//		a.bid(new Pass());
+//		a.bid(new Bid(2, Diamonds.i()));
+//		a.bid(new Pass());
+//		a.bid(new Bid(3, Diamonds.i()));
+//		a.bid(new Pass());
+//		a.bid(new Bid(3, NoTrump.i()));
+//		a.bid(new Pass());
+//		a.bid(new Pass());
+//		a.bid(new Pass());
+//		assertEquals(East.i(), a.getDummy());
 //	}
+	
+	
+	
+	
 }

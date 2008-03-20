@@ -37,7 +37,7 @@ public class Auctioneer {
 		result.addAll(calls);
 		return result;
 	}
-	 
+
 	public void bid(Bid bid) {
 		beforeLast = last;
 		last = new Call(bid, nextToBid);
@@ -98,7 +98,8 @@ public class Auctioneer {
 	public boolean isValid(Bid candidate) {
 		boolean result = false;
 		if (candidate != null) {
-			if (candidate.equals(new Pass()) || candidate.greaterThan(getHighBid())) {
+			if (candidate.equals(new Pass())
+					|| candidate.greaterThan(getHighBid())) {
 				result = true;
 			}
 		}
@@ -106,6 +107,24 @@ public class Auctioneer {
 	}
 
 	public Direction getDummy() {
+		Direction result = null;
+		if (biddingFinished() && getHighCall() != null) {
+			if (getPartnersCall(getHighCall()) != null && getHighCall().getBid().getTrump().equals(
+					getPartnersCall(getHighCall()).getBid().getTrump())) {
+				result = getHighCall().getDirection();
+			} else {
+				result = getHighCall().getDirection().clockwise().clockwise();
+			}
+		}
+		return result;
+	}
+
+	private Call getHighCall() {
+		for (Call call : calls) {
+			if (call.getBid().equals(getHighBid())) {
+				return call;
+			}
+		}
 		return null;
 	}
 }
