@@ -44,7 +44,7 @@ public class Game {
 	public Player getNorth() {
 		return players[Direction.NORTH];
 	}
-	public Player getEAST() {
+	public Player getEast() {
 		return players[Direction.EAST];
 	}
 	public Player getSouth() {

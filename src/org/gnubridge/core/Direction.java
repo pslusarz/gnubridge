@@ -58,4 +58,8 @@ public abstract class Direction {
 		}
 	}
 
+	public Direction opposite() {
+		return clockwise().clockwise();
+	}
+
 }

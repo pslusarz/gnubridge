@@ -17,7 +17,6 @@ public class Main  {
 		SwingUtilities.invokeAndWait(new Runnable() {
 			public void run() {
 				MainWindow mw = new MainWindow("gnubridge");
-
 				mw.show();
 			}
 		});

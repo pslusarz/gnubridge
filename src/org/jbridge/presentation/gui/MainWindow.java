@@ -1,5 +1,7 @@
 package org.jbridge.presentation.gui;
 
+import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
@@ -10,6 +12,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JSplitPane;
 
+import org.gnubridge.core.Game;
 import org.gnubridge.core.Hand;
 import org.gnubridge.core.bidding.Auctioneer;
 
@@ -20,6 +23,8 @@ public class MainWindow implements ActionListener {
 	private BiddingControls biddingControls;
 	private int bidSize;
 	private GBController controller;
+	private Container biddingPane;
+	private Container playPane;
 
 	public MainWindow(String title) {
 		theWindow = new JFrame(title);
@@ -86,6 +91,20 @@ public class MainWindow implements ActionListener {
 	public void auctionStateChanged() {
 		getBiddingDisplay().auctionStateChanged();
 		
+		
+	}
+
+	public void setGame(Game game) {
+		biddingPane = theWindow.getContentPane();
+		biddingPane.setVisible(false);
+		playPane = new JPanel();
+		playPane.setPreferredSize(new Dimension(700, 500));
+		theWindow.setContentPane(playPane);
+		
+		PlayControls playControls = new PlayControls(this);
+		playControls.placeOn(theWindow);
+		playControls.setGame(game);
+		theWindow.pack();
 		
 	}
 }

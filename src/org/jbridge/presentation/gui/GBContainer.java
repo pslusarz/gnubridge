@@ -15,6 +15,7 @@ public abstract class GBContainer {
 		this.owner = owner;
 		panel = createDisplayPanel();
 		
+		
 	}
 
 	protected abstract JPanel createDisplayPanel();

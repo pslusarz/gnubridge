@@ -109,11 +109,12 @@ public class Auctioneer {
 	public Direction getDummy() {
 		Direction result = null;
 		if (biddingFinished() && getHighCall() != null) {
-			if (getPartnersCall(getHighCall()) != null && getHighCall().getBid().getTrump().equals(
-					getPartnersCall(getHighCall()).getBid().getTrump())) {
-				result = getHighCall().getDirection();
-			} else {
-				result = getHighCall().getDirection().clockwise().clockwise();
+			for (Call call : calls) {
+				if (!call.isPass() && call.getTrump().equals(getHighCall().getTrump())
+						&& call.pairMatches(getHighCall().getDirection())) {
+					result = call.getDirection().opposite();
+					break;
+				}
 			}
 		}
 		return result;

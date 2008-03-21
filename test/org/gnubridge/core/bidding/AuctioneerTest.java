@@ -159,21 +159,20 @@ public class AuctioneerTest extends TestCase {
 		a.bid(new Pass());
 		assertEquals(East.i(), a.getDummy());
 	}
-	//TODO : make this test pass
-//	public void testGetDummyTwoRoundContract() {
-//		Auctioneer a = new Auctioneer(West.i());
-//		a.bid(new Bid(1, NoTrump.i()));
-//		a.bid(new Pass());
-//		a.bid(new Bid(2, Diamonds.i()));
-//		a.bid(new Pass());
-//		a.bid(new Bid(3, Diamonds.i()));
-//		a.bid(new Pass());
-//		a.bid(new Bid(3, NoTrump.i()));
-//		a.bid(new Pass());
-//		a.bid(new Pass());
-//		a.bid(new Pass());
-//		assertEquals(East.i(), a.getDummy());
-//	}
+	public void testGetDummyTwoRoundContract() {
+		Auctioneer a = new Auctioneer(West.i());
+		a.bid(new Bid(1, NoTrump.i()));
+		a.bid(new Pass());
+		a.bid(new Bid(2, Diamonds.i()));
+		a.bid(new Pass());
+		a.bid(new Bid(3, Diamonds.i()));
+		a.bid(new Pass());
+		a.bid(new Bid(3, NoTrump.i()));
+		a.bid(new Pass());
+		a.bid(new Pass());
+		a.bid(new Pass());
+		assertEquals(East.i(), a.getDummy());
+	}
 	
 	
 	
