@@ -2,6 +2,7 @@ package org.gnubridge.core.bidding;
 
 import junit.framework.TestCase;
 
+import org.gnubridge.core.Direction;
 import org.gnubridge.core.East;
 import org.gnubridge.core.North;
 import org.gnubridge.core.South;
@@ -19,7 +20,7 @@ public class AuctioneerTest extends TestCase {
 		Auctioneer b = new Auctioneer(South.i());
 		assertEquals(South.i(), b.getNextToBid());
 	}
-	
+
 	public void testBiddingMovesClockwise() {
 		Auctioneer a = new Auctioneer(West.i());
 		a.bid(new Bid(1, NoTrump.i()));
@@ -29,9 +30,9 @@ public class AuctioneerTest extends TestCase {
 		a.bid(new Pass());
 		assertEquals(South.i(), a.getNextToBid());
 		a.bid(new Bid(2, NoTrump.i()));
-		assertEquals(West.i(), a.getNextToBid());	
+		assertEquals(West.i(), a.getNextToBid());
 	}
-	
+
 	public void testEndBiddingContract() {
 		Auctioneer a = new Auctioneer(West.i());
 		a.bid(new Bid(1, NoTrump.i()));
@@ -55,7 +56,7 @@ public class AuctioneerTest extends TestCase {
 		assertTrue(a.biddingFinished());
 		assertEquals(null, a.getHighBid());
 	}
-	
+
 	public void testIsOpeningBid() {
 		Auctioneer a = new Auctioneer(West.i());
 		assertTrue(a.isOpeningBid());
@@ -64,11 +65,14 @@ public class AuctioneerTest extends TestCase {
 		a.bid(new Bid(1, NoTrump.i()));
 		assertTrue(a.isOpeningBid());
 		a.bid(new Pass());
-		assertFalse("South responding to partners 1NT is not an opening bid", a.isOpeningBid());
+		assertFalse("South responding to partners 1NT is not an opening bid", a
+				.isOpeningBid());
 		a.bid(new Bid(2, Clubs.i()));
-		assertFalse("West already passed on 1st round, so it is not an opening bid", a.isOpeningBid());	
+		assertFalse(
+				"West already passed on 1st round, so it is not an opening bid",
+				a.isOpeningBid());
 	}
-	
+
 	public void testCanTraversePairsHistoryWithGetPartnersBid() {
 		Auctioneer a = new Auctioneer(West.i());
 		a.bid(new Bid(1, Clubs.i()));
@@ -89,24 +93,24 @@ public class AuctioneerTest extends TestCase {
 		Call c2 = a.getPartnersCall(c4);
 		assertEquals(new Pass(), c2.getBid());
 		assertNull(a.getPartnersCall(c2));
-		
+
 		Call c7 = a.getPartnersLastCall();
 		assertEquals(new Bid(1, Spades.i()), c7.getBid());
 	}
-	
+
 	public void testIsValidAnyBidValidAtStart() {
 		Auctioneer a = new Auctioneer(West.i());
 		assertTrue(a.isValid(new Pass()));
 		assertTrue(a.isValid(new Bid(1, NoTrump.i())));
 		assertTrue(a.isValid(new Bid(7, Diamonds.i())));
 	}
-	
+
 	public void testIsValidPassAlwaysValid() {
 		Auctioneer a = new Auctioneer(West.i());
 		a.bid(new Bid(1, NoTrump.i()));
 		assertTrue(a.isValid(new Pass()));
 	}
-	
+
 	public void testIsValidOnlyHigherThanCurrent() {
 		Auctioneer a = new Auctioneer(West.i());
 		a.bid(new Bid(1, NoTrump.i()));
@@ -114,14 +118,14 @@ public class AuctioneerTest extends TestCase {
 		assertFalse(a.isValid(new Bid(1, NoTrump.i())));
 		assertTrue(a.isValid(new Bid(2, Clubs.i())));
 	}
-	
+
 	public void testGetDummyNullIfAuctionNotFinished() {
 		Auctioneer a = new Auctioneer(West.i());
 		assertNull(a.getDummy());
 		a.bid(new Bid(1, NoTrump.i()));
 		assertEquals(null, a.getDummy());
 	}
-	
+
 	public void testGetDummyNullIfNoContract() {
 		Auctioneer a = new Auctioneer(West.i());
 		a.bid(new Pass());
@@ -130,7 +134,7 @@ public class AuctioneerTest extends TestCase {
 		a.bid(new Pass());
 		assertEquals(null, a.getDummy());
 	}
-	
+
 	public void testGetDummySimpleContract() {
 		Auctioneer a = new Auctioneer(West.i());
 		a.bid(new Pass());
@@ -140,6 +144,7 @@ public class AuctioneerTest extends TestCase {
 		a.bid(new Pass());
 		assertEquals(South.i(), a.getDummy());
 	}
+
 	public void testGetDummyOverbidContract() {
 		Auctioneer a = new Auctioneer(West.i());
 		a.bid(new Bid(1, NoTrump.i()));
@@ -149,6 +154,7 @@ public class AuctioneerTest extends TestCase {
 		a.bid(new Pass());
 		assertEquals(South.i(), a.getDummy());
 	}
+
 	public void testGetDummyRaisedPartnersContract() {
 		Auctioneer a = new Auctioneer(West.i());
 		a.bid(new Bid(1, NoTrump.i()));
@@ -159,6 +165,7 @@ public class AuctioneerTest extends TestCase {
 		a.bid(new Pass());
 		assertEquals(East.i(), a.getDummy());
 	}
+
 	public void testGetDummyTwoRoundContract() {
 		Auctioneer a = new Auctioneer(West.i());
 		a.bid(new Bid(1, NoTrump.i()));
@@ -173,8 +180,19 @@ public class AuctioneerTest extends TestCase {
 		a.bid(new Pass());
 		assertEquals(East.i(), a.getDummy());
 	}
-	
-	
-	
-	
+
+	public void testGetDummyDirectionOffset() {
+		Auctioneer a = new Auctioneer(West.i()) {
+			@Override
+			public Direction getDummy() {
+				return West.i();
+			}
+		};
+        assertEquals(West.i(), a.getDummyOffsetDirection(South.i()));
+        assertEquals(North.i(), a.getDummyOffsetDirection(West.i()));
+        assertEquals(East.i(), a.getDummyOffsetDirection(North.i()));
+        assertEquals(South.i(), a.getDummyOffsetDirection(East.i()));
+        
+	}
+
 }

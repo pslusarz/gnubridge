@@ -12,6 +12,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JSplitPane;
 
+import org.gnubridge.core.Direction;
 import org.gnubridge.core.Game;
 import org.gnubridge.core.Hand;
 import org.gnubridge.core.bidding.Auctioneer;
@@ -94,16 +95,16 @@ public class MainWindow implements ActionListener {
 		
 	}
 
-	public void setGame(Game game) {
+	public void setGame(Game game, Direction human) {
 		biddingPane = theWindow.getContentPane();
 		biddingPane.setVisible(false);
 		playPane = new JPanel();
-		playPane.setPreferredSize(new Dimension(700, 500));
+		playPane.setPreferredSize(new Dimension(800, 600));
 		theWindow.setContentPane(playPane);
 		
 		PlayControls playControls = new PlayControls(this);
 		playControls.placeOn(theWindow);
-		playControls.setGame(game);
+		playControls.setGame(game, human);
 		theWindow.pack();
 		
 	}

@@ -110,7 +110,8 @@ public class Auctioneer {
 		Direction result = null;
 		if (biddingFinished() && getHighCall() != null) {
 			for (Call call : calls) {
-				if (!call.isPass() && call.getTrump().equals(getHighCall().getTrump())
+				if (!call.isPass()
+						&& call.getTrump().equals(getHighCall().getTrump())
 						&& call.pairMatches(getHighCall().getDirection())) {
 					result = call.getDirection().opposite();
 					break;
@@ -127,5 +128,29 @@ public class Auctioneer {
 			}
 		}
 		return null;
+	}
+
+	/**
+	 *      The parties in bidding are referred to by directions of the world, but
+	 *      these are not the same directions as the ones during play. This method
+	 *      provides a way to find the offset from what this class considers a
+	 *      direction and what direction ends up being when the contract is played.
+	 *      
+	 *      ie: if auction's West becomes the dummy (South during play), the offset
+	 *      is 1 move clockwise, and when given South as parameter, this method 
+	 *      returns West.
+	 */
+	public Direction getDummyOffsetDirection(Direction original) {
+		Direction d = getDummy();
+		Direction offset = original;
+		for (int i = 0; i < 4; i++) {
+			if (d.equals(North.i())) {
+				break;
+			} else {
+				d = d.clockwise();
+				offset = offset.clockwise();
+			}
+		}
+		return offset;
 	}
 }

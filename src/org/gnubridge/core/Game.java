@@ -175,5 +175,9 @@ public class Game {
 		return result;
 	}
 
+	public Player getPlayer(Direction d) {
+		return getPlayer(d.getValue());
+	}
+
 
 }

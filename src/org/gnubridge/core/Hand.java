@@ -92,6 +92,16 @@ public class Hand {
 		return orderedCards;
 	}
 
+	public int getLongestColorLength() {
+		int result = 0;
+		for (Color color : Color.list) {
+			if (result < getColorLength(color)) {
+				result = getColorLength(color);
+			}
+		}
+		return result;
+	}
+
 	
 
 }

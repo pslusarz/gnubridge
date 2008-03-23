@@ -1,9 +1,12 @@
 package org.jbridge.presentation.gui;
 
 import org.gnubridge.core.Direction;
+import org.gnubridge.core.East;
 import org.gnubridge.core.Game;
 import org.gnubridge.core.Hand;
+import org.gnubridge.core.North;
 import org.gnubridge.core.Player;
+import org.gnubridge.core.South;
 import org.gnubridge.core.West;
 import org.gnubridge.core.bidding.Auctioneer;
 import org.gnubridge.core.bidding.Bid;
@@ -72,22 +75,29 @@ public class GBController {
 		view.getBiddingDisplay().display("Play game not implemented");
 		game = makeGame(auction, holdPlayerCards);
 		
-		view.setGame(game);
+		
+		view.setGame(game, allowHumanToPlayIfDummy() );
 //		doAutomatedPlay();
+	}
+
+
+
+	private Direction allowHumanToPlayIfDummy() {
+		Direction newHuman = auction.getDummyOffsetDirection(human.getDirection2());
+		if (North.i().equals(newHuman)) {
+			newHuman = South.i();
+		}
+		return newHuman;
 	}
 
 	private Game makeGame(Auctioneer a, Game cardHolder) {
 		Game result = new Game(a.getHighBid().getTrump());
-		Direction dummyDir = a.getDummy();
 		
-		result.getNorth().init(cardHolder.getPlayer(dummyDir.getValue()).getHand());
-		Direction east = dummyDir.clockwise();
-		result.getEast().init(cardHolder.getPlayer(east.getValue()).getHand());
-		Direction south = east.clockwise();
-		result.getSouth().init(cardHolder.getPlayer(south.getValue()).getHand());
-		Direction west = south.clockwise();
-		result.getSouth().init(cardHolder.getPlayer(west.getValue()).getHand());
-		result.setNextToPlay(west.getValue());
+		result.getNorth().init(cardHolder.getPlayer(a.getDummyOffsetDirection(North.i())).getHand());
+		result.getEast().init(cardHolder.getPlayer(a.getDummyOffsetDirection(East.i())).getHand());
+		result.getSouth().init(cardHolder.getPlayer(a.getDummyOffsetDirection(South.i())).getHand());
+		result.getWest().init(cardHolder.getPlayer(a.getDummyOffsetDirection(West.i())).getHand());
+		result.setNextToPlay(West.i().getValue());
 		return result;
 	}
 
