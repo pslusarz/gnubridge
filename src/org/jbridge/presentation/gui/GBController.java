@@ -63,6 +63,7 @@ public class GBController {
 			}
 			auction.bid(candidate);
 			view.getBiddingDisplay().display("Bid placed:" + candidate);
+			view.auctionStateChanged();
 			doAutomatedBidding();
 		}
 		if (auction.biddingFinished()) {
@@ -93,10 +94,10 @@ public class GBController {
 	private Game makeGame(Auctioneer a, Game cardHolder) {
 		Game result = new Game(a.getHighBid().getTrump());
 		
-		result.getNorth().init(cardHolder.getPlayer(a.getDummyOffsetDirection(North.i())).getHand());
-		result.getEast().init(cardHolder.getPlayer(a.getDummyOffsetDirection(East.i())).getHand());
-		result.getSouth().init(cardHolder.getPlayer(a.getDummyOffsetDirection(South.i())).getHand());
-		result.getWest().init(cardHolder.getPlayer(a.getDummyOffsetDirection(West.i())).getHand());
+		result.getPlayer(a.getDummyOffsetDirection(North.i())).init(cardHolder.getPlayer(North.i()).getHand());
+		result.getPlayer(a.getDummyOffsetDirection(East.i())).init(cardHolder.getPlayer(East.i()).getHand());
+		result.getPlayer(a.getDummyOffsetDirection(South.i())).init(cardHolder.getPlayer(South.i()).getHand());
+		result.getPlayer(a.getDummyOffsetDirection(West.i())).init(cardHolder.getPlayer(West.i()).getHand());
 		result.setNextToPlay(West.i().getValue());
 		return result;
 	}

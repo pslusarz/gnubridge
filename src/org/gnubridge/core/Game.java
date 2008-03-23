@@ -179,5 +179,10 @@ public class Game {
 		return getPlayer(d.getValue());
 	}
 
+	public boolean isLegalMove(Card card) {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
 
 }

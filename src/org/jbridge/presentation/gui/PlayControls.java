@@ -3,6 +3,7 @@ package org.jbridge.presentation.gui;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -22,14 +23,16 @@ import org.gnubridge.core.deck.Color;
 public class PlayControls extends GBContainer {
 
 	private Game game;
-	private final int DHEIGHT = 600;
+	private final int DHEIGHT = 750;
 	private final int WIDTH = 800;
 	private final int CARD_OFFSET = 30;
+	private Rectangle table;
 
 	public PlayControls(MainWindow owner) {
 		super(owner);
 		panel.setLayout(null);
 		panel.setPreferredSize(new Dimension(WIDTH, DHEIGHT));
+		table = new Rectangle(290, DHEIGHT - CardPanel.IMAGE_HEIGHT - 35 - 5 - 275, 222, 275);
 	}
 
 	public void setGame(Game g, Direction human) {
@@ -39,11 +42,11 @@ public class PlayControls extends GBContainer {
 		Hand humanHand = new Hand(game.getPlayer(human).getHand());
 		for (Card card : humanHand.getCardsHighToLow()) {
 			CardPanel cardPanel = new CardPanel(card);
-			cardPanel.addMouseListener(new DaListener(cardPanel));
-			cardPanel.addMouseMotionListener(new DaListener(cardPanel));
+			DaListener listener = new DaListener(cardPanel, game);
+			cardPanel.addMouseListener(listener);
+			cardPanel.addMouseMotionListener(listener);
 			panel.add(cardPanel);
-			System.out.println("panel height: " + panel.getHeight());
-			cardPanel.setLocation(75 + CARD_OFFSET * i, DHEIGHT
+			cardPanel.setLocation(200 + CARD_OFFSET * i, DHEIGHT
 					- CardPanel.IMAGE_HEIGHT - 35);
 			panel.setComponentZOrder(cardPanel, 0);
 			i++;
@@ -57,8 +60,9 @@ public class PlayControls extends GBContainer {
 			for (Card card : dummyHand.getColorHi2Low(color)) {
 				CardPanel cardPanel = new CardPanel(card);
 				if (human.equals(South.i())) {
-					cardPanel.addMouseListener(new DaListener(cardPanel));
-					cardPanel.addMouseMotionListener(new DaListener(cardPanel));
+					DaListener listener = new DaListener(cardPanel, game);
+					cardPanel.addMouseListener(listener);
+					cardPanel.addMouseMotionListener(listener);
 				}
 				panel.add(cardPanel);
 				cardPanel.setLocation((int) dummyUpperLeft.getX(),
@@ -67,18 +71,18 @@ public class PlayControls extends GBContainer {
 				j++;
 			}
 			dummyUpperLeft.setLocation(dummyUpperLeft.getX()
-					+ CardPanel.IMAGE_WIDTH + 5, dummyUpperLeft.getY());
+					+ CardPanel.IMAGE_WIDTH + 2, dummyUpperLeft.getY());
 		}
 		panel.repaint();
 	}
 
 	private Point determineDummyPos(Direction human, int longestColorLength) {
 		if (South.i().equals(human)) {
-			return new Point(175, 10);
+			return new Point(235, 5);
 		} else if (West.i().equals(human)) {
-			return new Point(30, 150);
+			return new Point(10, DHEIGHT-500);
 		} else if (East.i().equals(human)) {
-			return new Point(600, 150);
+			return new Point(512, DHEIGHT-500);
 		}
 		throw new RuntimeException("human should never have to play as dummy");
 	}
@@ -88,7 +92,7 @@ public class PlayControls extends GBContainer {
 		return new JPanel() {
 			public void paintComponent(Graphics g) {
 				super.paintComponent(g);
-				//g.drawRect(5, 5, getWidth() - 10, getHeight() - 10);
+				g.drawRect((int)table.getX(), (int)table.getY(), (int)table.getWidth(), (int)table.getHeight());
 				g.drawString("Trump: " + game.getTrump(), 20, DHEIGHT - 25);
 			}
 		};
@@ -98,22 +102,28 @@ public class PlayControls extends GBContainer {
 
 class DaListener implements MouseListener, MouseMotionListener {
 
-	private JPanel theCard;
+	private CardPanel theCard;
 	private boolean dragging;
 	private int startX = -1;
 	private int startY = -1;
+	private Game theGame;
 
-	public DaListener(CardPanel card) {
+	public DaListener(CardPanel card, Game g) {
 		theCard = card;
+		theGame = g;
 	}
 
 	public void mouseClicked(MouseEvent arg0) {
 	}
 
 	public void mouseEntered(MouseEvent arg0) {
+		if (theGame.isLegalMove(theCard.getCard())) {
+		  theCard.setSelected(true);	
+		}
 	}
 
 	public void mouseExited(MouseEvent arg0) {
+		theCard.setSelected(false);
 	}
 
 	public void mousePressed(MouseEvent arg0) {

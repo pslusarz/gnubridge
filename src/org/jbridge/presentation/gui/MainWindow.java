@@ -99,7 +99,7 @@ public class MainWindow implements ActionListener {
 		biddingPane = theWindow.getContentPane();
 		biddingPane.setVisible(false);
 		playPane = new JPanel();
-		playPane.setPreferredSize(new Dimension(800, 600));
+		playPane.setPreferredSize(new Dimension(800, 750));
 		theWindow.setContentPane(playPane);
 		
 		PlayControls playControls = new PlayControls(this);
