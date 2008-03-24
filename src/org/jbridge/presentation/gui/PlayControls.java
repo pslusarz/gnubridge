@@ -20,6 +20,8 @@ import org.gnubridge.core.South;
 import org.gnubridge.core.West;
 import org.gnubridge.core.deck.Color;
 
+import sun.net.www.http.Hurryable;
+
 public class PlayControls extends GBContainer {
 
 	private Game game;
@@ -27,6 +29,7 @@ public class PlayControls extends GBContainer {
 	private final int WIDTH = 800;
 	private final int CARD_OFFSET = 30;
 	private Rectangle table;
+	private Direction humanDirection;
 
 	public PlayControls(MainWindow owner) {
 		super(owner);
@@ -37,7 +40,7 @@ public class PlayControls extends GBContainer {
 
 	public void setGame(Game g, Direction human) {
 		game = g;
-
+        humanDirection = human;
 		int i = 0;
 		Hand humanHand = new Hand(game.getPlayer(human).getHand());
 		for (Card card : humanHand.getCardsHighToLow()) {
@@ -93,61 +96,134 @@ public class PlayControls extends GBContainer {
 			public void paintComponent(Graphics g) {
 				super.paintComponent(g);
 				g.drawRect((int)table.getX(), (int)table.getY(), (int)table.getWidth(), (int)table.getHeight());
-				g.drawString("Trump: " + game.getTrump(), 20, DHEIGHT - 25);
+				g.drawString("Trump: " + game.getTrump()+" *** "+message, 20, DHEIGHT - 25);
+				drawPromptArrow(g);
 			}
 		};
 	}
+	
+	private void drawPromptArrow(Graphics g) {
+		Direction d = game.getNextToPlay().getDirection2();
+		Point topLeft = getExpectedSlot(d, humanDirection);
+		g.setColor(java.awt.Color.WHITE);
+		g.fillRect((int)topLeft.getX()+1, (int)topLeft.getY()+1, CardPanel.IMAGE_WIDTH-2, CardPanel.IMAGE_HEIGHT-2);
+	}
 
+	private Point getExpectedSlot(Direction d, Direction human) {
+		Direction rotation = South.i();
+		Direction slot = South.i();
+		
+		while(!rotation.equals(d)) {
+			slot = slot.clockwise();
+			rotation = rotation.clockwise();
+		}
+		
+		Direction humanOffset = human;
+		while(!humanOffset.equals(South.i())) {
+			slot = slot.clockwise();
+			humanOffset = humanOffset.clockwise();
+		}
+		System.out.println("Slot prompt determined: "+slot);
+		if (slot.equals(South.i())) {
+			return new Point((int) (table.getX() + table.getWidth()/2 - CardPanel.IMAGE_WIDTH/2),
+					         (int) (table.getY() + table.getHeight() - CardPanel.IMAGE_HEIGHT));
+		} else if (slot.equals(West.i())) {
+			return new Point((int)table.getX(),
+			         (int) (table.getY() + table.getHeight()/2 - CardPanel.IMAGE_HEIGHT/2));			
+		} else if (slot.equals(North.i())) {
+			return new Point((int) (table.getX() + table.getWidth()/2 - CardPanel.IMAGE_WIDTH/2),
+			         (int)table.getY());
+		} else if (slot.equals(East.i())) {
+			return new Point((int) (table.getX() + table.getWidth() - CardPanel.IMAGE_WIDTH),
+					(int) (table.getY() + table.getHeight()/2 - CardPanel.IMAGE_HEIGHT/2));
+		}
+		return null;
+	}
+
+	public void gameStateChanged() {
+		message = "Current trick: " + game.getCurrentTrick() + ", next to play: " + game.getNextToPlay();
+		panel.repaint();
+		
+	}
+
+	class DaListener implements MouseListener, MouseMotionListener {
+		
+		private CardPanel theCard;
+		private boolean dragging;
+		private int startX = -1;
+		private int startY = -1;
+		private Game theGame;
+		private int originalX;
+		private int originalY;
+		
+		public DaListener(CardPanel card, Game g) {
+			theCard = card;
+			theGame = g;
+		}
+		
+		public void mouseClicked(MouseEvent arg0) {
+		}
+		
+		public void mouseEntered(MouseEvent arg0) {
+			if (!dragging && CardPanel.canSelect(theCard) && theGame.isLegalMove(theCard.getCard())) {
+				theCard.setSelected(true);
+				originalX = theCard.getX();
+				originalY = theCard.getY();
+			}
+		}
+		
+		public void mouseExited(MouseEvent arg0) {
+			if (!dragging) {
+				mouseReleased(arg0);
+			}
+		}
+		
+		public void mousePressed(MouseEvent arg0) {
+			
+		}
+		
+		public void mouseReleased(MouseEvent arg0) {
+			dragging = false;
+			if (!theCard.isPlayed() && theCard.isSelected()) {
+				theCard.setLocation(originalX, originalY);
+				theCard.setSelected(false);
+			} else if (theCard.isPlayed()) {
+				
+				theCard.setVisible(false);
+				theCard.setSelected(false);
+				panel.remove(theCard);
+				theCard.removeMouseListener(this);
+				theCard.removeMouseMotionListener(this);
+				owner.playCard(theCard.getCard());
+				theCard = null;
+				panel.repaint();
+			}
+		}
+		
+		public void mouseDragged(MouseEvent arg0) {
+			if (!theCard.isSelected()) {
+				return;
+			}
+			if (!dragging) {
+				startX = arg0.getX();
+				startY = arg0.getY();
+			}
+			theCard.setLocation(theCard.getX() + arg0.getX() - startX, theCard
+					.getY()
+					+ arg0.getY() - startY);
+			if (table.contains(theCard.getBounds().getCenterX(), theCard.getBounds().getCenterY())) {
+				theCard.setPlayed(true);
+			} else {
+				theCard.setPlayed(false);
+			}
+			theCard.repaint();
+			dragging = true;
+		}
+		
+		public void mouseMoved(MouseEvent arg0) {
+			
+		}
+		
+	}
 }
 
-class DaListener implements MouseListener, MouseMotionListener {
-
-	private CardPanel theCard;
-	private boolean dragging;
-	private int startX = -1;
-	private int startY = -1;
-	private Game theGame;
-
-	public DaListener(CardPanel card, Game g) {
-		theCard = card;
-		theGame = g;
-	}
-
-	public void mouseClicked(MouseEvent arg0) {
-	}
-
-	public void mouseEntered(MouseEvent arg0) {
-		if (theGame.isLegalMove(theCard.getCard())) {
-		  theCard.setSelected(true);	
-		}
-	}
-
-	public void mouseExited(MouseEvent arg0) {
-		theCard.setSelected(false);
-	}
-
-	public void mousePressed(MouseEvent arg0) {
-
-	}
-
-	public void mouseReleased(MouseEvent arg0) {
-		dragging = false;
-	}
-
-	public void mouseDragged(MouseEvent arg0) {
-		if (!dragging) {
-			startX = arg0.getX();
-			startY = arg0.getY();
-		}
-		theCard.setLocation(theCard.getX() + arg0.getX() - startX, theCard
-				.getY()
-				+ arg0.getY() - startY);
-		theCard.repaint();
-		dragging = true;
-	}
-
-	public void mouseMoved(MouseEvent arg0) {
-
-	}
-
-}

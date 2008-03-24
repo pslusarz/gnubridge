@@ -61,5 +61,10 @@ public class Trick {
 	public Trump getTrump() {
 		return trump;
 	}
+	
+	@Override
+	public String toString() {
+		return cards.toString();
+	}
 
 }

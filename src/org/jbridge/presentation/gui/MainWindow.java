@@ -12,6 +12,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JSplitPane;
 
+import org.gnubridge.core.Card;
 import org.gnubridge.core.Direction;
 import org.gnubridge.core.Game;
 import org.gnubridge.core.Hand;
@@ -26,6 +27,7 @@ public class MainWindow implements ActionListener {
 	private GBController controller;
 	private Container biddingPane;
 	private Container playPane;
+	PlayControls playControls;
 
 	public MainWindow(String title) {
 		theWindow = new JFrame(title);
@@ -102,10 +104,24 @@ public class MainWindow implements ActionListener {
 		playPane.setPreferredSize(new Dimension(800, 750));
 		theWindow.setContentPane(playPane);
 		
-		PlayControls playControls = new PlayControls(this);
+		playControls = new PlayControls(this);
 		playControls.placeOn(theWindow);
 		playControls.setGame(game, human);
 		theWindow.pack();
 		
+	}
+
+	public void display(String msg) {
+		playControls.display(msg);
+		
+	}
+
+	public void gameStateChanged() {
+		playControls.gameStateChanged();
+		
+	}
+
+	public void playCard(Card card) {
+		controller.playCard(card);
 	}
 }

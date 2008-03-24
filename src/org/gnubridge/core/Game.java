@@ -180,8 +180,12 @@ public class Game {
 	}
 
 	public boolean isLegalMove(Card card) {
-		// TODO Auto-generated method stub
-		return true;
+		 return getNextToPlay().getPossibleMoves(currentTrick).contains(card);
+	}
+
+	public void play(Card c) {
+		List<Card> possibleMoves = getNextToPlay().getPossibleMoves(currentTrick);
+		doNextCard(possibleMoves.indexOf(c));
 	}
 
 
