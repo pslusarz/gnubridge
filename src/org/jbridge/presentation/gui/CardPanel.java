@@ -17,6 +17,8 @@ public class CardPanel extends JPanel {
 	private Card card;
 	private boolean selected;
 	private boolean played;
+	private int originalX;
+	private int originalY;
 
 	public CardPanel(Card card) {
 		this.card = card;
@@ -51,6 +53,12 @@ public class CardPanel extends JPanel {
 			getParent().repaint();
 		}
 		selected = b;
+		if (selected) {
+			originalX = getX();
+			originalY = getY();
+		} else {
+			setLocation(originalX, originalY);
+		}
 
 	}
 
@@ -73,6 +81,12 @@ public class CardPanel extends JPanel {
 	public void setPlayed(boolean b) {
 		played = b;
 
+	}
+
+	public void dispose() {
+		setVisible(false);
+//		setSelected(false);
+		getParent().remove(this);
 	}
 
 }

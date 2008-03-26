@@ -72,6 +72,7 @@ public class GBController {
 
 	public GBController(MainWindow view) {
 		this.view = view;
+		view.setController(this);
 		auction = new Auctioneer(West.i());
 		holdPlayerCards = new Game(null);
 		GameUtils.initializeRandom(holdPlayerCards.getPlayers(), 13);
@@ -100,36 +101,33 @@ public class GBController {
 	public void placeBid(int bidSize, String trump) {
 		if (!auction.biddingFinished()) {
 			if (!auction.getNextToBid().equals(human.getDirection2())) {
-				view.getBiddingDisplay().display("Not your turn to bid");
+				view.display("Not your turn to bid");
 				return;
 			}
 			Bid candidate = Bid.makeBid(bidSize, trump);
 			if (!auction.isValid(candidate)) {
-				view.getBiddingDisplay().display("Invalid bid");
+				view.display("Invalid bid");
 				return;
 			}
 			auction.bid(candidate);
-			view.getBiddingDisplay().display("Bid placed:" + candidate);
+			view.display("Bid placed:" + candidate);
 			view.auctionStateChanged();
 			doAutomatedBidding();
 		}
 		if (auction.biddingFinished()) {
-			view.getBiddingDisplay().display(
+			view.display(
 					"BIDDING COMPLETE. High bid: " + auction.getHighBid());
 		}
 	}
 
 	public void playGame() {
-		//view.getBiddingDisplay().display("Play game not implemented");
 		game = makeGame(auction, holdPlayerCards);
-
 		humanDirection = allowHumanToPlayIfDummy();
 		view.setGame(game, humanDirection);
 		doAutomatedPlay();
 	}
 	
 	public void playCard(Card c) {
-	  System.out.println("Playing: "+c);
 	  game.play(c);
 	  view.gameStateChanged();
 	  doAutomatedPlay();
@@ -137,11 +135,8 @@ public class GBController {
 
 	private void doAutomatedPlay() {
 		if (humanHasMove(humanDirection, game)) {
-			System.out.println("Human has move");
 			return;
-
 		}
-		System.out.println("Computer has move: "+game.getNextToPlay());
 		SearchWorker w = new SearchWorker();
 		w.execute();
 

@@ -22,45 +22,49 @@ public class MainWindow implements ActionListener {
 
 	private JFrame theWindow;
 	private BiddingDisplay biddingDisplay;
-	private BiddingControls biddingControls;
 	private int bidSize;
 	private GBController controller;
 	private Container biddingPane;
 	private Container playPane;
 	PlayControls playControls;
+	private GBContainer currentDisplay;
 
 	public MainWindow(String title) {
 		theWindow = new JFrame(title);
 		theWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		JPanel content = new JPanel();
-
-		theWindow.setContentPane(content);
-		int width = 600;
-		int height = 500;
-		theWindow.setBounds(new Rectangle(GraphicsEnvironment
-				.getLocalGraphicsEnvironment().getCenterPoint().x
-				- (width / 2), GraphicsEnvironment
-				.getLocalGraphicsEnvironment().getCenterPoint().y
-				- (height / 2), width, height));
-		
-		splitLeftRight(200, 300);
-		controller = new GBController(this);
-		theWindow.pack();
-	}
-
-	public void splitLeftRight(int i, int j) {
+		theWindow.setSize(600, 500);
 		biddingDisplay = new BiddingDisplay(this);
-		biddingControls = new BiddingControls(this);
+		currentDisplay = biddingDisplay;
+		biddingPane = createBiddingPane(biddingDisplay);
+		setContent(biddingPane);		
+	}
+
+	private void setContent(Container pane) {
+		theWindow.setContentPane(pane);
+		theWindow.pack();
+		center();
+		
+	}
+
+	private void center() {
+		theWindow.setLocation(GraphicsEnvironment.getLocalGraphicsEnvironment().getCenterPoint().x
+				- (theWindow.getWidth() / 2), 
+				GraphicsEnvironment.getLocalGraphicsEnvironment().getCenterPoint().y
+				- (theWindow.getHeight() / 2));
+		
+	}
+
+	public JSplitPane createBiddingPane(BiddingDisplay bd) {
+		BiddingControls biddingControls = new BiddingControls(this);
 		JSplitPane content = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
-		theWindow.setContentPane(content);
-		biddingDisplay.placeOn(theWindow);
-		biddingControls.placeOn(theWindow);
+		bd.placeOn(content);
+		biddingControls.placeOn(content);
 		content.setDividerLocation(500);
+		return content;
 
 	}
 
 
-	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() instanceof JRadioButton) {
 			bidSize = Integer.valueOf(e.getActionCommand()).intValue();
@@ -72,49 +76,46 @@ public class MainWindow implements ActionListener {
 
 	}
 
-	public BiddingDisplay getBiddingDisplay() {		
-		return biddingDisplay;
-	}
-
 	public void show() {
 		theWindow.setVisible(true);
 		
 	}
 
 	public void setCards(Hand hand) {
-		getBiddingDisplay().setCards(hand);
+		biddingDisplay.setCards(hand);
 		
 	}
 
 	public void setAuction(Auctioneer auction) {
-		getBiddingDisplay().setAuction(auction);
+		biddingDisplay.setAuction(auction);
 		
 	}
 
 	public void auctionStateChanged() {
-		getBiddingDisplay().auctionStateChanged();
-		
-		
+		biddingDisplay.auctionStateChanged();		
+	}
+	
+	public void display (String msg) {
+		currentDisplay.display(msg);
 	}
 
 	public void setGame(Game game, Direction human) {
-		biddingPane = theWindow.getContentPane();
 		biddingPane.setVisible(false);
-		playPane = new JPanel();
-		playPane.setPreferredSize(new Dimension(800, 750));
-		theWindow.setContentPane(playPane);
-		
 		playControls = new PlayControls(this);
-		playControls.placeOn(theWindow);
 		playControls.setGame(game, human);
-		theWindow.pack();
-		
+		currentDisplay = playControls;
+		playPane = createPlayPane(playControls);		
+		setContent(playPane);		
 	}
 
-	public void display(String msg) {
-		playControls.display(msg);
+	private Container createPlayPane(PlayControls pc) {
+		Container result = new JPanel();
+		result.setPreferredSize(new Dimension(800, 750));
 		
+		pc.placeOn(result);
+		return result;
 	}
+
 
 	public void gameStateChanged() {
 		playControls.gameStateChanged();
@@ -123,5 +124,10 @@ public class MainWindow implements ActionListener {
 
 	public void playCard(Card card) {
 		controller.playCard(card);
+	}
+
+	public void setController(GBController c) {
+		controller = c;
+		
 	}
 }

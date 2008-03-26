@@ -1,6 +1,7 @@
 package org.jbridge.presentation.gui;
 
-import javax.swing.JFrame;
+import java.awt.Container;
+
 import javax.swing.JPanel;
 
 public abstract class GBContainer {
@@ -20,8 +21,8 @@ public abstract class GBContainer {
 
 	protected abstract JPanel createDisplayPanel();
 
-	public void placeOn(JFrame parent) {
-	  parent.getContentPane().add(panel);
+	public void placeOn(Container parent) {
+	  parent.add(panel);
 	}
 
 	

@@ -96,7 +96,7 @@ public class PlayControls extends GBContainer {
 			public void paintComponent(Graphics g) {
 				super.paintComponent(g);
 				g.drawRect((int)table.getX(), (int)table.getY(), (int)table.getWidth(), (int)table.getHeight());
-				g.drawString("Trump: " + game.getTrump()+" *** "+message, 20, DHEIGHT - 25);
+				g.drawString("Trump: " + game.getTrump()+" < "+message+" >", 20, DHEIGHT - 25);
 				drawPromptArrow(g);
 			}
 		};
@@ -123,7 +123,7 @@ public class PlayControls extends GBContainer {
 			slot = slot.clockwise();
 			humanOffset = humanOffset.clockwise();
 		}
-		System.out.println("Slot prompt determined: "+slot);
+		
 		if (slot.equals(South.i())) {
 			return new Point((int) (table.getX() + table.getWidth()/2 - CardPanel.IMAGE_WIDTH/2),
 					         (int) (table.getY() + table.getHeight() - CardPanel.IMAGE_HEIGHT));
@@ -153,8 +153,8 @@ public class PlayControls extends GBContainer {
 		private int startX = -1;
 		private int startY = -1;
 		private Game theGame;
-		private int originalX;
-		private int originalY;
+		//private int originalX;
+		//private int originalY;
 		
 		public DaListener(CardPanel card, Game g) {
 			theCard = card;
@@ -167,8 +167,8 @@ public class PlayControls extends GBContainer {
 		public void mouseEntered(MouseEvent arg0) {
 			if (!dragging && CardPanel.canSelect(theCard) && theGame.isLegalMove(theCard.getCard())) {
 				theCard.setSelected(true);
-				originalX = theCard.getX();
-				originalY = theCard.getY();
+				//originalX = theCard.getX();
+				//originalY = theCard.getY();
 			}
 		}
 		
@@ -185,18 +185,12 @@ public class PlayControls extends GBContainer {
 		public void mouseReleased(MouseEvent arg0) {
 			dragging = false;
 			if (!theCard.isPlayed() && theCard.isSelected()) {
-				theCard.setLocation(originalX, originalY);
 				theCard.setSelected(false);
 			} else if (theCard.isPlayed()) {
-				
-				theCard.setVisible(false);
-				theCard.setSelected(false);
-				panel.remove(theCard);
-				theCard.removeMouseListener(this);
-				theCard.removeMouseMotionListener(this);
+				theCard.dispose();
 				owner.playCard(theCard.getCard());
 				theCard = null;
-				panel.repaint();
+				
 			}
 		}
 		
