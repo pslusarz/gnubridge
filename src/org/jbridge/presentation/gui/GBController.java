@@ -1,24 +1,15 @@
 package org.jbridge.presentation.gui;
 
-import java.util.List;
-
 import javax.swing.SwingWorker;
 
 import org.gnubridge.core.Card;
 import org.gnubridge.core.Direction;
 import org.gnubridge.core.East;
 import org.gnubridge.core.Game;
-import org.gnubridge.core.Hand;
 import org.gnubridge.core.North;
-import org.gnubridge.core.Player;
 import org.gnubridge.core.South;
 import org.gnubridge.core.West;
 import org.gnubridge.core.bidding.Auctioneer;
-import org.gnubridge.core.bidding.Bid;
-import org.gnubridge.core.bidding.BiddingAgent;
-import org.gnubridge.core.deck.NoTrump;
-import org.gnubridge.core.deck.Trump;
-import org.gnubridge.presentation.GameUtils;
 import org.gnubridge.search.Search;
 
 public class GBController {
@@ -64,64 +55,22 @@ public class GBController {
 	}
 
 	private MainWindow view;
-	private Auctioneer auction;
-	Player human;
-	Game holdPlayerCards;
 	private Game game;
 	private Direction humanDirection;
+	private BiddingController biddingController;
 
 	public GBController(MainWindow view) {
 		this.view = view;
 		view.setController(this);
-		auction = new Auctioneer(West.i());
-		holdPlayerCards = new Game(null);
-		GameUtils.initializeRandom(holdPlayerCards.getPlayers(), 13);
-		human = holdPlayerCards.getSouth();
-		view.setCards(new Hand(human.getHand()));
-		view.setAuction(auction);
-		doAutomatedBidding();
-		// fake bidding to get to the other page
-		//		auction.bid(new Bid(7, NoTrump.i()));
-		//		doAutomatedBidding();
-		//        playGame();
+		biddingController = new BiddingController(view.getBiddingView());
 	}
 
-	private void doAutomatedBidding() {
-		while (!auction.biddingFinished()
-				&& !auction.getNextToBid().equals(human.getDirection2())) {
-			Hand hand = new Hand(holdPlayerCards.getPlayer(
-					auction.getNextToBid().getValue()).getHand());
-			BiddingAgent ba = new BiddingAgent(auction, hand);
-			auction.bid(ba.getBid());
-			view.auctionStateChanged();
-		}
 
-	}
 
-	public void placeBid(int bidSize, String trump) {
-		if (!auction.biddingFinished()) {
-			if (!auction.getNextToBid().equals(human.getDirection2())) {
-				view.display("Not your turn to bid");
-				return;
-			}
-			Bid candidate = Bid.makeBid(bidSize, trump);
-			if (!auction.isValid(candidate)) {
-				view.display("Invalid bid");
-				return;
-			}
-			auction.bid(candidate);
-			view.display("Bid placed:" + candidate);
-			view.auctionStateChanged();
-			doAutomatedBidding();
-		}
-		if (auction.biddingFinished()) {
-			view.display(
-					"BIDDING COMPLETE. High bid: " + auction.getHighBid());
-		}
-	}
+
 
 	public void playGame() {
-		game = makeGame(auction, holdPlayerCards);
+		game = makeGame(biddingController.getAuction(), biddingController.getCardHolder());
 		humanDirection = allowHumanToPlayIfDummy();
 		view.setGame(game, humanDirection);
 		doAutomatedPlay();
@@ -153,7 +102,7 @@ public class GBController {
 	}
 
 	private Direction allowHumanToPlayIfDummy() {
-		Direction newHuman = auction.getDummyOffsetDirection(human
+		Direction newHuman = biddingController.getAuction().getDummyOffsetDirection(biddingController.getHuman()
 				.getDirection2());
 		if (North.i().equals(newHuman)) {
 			newHuman = South.i();
@@ -175,5 +124,6 @@ public class GBController {
 		result.setNextToPlay(West.i().getValue());
 		return result;
 	}
+
 
 }

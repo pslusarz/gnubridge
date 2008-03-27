@@ -84,8 +84,8 @@ public class CardPanel extends JPanel {
 	}
 
 	public void dispose() {
+		setSelected(false);
 		setVisible(false);
-//		setSelected(false);
 		getParent().remove(this);
 	}
 

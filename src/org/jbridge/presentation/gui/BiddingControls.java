@@ -14,9 +14,11 @@ import javax.swing.JRadioButton;
 public class BiddingControls extends GBContainer {
 	private ButtonGroup radioButtons;
 	private List<JPanel> subpanels;
+	private BiddingView listener;
 	
-	public BiddingControls(MainWindow owner) {
-		super(owner);
+	public BiddingControls(BiddingView view) {
+		super(null);
+		listener = view;
 		subpanels = new ArrayList<JPanel>();
 		addSelection("1", "2", "3", "4", "5", "6", "7");
 		addButtons("Pass", "NT", "Spades", "Hearts", "Diamonds", "Clubs");
@@ -38,7 +40,7 @@ public class BiddingControls extends GBContainer {
 		for (String selection : selections) {
 			JRadioButton button = new JRadioButton("       "+selection);
 			button.setActionCommand(selection);
-			button.addActionListener(owner);		
+			button.addActionListener(listener);		
 			radioButtons.add(button);
 			subpanel.add(button);
 		}
@@ -50,7 +52,7 @@ public class BiddingControls extends GBContainer {
 		for (String name : buttons) {
 			JButton button = new JButton(name);
 			button.setActionCommand(name);
-			button.addActionListener(owner);		
+			button.addActionListener(listener);		
 			subpanel.add(button);
 		}
 		

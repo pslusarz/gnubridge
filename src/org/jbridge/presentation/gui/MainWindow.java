@@ -21,31 +21,26 @@ import org.gnubridge.core.bidding.Auctioneer;
 public class MainWindow implements ActionListener {
 
 	private JFrame theWindow;
-	private BiddingDisplay biddingDisplay;
-	private int bidSize;
 	private GBController controller;
-	private Container biddingPane;
 	private Container playPane;
 	PlayControls playControls;
 	private GBContainer currentDisplay;
+	private BiddingView biddingView;
 
 	public MainWindow(String title) {
 		theWindow = new JFrame(title);
 		theWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		theWindow.setSize(600, 500);
-		biddingDisplay = new BiddingDisplay(this);
-		currentDisplay = biddingDisplay;
-		biddingPane = createBiddingPane(biddingDisplay);
-		setContent(biddingPane);		
+		biddingView = new BiddingView(this);
+		biddingView.show();		
 	}
 
-	private void setContent(Container pane) {
+	public void setContent(Container pane) {
 		theWindow.setContentPane(pane);
 		theWindow.pack();
-		center();
-		
+		center();		
 	}
-
+	
 	private void center() {
 		theWindow.setLocation(GraphicsEnvironment.getLocalGraphicsEnvironment().getCenterPoint().x
 				- (theWindow.getWidth() / 2), 
@@ -54,24 +49,9 @@ public class MainWindow implements ActionListener {
 		
 	}
 
-	public JSplitPane createBiddingPane(BiddingDisplay bd) {
-		BiddingControls biddingControls = new BiddingControls(this);
-		JSplitPane content = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
-		bd.placeOn(content);
-		biddingControls.placeOn(content);
-		content.setDividerLocation(500);
-		return content;
-
-	}
-
-
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() instanceof JRadioButton) {
-			bidSize = Integer.valueOf(e.getActionCommand()).intValue();
-		} else if ("Play game...".equals(e.getActionCommand())) {
+		if ("Play game...".equals(e.getActionCommand())) {
 			controller.playGame();
-		} else {
-			controller.placeBid(bidSize, e.getActionCommand());
 		}
 
 	}
@@ -81,26 +61,13 @@ public class MainWindow implements ActionListener {
 		
 	}
 
-	public void setCards(Hand hand) {
-		biddingDisplay.setCards(hand);
-		
-	}
-
-	public void setAuction(Auctioneer auction) {
-		biddingDisplay.setAuction(auction);
-		
-	}
-
-	public void auctionStateChanged() {
-		biddingDisplay.auctionStateChanged();		
-	}
 	
 	public void display (String msg) {
 		currentDisplay.display(msg);
 	}
 
 	public void setGame(Game game, Direction human) {
-		biddingPane.setVisible(false);
+		biddingView.hide();
 		playControls = new PlayControls(this);
 		playControls.setGame(game, human);
 		currentDisplay = playControls;
@@ -129,5 +96,9 @@ public class MainWindow implements ActionListener {
 	public void setController(GBController c) {
 		controller = c;
 		
+	}
+
+	public BiddingView getBiddingView() {
+		return biddingView;
 	}
 }
