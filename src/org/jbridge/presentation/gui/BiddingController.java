@@ -15,10 +15,12 @@ public class BiddingController {
 	private Game cardHolder;
 	private Auctioneer auction;
 	private Player human;
+	private GBController parent;
 
-	public BiddingController(BiddingView v) {
+	public BiddingController(BiddingView v, GBController p) {
 		view = v;
 		view.setController(this);
+		parent = p;
 		cardHolder = new Game(null);
 		GameUtils.initializeRandom(cardHolder.getPlayers(), 13);
 		auction = new Auctioneer(West.i());
@@ -77,6 +79,11 @@ public class BiddingController {
 			view.display(
 					"BIDDING COMPLETE. High bid: " + auction.getHighBid());
 		}
+	}
+
+	public void playGame() {
+		parent.playGame();
+		
 	}
 
 }

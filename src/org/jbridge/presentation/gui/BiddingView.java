@@ -19,7 +19,7 @@ public class BiddingView implements ActionListener{
 
 	public BiddingView(MainWindow o) {
 		owner = o;
-		biddingDisplay = new BiddingDisplay(owner);
+		biddingDisplay = new BiddingDisplay(this);
 		pane = createBiddingPane();
 	}
 
@@ -70,10 +70,12 @@ public class BiddingView implements ActionListener{
 		controller = c;
 		
 	}
-	
+
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() instanceof JRadioButton) {
 			bidSize  = Integer.valueOf(e.getActionCommand()).intValue();
+		} else if ("Play game...".equals(e.getActionCommand())) {
+			controller.playGame();
 		} else {
 			controller.placeBid(bidSize, e.getActionCommand());
 		}

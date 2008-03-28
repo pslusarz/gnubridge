@@ -62,7 +62,7 @@ public class GBController {
 	public GBController(MainWindow view) {
 		this.view = view;
 		view.setController(this);
-		biddingController = new BiddingController(view.getBiddingView());
+		biddingController = new BiddingController(view.getBiddingView(), this);
 	}
 
 

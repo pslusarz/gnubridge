@@ -16,9 +16,11 @@ public class BiddingDisplay extends GBContainer {
 
 	private Auctioneer auction;
 	private JButton playGameButton;
+	private BiddingView parentView;
 
-	public BiddingDisplay(MainWindow owner) {
-		super(owner);
+	public BiddingDisplay(BiddingView pv) {
+		super(null);
+		parentView = pv;
 		panel.setLayout(null);
 		panel.setPreferredSize(new Dimension(500, 500));
 		addPlayGameButton();
@@ -27,7 +29,7 @@ public class BiddingDisplay extends GBContainer {
 	private void addPlayGameButton() {
 		playGameButton = new JButton("Play game...");
 		playGameButton.setActionCommand("Play game...");
-		playGameButton.addActionListener(owner);
+		playGameButton.addActionListener(parentView);
 		panel.add(playGameButton);
 		playGameButton.setLocation(175, getTopOfCards()-125);
 		playGameButton.setSize(125, 25);

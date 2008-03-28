@@ -18,7 +18,7 @@ import org.gnubridge.core.Game;
 import org.gnubridge.core.Hand;
 import org.gnubridge.core.bidding.Auctioneer;
 
-public class MainWindow implements ActionListener {
+public class MainWindow {
 
 	private JFrame theWindow;
 	private GBController controller;
@@ -47,13 +47,6 @@ public class MainWindow implements ActionListener {
 				GraphicsEnvironment.getLocalGraphicsEnvironment().getCenterPoint().y
 				- (theWindow.getHeight() / 2));
 		
-	}
-
-	public void actionPerformed(ActionEvent e) {
-		if ("Play game...".equals(e.getActionCommand())) {
-			controller.playGame();
-		}
-
 	}
 
 	public void show() {
