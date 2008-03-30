@@ -31,14 +31,17 @@ public class PlayView extends GBContainer {
 	private final int CARD_OFFSET = 30;
 	private Rectangle table;
 	private Direction humanDirection;
+	private GameController controller;
 
 	public PlayView(MainView owner) {
 		super(owner);
 		panel.setLayout(null);
 		panel.setPreferredSize(new Dimension(WIDTH, DHEIGHT));
-		table = new Rectangle(290, DHEIGHT - CardPanel.IMAGE_HEIGHT - 35 - 5 - 275, 222, 275);
-		
-		
+		table = new Rectangle(290, DHEIGHT - CardPanel.IMAGE_HEIGHT - 35 - 5 - 275, 222, 275);		
+	}
+	
+	public void setController(GameController c) {
+		controller = c;
 	}
 	
 	private Container createPlayPane() {
@@ -164,6 +167,7 @@ public class PlayView extends GBContainer {
 		private int startY = -1;
 		private Game theGame;
 		
+		
 		public DaListener(CardPanel card, Game g) {
 			theCard = card;
 			theGame = g;
@@ -194,7 +198,7 @@ public class PlayView extends GBContainer {
 				theCard.setSelected(false);
 			} else if (theCard.isPlayed()) {
 				theCard.dispose();
-				owner.playCard(theCard.getCard());
+				controller.playCard(theCard.getCard());
 				theCard = null;
 				
 			}

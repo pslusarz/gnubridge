@@ -1,19 +1,5 @@
 package org.gnubridge.presentation.gui;
 
-import javax.swing.SwingWorker;
-
-import org.gnubridge.core.Card;
-import org.gnubridge.core.Direction;
-import org.gnubridge.core.East;
-import org.gnubridge.core.Game;
-import org.gnubridge.core.North;
-import org.gnubridge.core.South;
-import org.gnubridge.core.West;
-import org.gnubridge.core.bidding.Auctioneer;
-import org.gnubridge.presentation.gui.MainView;
-import org.gnubridge.search.Search;
-
-
 public class GBController {
 
 //	public class SearchWorker extends SwingWorker<Void, String> {
@@ -39,26 +25,9 @@ public class GBController {
 //		}
 //
 //	}
-	public class SearchWorker extends SwingWorker<Void, String> {
-		Search search;
-		@Override
-		protected Void doInBackground() throws Exception {
-			search = new Search(game);
-			search.setMaxTricks(2);
-			search.search();
-			return null;
-		}
-		
-		@Override
-		public void done() {
-			playCard(search.getBestMoves().get(0));
-		}
-		
-	}
+
 
 	private MainView view;
-	private Game game;
-	private Direction humanDirection;
 	private BiddingController biddingController;
 	private GameController gameController;
 
@@ -70,47 +39,16 @@ public class GBController {
 
 
 	public void playGame() {
-		gameController = new GameController(this, biddingController.getAuction(), biddingController.getCardHolder());
-		game = gameController.getGame();
-		
-		humanDirection = allowHumanToPlayIfDummy();
-		view.getPlayView().setGame(game, humanDirection);
-		doAutomatedPlay();
+		gameController = new GameController(this, biddingController.getAuction(), biddingController.getCardHolder(), biddingController.allowHumanToPlayIfDummy(), view.getPlayView());
 	}
 	
-	public void playCard(Card c) {
-	  game.play(c);
-	  view.getPlayView().gameStateChanged();
-	  doAutomatedPlay();
-	}
 
-	private void doAutomatedPlay() {
-		if (humanHasMove(humanDirection, game)) {
-			return;
-		}
-		SearchWorker w = new SearchWorker();
-		w.execute();
 
-	}
 
-	private boolean humanHasMove(Direction player, Game g) {
-		Direction nextToMove = g.getNextToPlay().getDirection2();
-		if (player.equals(nextToMove)
-				|| (player.equals(South.i()) && nextToMove.equals(North.i()))) {
-			return true;
-		} else {
-			return false;
-		}
-	}
 
-	private Direction allowHumanToPlayIfDummy() {
-		Direction newHuman = biddingController.getAuction().getDummyOffsetDirection(biddingController.getHuman()
-				.getDirection2());
-		if (North.i().equals(newHuman)) {
-			newHuman = South.i();
-		}
-		return newHuman;
-	}
+	
+
+	
 
 
 

@@ -1,8 +1,11 @@
 package org.gnubridge.presentation.gui;
 
+import org.gnubridge.core.Direction;
 import org.gnubridge.core.Game;
 import org.gnubridge.core.Hand;
+import org.gnubridge.core.North;
 import org.gnubridge.core.Player;
+import org.gnubridge.core.South;
 import org.gnubridge.core.West;
 import org.gnubridge.core.bidding.Auctioneer;
 import org.gnubridge.core.bidding.Bid;
@@ -84,6 +87,14 @@ public class BiddingController {
 	public void playGame() {
 		parent.playGame();
 		
+	}
+	
+	public Direction allowHumanToPlayIfDummy() {
+		Direction newHuman = auction.getDummyOffsetDirection(getHuman().getDirection2());
+		if (North.i().equals(newHuman)) {
+			newHuman = South.i();
+		}
+		return newHuman;
 	}
 
 }

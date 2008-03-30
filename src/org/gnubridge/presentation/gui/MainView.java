@@ -1,22 +1,11 @@
 package org.gnubridge.presentation.gui;
 
 import java.awt.Container;
-import java.awt.Dimension;
 import java.awt.GraphicsEnvironment;
-import java.awt.Rectangle;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JSplitPane;
 
 import org.gnubridge.core.Card;
-import org.gnubridge.core.Direction;
-import org.gnubridge.core.Game;
-import org.gnubridge.core.Hand;
-import org.gnubridge.core.bidding.Auctioneer;
 
 public class MainView {
 
@@ -48,10 +37,6 @@ public class MainView {
 	public void show() {
 		theWindow.setVisible(true);
 
-	}
-
-	public void playCard(Card card) {
-		controller.playCard(card);
 	}
 
 	public void setController(GBController c) {
