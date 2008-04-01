@@ -22,6 +22,8 @@ public class Game {
 
 	private int tricksPlayed;
 
+	private Trick previousTrick;
+
 	public Game(Trump trump) {
 		players = new Player[4];
 		for (int i = Direction.WEST; i <= Direction.SOUTH; i++) {
@@ -73,7 +75,7 @@ public class Game {
 			int winner = getWinnerIndex(currentTrick);
 			nextToPlay = winner;
 			players[winner].addTrickTaken(currentTrick);
-
+            previousTrick = currentTrick;
 			currentTrick = new Trick(this.getTrump());
 			tricksPlayed++;
 		} else {
@@ -85,6 +87,10 @@ public class Game {
 
 	}
 
+	public Trick getPreviousTrick() {
+		return previousTrick;
+	}
+	
 	public int getWinnerIndex(Trick trick) {
 		for (int i = 0; i < players.length; i++) {
             if (players[i].hasPlayedCard(trick.getHighestCard())) {
@@ -186,6 +192,17 @@ public class Game {
 	public void play(Card c) {
 		List<Card> possibleMoves = getNextToPlay().getPossibleMoves(currentTrick);
 		doNextCard(possibleMoves.indexOf(c));
+	}
+	
+	public Direction whoPlayed(Card c) {
+		Direction result = null;
+		for (Player player : players) {
+		  if (player.hasPlayedCard(c)) {
+			  result = player.getDirection2();
+			  break;
+		  }
+		}
+		return result;
 	}
 
 

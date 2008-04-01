@@ -67,4 +67,10 @@ public class Trick {
 		return cards.toString();
 	}
 
+	public List<Card> getCards() {
+		List<Card> result = new ArrayList<Card> ();
+		result.addAll(cards);
+		return result;
+	}
+
 }

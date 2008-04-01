@@ -10,7 +10,6 @@ import org.gnubridge.core.Card;
 public class MainView {
 
 	private JFrame theWindow;
-	private GBController controller;
 	PlayView playView;
 	private BiddingView biddingView;
 
@@ -36,11 +35,6 @@ public class MainView {
 
 	public void show() {
 		theWindow.setVisible(true);
-
-	}
-
-	public void setController(GBController c) {
-		controller = c;
 
 	}
 

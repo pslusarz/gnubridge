@@ -15,6 +15,7 @@ import org.gnubridge.search.Search;
 public class GameController {
 	public class SearchWorker extends SwingWorker<Void, String> {
 		Search search;
+
 		@Override
 		protected Void doInBackground() throws Exception {
 			search = new Search(game);
@@ -22,19 +23,21 @@ public class GameController {
 			search.search();
 			return null;
 		}
-		
+
 		@Override
 		public void done() {
 			playCard(search.getBestMoves().get(0));
 		}
-		
+
 	}
+
 	private GBController parent;
 	private Game game;
 	private Direction human;
 	private PlayView view;
 
-	public GameController(GBController controller, Auctioneer auctioneer, Game cardHolder, Direction humanDir, PlayView playView) {
+	public GameController(GBController controller, Auctioneer auctioneer,
+			Game cardHolder, Direction humanDir, PlayView playView) {
 		parent = controller;
 		game = makeGame(auctioneer, cardHolder);
 		human = humanDir;
@@ -47,11 +50,11 @@ public class GameController {
 	public Game getGame() {
 		return game;
 	}
-	
+
 	public Direction getHuman() {
 		return human;
 	}
-	
+
 	private Game makeGame(Auctioneer a, Game cardHolder) {
 		Game result = new Game(a.getHighBid().getTrump());
 
@@ -66,7 +69,7 @@ public class GameController {
 		result.setNextToPlay(West.i().getValue());
 		return result;
 	}
-	
+
 	public boolean humanHasMove() {
 		Direction nextToMove = game.getNextToPlay().getDirection2();
 		if (human.equals(nextToMove)
@@ -76,13 +79,17 @@ public class GameController {
 			return false;
 		}
 	}
-	
+
 	public void playCard(Card c) {
-		  game.play(c);
-		  view.gameStateChanged();
-		  doAutomatedPlay();
+		game.play(c);
+		if (game.isDone()) {
+			parent.gameFinished();
+		} else {
+			view.gameStateChanged();
+			doAutomatedPlay();
 		}
-	
+	}
+
 	public void doAutomatedPlay() {
 		if (humanHasMove()) {
 			return;

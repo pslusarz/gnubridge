@@ -1,5 +1,7 @@
 package org.gnubridge.presentation.gui;
 
+import org.gnubridge.core.Player;
+
 public class GBController {
 
 //	public class SearchWorker extends SwingWorker<Void, String> {
@@ -33,13 +35,18 @@ public class GBController {
 
 	public GBController(MainView view) {
 		this.view = view;
-		view.setController(this);
 		biddingController = new BiddingController(view.getBiddingView(), this);
 	}
 
 
 	public void playGame() {
 		gameController = new GameController(this, biddingController.getAuction(), biddingController.getCardHolder(), biddingController.allowHumanToPlayIfDummy(), view.getPlayView());
+	}
+
+
+	public void gameFinished() {
+		view.getPlayView().display("GAME FINISHED. Contract was: "+biddingController.getAuction().getHighBid()+ 
+				", declarers took "+gameController.getGame().getTricksTaken(Player.NORTH_SOUTH)+ " tricks.");
 	}
 	
 

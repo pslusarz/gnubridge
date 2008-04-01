@@ -19,16 +19,18 @@ public class CardPanel extends JPanel {
 	private boolean played;
 	private int originalX;
 	private int originalY;
+	Image image;
+	private boolean disposed = false;
 
 	public CardPanel(Card card) {
 		this.card = card;
 		setSize(IMAGE_WIDTH, IMAGE_HEIGHT);
+		image = new ImageIcon("./data/images/cards/jfitz/"
+				+ card.toString().replaceAll(" ", "-") + ".png").getImage();
 	}
 
 	@Override
 	public void paint(Graphics g) {
-		Image image = new ImageIcon("./data/images/cards/jfitz/"
-				+ card.toString().replaceAll(" ", "-") + ".png").getImage();
 		g.drawImage(image, 0, 0, IMAGE_WIDTH, IMAGE_HEIGHT, null);
 		if (played) {
 			g.setColor(Color.GREEN);
@@ -84,9 +86,12 @@ public class CardPanel extends JPanel {
 	}
 
 	public void dispose() {
-		setSelected(false);
-		setVisible(false);
-		getParent().remove(this);
+		if (!disposed ) {
+			setSelected(false);
+			setVisible(false);
+			getParent().remove(this);
+			disposed = true;
+		}
 	}
 
 }
