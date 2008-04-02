@@ -39,6 +39,7 @@ public class PlayView extends GBContainer {
 	private List<CardPanel> dummyCards;
 	private List<CardPanel> currentTrickCards;
 	private boolean cardPlayed = false;
+	private boolean displayingPreviousTrick;
 
 	public PlayView(MainView owner) {
 		super(owner);
@@ -133,8 +134,8 @@ public class PlayView extends GBContainer {
 				super.paintComponent(g);
 				g.drawRect((int) table.getX(), (int) table.getY(), (int) table
 						.getWidth(), (int) table.getHeight());
-				g.drawString("Trump: " + game.getTrump() + " < " + message
-						+ " >", 20, DHEIGHT - 25);
+				g.drawString("Trump: " + game.getTrump() + "            " + message
+						+ " ", 20, DHEIGHT - 25);
 				if (currentTrickCards.size() < 4) {
 					drawPromptArrow(g);
 				}
@@ -192,31 +193,25 @@ public class PlayView extends GBContainer {
 	}
 
 	public void gameStateChanged() {
+		if (displayingPreviousTrick) {
+			return;
+		}
 		message = " Tricks taken North/South: "
 				+ game.getTricksTaken(Player.NORTH_SOUTH) + " out of "
 				+ game.getTricksPlayed();
 		displayCurrentTrick();
 		displayDummy(humanDirection);
-		panel.repaint();
+		
 
 	}
 
-	private void displayCurrentTrick() {
-
-//		if (game.getCurrentTrick().getHighestCard() == null
-//				&& game.getPreviousTrick() != null) {
-//			displayTrick(game.getPreviousTrick());
-//			try {
-//				Thread.sleep(4000);
-//			} catch (InterruptedException e) {
-//				throw new RuntimeException(e);
-//			}
-//		}
+	void displayCurrentTrick() {
 		displayTrick(game.getCurrentTrick());
+		displayingPreviousTrick = false;
 
 	}
 
-	private void displayTrick(Trick trick) {
+	void displayTrick(Trick trick) {
 		dispose(currentTrickCards);
 		for (Card card : trick.getCards()) {
 			CardPanel cardPanel = new CardPanel(card);
@@ -224,7 +219,7 @@ public class PlayView extends GBContainer {
 			cardPanel.setLocation(getExpectedSlot(game.whoPlayed(card),
 					humanDirection));
 			panel.add(cardPanel);
-
+			panel.repaint();
 		}
 
 	}
@@ -314,5 +309,11 @@ public class PlayView extends GBContainer {
 
 	public void show() {
 		owner.setContent(createPlayPane());
+	}
+
+	public void displayPreviousTrick() {
+		displayingPreviousTrick = true;
+		displayTrick(game.getPreviousTrick());
+		
 	}
 }

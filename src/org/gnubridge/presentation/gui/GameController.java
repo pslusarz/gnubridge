@@ -28,7 +28,32 @@ public class GameController {
 		public void done() {
 			playCard(search.getBestMoves().get(0));
 		}
+	}
 
+	public class TrickDisplayWorker extends SwingWorker<Void, String> {
+		boolean previousTrickDisplayed = false;
+
+		@Override
+		protected Void doInBackground() throws Exception {
+			if (game.getCurrentTrick().getCards().size() == 0
+					&& game.getPreviousTrick() != null) {
+				view.displayPreviousTrick();
+				previousTrickDisplayed = true;
+			}
+			return null;
+		}
+
+		@Override
+		public void done() {
+			if (previousTrickDisplayed) {
+				try {
+					Thread.sleep(3000);
+				} catch (InterruptedException e) {
+					throw new RuntimeException(e);
+				}
+				view.displayCurrentTrick();
+			}
+		}
 	}
 
 	private GBController parent;
@@ -82,6 +107,15 @@ public class GameController {
 
 	public void playCard(Card c) {
 		game.play(c);
+		TrickDisplayWorker tdw = new TrickDisplayWorker();
+		tdw.execute();
+		while (!tdw.isDone()) {
+			try {
+				Thread.sleep(200);
+			} catch (InterruptedException e) {
+				throw new RuntimeException(e);
+			}
+		}
 		if (game.isDone()) {
 			parent.gameFinished();
 		} else {
@@ -95,6 +129,7 @@ public class GameController {
 			return;
 		}
 		SearchWorker w = new SearchWorker();
+
 		w.execute();
 
 	}

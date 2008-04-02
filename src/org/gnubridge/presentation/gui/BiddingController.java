@@ -28,7 +28,7 @@ public class BiddingController {
 		GameUtils.initializeRandom(cardHolder.getPlayers(), 13);
 		auction = new Auctioneer(West.i());
 		view.setAuction(auction);
-		human = cardHolder.getSouth();
+		human = cardHolder.selectRandomPlayer();
 		view.setCards(new Hand(human.getHand()));
 		doAutomatedBidding();
 		

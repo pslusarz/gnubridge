@@ -205,5 +205,9 @@ public class Game {
 		return result;
 	}
 
+	public Player selectRandomPlayer() {
+		return players[(int) Math.floor(Math.random() * players.length)];
+	}
+
 
 }
