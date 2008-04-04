@@ -31,10 +31,10 @@ public class BiddingDisplay extends GBContainer {
 		playGameButton.setActionCommand("Play game...");
 		playGameButton.addActionListener(parentView);
 		panel.add(playGameButton);
-		playGameButton.setLocation(175, getTopOfCards()-125);
+		playGameButton.setLocation(175, getTopOfCards() - 125);
 		playGameButton.setSize(125, 25);
 		playGameButton.setVisible(false);
-		
+
 	}
 
 	public void setCards(Hand h) {
@@ -74,10 +74,10 @@ public class BiddingDisplay extends GBContainer {
 				super.paintComponent(g);
 				int top = 15;
 				int rowHeight = 15;
-				for (int i = Direction.WEST; i <= Direction.SOUTH; i++) {
-					g.drawString(Direction.instance(i).toString(),
-							getColumnForDirection(i), top);
-				}
+				g.drawString("Player 1", getColumnForDirection(0), top);
+				g.drawString("Player 2", getColumnForDirection(1), top);
+				g.drawString("Partner 1", getColumnForDirection(2), top);
+				g.drawString("Partner 2", getColumnForDirection(3), top);
 				top += rowHeight;
 				for (Call call : auction.getCalls()) {
 					g.drawString(call.getBid().toString(),
