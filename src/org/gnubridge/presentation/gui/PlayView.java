@@ -45,6 +45,7 @@ public class PlayView extends GBContainer {
 		super(owner);
 		panel.setLayout(null);
 		panel.setPreferredSize(new Dimension(WIDTH, DHEIGHT));
+		panel.setSize(new Dimension(WIDTH, DHEIGHT));
 		table = new Rectangle(290, DHEIGHT - CardPanel.IMAGE_HEIGHT - 35 - 5
 				- 275, 222, 275);
 		dummyCards = new ArrayList<CardPanel>();

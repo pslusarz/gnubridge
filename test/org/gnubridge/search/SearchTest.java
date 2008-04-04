@@ -544,6 +544,32 @@ public class SearchTest extends TestCase {
 		assertEquals(1, s.getBestMoves().size());
 		assertEquals(Two.of(Clubs.i()), s.getBestMoves().get(0));
 	}
+	
+	public void testBestMoveForOneTrick() {
+		Game game = new Game(NoTrump.i());
+		game.getPlayer(Direction.WEST).init(new String[] { "3" });
+		game.getPlayer(Direction.NORTH).init(new String[] { "2" });
+		game.getPlayer(Direction.SOUTH).init(new String[] { "A" });
+		game.getPlayer(Direction.EAST).init(new String[] { "K" });
+		game.setNextToPlay(Direction.SOUTH);
+		Search s = new Search(game);
+		s.search();
+		assertNotNull(s.getBestMoves());
+		assertEquals(1, s.getBestMoves().size());
+	}
+	public void testBestMoveForOneTrickRootDidNotStartTrick() {
+		Game game = new Game(NoTrump.i());
+		game.getPlayer(Direction.WEST).init(new String[] { "3" });
+		game.getPlayer(Direction.NORTH).init(new String[] { "2" });
+		game.getPlayer(Direction.SOUTH).init(new String[] { "A" });
+		game.getPlayer(Direction.EAST).init(new String[] { "K" });
+		game.setNextToPlay(Direction.SOUTH);
+		game.doNextCard(0);
+		Search s = new Search(game);
+		s.search();
+		assertNotNull(s.getBestMoves());
+		assertEquals(1, s.getBestMoves().size());
+	}
 
 
 }

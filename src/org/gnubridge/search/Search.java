@@ -101,6 +101,12 @@ public class Search {
 		node.setPlayerTurn(player.getDirection());
 
 		if (position.oneTrickLeft()) {
+			if (node == root) {
+				Node move = new Node(node);
+				move.setCardPlayed(player.getPossibleMoves(position
+						.getCurrentTrick()).get(0));
+				move.setPlayerCardPlayed(player);	
+			}
 			position.playMoves(finalMoves);
 			handleLeafNode(node, position);
 
