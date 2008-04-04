@@ -79,8 +79,13 @@ public class BiddingController {
 			doAutomatedBidding();
 		}
 		if (auction.biddingFinished()) {
-			view.display(
-					"BIDDING COMPLETE. High bid: " + auction.getHighBid());
+			String message = "BIDDING COMPLETE.";
+			if (auction.getHighBid() != null) {
+				message += " High bid: " + auction.getHighBid();
+			} else {
+				message += " No contract reached. Cannot play game.";	
+			}
+			view.display(message);
 		}
 	}
 

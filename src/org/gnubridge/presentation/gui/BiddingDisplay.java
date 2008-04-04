@@ -59,7 +59,7 @@ public class BiddingDisplay extends GBContainer {
 	}
 
 	public void auctionStateChanged() {
-		if (auction.biddingFinished()) {
+		if (auction.biddingFinished() && auction.getHighBid() != null) {
 			playGameButton.setVisible(true);
 		}
 		panel.repaint();
