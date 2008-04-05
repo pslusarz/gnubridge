@@ -25,8 +25,6 @@ import org.gnubridge.core.Trick;
 import org.gnubridge.core.West;
 import org.gnubridge.core.deck.Color;
 
-import sun.net.www.http.Hurryable;
-
 public class PlayView extends GBContainer {
 
 	private Game game;

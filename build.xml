@@ -1,0 +1,33 @@
+<project name="gnubridge" default="build-jar">
+	<target name="build-jar">
+	  <property name="build.dir" value="c:/temp/gnubridge/" />
+	  <deltree dir="${build.dir}"/>
+	  <mkdir dir="${build.dir}"/>
+		
+	  <copy todir="${build.dir}/src/">
+	  	<fileset dir="./src/">
+	  	  <include name="**/*.java" />	
+	  	</fileset>
+	  </copy>
+
+	  <copy todir="${build.dir}/resources/">
+	  	<fileset dir="./data/images/cards/jfitz/">
+	  	  <include name="**/*.png"/>	
+	  	</fileset>
+	  </copy>
+		
+	  <mkdir dir="${build.dir}/classes/"/>
+	  
+	  <javac srcdir="${build.dir}/src/" destdir="${build.dir}/classes/" debug="on"/>
+	  
+	  <mkdir dir="${build.dir}/publish/"/>
+	  <jar destfile="${build.dir}/publish/gnubridge.jar">
+		<fileset dir="${build.dir}/classes/" />
+		<fileset dir="${build.dir}/resources/" />
+	    <manifest>
+	      <attribute name="Main-Class" value="org.gnubridge.presentation.gui.Main"/>
+	    </manifest>
+	  </jar>
+	
+	</target>
+</project>

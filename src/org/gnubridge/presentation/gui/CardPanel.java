@@ -3,6 +3,8 @@ package org.gnubridge.presentation.gui;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.io.File;
+import java.net.URL;
 
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
@@ -25,8 +27,17 @@ public class CardPanel extends JPanel {
 	public CardPanel(Card card) {
 		this.card = card;
 		setSize(IMAGE_WIDTH, IMAGE_HEIGHT);
-		image = new ImageIcon("./data/images/cards/jfitz/"
-				+ card.toString().replaceAll(" ", "-") + ".png").getImage();
+//		if (new File("./data/images/cards/jfitz/").exists()) {
+//			image = new ImageIcon("./data/images/cards/jfitz/"
+//					+ card.toString().replaceAll(" ", "-") + ".png").getImage();
+//		} else {
+//			image = new ImageIcon( //"./data/images/cards/jfitz/"+
+//					card.toString().replaceAll(" ", "-") + ".png").getImage();
+//
+//		}
+		URL imageURL = CardPanel.class.getResource("/"+card.toString().replaceAll(" ", "-") + ".png");
+		System.out.println("image url: "+imageURL.toString());
+        image = new ImageIcon(imageURL).getImage();
 	}
 
 	@Override
@@ -86,7 +97,7 @@ public class CardPanel extends JPanel {
 	}
 
 	public void dispose() {
-		if (!disposed ) {
+		if (!disposed) {
 			setSelected(false);
 			setVisible(false);
 			getParent().remove(this);
