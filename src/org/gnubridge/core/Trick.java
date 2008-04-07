@@ -11,21 +11,26 @@ public class Trick {
 
 	private Trump trump;
 
+	private List<Player> players;
+
+
 	public Trick(Trump trump2) {
 		cards = new ArrayList<Card>();
+		players = new ArrayList<Player>();
 		this.trump = trump2;
 	}
 	
 	public Trick duplicate() {
 		Trick result = new Trick(getTrump());
-		for (Card card : cards) {
-			result.addCard(card);
+		for (Card card: cards) {
+			result.addCard(card, players.get(cards.indexOf(card))); //TODO: test player duplication
 		}
 		return result;
 	}
 
-	public void addCard(Card card) {
+	public void addCard(Card card, Player p) {
 		cards.add(card);
+		players.add(p);
 	}
 
 	public boolean isDone() {
@@ -70,6 +75,17 @@ public class Trick {
 	public List<Card> getCards() {
 		List<Card> result = new ArrayList<Card> ();
 		result.addAll(cards);
+		return result;
+	}
+
+	public Player whoPlayed(Card card) {
+		Player result = null;
+		for (Card current : cards) {
+		  if (card.equals(current)) {
+			  result = players.get(cards.indexOf(current));
+			  break;
+		  }
+		}
 		return result;
 	}
 

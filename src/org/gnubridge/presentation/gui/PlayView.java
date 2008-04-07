@@ -28,26 +28,24 @@ import org.gnubridge.core.deck.Color;
 public class PlayView extends GBContainer {
 
 	private Game game;
-	private final int DHEIGHT = 750;
+	private final int DHEIGHT = 700;
 	private final int WIDTH = 800;
 	private final int CARD_OFFSET = 30;
-	private Rectangle table;
+	private Table table;
 	private Direction humanDirection;
 	private GameController controller;
 	private List<CardPanel> dummyCards;
-	private List<CardPanel> currentTrickCards;
+	
 	private boolean cardPlayed = false;
-	private boolean displayingPreviousTrick;
 
 	public PlayView(MainView owner) {
 		super(owner);
 		panel.setLayout(null);
 		panel.setPreferredSize(new Dimension(WIDTH, DHEIGHT));
 		panel.setSize(new Dimension(WIDTH, DHEIGHT));
-		table = new Rectangle(290, DHEIGHT - CardPanel.IMAGE_HEIGHT - 35 - 5
-				- 275, 222, 275);
+		table = new Table(DHEIGHT);
 		dummyCards = new ArrayList<CardPanel>();
-		currentTrickCards = new ArrayList<CardPanel>();
+		
 	}
 
 	public void setController(GameController c) {
@@ -56,7 +54,7 @@ public class PlayView extends GBContainer {
 
 	private Container createPlayPane() {
 		Container result = new JPanel();
-		result.setPreferredSize(new Dimension(800, 750));
+		result.setPreferredSize(new Dimension(WIDTH, DHEIGHT));
 		placeOn(result);
 		return result;
 	}
@@ -64,6 +62,7 @@ public class PlayView extends GBContainer {
 	public void setGame(Game g, Direction human) {
 		game = g;
 		humanDirection = human;
+		table.setHumanDirection(human);
 		int i = 0;
 		Hand humanHand = new Hand(game.getPlayer(human).getHand());
 		for (Card card : humanHand.getCardsHighToLow()) {
@@ -111,7 +110,7 @@ public class PlayView extends GBContainer {
 	protected void dockingCard(boolean isDocking) {
 		if (cardPlayed != isDocking) {
 			cardPlayed = isDocking;
-			drawPromptArrow(panel.getGraphics());
+			table.drawPromptArrow(panel.getGraphics(), game.getNextToPlay().getDirection2(), cardPlayed);
 		}
 	}
 
@@ -131,68 +130,21 @@ public class PlayView extends GBContainer {
 		return new JPanel() {
 			public void paintComponent(Graphics g) {
 				super.paintComponent(g);
-				g.drawRect((int) table.getX(), (int) table.getY(), (int) table
-						.getWidth(), (int) table.getHeight());
+				table.draw(g);
 				g.drawString("Trump: " + game.getTrump() + "            " + message
 						+ " ", 20, DHEIGHT - 25);
-				if (currentTrickCards.size() < 4) {
-					drawPromptArrow(g);
-				}
+				
+				table.drawPromptArrow(g, game.getNextToPlay().getDirection2(), cardPlayed);
 			}
 		};
 	}
 
-	private void drawPromptArrow(Graphics g) {
-		Direction d = game.getNextToPlay().getDirection2();
-		Point topLeft = getExpectedSlot(d, humanDirection);
-		g.setColor(java.awt.Color.WHITE);
-		g.fillRect((int) topLeft.getX() + 1, (int) topLeft.getY() + 1,
-				CardPanel.IMAGE_WIDTH - 2, CardPanel.IMAGE_HEIGHT - 2);
-		if (cardPlayed) {
-			g.setColor(java.awt.Color.GREEN);
-		} else {
-			g.setColor(java.awt.Color.YELLOW);
-		}
-		g.drawRect((int) topLeft.getX() + 1, (int) topLeft.getY() + 1,
-				CardPanel.IMAGE_WIDTH - 2, CardPanel.IMAGE_HEIGHT - 2);
-	}
 
-	private Point getExpectedSlot(Direction d, Direction human) {
-		Direction rotation = South.i();
-		Direction slot = South.i();
 
-		while (!rotation.equals(d)) {
-			slot = slot.clockwise();
-			rotation = rotation.clockwise();
-		}
 
-		Direction humanOffset = human;
-		while (!humanOffset.equals(South.i())) {
-			slot = slot.clockwise();
-			humanOffset = humanOffset.clockwise();
-		}
-
-		if (slot.equals(South.i())) {
-			return new Point(
-					(int) (table.getX() + table.getWidth() / 2 - CardPanel.IMAGE_WIDTH / 2),
-					(int) (table.getY() + table.getHeight() - CardPanel.IMAGE_HEIGHT));
-		} else if (slot.equals(West.i())) {
-			return new Point((int) table.getX(), (int) (table.getY()
-					+ table.getHeight() / 2 - CardPanel.IMAGE_HEIGHT / 2));
-		} else if (slot.equals(North.i())) {
-			return new Point(
-					(int) (table.getX() + table.getWidth() / 2 - CardPanel.IMAGE_WIDTH / 2),
-					(int) table.getY());
-		} else if (slot.equals(East.i())) {
-			return new Point(
-					(int) (table.getX() + table.getWidth() - CardPanel.IMAGE_WIDTH),
-					(int) (table.getY() + table.getHeight() / 2 - CardPanel.IMAGE_HEIGHT / 2));
-		}
-		return null;
-	}
 
 	public void gameStateChanged() {
-		if (displayingPreviousTrick) {
+		if (table.isDisplayingPreviousTrick()) {
 			return;
 		}
 		message = " Tricks taken North/South: "
@@ -205,23 +157,12 @@ public class PlayView extends GBContainer {
 	}
 
 	void displayCurrentTrick() {
-		displayTrick(game.getCurrentTrick());
-		displayingPreviousTrick = false;
+		table.displayTrick(game.getCurrentTrick(), panel);
+		table.setDisplayingPreviousTrick(false);
 
 	}
 
-	void displayTrick(Trick trick) {
-		dispose(currentTrickCards);
-		for (Card card : trick.getCards()) {
-			CardPanel cardPanel = new CardPanel(card);
-			currentTrickCards.add(cardPanel);
-			cardPanel.setLocation(getExpectedSlot(game.whoPlayed(card),
-					humanDirection));
-			panel.add(cardPanel);
-			panel.repaint();
-		}
 
-	}
 
 	private void dispose(List<CardPanel> trash) {
 		for (CardPanel card : trash) {
@@ -288,8 +229,7 @@ public class PlayView extends GBContainer {
 			theCard.setLocation(theCard.getX() + arg0.getX() - startX, theCard
 					.getY()
 					+ arg0.getY() - startY);
-			if (table.contains(theCard.getBounds().getCenterX(), theCard
-					.getBounds().getCenterY())) {
+			if (table.contains(theCard)) {
 				theCard.setPlayed(true);
 				dockingCard(true);
 			} else {
@@ -311,8 +251,8 @@ public class PlayView extends GBContainer {
 	}
 
 	public void displayPreviousTrick() {
-		displayingPreviousTrick = true;
-		displayTrick(game.getPreviousTrick());
+		table.setDisplayingPreviousTrick(true);
+		table.displayTrick(game.getPreviousTrick(), panel);
 		
 	}
 }

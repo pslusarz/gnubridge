@@ -31,6 +31,10 @@ public class Player {
 		direction = i;
 	}
 	
+	public Player(Direction d) {
+		this(d.getValue());
+	}
+	
 //	public Player (Direction d, Hand h) {
 //		this(d.getValue());
 //		direction2 = d;

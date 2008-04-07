@@ -70,7 +70,7 @@ public class Game {
 		} else {
 			card = players[nextToPlay].play(currentTrick, forcedMoveIndex);
 		}
-		currentTrick.addCard(card);
+		currentTrick.addCard(card, players[nextToPlay]); //TODO: test player assignment
 		if (currentTrick.isDone()) {
 			int winner = getWinnerIndex(currentTrick);
 			nextToPlay = winner;
@@ -193,17 +193,7 @@ public class Game {
 		List<Card> possibleMoves = getNextToPlay().getPossibleMoves(currentTrick);
 		doNextCard(possibleMoves.indexOf(c));
 	}
-	
-	public Direction whoPlayed(Card c) {
-		Direction result = null;
-		for (Player player : players) {
-		  if (player.hasPlayedCard(c)) {
-			  result = player.getDirection2();
-			  break;
-		  }
-		}
-		return result;
-	}
+
 
 	public Player selectRandomPlayer() {
 		return players[(int) Math.floor(Math.random() * players.length)];

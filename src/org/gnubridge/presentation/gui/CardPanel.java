@@ -27,16 +27,7 @@ public class CardPanel extends JPanel {
 	public CardPanel(Card card) {
 		this.card = card;
 		setSize(IMAGE_WIDTH, IMAGE_HEIGHT);
-//		if (new File("./data/images/cards/jfitz/").exists()) {
-//			image = new ImageIcon("./data/images/cards/jfitz/"
-//					+ card.toString().replaceAll(" ", "-") + ".png").getImage();
-//		} else {
-//			image = new ImageIcon( //"./data/images/cards/jfitz/"+
-//					card.toString().replaceAll(" ", "-") + ".png").getImage();
-//
-//		}
 		URL imageURL = CardPanel.class.getResource("/"+card.toString().replaceAll(" ", "-") + ".png");
-		System.out.println("image url: "+imageURL.toString());
         image = new ImageIcon(imageURL).getImage();
 	}
 

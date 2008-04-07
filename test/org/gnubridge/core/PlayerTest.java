@@ -59,8 +59,8 @@ public class PlayerTest extends TestCase {
 		Player west = new Player(Direction.WEST);
 		west.init(westSpades, westHearts, westDiamonds, westClubs);	
 		Trick trick = new Trick(NoTrump.i());
-		trick.addCard(Three.of(Hearts.i()));
-		trick.addCard(Ace.of(Clubs.i()));
+		trick.addCard(Three.of(Hearts.i()), null);
+		trick.addCard(Ace.of(Clubs.i()), null);
 		List<Card> moves = west.getPossibleMoves(trick);
 		assertEquals(2, moves.size());
 		assertEquals(Jack.of(Hearts.i()), moves.get(0));
@@ -75,8 +75,8 @@ public class PlayerTest extends TestCase {
 		Player west = new Player(Direction.WEST);
 		west.init(westSpades, westHearts, westDiamonds, westClubs);	
 		Trick trick = new Trick(NoTrump.i());
-		trick.addCard(Three.of(Diamonds.i()));
-		trick.addCard(Ace.of(Clubs.i()));
+		trick.addCard(Three.of(Diamonds.i()), null);
+		trick.addCard(Ace.of(Clubs.i()), null);
 		List<Card> moves = west.getPossibleMoves(trick);
 		assertEquals(7, moves.size());
 		assertEquals(Two.of(Spades.i()), moves.get(0));
@@ -114,8 +114,8 @@ public class PlayerTest extends TestCase {
 		Player west = new Player(Direction.WEST);
 		west.init(westSpades, westHearts, westDiamonds, westClubs);	
 		Trick trick = new Trick(NoTrump.i());
-		trick.addCard(Three.of(Diamonds.i()));
-		trick.addCard(Ace.of(Clubs.i()));
+		trick.addCard(Three.of(Diamonds.i()), null);
+		trick.addCard(Ace.of(Clubs.i()), null);
 		List<Card> moves = west.getPossibleMoves(trick);
 		west.play(trick, 3);
 		assertTrue(west.hasPlayedCard(moves.get(3)));
