@@ -1,11 +1,15 @@
 package org.gnubridge.presentation.gui;
 
 import java.awt.Container;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.swing.border.Border;
+import javax.swing.border.LineBorder;
 
 import org.gnubridge.core.Card;
 import org.gnubridge.core.Direction;
@@ -81,6 +85,12 @@ public class Table {
 			}
 			g.drawRect((int) topLeft.getX() + 1, (int) topLeft.getY() + 1,
 					CardPanel.IMAGE_WIDTH - 2, CardPanel.IMAGE_HEIGHT - 2);
+			g.setColor(java.awt.Color.BLACK);
+			Font font = g.getFont();
+			g.setFont(new Font(font.getName(), Font.BOLD, font.getSize() +8));
+			g.drawString(whereIsNextPlayer.toString(), (int)topLeft.getX()+8, (int)topLeft.getY() + 30);
+			g.setFont(new Font(font.getName(), Font.BOLD, font.getSize() +30));
+			g.drawString("?", (int)topLeft.getX()+CardPanel.IMAGE_WIDTH/2-10, (int)topLeft.getY() + CardPanel.IMAGE_HEIGHT/2+15);
 		}
 	}
 
@@ -106,6 +116,9 @@ public class Table {
 		dispose(currentTrickCards);
 		for (Card card : trick.getCards()) {
 			CardPanel cardPanel = new CardPanel(card);
+			if (card.equals(trick.getHighestCard()) && displayingPreviousTrick) {
+				cardPanel.setHighestInTrick();
+			}
 			currentTrickCards.add(cardPanel);
 			cardPanel.setLocation(getExpectedSlot(trick.whoPlayed(card).getDirection2()));
 			thePanel.add(cardPanel);

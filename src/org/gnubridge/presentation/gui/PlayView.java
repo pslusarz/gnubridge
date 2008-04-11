@@ -118,7 +118,7 @@ public class PlayView extends GBContainer {
 		if (South.i().equals(human)) {
 			return new Point(235, 5);
 		} else if (West.i().equals(human)) {
-			return new Point(10, DHEIGHT - 500);
+			return new Point(3, DHEIGHT - 500);
 		} else if (East.i().equals(human)) {
 			return new Point(512, DHEIGHT - 500);
 		}

@@ -23,6 +23,7 @@ public class CardPanel extends JPanel {
 	private int originalY;
 	Image image;
 	private boolean disposed = false;
+	private boolean high;
 
 	public CardPanel(Card card) {
 		this.card = card;
@@ -38,8 +39,10 @@ public class CardPanel extends JPanel {
 			g.setColor(Color.GREEN);
 		} else if (selected) {
 			g.setColor(Color.YELLOW);
+		} else if (high) {
+			g.setColor(Color.BLUE);
 		}
-		if (selected || played) {
+		if (selected || played || high) {
 			g.drawRect(0, 0, IMAGE_WIDTH - 1, IMAGE_HEIGHT - 1);
 		}
 	}
@@ -94,6 +97,11 @@ public class CardPanel extends JPanel {
 			getParent().remove(this);
 			disposed = true;
 		}
+	}
+
+	public void setHighestInTrick() {
+		high = true;
+		
 	}
 
 }
