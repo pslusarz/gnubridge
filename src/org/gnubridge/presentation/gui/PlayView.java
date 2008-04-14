@@ -28,13 +28,12 @@ import org.gnubridge.core.deck.Color;
 public class PlayView extends GBContainer {
 
 	private Game game;
-	private final int DHEIGHT = 700;
+	final int DHEIGHT = 700;
 	private final int WIDTH = 800;
-	private final int CARD_OFFSET = 30;
+	
 	private Table table;
-	private Direction humanDirection;
 	private GameController controller;
-	private List<CardPanel> dummyCards;
+	private HandDisplay dummy;
 	
 	private boolean cardPlayed = false;
 
@@ -44,7 +43,6 @@ public class PlayView extends GBContainer {
 		panel.setPreferredSize(new Dimension(WIDTH, DHEIGHT));
 		panel.setSize(new Dimension(WIDTH, DHEIGHT));
 		table = new Table(DHEIGHT);
-		dummyCards = new ArrayList<CardPanel>();
 		
 	}
 
@@ -61,7 +59,6 @@ public class PlayView extends GBContainer {
 
 	public void setGame(Game g, Direction human) {
 		game = g;
-		humanDirection = human;
 		table.setHumanDirection(human);
 		int i = 0;
 		Hand humanHand = new Hand(game.getPlayer(human).getHand());
@@ -71,40 +68,26 @@ public class PlayView extends GBContainer {
 			cardPanel.addMouseListener(listener);
 			cardPanel.addMouseMotionListener(listener);
 			panel.add(cardPanel);
-			cardPanel.setLocation(200 + CARD_OFFSET * i, DHEIGHT
+			cardPanel.setLocation(200 + HandDisplay.CARD_OFFSET * i, DHEIGHT
 					- CardPanel.IMAGE_HEIGHT - 35);
 			panel.setComponentZOrder(cardPanel, 0);
 			i++;
 		}
-
-		displayDummy(human);
+        dummy = new HandDisplay(human, North.i(), game, this);
+        dummy.display();
 	}
 
-	private void displayDummy(Direction human) {
-		dispose(dummyCards);
-		Hand dummyHand = new Hand(game.getPlayer(North.i()).getHand());
-		Point dummyUpperLeft = determineDummyPos(human, dummyHand
-				.getLongestColorLength());
-		for (Color color : Color.list) {
-			int j = 0;
-			for (Card card : dummyHand.getColorHi2Low(color)) {
-				CardPanel cardPanel = new CardPanel(card);
-				dummyCards.add(cardPanel);
-				if (human.equals(South.i())) {
-					DaListener listener = new DaListener(cardPanel, game);
-					cardPanel.addMouseListener(listener);
-					cardPanel.addMouseMotionListener(listener);
-				}
-				panel.add(cardPanel);
-				cardPanel.setLocation((int) dummyUpperLeft.getX(),
-						(int) dummyUpperLeft.getY() + CARD_OFFSET * j);
-				panel.setComponentZOrder(cardPanel, 0);
-				j++;
-			}
-			dummyUpperLeft.setLocation(dummyUpperLeft.getX()
-					+ CardPanel.IMAGE_WIDTH + 2, dummyUpperLeft.getY());
-		}
 
+
+	void addCard(CardPanel card) {
+        if (card.isPlayable()) {
+        	DaListener listener = new DaListener(card, game);
+			card.addMouseListener(listener);
+			card.addMouseMotionListener(listener);
+        }
+		panel.add(card);
+		panel.setComponentZOrder(card, 0);
+		
 	}
 
 	protected void dockingCard(boolean isDocking) {
@@ -114,16 +97,7 @@ public class PlayView extends GBContainer {
 		}
 	}
 
-	private Point determineDummyPos(Direction human, int longestColorLength) {
-		if (South.i().equals(human)) {
-			return new Point(235, 5);
-		} else if (West.i().equals(human)) {
-			return new Point(3, DHEIGHT - 500);
-		} else if (East.i().equals(human)) {
-			return new Point(512, DHEIGHT - 500);
-		}
-		throw new RuntimeException("human should never have to play as dummy");
-	}
+
 
 	@Override
 	protected JPanel createDisplayPanel() {
@@ -147,30 +121,20 @@ public class PlayView extends GBContainer {
 		if (table.isDisplayingPreviousTrick()) {
 			return;
 		}
-		message = " Tricks taken North/South: "
-				+ game.getTricksTaken(Player.NORTH_SOUTH) + " out of "
-				+ game.getTricksPlayed();
 		displayCurrentTrick();
-		displayDummy(humanDirection);
-		
+		dummy.display();
 
 	}
 
 	void displayCurrentTrick() {
+		message = " Tricks taken North/South: "
+			+ game.getTricksTaken(Player.NORTH_SOUTH) + " out of "
+			+ game.getTricksPlayed();
 		table.displayTrick(game.getCurrentTrick(), panel);
 		table.setDisplayingPreviousTrick(false);
 
 	}
 
-
-
-	private void dispose(List<CardPanel> trash) {
-		for (CardPanel card : trash) {
-			card.dispose();
-		}
-		trash.clear();
-
-	}
 
 	class DaListener implements MouseListener, MouseMotionListener {
 

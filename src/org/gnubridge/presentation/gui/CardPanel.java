@@ -24,6 +24,7 @@ public class CardPanel extends JPanel {
 	Image image;
 	private boolean disposed = false;
 	private boolean high;
+	private boolean playable;
 
 	public CardPanel(Card card) {
 		this.card = card;
@@ -102,6 +103,14 @@ public class CardPanel extends JPanel {
 	public void setHighestInTrick() {
 		high = true;
 		
+	}
+
+	public boolean isPlayable() {
+		return playable;
+	}
+	
+	public void setPlayable(boolean newVal) {
+		playable = newVal;
 	}
 
 }
