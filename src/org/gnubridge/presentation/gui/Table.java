@@ -1,5 +1,6 @@
 package org.gnubridge.presentation.gui;
 
+import java.awt.Component;
 import java.awt.Container;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -39,19 +40,8 @@ public class Table {
 	}
 
 	public Point getExpectedSlot(Direction d) {
-		Direction rotation = South.i();
-		Direction slot = South.i();
-
-		while (!rotation.equals(d)) {
-			slot = slot.clockwise();
-			rotation = rotation.clockwise();
-		}
-
-		Direction humanOffset = human;
-		while (!humanOffset.equals(South.i())) {
-			slot = slot.clockwise();
-			humanOffset = humanOffset.clockwise();
-		}
+		Direction slot = new HumanAlwaysOnBottom(human).mapRelativeTo(d);
+		
 
 		if (slot.equals(South.i())) {
 			return new Point((int) (dimensions.getX() + dimensions.getWidth()
@@ -133,6 +123,10 @@ public class Table {
 		}
 		trash.clear();
 
+	}
+
+	public Rectangle getDimensions() {
+		return dimensions;
 	}
 
 }

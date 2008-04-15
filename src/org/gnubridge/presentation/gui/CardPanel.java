@@ -25,6 +25,7 @@ public class CardPanel extends JPanel {
 	private boolean disposed = false;
 	private boolean high;
 	private boolean playable;
+	private boolean dragging;
 
 	public CardPanel(Card card) {
 		this.card = card;
@@ -55,6 +56,7 @@ public class CardPanel extends JPanel {
 	public void setSelected(boolean b) {
 		if (b && !selected) {
 			selectedCard = this;
+			
 			getParent().repaint();
 		} else if (!b && selected) {
 			selectedCard = null;
@@ -79,7 +81,7 @@ public class CardPanel extends JPanel {
 	}
 
 	public static boolean canSelect(CardPanel theCard) {
-		if (selectedCard == null || selectedCard.equals(theCard)) {
+		if ( selectedCard == null || selectedCard.equals(theCard)) {
 			return true;
 		} else {
 			return false;
@@ -111,6 +113,17 @@ public class CardPanel extends JPanel {
 	
 	public void setPlayable(boolean newVal) {
 		playable = newVal;
+	}
+
+	public boolean isDragged() {
+		return dragging;
+	}
+	
+	public void startDragging() {
+		dragging = true;
+	}
+	public void stopDragging() {
+		dragging = false;
 	}
 
 }
