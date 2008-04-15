@@ -5,8 +5,6 @@ import java.awt.GraphicsEnvironment;
 
 import javax.swing.JFrame;
 
-import org.gnubridge.core.Card;
-
 public class MainView {
 
 	private JFrame theWindow;

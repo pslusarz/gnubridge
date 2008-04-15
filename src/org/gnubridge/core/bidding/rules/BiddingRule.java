@@ -3,7 +3,6 @@ package org.gnubridge.core.bidding.rules;
 import org.gnubridge.core.Hand;
 import org.gnubridge.core.bidding.Auctioneer;
 import org.gnubridge.core.bidding.Bid;
-import org.gnubridge.core.bidding.Pass;
 
 public abstract class BiddingRule {
 	protected Auctioneer auction;

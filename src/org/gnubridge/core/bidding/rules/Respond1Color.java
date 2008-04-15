@@ -6,7 +6,6 @@ import org.gnubridge.core.bidding.Bid;
 import org.gnubridge.core.bidding.Call;
 import org.gnubridge.core.bidding.PointCalculator;
 import org.gnubridge.core.deck.Color;
-import org.gnubridge.core.deck.Hearts;
 import org.gnubridge.core.deck.NoTrump;
 
 public class Respond1Color extends BiddingRule {

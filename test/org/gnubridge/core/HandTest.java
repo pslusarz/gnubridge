@@ -2,6 +2,8 @@ package org.gnubridge.core;
 
 import java.util.List;
 
+import junit.framework.TestCase;
+
 import org.gnubridge.core.deck.Ace;
 import org.gnubridge.core.deck.Clubs;
 import org.gnubridge.core.deck.Diamonds;
@@ -9,8 +11,6 @@ import org.gnubridge.core.deck.Hearts;
 import org.gnubridge.core.deck.King;
 import org.gnubridge.core.deck.Three;
 import org.gnubridge.core.deck.Two;
-
-import junit.framework.TestCase;
 
 public class HandTest extends TestCase {
   

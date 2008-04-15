@@ -3,7 +3,6 @@ package org.gnubridge.presentation.gui;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.io.File;
 import java.net.URL;
 
 import javax.swing.ImageIcon;
@@ -13,6 +12,7 @@ import org.gnubridge.core.Card;
 
 public class CardPanel extends JPanel {
 
+	private static final long serialVersionUID = -5094295103096621771L;
 	public static final int IMAGE_WIDTH = 70;
 	public static final int IMAGE_HEIGHT = 120;
 	private static CardPanel selectedCard;

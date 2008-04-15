@@ -1,8 +1,6 @@
 package org.gnubridge.presentation.gui;
 
 import java.awt.Point;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.gnubridge.core.Card;
 import org.gnubridge.core.Direction;

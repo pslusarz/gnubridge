@@ -1,9 +1,9 @@
 package org.gnubridge.search;
 
+import junit.framework.TestCase;
+
 import org.gnubridge.core.Direction;
 import org.gnubridge.core.Player;
-
-import junit.framework.TestCase;
 
 public class AlphaBetaPruningTest extends TestCase {
 	/**

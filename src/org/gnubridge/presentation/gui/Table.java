@@ -1,6 +1,5 @@
 package org.gnubridge.presentation.gui;
 
-import java.awt.Component;
 import java.awt.Container;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -8,9 +7,6 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.swing.border.Border;
-import javax.swing.border.LineBorder;
 
 import org.gnubridge.core.Card;
 import org.gnubridge.core.Direction;

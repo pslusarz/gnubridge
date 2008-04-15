@@ -3,27 +3,16 @@ package org.gnubridge.presentation.gui;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Point;
-import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.JPanel;
 
-import org.gnubridge.core.Card;
 import org.gnubridge.core.Direction;
-import org.gnubridge.core.East;
 import org.gnubridge.core.Game;
-import org.gnubridge.core.Hand;
 import org.gnubridge.core.North;
 import org.gnubridge.core.Player;
-import org.gnubridge.core.South;
-import org.gnubridge.core.Trick;
-import org.gnubridge.core.West;
-import org.gnubridge.core.deck.Color;
 
 public class PlayView extends GBContainer {
 
@@ -91,6 +80,8 @@ public class PlayView extends GBContainer {
 	@Override
 	protected JPanel createDisplayPanel() {
 		return new JPanel() {
+			private static final long serialVersionUID = -8275738275275964573L;
+
 			public void paintComponent(Graphics g) {
 				super.paintComponent(g);
 				table.draw(g);

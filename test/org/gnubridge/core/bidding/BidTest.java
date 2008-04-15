@@ -1,12 +1,12 @@
 package org.gnubridge.core.bidding;
 
+import junit.framework.TestCase;
+
 import org.gnubridge.core.deck.Clubs;
 import org.gnubridge.core.deck.Diamonds;
 import org.gnubridge.core.deck.Hearts;
 import org.gnubridge.core.deck.NoTrump;
 import org.gnubridge.core.deck.Spades;
-
-import junit.framework.TestCase;
 
 public class BidTest extends TestCase {
 	public void testGreaterThanFalseIfSame() {
