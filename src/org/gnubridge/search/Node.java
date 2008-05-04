@@ -13,11 +13,15 @@ public class Node {
 
 	public static final int PRUNE_ALPHA = 0;
 
-	public static final int PRUNE_BETA = 1;
+	public static final int PRUNE_BETA = PRUNE_ALPHA + 1;
 
 	private static final int ALPHA_UNINIT = -1;
 
 	static final int BETA_UNINIT = 14;
+
+	public static final int PRUNE_SEQUENCE_SIBLINGS = PRUNE_BETA + 1;
+
+	public static final int PRUNE_SEQUENCE_SIBLINGS_PLAYED = PRUNE_SEQUENCE_SIBLINGS + 1;
 
 	int value;
 
@@ -364,6 +368,36 @@ public class Node {
 	@Override
 	public String toString() {
 		return "Node "+getMoves().toString();
+	}
+
+	private List<Node> siblings() {
+		List<Node> result = new ArrayList<Node>();
+		if (parent != null) {
+			for (Node node : parent.children) {
+				if (! node.equals(this)) {
+					result.add(node);
+				}
+			}
+		}
+		return result;
+	}
+
+	public boolean isSequencePruned() {
+		return isPruned() && (getPruneType() == PRUNE_SEQUENCE_SIBLINGS);
+	}
+
+	public List<Card> getSiblingsInColor() {
+		List<Card> cardsInSuit = new ArrayList<Card>();
+		for (Node sibling : siblings()) {
+			if (sibling.getCardPlayed().hasSameColorAs(getCardPlayed())) {
+			  cardsInSuit.add(sibling.getCardPlayed());	
+			}
+		}
+		return cardsInSuit;
+	}
+
+	public boolean isPlayedSequencePruned() {
+		return isPruned() && (getPruneType() == PRUNE_SEQUENCE_SIBLINGS_PLAYED);
 	}
 
 }

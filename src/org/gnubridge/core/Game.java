@@ -3,6 +3,7 @@ package org.gnubridge.core;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.gnubridge.core.deck.Color;
 import org.gnubridge.core.deck.Trump;
 
 
@@ -23,6 +24,7 @@ public class Game {
 	private int tricksPlayed;
 
 	private Trick previousTrick;
+	private Hand playedCards;
 
 	public Game(Trump trump) {
 		players = new Player[4];
@@ -34,6 +36,8 @@ public class Game {
 		currentTrick = new Trick(this.getTrump());
 		tricksPlayed = 0;
 		done = false;
+		playedCards = new Hand();
+		
 	}
 
 	public Player getPlayer(int i) {
@@ -62,6 +66,11 @@ public class Game {
 		doNextCard(NO_FORCED_MOVE);
 	}
 
+	//TODO: test how it interacts with play()
+	public List<Card> getPlayedCardsHiToLow(Color color) {
+		return playedCards.getColorHi2Low(color);
+	}
+	
 	public void doNextCard(int forcedMoveIndex) {		
 		Card card;
 		
@@ -70,6 +79,7 @@ public class Game {
 		} else {
 			card = players[nextToPlay].play(currentTrick, forcedMoveIndex);
 		}
+		playedCards.add(card);
 		currentTrick.addCard(card, players[nextToPlay]); //TODO: test player assignment
 		if (currentTrick.isDone()) {
 			int winner = getWinnerIndex(currentTrick);
@@ -115,7 +125,13 @@ public class Game {
 		}
 		result.nextToPlay = nextToPlay;
 		result.setCurrentTrick(currentTrick.duplicate());
+		result.setPlayedCards(playedCards.getCardsHighToLow()); //TODO: untested
 		return result;
+	}
+
+	private void setPlayedCards(List<Card> cards) {
+		playedCards = new Hand(cards);
+		
 	}
 
 	private void setCurrentTrick(Trick trick) {

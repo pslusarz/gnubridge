@@ -6,6 +6,7 @@ import java.util.Stack;
 
 import org.gnubridge.core.Card;
 import org.gnubridge.core.Game;
+import org.gnubridge.core.Hand;
 import org.gnubridge.core.Player;
 
 public class Search {
@@ -29,6 +30,10 @@ public class Search {
 	private long runningTime;
 
 	private int maxTricks = 13;
+
+	private int prunedSequence;
+
+	private int prunedPlayedSequence;
 
 	public Search(Node root) {
 		this.root = root;
@@ -73,6 +78,8 @@ public class Search {
 		runningTime = 0;
 		prunedAlpha = 0;
 		prunedBeta = 0;
+		prunedSequence = 0;
+		prunedPlayedSequence = 0;
 		positionsCount = 0;
 	}
 
@@ -82,7 +89,11 @@ public class Search {
 			prunedAlpha++;
 		} else if (node.isBetaPruned()) {
 			prunedBeta++;
-		}
+		} else if (node.isSequencePruned()) {
+			prunedSequence++;
+		} else if (node.isPlayedSequencePruned()) {
+		   prunedPlayedSequence++;
+	    }
 
 	}
 
@@ -103,9 +114,9 @@ public class Search {
 		if (position.oneTrickLeft()) {
 			if (node == root) {
 				Node move = new Node(node);
-				move.setCardPlayed(player.getPossibleMoves(position
-						.getCurrentTrick()).get(0));
-				move.setPlayerCardPlayed(player);	
+				move.setCardPlayed(player.getPossibleMoves(
+						position.getCurrentTrick()).get(0));
+				move.setPlayerCardPlayed(player);
 			}
 			position.playMoves(finalMoves);
 			handleLeafNode(node, position);
@@ -116,15 +127,90 @@ public class Search {
 			} else {
 				List<Card> moves = player.getPossibleMoves(position
 						.getCurrentTrick());
-
 				for (Card card : moves) {
 					Node move = new Node(node);
 					move.setCardPlayed(card);
 					move.setPlayerCardPlayed(player);
+					removeSiblingsInSequence(move, position);
+					removeSiblingsInSequenceWithPlayedCards(move, position);
 					stack.push(move);
 				}
 			}
 		}
+	}
+
+	private void removeSiblingsInSequenceWithPlayedCards(Node move,
+			Game position) {
+		boolean shouldTrim = false;
+
+		List<Card> siblingsInSuit = move.getSiblingsInColor();
+		List<Card> orderedPlayedCardsInSuit = position
+				.getPlayedCardsHiToLow(move.getCardPlayed().getDenomination());
+		Card lowerCard;
+		Card higherCard;
+		for (Card sibling : siblingsInSuit) {
+			higherCard = getHigher(move.getCardPlayed(), sibling);
+			lowerCard = getLower(move.getCardPlayed(), sibling);
+			boolean isSequence = false;
+			Card previous = higherCard;
+			for (Card played : orderedPlayedCardsInSuit) {
+				if (played.getValue() > higherCard.getValue()) {
+					continue;
+				}
+				if (previous.getValue() == played.getValue() + 1) {
+					isSequence = true;
+				} else {
+					isSequence = false;
+					break;
+				}
+				if (isSequence && played.getValue() == lowerCard.getValue() + 1) {
+					shouldTrim = true;
+					break;
+				}
+				previous = played;
+			}
+			if (shouldTrim) {
+				break;
+			}
+		}
+		if (shouldTrim) {
+			move.setPruned(true, Node.PRUNE_SEQUENCE_SIBLINGS_PLAYED);
+		}
+
+	}
+
+	private Card getLower(Card c1, Card c2) {
+		if (c1.getValue() < c2.getValue()) {
+			return c1;
+		} else {
+			return c2;
+		}
+	}
+
+	private Card getHigher(Card c1, Card c2) {
+		if (c1.getValue() > c2.getValue()) {
+			return c1;
+		} else {
+			return c2;
+		}
+	}
+
+	private void removeSiblingsInSequence(Node move, Game position) {
+		boolean shouldTrim = false;
+
+		List<Card> cardsInSuit = move.getSiblingsInColor();
+		for (Card sibling : cardsInSuit) {
+			if (Math.abs(sibling.getValue() - move.getCardPlayed().getValue()) == 1) {
+				shouldTrim = true;
+				break;
+			}
+
+		}
+
+		if (shouldTrim) {
+			move.setPruned(true, Node.PRUNE_SEQUENCE_SIBLINGS);
+		}
+
 	}
 
 	private void handleLeafNode(Node node, Game position) {
@@ -241,10 +327,20 @@ public class Search {
 		if (usePruning) {
 			System.out.println("  Alpha prunes: " + getPrunedAlpha());
 			System.out.println("  Beta prunes: " + getPrunedBeta());
+			System.out.println("  Sequence prunes: " + getPrunedSequence());
+			System.out.println("  Played Sequence prunes: " + getPrunedPlayedSequence());
 		}
 		System.out.println("West/East tricks taken: "
 				+ root.getTricksTaken(Player.WEST_EAST));
 
+	}
+
+	private int getPrunedPlayedSequence() {
+		return prunedPlayedSequence;
+	}
+
+	private int getPrunedSequence() {
+		return prunedSequence;
 	}
 
 	public boolean usePruning() {

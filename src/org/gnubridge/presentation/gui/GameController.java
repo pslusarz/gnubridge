@@ -19,7 +19,11 @@ public class GameController {
 		@Override
 		protected Void doInBackground() throws Exception {
 			search = new Search(game);
-			search.setMaxTricks(2);
+			if (game.getTricksPlayed() < 6) {
+			  search.setMaxTricks(3);
+			} else if (game.getTricksPlayed() < 8) {
+				search.setMaxTricks(4);
+			}
 			search.search();
 			return null;
 		}

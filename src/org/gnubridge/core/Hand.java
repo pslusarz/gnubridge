@@ -9,8 +9,16 @@ import org.gnubridge.core.deck.Color;
 
 public class Hand {
 	List<Card> cards;
+	
+	/**
+	 * Caching optimization for pruning played cards
+	 * and perhaps others
+	 */
+	List<Card> orderedCards;
+	Color color;
+	List<Card> colorInOrder;
 
-	private Hand() {
+	public Hand() {
 		this.cards = new ArrayList<Card>();
 	}
 	
@@ -35,6 +43,15 @@ public class Hand {
 		}
 
 	}
+	
+	public void add(Card c) {
+		cards.add(c);
+		orderedCards = null;
+		if (c.getDenomination().equals(color)) {
+			colorInOrder = null;
+		}
+		
+	}
 
 	private Collection<? extends Card> createCards(String colorSuit, Color color) {
 		List<Card> results = new ArrayList<Card>();
@@ -49,6 +66,9 @@ public class Hand {
 	}
 
 	public List<Card> getColorHi2Low(Color color) {
+		if (color.equals(this.color) && colorInOrder != null) {
+			return colorInOrder;
+		}
 		List<Card> result = new ArrayList<Card>();
 		for (Card card : cards) {
 			if (card.getDenomination().equals(color)) {
@@ -56,6 +76,8 @@ public class Hand {
 
 			}
 		}
+		this.color = color;
+		colorInOrder = result;
 		return result;
 	}
 
@@ -85,10 +107,14 @@ public class Hand {
 	}
 
 	public List<Card> getCardsHighToLow() {
+		if (orderedCards != null) {
+			return orderedCards;
+		}
 		List<Card> orderedCards = new ArrayList<Card>();
 		for (Color color : Color.list) {
 		  orderedCards.addAll(getColorHi2Low(color));	
 		}
+		this.orderedCards = orderedCards;
 		return orderedCards;
 	}
 
