@@ -128,6 +128,18 @@ public class Hand {
 		return result;
 	}
 
+	public boolean contains(Card card) {
+		if (cards.size() == 0 && card == null) {
+			return true;
+		} else {
+			return cards.contains(card);
+		}
+	}
+
+	public boolean isEmpty() {
+		return cards.isEmpty();
+	}
+
 	
 
 }

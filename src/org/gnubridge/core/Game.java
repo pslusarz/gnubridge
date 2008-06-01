@@ -215,5 +215,10 @@ public class Game {
 		return players[(int) Math.floor(Math.random() * players.length)];
 	}
 
+	//TODO: note, this is currently tested by TestPositionLookup indirectly
+	public Hand getPlayedCards() {
+		return playedCards;
+	}
+
 
 }
