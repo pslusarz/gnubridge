@@ -33,6 +33,8 @@ public class Card {
 	public static final String[] FullSuit = { "2", "3", "4", "5", "6", "7",
 			"8", "9", "10", "J", "Q", "K", "A" };
 
+	public static final int COUNT = 52;
+
 	private int value;
 
 	private Color denomination;
@@ -143,6 +145,10 @@ public class Card {
 
 	public boolean hasGreaterValueThan(Card other) {
 		return getValue() > other.getValue();
+	}
+
+	public int getIndex() {
+		return value + Color.getIndex(denomination)*(ACE+1);
 	}
 
 }

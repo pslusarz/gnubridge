@@ -108,14 +108,16 @@ public class Hand {
 
 	public List<Card> getCardsHighToLow() {
 		if (orderedCards != null) {
-			return orderedCards;
+			List<Card> copyOfOrderedCards = new ArrayList<Card> ();
+			copyOfOrderedCards.addAll(orderedCards);
+			return copyOfOrderedCards ;
 		}
 		List<Card> orderedCards = new ArrayList<Card>();
 		for (Color color : Color.list) {
 		  orderedCards.addAll(getColorHi2Low(color));	
 		}
 		this.orderedCards = orderedCards;
-		return orderedCards;
+		return getCardsHighToLow();
 	}
 
 	public int getLongestColorLength() {
