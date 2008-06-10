@@ -7,16 +7,13 @@ import org.gnubridge.core.Game;
 import org.gnubridge.core.Hand;
 
 public class PositionLookup {
-	// private Hand move1;
 	private PositionLookupNode root;
 
 	public PositionLookup() {
-		// move1 = new Hand();
 		root = new PositionLookupNode(null, null);
 	}
 
 	public boolean positionEncountered(Game g) {
-		boolean result = false;
 		List<Card> playedCards = g.getPlayedCards().getCardsHighToLow();
 		return root.positionEncountered(playedCards);
 	}
@@ -26,36 +23,39 @@ public class PositionLookup {
 class PositionLookupNode {
 	PositionLookupNode[] moves;
 	private Card card;
-	private boolean isLeaf;
+	private boolean terminatesAPosition;
 
 	PositionLookupNode(PositionLookupNode parent, Card card) {
 		moves = new PositionLookupNode[Card.COUNT];
 		this.card = card;
-		isLeaf = true;
+		terminatesAPosition = false;
 	}
 
 	public boolean positionEncountered(List<Card> playedCards) {
-		if (!haveCard(playedCards.get(0))) {
+		Card top = playedCards.get(0);
+		if (!haveCard(top)) {
 			store(playedCards);
 			return false;
 		} else {
-			Card top = playedCards.get(0);
 			if (playedCards.size() > 1) {
 				playedCards.remove(0);
 				return moves[top.getIndex()].positionEncountered(playedCards);
 			} else {
-				return moves[top.getIndex()].isLeaf;
+				boolean result =  moves[top.getIndex()].terminatesAPosition;
+				moves[top.getIndex()].terminatesAPosition = true;
+				return result;
 			}
 		}
 	}
 
 	private void store(List<Card> cards) {
-		isLeaf = false;
 		Card top = cards.get(0);
 		moves[top.getIndex()] = new PositionLookupNode(this, top);
 		if (cards.size() > 1) {
 			cards.remove(0);
 			moves[top.getIndex()].store(cards);
+		} else {
+			moves[top.getIndex()].terminatesAPosition = true;
 		}
 
 	}

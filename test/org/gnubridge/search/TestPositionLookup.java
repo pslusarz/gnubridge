@@ -1,7 +1,24 @@
 package org.gnubridge.search;
 
+import org.gnubridge.core.East;
 import org.gnubridge.core.Game;
+import org.gnubridge.core.Hand;
+import org.gnubridge.core.North;
+import org.gnubridge.core.South;
+import org.gnubridge.core.West;
+import org.gnubridge.core.deck.Clubs;
+import org.gnubridge.core.deck.Diamonds;
+import org.gnubridge.core.deck.Eight;
+import org.gnubridge.core.deck.Five;
+import org.gnubridge.core.deck.Four;
+import org.gnubridge.core.deck.Hearts;
+import org.gnubridge.core.deck.Nine;
 import org.gnubridge.core.deck.NoTrump;
+import org.gnubridge.core.deck.Seven;
+import org.gnubridge.core.deck.Spades;
+import org.gnubridge.core.deck.Ten;
+import org.gnubridge.core.deck.Three;
+import org.gnubridge.core.deck.Two;
 import org.gnubridge.presentation.GameUtils;
 
 import junit.framework.TestCase;
@@ -78,9 +95,48 @@ public class TestPositionLookup extends TestCase {
 		Game sameFirstMove = new Game(NoTrump.i());
 		GameUtils.initializeSingleColorSuits(sameFirstMove);
 		sameFirstMove.play(sameFirstMove.getNextToPlay().getHand().get(0));
-		System.out.println("looking up 2nd position");
-		assertFalse(pl.positionEncountered(sameFirstMove));		
+		assertFalse(pl.positionEncountered(sameFirstMove));	
+		assertTrue(pl.positionEncountered(sameFirstMove));		
 		
 	}
+	
+	public void testDistinguishPlayerTurn() {
+		Game g = new Game(Spades.i());
+		g.getPlayer(West.i()).init(new Hand("", "3,2", "", "").getCardsHighToLow());
+		g.getPlayer(North.i()).init(new Hand("7", "", "8", "").getCardsHighToLow());
+		g.getPlayer(East.i()).init(new Hand("", "", "", "4,5").getCardsHighToLow());
+		g.getPlayer(South.i()).init(new Hand("", "", "", "10,9").getCardsHighToLow());
+		
+		Game differentOrder = g.duplicate();
+		
+		g.play(Three.of(Hearts.i()));
+		g.play(Eight.of(Diamonds.i()));
+		g.play(Four.of(Clubs.i()));
+		g.play(Ten.of(Clubs.i()));
+		
+		g.play(Two.of(Hearts.i()));
+		g.play(Seven.of(Spades.i()));
+		g.play(Five.of(Clubs.i()));
+		g.play(Nine.of(Clubs.i()));
+		
+		PositionLookup pl = new PositionLookup();
+		boolean justPresentThePosition = pl.positionEncountered(g);
+		assertTrue(pl.positionEncountered(g));
+		
+		differentOrder.play(Three.of(Hearts.i()));
+		differentOrder.play(Seven.of(Spades.i()));
+		differentOrder.play(Four.of(Clubs.i()));
+		differentOrder.play(Ten.of(Clubs.i()));
+		
+		differentOrder.play(Eight.of(Diamonds.i()));
+		differentOrder.play(Five.of(Clubs.i()));
+		differentOrder.play(Nine.of(Clubs.i()));
+		differentOrder.play(Two.of(Hearts.i()));
+		assertFalse(pl.positionEncountered(differentOrder));
+	}
+	/**
+	 * TODO: can be the same guy's move, same cards, but different number of tricks taken
+	 * 
+	 */
 
 }
