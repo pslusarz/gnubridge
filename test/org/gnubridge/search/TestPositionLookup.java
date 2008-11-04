@@ -100,7 +100,7 @@ public class TestPositionLookup extends TestCase {
 		
 	}
 	
-	public void testDistinguishPlayerTurn() {
+	public void testDistinguishNumberOfTricks() {
 		Game g = new Game(Spades.i());
 		g.getPlayer(West.i()).init(new Hand("", "3,2", "", "").getCardsHighToLow());
 		g.getPlayer(North.i()).init(new Hand("7", "", "8", "").getCardsHighToLow());
@@ -134,9 +134,41 @@ public class TestPositionLookup extends TestCase {
 		differentOrder.play(Two.of(Hearts.i()));
 		assertFalse(pl.positionEncountered(differentOrder));
 	}
-	/**
-	 * TODO: can be the same guy's move, same cards, but different number of tricks taken
-	 * 
-	 */
+	
+	public void testDistinguishPlayerTurn() {
+		Game g = new Game(Spades.i());
+		g.getPlayer(West.i()).init(new Hand("10", "3", "", "").getCardsHighToLow());
+		g.getPlayer(North.i()).init(new Hand("7", "8", "", "").getCardsHighToLow());
+		g.getPlayer(East.i()).init(new Hand("", "", "", "4,5").getCardsHighToLow());
+		g.getPlayer(South.i()).init(new Hand("", "", "", "10,9").getCardsHighToLow());
+		
+		Game differentOrder = g.duplicate();
+		
+		g.play(Three.of(Hearts.i()));
+		g.play(Eight.of(Hearts.i()));
+		g.play(Four.of(Clubs.i()));
+		g.play(Ten.of(Clubs.i()));
+		
+		g.play(Seven.of(Spades.i()));
+		g.play(Five.of(Clubs.i()));
+		g.play(Nine.of(Clubs.i()));
+		g.play(Ten.of(Spades.i()));
+		
+		PositionLookup pl = new PositionLookup();
+		boolean justPresentThePosition = pl.positionEncountered(g);
+		assertTrue(pl.positionEncountered(g));
+		
+		differentOrder.play(Ten.of(Spades.i()));
+		differentOrder.play(Seven.of(Spades.i()));
+		differentOrder.play(Four.of(Clubs.i()));
+		differentOrder.play(Ten.of(Clubs.i()));
+		
+		differentOrder.play(Three.of(Hearts.i()));
+		differentOrder.play(Eight.of(Hearts.i()));
+		differentOrder.play(Five.of(Clubs.i()));
+		differentOrder.play(Nine.of(Hearts.i()));
+		assertFalse(pl.positionEncountered(differentOrder));
+	}
+
 
 }
