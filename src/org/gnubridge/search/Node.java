@@ -23,6 +23,8 @@ public class Node {
 
 	public static final int PRUNE_SEQUENCE_SIBLINGS_PLAYED = PRUNE_SEQUENCE_SIBLINGS + 1;
 
+	private static final int PRUNE_DUPLICATE_POSITION = PRUNE_SEQUENCE_SIBLINGS_PLAYED + 1;
+
 	int value;
 
 	Node parent;
@@ -398,6 +400,15 @@ public class Node {
 
 	public boolean isPlayedSequencePruned() {
 		return isPruned() && (getPruneType() == PRUNE_SEQUENCE_SIBLINGS_PLAYED);
+	}
+
+	public void pruneAsDuplicatePosition() {
+		setPruned(true, Node.PRUNE_DUPLICATE_POSITION);
+		
+	}
+
+	public boolean isPrunedDuplicatePosition() {
+		return isPruned() && (getPruneType() == PRUNE_DUPLICATE_POSITION);
 	}
 
 }

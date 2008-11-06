@@ -19,7 +19,15 @@ public class PositionLookup {
 
 	public boolean positionEncountered(Game g) {
 		List<Card> playedCards = g.getPlayedCards().getCardsHighToLow();
+		if (isFreshTrick(playedCards)) {
 		return root.positionEncountered(g, playedCards);
+		} else {
+			return false;
+		}
+	}
+
+	private boolean isFreshTrick(List<Card> playedCards) {
+		return playedCards.size() % 4 == 0;
 	}
 
 }
@@ -36,6 +44,9 @@ class PositionLookupNode {
 	}
 
 	public boolean positionEncountered(Game g, List<Card> playedCards) {
+		if (playedCards.size() == 0) {
+			return false;
+		}
 		Card top = playedCards.get(0);
 		AdditionalUniquePositionIdentifiers additionalUniquePositionIdentifiers = new AdditionalUniquePositionIdentifiers(g);
 		if (!haveCard(top)) {

@@ -35,6 +35,11 @@ public class Search {
 
 	private int prunedPlayedSequence;
 
+	private boolean useDuplicateRemoval = false;
+
+	private int prunedDuplicatePosition;
+	PositionLookup lookup;
+
 	public Search(Node root) {
 		this.root = root;
 	}
@@ -47,6 +52,7 @@ public class Search {
 		finalMoves.add(0);
 		finalMoves.add(0);
 		finalMoves.add(0);
+		lookup = new PositionLookup();
 	}
 
 	public Stack<Node> getStack() {
@@ -66,8 +72,8 @@ public class Search {
 
 		while (!stack.empty()) {
 			Node node = stack.pop();
-			collectStats(node);
 			examinePosition(node);
+			collectStats(node);
 			i++;
 		}
 		runningTime = System.currentTimeMillis() - start;
@@ -78,9 +84,14 @@ public class Search {
 		runningTime = 0;
 		prunedAlpha = 0;
 		prunedBeta = 0;
+		prunedDuplicatePosition = 0;
 		prunedSequence = 0;
 		prunedPlayedSequence = 0;
 		positionsCount = 0;
+	}
+
+	public void setUseDuplicateRemoval(boolean b) {
+		useDuplicateRemoval = b;
 	}
 
 	private void collectStats(Node node) {
@@ -92,8 +103,10 @@ public class Search {
 		} else if (node.isSequencePruned()) {
 			prunedSequence++;
 		} else if (node.isPlayedSequencePruned()) {
-		   prunedPlayedSequence++;
-	    }
+			prunedPlayedSequence++;
+		} else if (node.isPrunedDuplicatePosition()) {
+			prunedDuplicatePosition++;
+		}
 
 	}
 
@@ -107,6 +120,7 @@ public class Search {
 		}
 		Game position = game.duplicate();
 		position.playMoves(node.getMoves());
+		
 
 		Player player = position.getNextToPlay();
 		node.setPlayerTurn(player.getDirection());
@@ -133,10 +147,23 @@ public class Search {
 					move.setPlayerCardPlayed(player);
 					removeSiblingsInSequence(move, position);
 					removeSiblingsInSequenceWithPlayedCards(move, position);
+					removeDuplicatePositions(move);
 					stack.push(move);
 				}
 			}
 		}
+	}
+
+	private void removeDuplicatePositions(Node node) {
+		if (useDuplicateRemoval()) {
+			Game position = game.duplicate();
+			position.playMoves(node.getMoves());
+			  if (lookup.positionEncountered(position))	{
+				  //System.out.println(node.printMoves());
+				  node.pruneAsDuplicatePosition();
+			  }
+			}
+		
 	}
 
 	private void removeSiblingsInSequenceWithPlayedCards(Node move,
@@ -268,6 +295,7 @@ public class Search {
 			if (usePruning() && node.shouldBeBetaPruned()) {
 				node.betaPrune();
 			}
+			
 
 		}
 		if (node.parent != null && node.parent.isLastVisitedChild(node)) {
@@ -275,6 +303,10 @@ public class Search {
 		}
 		node.trimmed = true;
 
+	}
+
+	private boolean useDuplicateRemoval() {
+		return useDuplicateRemoval;
 	}
 
 	private void removeExpandedBranches(Node node) {
@@ -328,7 +360,11 @@ public class Search {
 			System.out.println("  Alpha prunes: " + getPrunedAlpha());
 			System.out.println("  Beta prunes: " + getPrunedBeta());
 			System.out.println("  Sequence prunes: " + getPrunedSequence());
-			System.out.println("  Played Sequence prunes: " + getPrunedPlayedSequence());
+			System.out.println("  Played Sequence prunes: "
+					+ getPrunedPlayedSequence());
+		}
+		if (useDuplicateRemoval()) {
+			System.out.println("  Duplicate position prunes: " + prunedDuplicatePosition);	
 		}
 		System.out.println("West/East tricks taken: "
 				+ root.getTricksTaken(Player.WEST_EAST));

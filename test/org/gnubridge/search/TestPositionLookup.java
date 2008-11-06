@@ -6,6 +6,7 @@ import org.gnubridge.core.Hand;
 import org.gnubridge.core.North;
 import org.gnubridge.core.South;
 import org.gnubridge.core.West;
+import org.gnubridge.core.deck.Ace;
 import org.gnubridge.core.deck.Clubs;
 import org.gnubridge.core.deck.Diamonds;
 import org.gnubridge.core.deck.Eight;
@@ -24,32 +25,61 @@ import org.gnubridge.presentation.GameUtils;
 import junit.framework.TestCase;
 
 public class TestPositionLookup extends TestCase {
-	public void testOneCardPlayed() {
+	public void testSameObjectShownTwice() {
 		Game g = new Game(NoTrump.i());
 		GameUtils.initializeSingleColorSuits(g);
-		g.play(g.getNextToPlay().getHand().get(0));
+		playOneTrick(g);
+		
 		PositionLookup pl = new PositionLookup();
 		assertFalse(pl.positionEncountered(g));
 		assertTrue(pl.positionEncountered(g));
+	}
+	private void playOneTrick(Game g) {
+		for (int i = 0; i< 4; i++) {
+			g.play(g.getNextToPlay().getHand().get(0));
+		}
+		
+	}
+	
+	@SuppressWarnings("unused")
+	public void testDistinguishDifferentPlays() {
+		Game g = new Game(NoTrump.i());
+		GameUtils.initializeSingleColorSuits(g);
+		playOneTrick(g);
+		
+		PositionLookup pl = new PositionLookup();
+		boolean justPresentThePosition = pl.positionEncountered(g);
+
 		Game g2 = new Game(NoTrump.i());
 		GameUtils.initializeSingleColorSuits(g2);
-		g2.play(g2.getNextToPlay().getHand().get(1));
+		playOneTrickWithSlightTwist(g2);
+		
 		assertFalse(pl.positionEncountered(g2));
 	}
+	
+	private void playOneTrickWithSlightTwist(Game g2) {
+		g2.play(g2.getNextToPlay().getHand().get(1));
+		for (int i = 0; i< 3; i++) {
+			g2.play(g2.getNextToPlay().getHand().get(0));
+		}
+		
+	}
+	
+	@SuppressWarnings("unused")
 	public void testOneCardPlayedDifferentObjectsSamePosition() {
 		Game g = new Game(NoTrump.i());
 		GameUtils.initializeSingleColorSuits(g);
-		g.play(g.getNextToPlay().getHand().get(0));
+		playOneTrick(g);
 		
 		PositionLookup pl = new PositionLookup();
-		assertFalse(pl.positionEncountered(g));
+		boolean justPresentThePosition = pl.positionEncountered(g);
 		
 		Game g2 = new Game(NoTrump.i());
 		GameUtils.initializeSingleColorSuits(g2);
-		g2.play(g2.getNextToPlay().getHand().get(0));
+		playOneTrick(g2);
 		assertTrue(pl.positionEncountered(g2));
-		assertTrue(pl.positionEncountered(g));
 	}
+	
 	public void testOneCardPlayedDifferentCards() {
 		Game g = new Game(NoTrump.i());
 		GameUtils.initializeSingleColorSuits(g);
@@ -64,39 +94,42 @@ public class TestPositionLookup extends TestCase {
 		gameWithDifferentCardPlayed.play(gameWithDifferentCardPlayed.getNextToPlay().getHand().get(1));
 		assertFalse(pl.positionEncountered(gameWithDifferentCardPlayed));		
 	}
+
+	@SuppressWarnings("unused")
 	public void testCanRememberMoreThanOnePosition() {
 		Game g = new Game(NoTrump.i());
 		GameUtils.initializeSingleColorSuits(g);
-		g.play(g.getNextToPlay().getHand().get(0));
+		playOneTrick(g);
 		
 		PositionLookup pl = new PositionLookup();
-		@SuppressWarnings("unused")
-		boolean justPresentThePosition = pl.positionEncountered(g);
 		
 		Game gameWithDifferentCardPlayed = new Game(NoTrump.i());
 		GameUtils.initializeSingleColorSuits(gameWithDifferentCardPlayed);
-		gameWithDifferentCardPlayed.play(gameWithDifferentCardPlayed.getNextToPlay().getHand().get(1));
-		justPresentThePosition = pl.positionEncountered(gameWithDifferentCardPlayed);
+		playOneTrickWithSlightTwist(gameWithDifferentCardPlayed);
 		
+		boolean justPresentThePosition = pl.positionEncountered(gameWithDifferentCardPlayed);
+		justPresentThePosition = pl.positionEncountered(g);
+
 		assertTrue(pl.positionEncountered(g));
 		assertTrue(pl.positionEncountered(gameWithDifferentCardPlayed));
 	}
 	
-	public void testTwoCardsPlayed() {
+	@SuppressWarnings("unused")
+	public void testTwoTricksPlayedSameFirstTrick() {
 		Game g = new Game(NoTrump.i());
 		GameUtils.initializeSingleColorSuits(g);
-		g.play(g.getNextToPlay().getHand().get(0));		
-		g.play(g.getNextToPlay().getHand().get(0));	
-		PositionLookup pl = new PositionLookup();
-		@SuppressWarnings("unused")
-		boolean justPresentThePosition = pl.positionEncountered(g);
-		assertTrue(pl.positionEncountered(g));
+		playOneTrick(g);	
+		playOneTrick(g);	
 		
-		Game sameFirstMove = new Game(NoTrump.i());
-		GameUtils.initializeSingleColorSuits(sameFirstMove);
-		sameFirstMove.play(sameFirstMove.getNextToPlay().getHand().get(0));
-		assertFalse(pl.positionEncountered(sameFirstMove));	
-		assertTrue(pl.positionEncountered(sameFirstMove));		
+		Game sameFirstTrick = new Game(NoTrump.i());
+		GameUtils.initializeSingleColorSuits(sameFirstTrick);
+		playOneTrick(sameFirstTrick);
+		playOneTrickWithSlightTwist(sameFirstTrick);
+		
+		PositionLookup pl = new PositionLookup();
+		boolean justPresentThePosition = pl.positionEncountered(g);
+
+		assertFalse(pl.positionEncountered(sameFirstTrick));	
 		
 	}
 	
@@ -167,6 +200,35 @@ public class TestPositionLookup extends TestCase {
 		differentOrder.play(Eight.of(Hearts.i()));
 		differentOrder.play(Five.of(Clubs.i()));
 		differentOrder.play(Nine.of(Hearts.i()));
+		assertFalse(pl.positionEncountered(differentOrder));
+	}
+	public void testOnlyApplyToCompletedTricks() {
+		Game g = new Game(Spades.i());
+		g.getPlayer(West.i()).init(new Hand("A,3", "", "", "").getCardsHighToLow());
+		g.getPlayer(North.i()).init(new Hand("7,2", "", "", "").getCardsHighToLow());
+		g.getPlayer(East.i()).init(new Hand("", "", "5,4", "").getCardsHighToLow());
+		g.getPlayer(South.i()).init(new Hand("", "", "", "7,6").getCardsHighToLow());
+		
+		Game differentOrder = g.duplicate();
+		
+		g.play(Ace.of(Spades.i()));
+		g.play(Two.of(Spades.i()));
+		g.play(Five.of(Diamonds.i()));
+		g.play(Seven.of(Clubs.i()));
+		
+		g.play(Three.of(Spades.i()));
+		g.play(Seven.of(Spades.i()));
+		
+		PositionLookup pl = new PositionLookup();
+		boolean justPresentThePosition = pl.positionEncountered(g);
+		
+		differentOrder.play(Ace.of(Spades.i()));
+		differentOrder.play(Seven.of(Spades.i()));
+		differentOrder.play(Five.of(Diamonds.i()));
+		differentOrder.play(Seven.of(Clubs.i()));
+		
+		differentOrder.play(Three.of(Spades.i()));
+		differentOrder.play(Two.of(Spades.i()));
 		assertFalse(pl.positionEncountered(differentOrder));
 	}
 

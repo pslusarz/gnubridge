@@ -74,25 +74,26 @@ public class SearchTest extends TestCase {
 
 	public void testDoNotExpandNodesBeyondTrickLimit() {
 		Game game = new Game(NoTrump.i());
-		game.getPlayer(Direction.WEST).init(new String[] { "3", "10","4" });
+		game.getPlayer(Direction.WEST).init(new String[] { "3", "10", "4" });
 		game.getPlayer(Direction.NORTH).init(new String[] { "2", "9", "6" });
 		game.getPlayer(Direction.SOUTH).init(new String[] { "A", "5", "J" });
 		game.getPlayer(Direction.EAST).init(new String[] { "K", "7", "Q" });
 		game.setNextToPlay(Direction.SOUTH);
 		Search s = new Search(game);
 		s.setMaxTricks(1);
-		Node node_0_0_0_0 = new Node(new Node(new Node(new Node(new Node(null)))));
-		s.examinePosition(node_0_0_0_0 );
+		Node node_0_0_0_0 = new Node(new Node(
+				new Node(new Node(new Node(null)))));
+		s.examinePosition(node_0_0_0_0);
 		assertEquals(0, s.getStack().size());
-	}	
-	
+	}
+
 	public void testOnlyExpandFirstCardInSequenceTwoCards() {
 		Node node = new Node(null);
 		Game game = new Game(NoTrump.i());
-		//game.getPlayer(Direction.WEST).init(new String[] { "A", "5" });
-		//game.getPlayer(Direction.NORTH).init(new String[] { "2", "9" });
+		// game.getPlayer(Direction.WEST).init(new String[] { "A", "5" });
+		// game.getPlayer(Direction.NORTH).init(new String[] { "2", "9" });
 		game.getPlayer(Direction.SOUTH).init(new String[] { "J", "10" });
-		//game.getPlayer(Direction.EAST).init(new String[] { "K", "7" });
+		// game.getPlayer(Direction.EAST).init(new String[] { "K", "7" });
 		game.setNextToPlay(Direction.SOUTH);
 		Search s = new Search(game);
 		s.examinePosition(node);
@@ -100,14 +101,14 @@ public class SearchTest extends TestCase {
 		assertTrue(s.getStack().contains(node.children.get(0)));
 		assertTrue(node.children.get(1).isPruned());
 	}
-	
+
 	public void testOnlyExpandFirstCardInSequenceThreeCards() {
 		Node node = new Node(null);
 		Game game = new Game(NoTrump.i());
-		//game.getPlayer(Direction.WEST).init(new String[] { "A", "5", "Q" });
-		//game.getPlayer(Direction.NORTH).init(new String[] { "2", "4", "6" });
+		// game.getPlayer(Direction.WEST).init(new String[] { "A", "5", "Q" });
+		// game.getPlayer(Direction.NORTH).init(new String[] { "2", "4", "6" });
 		game.getPlayer(Direction.SOUTH).init(new String[] { "J", "10", "9" });
-		//game.getPlayer(Direction.EAST).init(new String[] { "K", "7", "8" });
+		// game.getPlayer(Direction.EAST).init(new String[] { "K", "7", "8" });
 		game.setNextToPlay(Direction.SOUTH);
 		Search s = new Search(game);
 		s.examinePosition(node);
@@ -116,14 +117,14 @@ public class SearchTest extends TestCase {
 		assertTrue(node.children.get(1).isPruned());
 		assertTrue(node.children.get(2).isPruned());
 	}
-	
+
 	public void testOnlyExpandFirstCardInSequenceThreeCardsOutOfOrder() {
 		Node node = new Node(null);
 		Game game = new Game(NoTrump.i());
-		//game.getPlayer(Direction.WEST).init(new String[] { "A", "5", "Q" });
-		//game.getPlayer(Direction.NORTH).init(new String[] { "2", "4", "6" });
+		// game.getPlayer(Direction.WEST).init(new String[] { "A", "5", "Q" });
+		// game.getPlayer(Direction.NORTH).init(new String[] { "2", "4", "6" });
 		game.getPlayer(Direction.SOUTH).init(new String[] { "10", "9", "J" });
-		//game.getPlayer(Direction.EAST).init(new String[] { "K", "7", "8" });
+		// game.getPlayer(Direction.EAST).init(new String[] { "K", "7", "8" });
 		game.setNextToPlay(Direction.SOUTH);
 		Search s = new Search(game);
 		s.examinePosition(node);
@@ -132,13 +133,14 @@ public class SearchTest extends TestCase {
 		assertTrue(node.children.get(1).isPruned());
 		assertTrue(node.children.get(2).isPruned());
 	}
+
 	public void testOnlyExpandFirstCardInSequenceThreeCardsOutOfOrder2() {
 		Node node = new Node(null);
 		Game game = new Game(NoTrump.i());
-		//game.getPlayer(Direction.WEST).init(new String[] { "A", "5", "Q" });
-		//game.getPlayer(Direction.NORTH).init(new String[] { "2", "4", "6" });
+		// game.getPlayer(Direction.WEST).init(new String[] { "A", "5", "Q" });
+		// game.getPlayer(Direction.NORTH).init(new String[] { "2", "4", "6" });
 		game.getPlayer(Direction.SOUTH).init(new String[] { "9", "10", "J" });
-		//game.getPlayer(Direction.EAST).init(new String[] { "K", "7", "8" });
+		// game.getPlayer(Direction.EAST).init(new String[] { "K", "7", "8" });
 		game.setNextToPlay(Direction.SOUTH);
 		Search s = new Search(game);
 		s.examinePosition(node);
@@ -147,13 +149,14 @@ public class SearchTest extends TestCase {
 		assertTrue(node.children.get(1).isPruned());
 		assertTrue(node.children.get(2).isPruned());
 	}
+
 	public void testOnlyExpandFirstCardInSequenceCardPlayedBetweenTwoUnplayedCards() {
 		Node node = new Node(null);
 		Game game = new Game(NoTrump.i());
-		//game.getPlayer(Direction.WEST).init(new String[] { "A", "5", "Q" });
+		// game.getPlayer(Direction.WEST).init(new String[] { "A", "5", "Q" });
 		game.getPlayer(Direction.NORTH).init(new String[] { "10", "6" });
 		game.getPlayer(Direction.EAST).init(new String[] { "9", "J" });
-		//game.getPlayer(Direction.EAST).init(new String[] { "K", "7", "8" });
+		// game.getPlayer(Direction.EAST).init(new String[] { "K", "7", "8" });
 		game.setNextToPlay(Direction.NORTH);
 		game.play(Ten.of(Spades.i()));
 		Search s = new Search(game);
@@ -162,10 +165,11 @@ public class SearchTest extends TestCase {
 		assertTrue(s.getStack().contains(node.children.get(0)));
 		assertTrue(node.children.get(1).isPruned());
 	}
+
 	public void testOnlyExpandFirstCardInSequenceCardTwoPlayedBetweenTwoUnplayedCards() {
 		Node node = new Node(null);
 		Game game = new Game(NoTrump.i());
-		//game.getPlayer(Direction.WEST).init(new String[] { "A", "5", "Q" });
+		// game.getPlayer(Direction.WEST).init(new String[] { "A", "5", "Q" });
 		game.getPlayer(Direction.NORTH).init(new String[] { "10", "6" });
 		game.getPlayer(Direction.EAST).init(new String[] { "9", "A" });
 		game.getPlayer(Direction.SOUTH).init(new String[] { "8", "J" });
@@ -178,10 +182,10 @@ public class SearchTest extends TestCase {
 		assertTrue(s.getStack().contains(node.children.get(0)));
 		assertTrue(node.children.get(1).isPruned());
 	}
-	
+
 	public void testTricksTallyIsTrickLimit() {
 		Game game = new Game(NoTrump.i());
-		game.getPlayer(Direction.WEST).init(new String[] { "3", "A","4" });
+		game.getPlayer(Direction.WEST).init(new String[] { "3", "A", "4" });
 		game.getPlayer(Direction.NORTH).init(new String[] { "2", "9", "6" });
 		game.getPlayer(Direction.SOUTH).init(new String[] { "10", "5", "J" });
 		game.getPlayer(Direction.EAST).init(new String[] { "K", "7", "Q" });
@@ -189,11 +193,10 @@ public class SearchTest extends TestCase {
 		Search s = new Search(game);
 		s.setMaxTricks(1);
 		s.search();
-		assertEquals(1, s.getRoot().getTricksTaken(Player.WEST_EAST)+s.getRoot().getTricksTaken(Player.NORTH_SOUTH));
+		assertEquals(1, s.getRoot().getTricksTaken(Player.WEST_EAST)
+				+ s.getRoot().getTricksTaken(Player.NORTH_SOUTH));
 	}
-	
-	
-	
+
 	public void testExaminePositionInitsChildMove() {
 		Node node = new Node(null);
 		Game game = new Game(NoTrump.i());
@@ -239,8 +242,8 @@ public class SearchTest extends TestCase {
 				new String[] { "2" });
 		game.getPlayer(Direction.SOUTH).init(new String[] {},
 				new String[] { "K", "10" });
-		game.getPlayer(Direction.EAST).init(new String[] { "A" }, new String[] {},
-				new String[] { "J" });
+		game.getPlayer(Direction.EAST).init(new String[] { "A" },
+				new String[] {}, new String[] { "J" });
 		game.setNextToPlay(Direction.NORTH);
 		Search s = new Search(game);
 		s.search();
@@ -256,8 +259,8 @@ public class SearchTest extends TestCase {
 		game.getPlayer(Direction.NORTH).init(new String[] { "2" },
 				new String[] { "3" });
 		game.getPlayer(Direction.SOUTH).init(new String[] { "K", "10" });
-		game.getPlayer(Direction.EAST).init(new String[] {}, new String[] { "A" },
-				new String[] { "J" });
+		game.getPlayer(Direction.EAST).init(new String[] {},
+				new String[] { "A" }, new String[] { "J" });
 		game.setNextToPlay(Direction.NORTH);
 		Search s = new Search(game);
 		s.search();
@@ -280,110 +283,180 @@ public class SearchTest extends TestCase {
 
 	}
 
-//		public void testMinimaxEquivalentToAlphaBeta() {
-//			for (int i = 0; i < 10; i++) {
-//				
-//				Game game = new Game();
-//				GameTestingUtils.initializeRandom(game, 4);
-//				Search unpruned = new Search(game);
-//				unpruned.usePruning(false);
-//				unpruned.search();
-//	
-//				Search pruned = new Search(game);
-//				pruned.usePruning(true);
-//				pruned.search();
-//	
-//				System.out.println("----------********************-----------");
-//				game.printHands();
-//				unpruned.printStats();
-//				pruned.printStats();
-//				
-//				//assertTrue((pruned.getRunningTime() < unpruned.getRunningTime()) 
-//				//		|| (pruned.getPrunedCount() == 0));
-//				//assertEquals("Unpruned: "+unpruned.getBestMoves()+", pruned: "+pruned.getBestMoves(), 
-//				//		pruned.getBestMoves(), unpruned.getBestMoves());
-//				assertEquals("Unpruned: "+unpruned.getRoot().getTricksTaken(Player.WEST_EAST)+", pruned: "+pruned.getRoot().getTricksTaken(Player.WEST_EAST),
-//						unpruned.getRoot().getTricksTaken(Player.WEST_EAST), pruned.getRoot().getTricksTaken(Player.WEST_EAST));
-//				
-//			}
-//		}
-			
+	// public void testPruningDuplicateEquivalentToAlphaBeta() {
+	// //for (int i = 0; i < 10; i++) {
+	//				
+	// Game game = new Game(NoTrump.i());
+	// game.getPlayer(West.i()).init(King.of(Clubs.i()), King.of(Hearts.i()),
+	// Two.of(Diamonds.i()), Seven.of(Clubs.i()), Jack.of(Diamonds.i()),
+	// Eight.of(Clubs.i()), Four.of(Diamonds.i()), Ten.of(Hearts.i()),
+	// Three.of(Clubs.i()), Ten.of(Spades.i()), Eight.of(Hearts.i()),
+	// Five.of(Spades.i()), Ten.of(Diamonds.i()));
+	// game.getPlayer(North.i()).init(Four.of(Spades.i()), Ace.of(Clubs.i()),
+	// Five.of(Hearts.i()), Four.of(Hearts.i()), Nine.of(Spades.i()),
+	// Two.of(Spades.i()), Two.of(Hearts.i()), Nine.of(Clubs.i()),
+	// Jack.of(Clubs.i()), Nine.of(Diamonds.i()), Jack.of(Hearts.i()),
+	// Nine.of(Hearts.i()), Three.of(Spades.i()));
+	// game.getPlayer(East.i()).init(Two.of(Clubs.i()), Five.of(Clubs.i()),
+	// Queen.of(Clubs.i()), Three.of(Hearts.i()), Seven.of(Spades.i()),
+	// Seven.of(Hearts.i()), Seven.of(Diamonds.i()), Six.of(Clubs.i()),
+	// Eight.of(Spades.i()), Six.of(Hearts.i()), Jack.of(Spades.i()),
+	// Queen.of(Hearts.i()), Four.of(Clubs.i()));
+	// game.getPlayer(South.i()).init(Queen.of(Diamonds.i()),
+	// Five.of(Diamonds.i()), Queen.of(Spades.i()), Three.of(Diamonds.i()),
+	// King.of(Diamonds.i()), Ten.of(Clubs.i()), Six.of(Diamonds.i()),
+	// Ace.of(Diamonds.i()), Ace.of(Hearts.i()), Ace.of(Spades.i()),
+	// Eight.of(Diamonds.i()), King.of(Spades.i()), Six.of(Spades.i()));
+	//
+	// Search unpruned = new Search(game);
+	// unpruned.setUseDuplicateRemoval(false);
+	// unpruned.setMaxTricks(4);
+	// unpruned.search();
+	//	
+	// Search pruned = new Search(game);
+	// pruned.setUseDuplicateRemoval(true);
+	// pruned.setMaxTricks(4);
+	// pruned.search();
+	//	
+	// System.out.println("----------********************-----------");
+	// game.printHands();
+	// unpruned.printStats();
+	// pruned.printStats();
+	//				
+	// assertEquals("Unpruned:
+	// "+unpruned.getRoot().getTricksTaken(Player.WEST_EAST)+", pruned:
+	// "+pruned.getRoot().getTricksTaken(Player.WEST_EAST),
+	// unpruned.getRoot().getTricksTaken(Player.WEST_EAST),
+	// pruned.getRoot().getTricksTaken(Player.WEST_EAST));
+	//				
+	// //}
+	// }
 	
-//	public void testXDepth() {
-//			
-//			Game game = new Game(Hearts.i());
-//			//GameUtils.initializeRandom(game, 13);
-//			game.getPlayer(West.i()).init(King.of(Clubs.i()), King.of(Hearts.i()), Two.of(Diamonds.i()), Seven.of(Clubs.i()), Jack.of(Diamonds.i()), Eight.of(Clubs.i()), Four.of(Diamonds.i()), Ten.of(Hearts.i()), Three.of(Clubs.i()), Ten.of(Spades.i()), Eight.of(Hearts.i()), Five.of(Spades.i()), Ten.of(Diamonds.i()));
-//			game.getPlayer(North.i()).init(Four.of(Spades.i()), Ace.of(Clubs.i()), Five.of(Hearts.i()), Four.of(Hearts.i()), Nine.of(Spades.i()), Two.of(Spades.i()), Two.of(Hearts.i()), Nine.of(Clubs.i()), Jack.of(Clubs.i()), Nine.of(Diamonds.i()), Jack.of(Hearts.i()), Nine.of(Hearts.i()), Three.of(Spades.i()));
-//			game.getPlayer(East.i()).init(Two.of(Clubs.i()), Five.of(Clubs.i()), Queen.of(Clubs.i()), Three.of(Hearts.i()), Seven.of(Spades.i()), Seven.of(Hearts.i()), Seven.of(Diamonds.i()), Six.of(Clubs.i()), Eight.of(Spades.i()), Six.of(Hearts.i()), Jack.of(Spades.i()), Queen.of(Hearts.i()), Four.of(Clubs.i()));
-//			game.getPlayer(South.i()).init(Queen.of(Diamonds.i()), Five.of(Diamonds.i()), Queen.of(Spades.i()), Three.of(Diamonds.i()), King.of(Diamonds.i()), Ten.of(Clubs.i()), Six.of(Diamonds.i()), Ace.of(Diamonds.i()), Ace.of(Hearts.i()), Ace.of(Spades.i()), Eight.of(Diamonds.i()), King.of(Spades.i()), Six.of(Spades.i()));
+	
+//	public void testPruningDuplicateEquivalentToAlphaBeta() {
+//		for (int i = 0; i < 10; i++) {
+//
+//			Game game = new Game(NoTrump.i());
+//			GameUtils.initializeRandom(game, 5);
+//			Search unpruned = new Search(game);
+//			unpruned.setUseDuplicateRemoval(false);
+//			unpruned.search();
+//
+//			Search pruned = new Search(game);
+//			pruned.setUseDuplicateRemoval(true);
+//			pruned.search();
+//
 //			System.out.println("----------********************-----------");
 //			game.printHands();
-//			
-//			Search pruned = new Search(game);
-//			pruned.usePruning(true);
-//			pruned.setMaxTricks(3);
-//			pruned.search();
+//			unpruned.printStats();
 //			pruned.printStats();
-//	}
-//		public void testViableDepth() {
-//			for (int i = 0; i < 10; i++) {
-//				
-//				Game game = new Game(Hearts.i());
-//				GameUtils.initializeRandom(game, 13);
-//				
-//				System.out.println("----------********************-----------");
-//				game.printHands();
-//				//game.play(game.getPlayer(West.i()).getHand().get(0));
-//				//System.out.println("Initial branching factor: " +game.getNextToPlay().getPossibleMoves(game.getCurrentTrick()).size());
-//				Search pruned = new Search(game);
-//				pruned.usePruning(true);
-//				pruned.setMaxTricks(3);
-//				pruned.search();
-//				pruned.printStats();
-//				
-//				
-//			}
+//
+//			assertEquals("Unpruned: "
+//					+ unpruned.getRoot().getTricksTaken(Player.WEST_EAST)
+//					+ ", pruned: "
+//					+ pruned.getRoot().getTricksTaken(Player.WEST_EAST),
+//					unpruned.getRoot().getTricksTaken(Player.WEST_EAST), pruned
+//							.getRoot().getTricksTaken(Player.WEST_EAST));
+//
 //		}
+//	}
+
+	// public void testXDepth() {
+	//			
+	// Game game = new Game(Hearts.i());
+	// //GameUtils.initializeRandom(game, 13);
+	// game.getPlayer(West.i()).init(King.of(Clubs.i()), King.of(Hearts.i()),
+	// Two.of(Diamonds.i()), Seven.of(Clubs.i()), Jack.of(Diamonds.i()),
+	// Eight.of(Clubs.i()), Four.of(Diamonds.i()), Ten.of(Hearts.i()),
+	// Three.of(Clubs.i()), Ten.of(Spades.i()), Eight.of(Hearts.i()),
+	// Five.of(Spades.i()), Ten.of(Diamonds.i()));
+	// game.getPlayer(North.i()).init(Four.of(Spades.i()), Ace.of(Clubs.i()),
+	// Five.of(Hearts.i()), Four.of(Hearts.i()), Nine.of(Spades.i()),
+	// Two.of(Spades.i()), Two.of(Hearts.i()), Nine.of(Clubs.i()),
+	// Jack.of(Clubs.i()), Nine.of(Diamonds.i()), Jack.of(Hearts.i()),
+	// Nine.of(Hearts.i()), Three.of(Spades.i()));
+	// game.getPlayer(East.i()).init(Two.of(Clubs.i()), Five.of(Clubs.i()),
+	// Queen.of(Clubs.i()), Three.of(Hearts.i()), Seven.of(Spades.i()),
+	// Seven.of(Hearts.i()), Seven.of(Diamonds.i()), Six.of(Clubs.i()),
+	// Eight.of(Spades.i()), Six.of(Hearts.i()), Jack.of(Spades.i()),
+	// Queen.of(Hearts.i()), Four.of(Clubs.i()));
+	// game.getPlayer(South.i()).init(Queen.of(Diamonds.i()),
+	// Five.of(Diamonds.i()), Queen.of(Spades.i()), Three.of(Diamonds.i()),
+	// King.of(Diamonds.i()), Ten.of(Clubs.i()), Six.of(Diamonds.i()),
+	// Ace.of(Diamonds.i()), Ace.of(Hearts.i()), Ace.of(Spades.i()),
+	// Eight.of(Diamonds.i()), King.of(Spades.i()), Six.of(Spades.i()));
+	// System.out.println("----------********************-----------");
+	// game.printHands();
+	//			
+	// Search pruned = new Search(game);
+	// pruned.usePruning(true);
+	// pruned.setMaxTricks(3);
+	// pruned.search();
+	// pruned.printStats();
+	// }
+	// public void testViableDepth() {
+	// for (int i = 0; i < 10; i++) {
+	//				
+	// Game game = new Game(Hearts.i());
+	// GameUtils.initializeRandom(game, 13);
+	//				
+	// System.out.println("----------********************-----------");
+	// game.printHands();
+	// //game.play(game.getPlayer(West.i()).getHand().get(0));
+	// //System.out.println("Initial branching factor: "
+	// +game.getNextToPlay().getPossibleMoves(game.getCurrentTrick()).size());
+	// Search pruned = new Search(game);
+	// pruned.usePruning(true);
+	// pruned.setMaxTricks(3);
+	// pruned.search();
+	// pruned.printStats();
+	//				
+	//				
+	// }
+	// }
 
 	public void testAlphaBetaScenario1() {
 
 		Game game = new Game(NoTrump.i());
 		game.getPlayer(Direction.WEST).init(
-				new Card[] { Nine.of(Clubs.i()), Four.of(Spades.i()), Six.of(Spades.i()),
-						Nine.of(Spades.i()) });
+				new Card[] { Nine.of(Clubs.i()), Four.of(Spades.i()),
+						Six.of(Spades.i()), Nine.of(Spades.i()) });
 		game.getPlayer(Direction.NORTH).init(
 				new Card[] { Seven.of(Spades.i()), Ace.of(Spades.i()),
 						Eight.of(Spades.i()), Five.of(Clubs.i()) });
 		game.getPlayer(Direction.EAST).init(
-				new Card[] { Ten.of(Hearts.i()), Three.of(Hearts.i()), Two.of(Spades.i()),
-						Eight.of(Clubs.i()) });
+				new Card[] { Ten.of(Hearts.i()), Three.of(Hearts.i()),
+						Two.of(Spades.i()), Eight.of(Clubs.i()) });
 		game.getPlayer(Direction.SOUTH).init(
-				new Card[] { Six.of(Hearts.i()), Two.of(Hearts.i()), Queen.of(Spades.i()),
-						King.of(Clubs.i()) });
+				new Card[] { Six.of(Hearts.i()), Two.of(Hearts.i()),
+						Queen.of(Spades.i()), King.of(Clubs.i()) });
 
 		Search pruned = new Search(game.duplicate());
 		pruned.usePruning(true);
 		pruned.search();
 		assertEquals(2, pruned.getRoot().getTricksTaken(Player.WEST_EAST));
 	}
-	
+
 	public void testAlphaBetaScenario2() {
 
 		Game game = new Game(NoTrump.i());
-		game.getPlayer(Direction.WEST).init(new Card[] { Six.of(Spades.i()),Nine.of(Spades.i()) });
-		game.getPlayer(Direction.NORTH).init(new Card[] { Ace.of(Spades.i()), Eight.of(Spades.i()) });
-		game.getPlayer(Direction.EAST).init(new Card[] { Ten.of(Hearts.i()), Three.of(Hearts.i())});
-		game.getPlayer(Direction.SOUTH).init(new Card[] { Six.of(Hearts.i()), Two.of(Hearts.i())});
+		game.getPlayer(Direction.WEST).init(
+				new Card[] { Six.of(Spades.i()), Nine.of(Spades.i()) });
+		game.getPlayer(Direction.NORTH).init(
+				new Card[] { Ace.of(Spades.i()), Eight.of(Spades.i()) });
+		game.getPlayer(Direction.EAST).init(
+				new Card[] { Ten.of(Hearts.i()), Three.of(Hearts.i()) });
+		game.getPlayer(Direction.SOUTH).init(
+				new Card[] { Six.of(Hearts.i()), Two.of(Hearts.i()) });
 
-        game.setNextToPlay(Direction.SOUTH);
+		game.setNextToPlay(Direction.SOUTH);
 		Search pruned = new Search(game.duplicate());
 		pruned.usePruning(true);
 		pruned.search();
 		assertEquals(2, pruned.getRoot().getTricksTaken(Player.WEST_EAST));
 
 	}
-	
+
 	public void testLastTrickAutoExpands() {
 		Node root = new Node(null);
 		Game g = new Game(NoTrump.i());
@@ -404,7 +477,7 @@ public class SearchTest extends TestCase {
 		s.examinePosition(child);
 		assertEquals(0, child.children.size());
 	}
-	
+
 	public void testPrunedAncestorNoEvaluation() {
 		Node root = new Node(null);
 		root.setPruned(true, Node.PRUNE_ALPHA);
@@ -416,7 +489,7 @@ public class SearchTest extends TestCase {
 		s.examinePosition(grandChild);
 		assertEquals(0, grandChild.children.size());
 	}
-	
+
 	public void testTrimRoot() {
 		int maxWestTricks = 3;
 		Node root = new Node(null);
@@ -433,7 +506,7 @@ public class SearchTest extends TestCase {
 		assertEquals("Good move trimmed", child2, root.children.get(1));
 		assertEquals(maxWestTricks, root.getTricksTaken(Player.WEST_EAST));
 	}
-	
+
 	public void testLastChildCallsParentTrim() {
 		Node root = new Node(null);
 		root.setPlayerTurn(Direction.WEST);
@@ -462,7 +535,7 @@ public class SearchTest extends TestCase {
 		s.trim(child1);
 		assertTrue(root.trimmed());
 	}
-	
+
 	public void testNotLastChildNoCallToParentTrim() {
 		MockNode root = new MockNode(null);
 		root.setPlayerTurn(Direction.WEST);
@@ -489,7 +562,7 @@ public class SearchTest extends TestCase {
 		s.trim(child2);
 		assertFalse(root.trimmed());
 	}
-	
+
 	public void testMinMaxTrimmingNorthSpoilsWestPlay() {
 		Node root = new Node(null);
 		root.setPlayerTurn(Direction.WEST);
@@ -519,7 +592,7 @@ public class SearchTest extends TestCase {
 				.getTricksTaken(root.getCurrentPair()));
 		assertNull(root.children.get(1));
 	}
-	
+
 	public void testMinMaxTrimmingNorthLesserEvil() {
 		Node root = new Node(null);
 		root.setPlayerTurn(Direction.WEST);
@@ -550,7 +623,7 @@ public class SearchTest extends TestCase {
 				.getTricksTaken(root.getCurrentPair()));
 
 	}
-	
+
 	public void testTrimTerminatesOnUnexpandedNonLeafNode() {
 
 		MockNode root = new MockNode(null);
@@ -558,7 +631,7 @@ public class SearchTest extends TestCase {
 
 		Node child1 = new Node(root);
 		child1.setPlayerTurn(Direction.NORTH);
-        child1.setLeaf(false);
+		child1.setLeaf(false);
 
 		Node child2 = new Node(root);
 		child2.setPlayerTurn(Direction.NORTH);
@@ -574,7 +647,7 @@ public class SearchTest extends TestCase {
 		assertFalse(root.trimmed());
 
 	}
-	
+
 	public void testTrimPruned() {
 		Node root = new Node(null);
 		root.setPlayerTurn(Direction.WEST);
@@ -588,70 +661,92 @@ public class SearchTest extends TestCase {
 		assertEquals(null, root.children.get(0));
 		assertEquals(null, root.children.get(1));
 	}
-	
+
 	public void testBestMoveWhenRootDoesNotStartTrick() {
 		Game game = new Game(NoTrump.i());
-		game.getPlayer(Direction.WEST).init( new Card[] { Nine.of(Clubs.i()), Four.of(Spades.i())});
-		game.getPlayer(Direction.NORTH).init( new Card[] { Seven.of(Spades.i()), Queen.of(Hearts.i())});
-		game.getPlayer(Direction.EAST).init( new Card[] { Three.of(Clubs.i()), Three.of(Hearts.i()) });
-		game.getPlayer(Direction.SOUTH).init(new Card[] { Four.of(Clubs.i()), Two.of(Spades.i())});
+		game.getPlayer(Direction.WEST).init(
+				new Card[] { Nine.of(Clubs.i()), Four.of(Spades.i()) });
+		game.getPlayer(Direction.NORTH).init(
+				new Card[] { Seven.of(Spades.i()), Queen.of(Hearts.i()) });
+		game.getPlayer(Direction.EAST).init(
+				new Card[] { Three.of(Clubs.i()), Three.of(Hearts.i()) });
+		game.getPlayer(Direction.SOUTH).init(
+				new Card[] { Four.of(Clubs.i()), Two.of(Spades.i()) });
 		game.doNextCard(0);
-		Search s = new Search (game);
+		Search s = new Search(game);
 		s.search();
 		assertEquals(1, s.getBestMoves().size());
 		assertEquals(Queen.of(Hearts.i()), s.getBestMoves().get(0));
-		
-		//triangulate
+
+		// triangulate
 		Game game2 = new Game(NoTrump.i());
-		game2.getPlayer(Direction.WEST).init( new Card[] { Nine.of(Clubs.i()), Four.of(Spades.i())});
-		game2.getPlayer(Direction.NORTH).init( new Card[] { Queen.of(Hearts.i()), Seven.of(Spades.i())}); //invert order
-		game2.getPlayer(Direction.EAST).init( new Card[] { Three.of(Clubs.i()), Three.of(Hearts.i()) });
-		game2.getPlayer(Direction.SOUTH).init(new Card[] { Four.of(Clubs.i()), Two.of(Spades.i())});
+		game2.getPlayer(Direction.WEST).init(
+				new Card[] { Nine.of(Clubs.i()), Four.of(Spades.i()) });
+		game2.getPlayer(Direction.NORTH).init(
+				new Card[] { Queen.of(Hearts.i()), Seven.of(Spades.i()) }); // invert
+		// order
+		game2.getPlayer(Direction.EAST).init(
+				new Card[] { Three.of(Clubs.i()), Three.of(Hearts.i()) });
+		game2.getPlayer(Direction.SOUTH).init(
+				new Card[] { Four.of(Clubs.i()), Two.of(Spades.i()) });
 		game2.doNextCard(0);
-		Search s2 = new Search (game2);
+		Search s2 = new Search(game2);
 		s2.search();
 		assertEquals(1, s2.getBestMoves().size());
-		assertEquals(Queen.of(Hearts.i()), s2.getBestMoves().get(0));		
+		assertEquals(Queen.of(Hearts.i()), s2.getBestMoves().get(0));
 	}
-	
+
 	public void testNorthTrumps() {
 		Game game = new Game(Spades.i());
-		game.getPlayer(Direction.WEST).init( new Card[] { Nine.of(Clubs.i()), Four.of(Clubs.i())});
-		game.getPlayer(Direction.NORTH).init( new Card[] { Two.of(Spades.i()), Two.of(Hearts.i())});
-		game.getPlayer(Direction.EAST).init( new Card[] { Three.of(Clubs.i()), Three.of(Diamonds.i()) });
-		game.getPlayer(Direction.SOUTH).init(new Card[] { Six.of(Clubs.i()), Five.of(Diamonds.i())});
+		game.getPlayer(Direction.WEST).init(
+				new Card[] { Nine.of(Clubs.i()), Four.of(Clubs.i()) });
+		game.getPlayer(Direction.NORTH).init(
+				new Card[] { Two.of(Spades.i()), Two.of(Hearts.i()) });
+		game.getPlayer(Direction.EAST).init(
+				new Card[] { Three.of(Clubs.i()), Three.of(Diamonds.i()) });
+		game.getPlayer(Direction.SOUTH).init(
+				new Card[] { Six.of(Clubs.i()), Five.of(Diamonds.i()) });
 		game.doNextCard(0);
-		Search s = new Search (game);
+		Search s = new Search(game);
 		s.search();
 		assertEquals(1, s.getBestMoves().size());
 		assertEquals(Two.of(Spades.i()), s.getBestMoves().get(0));
-		
+
 		Game game2 = new Game(Spades.i());
-		game2.getPlayer(Direction.WEST).init( new Card[] { Nine.of(Clubs.i()), Four.of(Clubs.i())});
-		game2.getPlayer(Direction.NORTH).init( new Card[] { Two.of(Hearts.i()), Two.of(Spades.i())}); //order reverted
-		game2.getPlayer(Direction.EAST).init( new Card[] { Three.of(Clubs.i()), Three.of(Diamonds.i()) });
-		game2.getPlayer(Direction.SOUTH).init(new Card[] { Six.of(Clubs.i()), Five.of(Diamonds.i())});
+		game2.getPlayer(Direction.WEST).init(
+				new Card[] { Nine.of(Clubs.i()), Four.of(Clubs.i()) });
+		game2.getPlayer(Direction.NORTH).init(
+				new Card[] { Two.of(Hearts.i()), Two.of(Spades.i()) }); // order
+		// reverted
+		game2.getPlayer(Direction.EAST).init(
+				new Card[] { Three.of(Clubs.i()), Three.of(Diamonds.i()) });
+		game2.getPlayer(Direction.SOUTH).init(
+				new Card[] { Six.of(Clubs.i()), Five.of(Diamonds.i()) });
 		game2.doNextCard(0);
-		Search s2 = new Search (game2);
+		Search s2 = new Search(game2);
 		s2.search();
 		assertEquals(1, s2.getBestMoves().size());
 		assertEquals(Two.of(Spades.i()), s2.getBestMoves().get(0));
-		
+
 	}
-	
+
 	public void testNorthCannotTrumpBecauseHasColor() {
 		Game game = new Game(Spades.i());
-		game.getPlayer(Direction.WEST).init( new Card[] { Nine.of(Clubs.i()), Four.of(Spades.i())});
-		game.getPlayer(Direction.NORTH).init( new Card[] { Two.of(Spades.i()), Two.of(Clubs.i())});
-		game.getPlayer(Direction.EAST).init( new Card[] { Three.of(Diamonds.i()), Three.of(Hearts.i()) });
-		game.getPlayer(Direction.SOUTH).init(new Card[] { Six.of(Diamonds.i()), Five.of(Hearts.i())});
+		game.getPlayer(Direction.WEST).init(
+				new Card[] { Nine.of(Clubs.i()), Four.of(Spades.i()) });
+		game.getPlayer(Direction.NORTH).init(
+				new Card[] { Two.of(Spades.i()), Two.of(Clubs.i()) });
+		game.getPlayer(Direction.EAST).init(
+				new Card[] { Three.of(Diamonds.i()), Three.of(Hearts.i()) });
+		game.getPlayer(Direction.SOUTH).init(
+				new Card[] { Six.of(Diamonds.i()), Five.of(Hearts.i()) });
 		game.doNextCard(0);
-		Search s = new Search (game);
+		Search s = new Search(game);
 		s.search();
 		assertEquals(1, s.getBestMoves().size());
 		assertEquals(Two.of(Clubs.i()), s.getBestMoves().get(0));
 	}
-	
+
 	public void testBestMoveForOneTrick() {
 		Game game = new Game(NoTrump.i());
 		game.getPlayer(Direction.WEST).init(new String[] { "3" });
@@ -664,6 +759,7 @@ public class SearchTest extends TestCase {
 		assertNotNull(s.getBestMoves());
 		assertEquals(1, s.getBestMoves().size());
 	}
+
 	public void testBestMoveForOneTrickRootDidNotStartTrick() {
 		Game game = new Game(NoTrump.i());
 		game.getPlayer(Direction.WEST).init(new String[] { "3" });
@@ -678,6 +774,4 @@ public class SearchTest extends TestCase {
 		assertEquals(1, s.getBestMoves().size());
 	}
 
-
 }
-
