@@ -20,7 +20,7 @@ public class PositionLookup {
 	public boolean positionEncountered(Game g) {
 		List<Card> playedCards = g.getPlayedCards().getCardsHighToLow();
 		if (isFreshTrick(playedCards)) {
-		return root.positionEncountered(g, playedCards);
+			return root.positionEncountered(g, playedCards);
 		} else {
 			return false;
 		}
@@ -48,7 +48,8 @@ class PositionLookupNode {
 			return false;
 		}
 		Card top = playedCards.get(0);
-		AdditionalUniquePositionIdentifiers additionalUniquePositionIdentifiers = new AdditionalUniquePositionIdentifiers(g);
+		AdditionalUniquePositionIdentifiers additionalUniquePositionIdentifiers = new AdditionalUniquePositionIdentifiers(
+				g);
 		if (!haveCard(top)) {
 			store(additionalUniquePositionIdentifiers, playedCards);
 			return false;
@@ -58,43 +59,49 @@ class PositionLookupNode {
 				playedCards.remove(0);
 				return currentNode.positionEncountered(g, playedCards);
 			} else {
-				
+
 				boolean result = currentNode.terminatesAPosition
-						&& currentNode.playersTurnContains(
-								additionalUniquePositionIdentifiers);
+						&& currentNode
+								.playersTurnContains(additionalUniquePositionIdentifiers);
 				currentNode.terminatesAPosition = true;
-				currentNode.addAdditionalUniquePositionIdentifiers(additionalUniquePositionIdentifiers);
+				currentNode
+						.addAdditionalUniquePositionIdentifiers(additionalUniquePositionIdentifiers);
 				return result;
 			}
 		}
 	}
 
-	private void addAdditionalUniquePositionIdentifiers(AdditionalUniquePositionIdentifiers unique) {
+	private void addAdditionalUniquePositionIdentifiers(
+			AdditionalUniquePositionIdentifiers unique) {
 		if (!playersTurnContains(unique)) {
 			additionalUniquePositionIdentifiers.add(unique);
 		}
 
 	}
 
-	private boolean playersTurnContains(AdditionalUniquePositionIdentifiers candidate) {
+	private boolean playersTurnContains(
+			AdditionalUniquePositionIdentifiers candidate) {
 		for (AdditionalUniquePositionIdentifiers currentUnique : additionalUniquePositionIdentifiers) {
-		  if (currentUnique.hasSameIdentifiers(candidate)) {
-			  return true;
-		  }
+			if (currentUnique.hasSameIdentifiers(candidate)) {
+				return true;
+			}
 		}
 		return false;
 	}
 
-	private void store(AdditionalUniquePositionIdentifiers additionalUniquePositionIdentifiers, List<Card> cards) {
+	private void store(
+			AdditionalUniquePositionIdentifiers additionalUniquePositionIdentifiers,
+			List<Card> cards) {
 		Card top = cards.get(0);
 		moves[top.getIndex()] = new PositionLookupNode(this);
 		if (cards.size() > 1) {
 			cards.remove(0);
-			moves[top.getIndex()].store(additionalUniquePositionIdentifiers, cards);
+			moves[top.getIndex()].store(additionalUniquePositionIdentifiers,
+					cards);
 		} else {
 			moves[top.getIndex()].terminatesAPosition = true;
-			moves[top.getIndex()].addAdditionalUniquePositionIdentifiers(
-					additionalUniquePositionIdentifiers);
+			moves[top.getIndex()]
+					.addAdditionalUniquePositionIdentifiers(additionalUniquePositionIdentifiers);
 		}
 
 	}
@@ -110,14 +117,14 @@ class AdditionalUniquePositionIdentifiers {
 
 	public AdditionalUniquePositionIdentifiers(Game g) {
 		this.nextToMove = g.getNextToPlay().getDirection2();
-		this.tricksTakenByNorthSouth = g.getTricksTaken(Player.NORTH_SOUTH);		
+		this.tricksTakenByNorthSouth = g.getTricksTaken(Player.NORTH_SOUTH);
 	}
 
 	public boolean hasSameIdentifiers(AdditionalUniquePositionIdentifiers other) {
 		return other.getNextToMove().equals(getNextToMove())
-		  && other.getTricksTakenNorthSouth() == getTricksTakenNorthSouth();
+				&& other.getTricksTakenNorthSouth() == getTricksTakenNorthSouth();
 	}
-	
+
 	public int getTricksTakenNorthSouth() {
 		return tricksTakenByNorthSouth;
 	}

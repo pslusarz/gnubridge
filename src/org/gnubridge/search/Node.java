@@ -243,6 +243,9 @@ public class Node {
 		return isPruned() && (getPruneType() == PRUNE_BETA);
 	}
 
+	
+	
+
 	public int getPruneType() {
 		if (parent == null) {
 			return pruneType;
@@ -403,12 +406,14 @@ public class Node {
 	}
 
 	public void pruneAsDuplicatePosition() {
-		setPruned(true, Node.PRUNE_DUPLICATE_POSITION);
+//		setPruned(true, Node.PRUNE_DUPLICATE_POSITION);
+		setPruned(false, Node.PRUNE_DUPLICATE_POSITION);
 		
 	}
 
 	public boolean isPrunedDuplicatePosition() {
-		return isPruned() && (getPruneType() == PRUNE_DUPLICATE_POSITION);
+//		return isPruned() && (getPruneType() == PRUNE_DUPLICATE_POSITION);
+		return (pruneType == PRUNE_DUPLICATE_POSITION);
 	}
 
 }

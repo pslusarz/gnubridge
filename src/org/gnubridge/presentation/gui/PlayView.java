@@ -55,7 +55,14 @@ public class PlayView extends GBContainer {
 		humanHandDisplay = new AllCardsInOneRow(human, human, game, this);
 		humanHandDisplay.display();
 		dummy = new OneColumnPerColor(human, North.i(), game, this);
-		dummy.display();
+		displayDummyIfWestPlayed(); 
+	}
+	
+	private void displayDummyIfWestPlayed() {
+		if (game.getTricksPlayed() > 0 || game.getCurrentTrick().getHighestCard() != null) {
+			
+			dummy.display();
+		}
 	}
 
 	void addCard(CardPanel card) {
@@ -108,7 +115,7 @@ public class PlayView extends GBContainer {
 				+ game.getTricksPlayed();
 		table.displayTrick(game.getCurrentTrick(), panel);
 		table.setDisplayingPreviousTrick(false);
-		dummy.display();
+		displayDummyIfWestPlayed();
 		humanHandDisplay.display();
 
 	}

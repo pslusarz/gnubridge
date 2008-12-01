@@ -333,33 +333,34 @@ public class SearchTest extends TestCase {
 	// }
 	
 	
-//	public void testPruningDuplicateEquivalentToAlphaBeta() {
-//		for (int i = 0; i < 10; i++) {
-//
-//			Game game = new Game(NoTrump.i());
-//			GameUtils.initializeRandom(game, 5);
+	public void ignoreMeTestPruningDuplicateEquivalentToAlphaBeta() {
+		for (int i = 0; i < 10; i++) {
+
+			Game game = new Game(NoTrump.i());
+			GameUtils.initializeRandom(game, 5);
+			game.printHands();
+
 //			Search unpruned = new Search(game);
 //			unpruned.setUseDuplicateRemoval(false);
 //			unpruned.search();
-//
-//			Search pruned = new Search(game);
-//			pruned.setUseDuplicateRemoval(true);
-//			pruned.search();
-//
 //			System.out.println("----------********************-----------");
-//			game.printHands();
 //			unpruned.printStats();
-//			pruned.printStats();
-//
+
+			Search pruned = new Search(game);
+			pruned.setUseDuplicateRemoval(true);
+			pruned.search();
+
+			pruned.printStats();
+
 //			assertEquals("Unpruned: "
 //					+ unpruned.getRoot().getTricksTaken(Player.WEST_EAST)
 //					+ ", pruned: "
 //					+ pruned.getRoot().getTricksTaken(Player.WEST_EAST),
 //					unpruned.getRoot().getTricksTaken(Player.WEST_EAST), pruned
 //							.getRoot().getTricksTaken(Player.WEST_EAST));
-//
-//		}
-//	}
+
+		}
+	}
 
 	// public void testXDepth() {
 	//			

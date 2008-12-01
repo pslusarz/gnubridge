@@ -159,11 +159,14 @@ public class Search {
 			Game position = game.duplicate();
 			position.playMoves(node.getMoves());
 			  if (lookup.positionEncountered(position))	{
-				  //System.out.println(node.printMoves());
 				  node.pruneAsDuplicatePosition();
+
+				  if (node.parent != null
+				&& (node.parent.isLastVisitedChild(node) )) {
+//				  removeExpandedBranches(node);
 			  }
 			}
-		
+		}		
 	}
 
 	private void removeSiblingsInSequenceWithPlayedCards(Node move,

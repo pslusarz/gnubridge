@@ -34,6 +34,14 @@ public class TestPositionLookup extends TestCase {
 		assertFalse(pl.positionEncountered(g));
 		assertTrue(pl.positionEncountered(g));
 	}
+	public void testIgnoreStartupGame() {
+		Game g = new Game(NoTrump.i());
+		GameUtils.initializeSingleColorSuits(g);
+		
+		PositionLookup pl = new PositionLookup();
+		assertFalse(pl.positionEncountered(g));
+		assertFalse(pl.positionEncountered(g));
+	}
 	private void playOneTrick(Game g) {
 		for (int i = 0; i< 4; i++) {
 			g.play(g.getNextToPlay().getHand().get(0));
