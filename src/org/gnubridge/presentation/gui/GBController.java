@@ -35,18 +35,38 @@ public class GBController {
 
 	public GBController(MainView view) {
 		this.view = view;
-		biddingController = new BiddingController(view.getBiddingView(), this);
+		setBiddingController(new BiddingController(view.getBiddingView(), this));
 	}
 
 
 	public void playGame() {
-		gameController = new GameController(this, biddingController.getAuction(), biddingController.getCardHolder(), biddingController.allowHumanToPlayIfDummy(), view.getPlayView());
+		setGameController(new GameController(this, getBiddingController().getAuction(), getBiddingController().getCardHolder(), getBiddingController().allowHumanToPlayIfDummy(), view.getPlayView()));
 	}
 
 
 	public void gameFinished() {
-		view.getPlayView().display("GAME FINISHED. Contract was: "+biddingController.getAuction().getHighBid()+ 
-				", declarers took "+gameController.getGame().getTricksTaken(Player.NORTH_SOUTH)+ " tricks.");
+		view.getPlayView().display("GAME FINISHED. Contract was: "+getBiddingController().getAuction().getHighBid()+ 
+				", declarers took "+getGameController().getGame().getTricksTaken(Player.NORTH_SOUTH)+ " tricks.");
+	}
+
+
+	public void setBiddingController(BiddingController biddingController) {
+		this.biddingController = biddingController;
+	}
+
+
+	public BiddingController getBiddingController() {
+		return biddingController;
+	}
+
+
+	public void setGameController(GameController gameController) {
+		this.gameController = gameController;
+	}
+
+
+	public GameController getGameController() {
+		return gameController;
 	}
 	
 

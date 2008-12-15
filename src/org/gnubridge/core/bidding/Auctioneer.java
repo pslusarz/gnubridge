@@ -120,7 +120,7 @@ public class Auctioneer {
 		return result;
 	}
 
-	private Call getHighCall() {
+	public Call getHighCall() {
 		for (Call call : calls) {
 			if (call.getBid().equals(getHighBid())) {
 				return call;
