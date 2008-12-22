@@ -5,11 +5,13 @@ import java.util.List;
 
 import org.gnubridge.core.deck.Color;
 import org.gnubridge.core.deck.Trump;
-
+import org.gnubridge.presentation.GameUtils;
 
 public class Game {
 
 	private static final int NO_FORCED_MOVE = -1;
+
+	private static Game preInitializedGame;
 
 	private Player[] players;
 
@@ -26,6 +28,8 @@ public class Game {
 	private Trick previousTrick;
 	private Hand playedCards;
 
+	private Player preInitializedHumanPlayer;
+
 	public Game(Trump trump) {
 		players = new Player[4];
 		for (int i = Direction.WEST; i <= Direction.SOUTH; i++) {
@@ -37,22 +41,25 @@ public class Game {
 		tricksPlayed = 0;
 		done = false;
 		playedCards = new Hand();
-		
+
 	}
 
 	public Player getPlayer(int i) {
 		return players[i];
 	}
-	
+
 	public Player getWest() {
 		return players[Direction.WEST];
 	}
+
 	public Player getNorth() {
 		return players[Direction.NORTH];
 	}
+
 	public Player getEast() {
 		return players[Direction.EAST];
 	}
+
 	public Player getSouth() {
 		return players[Direction.SOUTH];
 	}
@@ -61,31 +68,32 @@ public class Game {
 		players[i] = p;
 
 	}
-	
+
 	public void doNextCard() {
 		doNextCard(NO_FORCED_MOVE);
 	}
 
-	//TODO: test how it interacts with play()
+	// TODO: test how it interacts with play()
 	public List<Card> getPlayedCardsHiToLow(Color color) {
 		return playedCards.getColorHi2Low(color);
 	}
-	
-	public void doNextCard(int forcedMoveIndex) {		
+
+	public void doNextCard(int forcedMoveIndex) {
 		Card card;
-		
+
 		if (forcedMoveIndex == NO_FORCED_MOVE) {
 			card = players[nextToPlay].play(currentTrick);
 		} else {
 			card = players[nextToPlay].play(currentTrick, forcedMoveIndex);
 		}
 		playedCards.add(card);
-		currentTrick.addCard(card, players[nextToPlay]); //TODO: test player assignment
+		currentTrick.addCard(card, players[nextToPlay]); // TODO: test player
+		// assignment
 		if (currentTrick.isDone()) {
 			int winner = getWinnerIndex(currentTrick);
 			nextToPlay = winner;
 			players[winner].addTrickTaken(currentTrick);
-            previousTrick = currentTrick;
+			previousTrick = currentTrick;
 			currentTrick = new Trick(this.getTrump());
 			tricksPlayed++;
 		} else {
@@ -100,14 +108,15 @@ public class Game {
 	public Trick getPreviousTrick() {
 		return previousTrick;
 	}
-	
+
 	public int getWinnerIndex(Trick trick) {
 		for (int i = 0; i < players.length; i++) {
-            if (players[i].hasPlayedCard(trick.getHighestCard())) {
-          	  return i;
-            }
+			if (players[i].hasPlayedCard(trick.getHighestCard())) {
+				return i;
 			}
-		throw new RuntimeException("Cannot find winning player for trick: "+trick);
+		}
+		throw new RuntimeException("Cannot find winning player for trick: "
+				+ trick);
 	}
 
 	public boolean isDone() {
@@ -125,24 +134,25 @@ public class Game {
 		}
 		result.nextToPlay = nextToPlay;
 		result.setCurrentTrick(currentTrick.duplicate());
-		result.setPlayedCards(playedCards.getCardsHighToLow()); //TODO: untested
+		result.setPlayedCards(playedCards.getCardsHighToLow()); // TODO:
+		// untested
 		return result;
 	}
 
 	private void setPlayedCards(List<Card> cards) {
 		playedCards = new Hand(cards);
-		
+
 	}
 
 	private void setCurrentTrick(Trick trick) {
 		currentTrick = trick;
-		
+
 	}
 
 	public void playMoves(List<Integer> moves) {
-		for (int move:moves) {
-			doNextCard(move);	
-		}		
+		for (int move : moves) {
+			doNextCard(move);
+		}
 	}
 
 	public Trick getCurrentTrick() {
@@ -151,34 +161,37 @@ public class Game {
 
 	public void setNextToPlay(int direction) {
 		this.nextToPlay = direction;
-		
+
 	}
 
 	public int getTricksTaken(int pair) {
 		switch (pair) {
 		case Player.WEST_EAST:
-			return getPlayer(Direction.WEST).countTricksTaken()+ getPlayer(Direction.EAST).countTricksTaken();			
+			return getPlayer(Direction.WEST).countTricksTaken()
+					+ getPlayer(Direction.EAST).countTricksTaken();
 		case Player.NORTH_SOUTH:
-			return getPlayer(Direction.NORTH).countTricksTaken()+ getPlayer(Direction.SOUTH).countTricksTaken();
+			return getPlayer(Direction.NORTH).countTricksTaken()
+					+ getPlayer(Direction.SOUTH).countTricksTaken();
 		default:
-			throw new RuntimeException("Unknown pair: "+pair);
+			throw new RuntimeException("Unknown pair: " + pair);
 		}
 
 	}
 
 	public boolean oneTrickLeft() {
-		return (getCurrentTrick().getHighestCard() == null && getNextToPlay().getHand().size() == 1); 
+		return (getCurrentTrick().getHighestCard() == null && getNextToPlay()
+				.getHand().size() == 1);
 	}
 
 	public void printHands() {
 		for (Player player : players) {
-			System.out.println(player+": "+player.getHand());
+			System.out.println(player + ": " + player.getHand());
 		}
 	}
 
 	public void setTrump(Trump d) {
 		this.trump = d;
-		
+
 	}
 
 	public Trump getTrump() {
@@ -191,8 +204,8 @@ public class Game {
 
 	public List<Player> getPlayers() {
 		List<Player> result = new ArrayList<Player>();
-		for (int i = 0; i< players.length ; i++) {
-		result.add(players[i]);
+		for (int i = 0; i < players.length; i++) {
+			result.add(players[i]);
 		}
 		return result;
 	}
@@ -202,23 +215,50 @@ public class Game {
 	}
 
 	public boolean isLegalMove(Card card) {
-		 return getNextToPlay().getPossibleMoves(currentTrick).contains(card);
+		return getNextToPlay().getPossibleMoves(currentTrick).contains(card);
 	}
 
 	public void play(Card c) {
-		List<Card> possibleMoves = getNextToPlay().getPossibleMoves(currentTrick);
+		List<Card> possibleMoves = getNextToPlay().getPossibleMoves(
+				currentTrick);
 		doNextCard(possibleMoves.indexOf(c));
 	}
 
-
-	public Player selectRandomPlayer() {
-		return players[(int) Math.floor(Math.random() * players.length)];
-	}
-
-	//TODO: note, this is currently tested by TestPositionLookup indirectly
+	// TODO: note, this is currently only tested by TestPositionLookup
+	// indirectly
 	public Hand getPlayedCards() {
 		return playedCards;
 	}
 
+	public void setHumanPlayer(Player p) {
+		preInitializedHumanPlayer = p;
+	}
+
+	public Player selectHumanPlayer() {
+		Player result;
+		if (preInitializedHumanPlayer != null) {
+			result = preInitializedHumanPlayer;
+			preInitializedHumanPlayer = null;
+		} else {
+			result = players[(int) Math.floor(Math.random() * players.length)];
+		}
+		return result;
+	}
+
+	public static void setPreInitializedGame(Game preInitializedGame) {
+		Game.preInitializedGame = preInitializedGame;
+	}
+
+	public static Game construct() {
+		Game result;
+		if (preInitializedGame != null) {
+			result = preInitializedGame;
+			preInitializedGame = null;
+		} else {
+			result = new Game(null);
+			GameUtils.initializeRandom(result.getPlayers(), 13);
+		}
+		return result;
+	}
 
 }

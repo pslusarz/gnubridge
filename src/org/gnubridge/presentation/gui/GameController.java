@@ -109,7 +109,7 @@ public class GameController {
 		}
 	}
 
-	public void playCard(Card c) {
+	public synchronized void playCard(Card c) {
 		game.play(c);
 		TrickDisplayWorker tdw = new TrickDisplayWorker();
 		tdw.execute();

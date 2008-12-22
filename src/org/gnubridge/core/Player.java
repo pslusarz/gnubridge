@@ -143,6 +143,9 @@ public class Player {
 
 	public Card play(Trick trick, int moveIndex) {
 		List<Card> moves = getPossibleMoves(trick);
+		if (moves.size() == 0) {
+			System.out.println(this +" has no possible move for "+trick+" (hand: "+getHand()+")");			
+		}
 		Card result = moves.get(moveIndex);
 		played.add(result);
 		hand.remove(hand.indexOf(result));

@@ -24,11 +24,10 @@ public class BiddingController {
 		view = v;
 		view.setController(this);
 		parent = p;
-		cardHolder = new Game(null);
-		GameUtils.initializeRandom(cardHolder.getPlayers(), 13);
+		cardHolder = Game.construct();
 		auction = new Auctioneer(West.i());
 		view.setAuction(auction);
-		human = cardHolder.selectRandomPlayer();
+		human = cardHolder.selectHumanPlayer();
 		view.setCards(new Hand(human.getHand()));
 		doAutomatedBidding();
 		
