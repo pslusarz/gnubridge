@@ -11,6 +11,7 @@ import org.gnubridge.core.South;
 import org.gnubridge.core.West;
 import org.gnubridge.core.bidding.Auctioneer;
 import org.gnubridge.search.Search;
+import org.gnubridge.search.ConfigurableRuntimeSettingsFactory;
 
 public class GameController {
 	public class SearchWorker extends SwingWorker<Void, String> {
@@ -19,11 +20,7 @@ public class GameController {
 		@Override
 		protected Void doInBackground() throws Exception {
 			search = new Search(game);
-			if (game.getTricksPlayed() < 6) {
-			  search.setMaxTricks(3);
-			} else if (game.getTricksPlayed() < 8) {
-				search.setMaxTricks(4);
-			}
+			search.setMaxTricks(ConfigurableRuntimeSettingsFactory.get().getSearchDepthRecommendation(game));
 			search.search();
 			return null;
 		}
@@ -51,7 +48,7 @@ public class GameController {
 		public void done() {
 			if (previousTrickDisplayed) {
 				try {
-					Thread.sleep(3000);
+					Thread.sleep(ConfigurableRuntimeSettingsFactory.get().getMilisecondsToDisplayLastTrick());
 				} catch (InterruptedException e) {
 					throw new RuntimeException(e);
 				}
