@@ -66,6 +66,7 @@ public class GameController {
 			Game cardHolder, Direction humanDir, PlayView playView) {
 		parent = controller;
 		game = makeGame(auctioneer, cardHolder);
+		game.printHandsDebug();
 		human = humanDir;
 		view = playView;
 		view.setController(this);
@@ -107,6 +108,7 @@ public class GameController {
 	}
 
 	public synchronized void playCard(Card c) {
+		System.out.println("game.play("+c.toDebugString()+");");
 		game.play(c);
 		TrickDisplayWorker tdw = new TrickDisplayWorker();
 		tdw.execute();

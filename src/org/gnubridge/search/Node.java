@@ -416,4 +416,14 @@ public class Node {
 		return (pruneType == PRUNE_DUPLICATE_POSITION);
 	}
 
+	public String toDebugString() {
+		String result = "";
+		result += "Node: "+parent.getMyIndex(this)+", "+cardPlayed+"\n";
+		result += "pruned? "+isPruned() +"\n";
+		result += "   alpha/beta: "+isAlphaPruned()+"/"+isBetaPruned()+"\n";
+		result += "   sequence/played sequence: "+isSequencePruned()+"/"+isPlayedSequencePruned()+"\n";
+		
+		return result;
+	}
+
 }

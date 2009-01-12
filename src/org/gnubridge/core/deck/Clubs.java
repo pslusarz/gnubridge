@@ -22,4 +22,9 @@ public class Clubs extends Color {
 		return "CLUBS";
 	}
 
+	@Override
+	public String toDebugString() {
+		return "Clubs.i()";
+	}
+
 }

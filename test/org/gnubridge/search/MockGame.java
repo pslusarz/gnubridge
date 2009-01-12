@@ -7,6 +7,7 @@ import java.util.Map;
 import org.gnubridge.core.Game;
 import org.gnubridge.core.Player;
 import org.gnubridge.core.deck.NoTrump;
+import org.gnubridge.presentation.GameUtils;
 
 class MockGame extends Game {
 	Map<List<Integer>, int[]> values;
@@ -55,6 +56,8 @@ class MockGame extends Game {
 	}
 
 	public Game duplicate() {
-		return new MockGame(values, movesWhenDone);
+		MockGame result = new MockGame(values, movesWhenDone);
+		GameUtils.initializeSingleColorSuits(result, 1); //this is so that some garbage value is returned when player is asked for possible moves
+		return result;
 	}
 }

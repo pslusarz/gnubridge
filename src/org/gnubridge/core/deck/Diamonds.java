@@ -21,4 +21,9 @@ public class Diamonds extends Color {
 		return "DIAMONDS";
 	}
 
+	@Override
+	public String toDebugString() {
+		return "Diamonds.i()";
+	}
+
 }

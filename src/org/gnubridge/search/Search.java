@@ -120,53 +120,51 @@ public class Search {
 		}
 		Game position = game.duplicate();
 		position.playMoves(node.getMoves());
-		
 
 		Player player = position.getNextToPlay();
 		node.setPlayerTurn(player.getDirection());
 
-		if (position.oneTrickLeft()) {
-			if (node == root) {
-				Node move = new Node(node);
-				move.setCardPlayed(player.getPossibleMoves(
-						position.getCurrentTrick()).get(0));
-				move.setPlayerCardPlayed(player);
-			}
-			position.playMoves(finalMoves);
-			handleLeafNode(node, position);
+		for (Card card : player.getPossibleMoves(position.getCurrentTrick())) {
+			makeChildNodeForCardPlayed(node, player, card);
+		}
 
+		if (position.oneTrickLeft()) {
+			position.playMoves(finalMoves);
+		}
+
+		if (position.getTricksPlayed() >= maxTricks || position.isDone()) {
+			handleLeafNode(node, position);
 		} else {
-			if (position.getTricksPlayed() >= maxTricks) {
-				handleLeafNode(node, position);
-			} else {
-				List<Card> moves = player.getPossibleMoves(position
-						.getCurrentTrick());
-				for (Card card : moves) {
-					Node move = new Node(node);
-					move.setCardPlayed(card);
-					move.setPlayerCardPlayed(player);
-					removeSiblingsInSequence(move, position);
-					removeSiblingsInSequenceWithPlayedCards(move, position);
-					removeDuplicatePositions(move);
-					stack.push(move);
-				}
+			for (Node move : node.children) {
+				removeSiblingsInSequence(move, position);
+				removeSiblingsInSequenceWithPlayedCards(move, position);
+				removeDuplicatePositions(move);
+				//TODO later if (!move.isPruned()) {
+				stack.push(move);
 			}
 		}
+	}
+
+	private void makeChildNodeForCardPlayed(Node parent, Player player,
+			Card card) {
+		Node move = new Node(parent);
+		move.setCardPlayed(card);
+		move.setPlayerCardPlayed(player);
 	}
 
 	private void removeDuplicatePositions(Node node) {
 		if (useDuplicateRemoval()) {
 			Game position = game.duplicate();
 			position.playMoves(node.getMoves());
-			  if (lookup.positionEncountered(position))	{
-				  node.pruneAsDuplicatePosition();
+			if (lookup.positionEncountered(position)) {
+				node.pruneAsDuplicatePosition();
 
-				  if (node.parent != null
-				&& (node.parent.isLastVisitedChild(node) )) {
-//				  removeExpandedBranches(node);
-			  }
+				if (node.parent != null
+						&& (node.parent.isLastVisitedChild(node))) {
+					// removeExpandedBranches(node);
+				}
 			}
-		}		
+		}
 	}
 
 	private void removeSiblingsInSequenceWithPlayedCards(Node move,
@@ -181,25 +179,10 @@ public class Search {
 		for (Card sibling : siblingsInSuit) {
 			higherCard = getHigher(move.getCardPlayed(), sibling);
 			lowerCard = getLower(move.getCardPlayed(), sibling);
-			boolean isSequence = false;
-			Card previous = higherCard;
-			for (Card played : orderedPlayedCardsInSuit) {
-				if (played.getValue() > higherCard.getValue()) {
-					continue;
-				}
-				if (previous.getValue() == played.getValue() + 1) {
-					isSequence = true;
-				} else {
-					isSequence = false;
-					break;
-				}
-				if (isSequence && played.getValue() == lowerCard.getValue() + 1) {
-					shouldTrim = true;
-					break;
-				}
-				previous = played;
-			}
-			if (shouldTrim) {
+			boolean isSequence = areTwoUnplayedCardsInSequenceIfPlayedCardsAreDiscarded(lowerCard, higherCard, orderedPlayedCardsInSuit);
+			
+			if (isSequence && higherCard.equals(move.getCardPlayed())) {
+				shouldTrim = true;
 				break;
 			}
 		}
@@ -207,6 +190,25 @@ public class Search {
 			move.setPruned(true, Node.PRUNE_SEQUENCE_SIBLINGS_PLAYED);
 		}
 
+	}
+
+	private boolean areTwoUnplayedCardsInSequenceIfPlayedCardsAreDiscarded(
+			Card lowerCard, Card higherCard, List<Card> orderedPlayedCardsInSuit) {
+		boolean result = false;
+		Card previous = higherCard;
+		for (Card played : orderedPlayedCardsInSuit) {
+			if (played.getValue() > higherCard.getValue()) {
+				continue;
+			}
+			if (previous.getValue() == played.getValue() + 1) {
+				result = true;
+			} else {
+				result = false;
+				break;
+			}
+			previous = played;
+		}
+		return result;
 	}
 
 	private Card getLower(Card c1, Card c2) {
@@ -227,10 +229,9 @@ public class Search {
 
 	private void removeSiblingsInSequence(Node move, Game position) {
 		boolean shouldTrim = false;
-
 		List<Card> cardsInSuit = move.getSiblingsInColor();
 		for (Card sibling : cardsInSuit) {
-			if (Math.abs(sibling.getValue() - move.getCardPlayed().getValue()) == 1) {
+			if (sibling.getValue() - move.getCardPlayed().getValue() == 1) {
 				shouldTrim = true;
 				break;
 			}
@@ -298,12 +299,9 @@ public class Search {
 			if (usePruning() && node.shouldBeBetaPruned()) {
 				node.betaPrune();
 			}
-			
 
 		}
-		if (node.parent != null && node.parent.isLastVisitedChild(node)) {
-			trim(node.parent);
-		}
+		removeExpandedBranches(node);
 		node.trimmed = true;
 
 	}
@@ -313,9 +311,7 @@ public class Search {
 	}
 
 	private void removeExpandedBranches(Node node) {
-		if (node.parent != null
-				&& (node.parent.isLastVisitedChild(node) || node.parent
-						.isPruned())) {
+		if (node.parent != null && (node.parent.isLastVisitedChild(node))) {
 			trim(node.parent);
 		}
 	}
@@ -367,7 +363,8 @@ public class Search {
 					+ getPrunedPlayedSequence());
 		}
 		if (useDuplicateRemoval()) {
-			System.out.println("  Duplicate position prunes: " + prunedDuplicatePosition);	
+			System.out.println("  Duplicate position prunes: "
+					+ prunedDuplicatePosition);
 		}
 		System.out.println("West/East tricks taken: "
 				+ root.getTricksTaken(Player.WEST_EAST));

@@ -21,4 +21,8 @@ public class Spades extends Color {
 		return "SPADES";
 	}
 
+	@Override
+	public String toDebugString() {
+		return "Spades.i()";
+	}
 }

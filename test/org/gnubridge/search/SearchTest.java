@@ -130,8 +130,9 @@ public class SearchTest extends TestCase {
 		s.examinePosition(node);
 		assertEquals(3, s.getStack().size());
 		assertTrue(s.getStack().contains(node.children.get(0)));
+		assertTrue(node.children.get(0).isPruned());
 		assertTrue(node.children.get(1).isPruned());
-		assertTrue(node.children.get(2).isPruned());
+		assertFalse(node.children.get(2).isPruned());
 	}
 
 	public void testOnlyExpandFirstCardInSequenceThreeCardsOutOfOrder2() {
@@ -146,8 +147,9 @@ public class SearchTest extends TestCase {
 		s.examinePosition(node);
 		assertEquals(3, s.getStack().size());
 		assertTrue(s.getStack().contains(node.children.get(0)));
+		assertTrue(node.children.get(0).isPruned());
 		assertTrue(node.children.get(1).isPruned());
-		assertTrue(node.children.get(2).isPruned());
+		assertFalse(node.children.get(2).isPruned());
 	}
 
 	public void testOnlyExpandFirstCardInSequenceCardPlayedBetweenTwoUnplayedCards() {
@@ -177,11 +179,21 @@ public class SearchTest extends TestCase {
 		game.play(Ten.of(Spades.i()));
 		game.play(Nine.of(Spades.i()));
 		Search s = new Search(game);
+//		s.search();
+//		assertFalse(s.getRoot().children.get(0).isPlayedSequencePruned());
+//		assertFalse(s.getRoot().children.get(0).isPruned());
+//		assertTrue(s.getRoot().children.get(1).isPruned());
+//		assertTrue(s.getRoot().children.get(1).isPlayedSequencePruned());
+		
 		s.examinePosition(node);
 		assertEquals(2, s.getStack().size());
 		assertTrue(s.getStack().contains(node.children.get(0)));
+		assertFalse(node.children.get(0).isPlayedSequencePruned());
+		assertFalse(node.children.get(0).isPruned());
 		assertTrue(node.children.get(1).isPruned());
+		assertTrue(node.children.get(1).isPlayedSequencePruned());
 	}
+
 
 	public void testTricksTallyIsTrickLimit() {
 		Game game = new Game(NoTrump.i());
@@ -463,8 +475,8 @@ public class SearchTest extends TestCase {
 		Game g = new Game(NoTrump.i());
 		GameUtils.initializeSingleColorSuits(g, 1);
 		Search s = new Search(g);
-		s.examinePosition(root);
-		assertEquals(0, root.children.size());
+		s.search();
+		assertEquals(1, s.getPositionsExamined());
 		assertTrue(s.getStack().empty());
 	}
 

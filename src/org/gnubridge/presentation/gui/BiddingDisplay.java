@@ -69,7 +69,7 @@ public class BiddingDisplay extends GBContainer {
 	protected JPanel createDisplayPanel() {
 		return new JPanel() {
 			private static final long serialVersionUID = 2776807090785540403L;
-			int colWidth = 80;
+			int colWidth = 90;
 
 			public void paintComponent(Graphics g) {
 				super.paintComponent(g);

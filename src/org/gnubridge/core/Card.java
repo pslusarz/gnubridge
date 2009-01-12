@@ -151,4 +151,51 @@ public class Card {
 		return value + Color.getIndex(denomination)*(ACE+1);
 	}
 
+	public String toDebugString() {
+		String result = "";
+		switch (value) {
+		case TWO:
+			result =  "Two";
+			break;
+		case THREE:
+			result =  "Three";
+			break;
+		case FOUR:
+			result =  "Four";
+			break;
+		case FIVE:
+			result =  "Five";
+			break;
+		case SIX:
+			result =  "Six";
+			break;
+		case SEVEN:
+			result =  "Seven";
+			break;
+		case EIGHT:
+			result =  "Eight";
+			break;
+		case NINE:
+			result =  "Nine";
+			break;
+		case TEN:
+			result =  "Ten";
+			break;
+		case JACK:
+			result =  "Jack";
+			break;
+		case QUEEN:
+			result =  "Queen";
+			break;
+		case KING:
+			result =  "King";
+			break;
+		case ACE:
+			result =  "Ace";
+			break;
+		}
+		result += ".of("+denomination.toDebugString()+")";
+		return result;
+	}
+
 }

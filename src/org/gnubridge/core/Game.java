@@ -89,6 +89,7 @@ public class Game {
 		playedCards.add(card);
 		currentTrick.addCard(card, players[nextToPlay]); // TODO: test player
 		// assignment
+        
 		if (currentTrick.isDone()) {
 			int winner = getWinnerIndex(currentTrick);
 			nextToPlay = winner;
@@ -222,6 +223,7 @@ public class Game {
 		List<Card> possibleMoves = getNextToPlay().getPossibleMoves(
 				currentTrick);
 		doNextCard(possibleMoves.indexOf(c));
+		
 	}
 
 	// TODO: note, this is currently only tested by TestPositionLookup
@@ -257,6 +259,29 @@ public class Game {
 		} else {
 			result = new Game(null);
 			GameUtils.initializeRandom(result.getPlayers(), 13);
+		}
+		return result;
+	}
+
+	public void printHandsDebug() {
+		for (Player player : players) {
+			System.out.println("game.get"+player+"().init("+printHandDebug(player.getHand())+");");
+		}
+		System.out.println("game.setNextToPlay(Player."+getNextToPlay().toString().toUpperCase()+");");
+		
+	}
+
+	private String printHandDebug(List<Card> cards) {
+		String result = "";
+		boolean noLeadingCommaOnFirstElement = true;
+		for (Card card: cards) {
+			if (noLeadingCommaOnFirstElement) {
+				noLeadingCommaOnFirstElement = false;
+			} else {
+               result += ", ";				
+			}
+			result += card.toDebugString();	
+		  	
 		}
 		return result;
 	}

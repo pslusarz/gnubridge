@@ -15,5 +15,5 @@ public abstract class Color extends Trump {
 		}
  		return result;
 	}
-
+	public abstract String toDebugString();
 }

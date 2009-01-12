@@ -21,6 +21,9 @@ public class Hearts extends Color {
 		return "HEARTS";
 	}
 	
-	
+	@Override
+	public String toDebugString() {
+		return "Hearts.i()";
+	}
 
 }

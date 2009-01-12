@@ -20,8 +20,6 @@ public class AcceptanceTest extends TestCase {
 	private static final int SEARCH_DEPTH_DURING_TEST = 4;
 	private static final int TRICKS_PER_DEAL = 6;
 
-	
-
 	public void setUp() {
 		ConfigurableRuntimeSettingsFactory.set(new TestingSettings(
 				SEARCH_DEPTH_DURING_TEST));
@@ -63,6 +61,7 @@ public class AcceptanceTest extends TestCase {
 				.getTricksTaken(Player.NORTH_SOUTH));
 	}
 
+
 	public void testPlayRandomGame() throws InterruptedException,
 			InvocationTargetException {
 		preInitializeRandomGame();
@@ -84,16 +83,16 @@ public class AcceptanceTest extends TestCase {
 		preInitializeGameWithSingleColorSuits();
 		GBController mainController = makeController();
 		mainController.getBiddingController().placeBid(7, "Spades"); // TODO:
-																		// what
-																		// are
-																		// valid
-																		// names?
-																		// hidden
-																		// in
-																		// biddingControls
-																		// -
-																		// force
-																		// programmaticaly
+		// what
+		// are
+		// valid
+		// names?
+		// hidden
+		// in
+		// biddingControls
+		// -
+		// force
+		// programmaticaly
 		mainController.playGame();
 		playGameToTheEnd(mainController);
 		System.out.println("Game finished. Declarers took "
@@ -118,8 +117,6 @@ public class AcceptanceTest extends TestCase {
 			if (mainController.getGameController().humanHasMove()) {
 				List<Card> possibleMoves = game.getNextToPlay()
 						.getPossibleMoves(game.getCurrentTrick());
-				System.out.println("Human about to play: "
-						+ possibleMoves.get(0));
 				mainController.getGameController().playCard(
 						possibleMoves.get(0));
 				continue;
@@ -128,10 +125,9 @@ public class AcceptanceTest extends TestCase {
 				for (int i = 0; i < 4000; i++) {
 					Thread.sleep(100);
 					if (i % 10 == 0) {
-						System.out.print(".");
+						System.out.println("// tick...");
 					}
 					if (game.getPlayedCards().getCardsHighToLow().size() > cardsPlayed) {
-						System.out.print(game.getCurrentTrick() + "\n");
 						cardPlayed = true;
 						break;
 					}
@@ -142,7 +138,7 @@ public class AcceptanceTest extends TestCase {
 		}
 		System.out.println("");
 	}
-	
+
 	private void preInitializeGameWithHumanToBidFirst() {
 		Game g = new Game(null);
 		GameUtils.initializeRandom(g, TRICKS_PER_DEAL);
@@ -162,6 +158,7 @@ public class AcceptanceTest extends TestCase {
 		Game g = new Game(null);
 		GameUtils.initializeRandom(g, TRICKS_PER_DEAL);
 		g.setHumanPlayer(g.getNorth());
+		g.printHandsDebug();
 		System.out.println("West's hand: " + g.getWest().getHand());
 		System.out.println("Human's hand: " + g.getNorth().getHand());
 		System.out.println("East's hand: " + g.getEast().getHand());
@@ -173,7 +170,7 @@ public class AcceptanceTest extends TestCase {
 		MainView mw = new MainView("gnubridge");
 		return new GBController(mw);
 	}
-	
+
 	public class TestingSettings extends ConfigurableRuntimeSettings {
 
 		private int depth = 1;
