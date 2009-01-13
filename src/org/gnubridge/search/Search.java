@@ -250,14 +250,7 @@ public class Search {
 				.getTricksTaken(Player.WEST_EAST));
 		node.setTricksTaken(Player.NORTH_SOUTH, position
 				.getTricksTaken(Player.NORTH_SOUTH));
-		if (usePruning) {
-			if (node.shouldBeAlphaPruned()) {
-				node.alphaPrune();
-			} else if (node.shouldBeBetaPruned()) {
-				node.betaPrune();
-			}
-
-		}
+		pruneAlphaBeta(node);
 		removeExpandedBranches(node);
 
 	}
@@ -270,40 +263,30 @@ public class Search {
 	 */
 
 	public void trim(Node node) {
-		int i = 0;
-		Node maxChild = null;
-		for (Node child : node.children) {
-			if (!child.isPruned()
-					&& (maxChild == null || child.getTricksTaken(node
-							.getCurrentPair()) > maxChild.getTricksTaken(node
-							.getCurrentPair()))) {
-				maxChild = child;
-				node.trimAllPriorChildren(i);
-
-			} else {
-				child.trimmed = true;
-				node.children.set(i, null);
-			}
-			i++;
-		}
-
+		Node maxChild = node.getUnprunedChildWithMostTricksForCurrentPair();
+		node.trimAllChildrenExceptOne(maxChild);
 		if (maxChild != null) {
 			node.setTricksTaken(Player.WEST_EAST, maxChild
 					.getTricksTaken(Player.WEST_EAST));
 			node.setTricksTaken(Player.NORTH_SOUTH, maxChild
 					.getTricksTaken(Player.NORTH_SOUTH));
-
-			if (usePruning() && node.shouldBeAlphaPruned()) {
-				node.alphaPrune();
-			}
-			if (usePruning() && node.shouldBeBetaPruned()) {
-				node.betaPrune();
-			}
+            pruneAlphaBeta(node);
+			
 
 		}
 		removeExpandedBranches(node);
 		node.trimmed = true;
 
+	}
+
+	private void pruneAlphaBeta(Node node) {
+		if (usePruning() && node.shouldBeAlphaPruned()) {
+			node.alphaPrune();
+		}
+		if (usePruning() && node.shouldBeBetaPruned()) {
+			node.betaPrune();
+		}
+		
 	}
 
 	private boolean useDuplicateRemoval() {

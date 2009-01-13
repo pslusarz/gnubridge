@@ -115,16 +115,6 @@ public class Node {
 		return trimmed;
 	}
 
-	public void trimAllPriorChildren(int i) {
-		for (int j = 0; j < i; j++) {
-			if (children.get(j) != null ) {
-				children.get(j).trimmed = true;
-			}
-			children.set(j, null);
-		}
-
-	}
-
 	public int getCurrentPair() {
 		return Player.matchPair(getPlayerTurn());
 	}
@@ -424,6 +414,27 @@ public class Node {
 		result += "   sequence/played sequence: "+isSequencePruned()+"/"+isPlayedSequencePruned()+"\n";
 		
 		return result;
+	}
+
+	public void trimAllChildrenExceptOne(Node exception) {
+		for (int i = 0; i< children.size(); i++) {
+		  if (exception == null || !exception.equals(children.get(i))) {
+			  children.get(i).trimmed = true;
+			  children.set(i, null);  
+		  }
+		}
+		
+	}
+
+	Node getUnprunedChildWithMostTricksForCurrentPair() {
+		Node maxChild = null;
+		for (Node child : children) {
+			if (!child.isPruned()
+					&& (maxChild == null || child.getTricksTaken(getCurrentPair()) > maxChild.getTricksTaken(getCurrentPair()))) {
+				maxChild = child;
+			} 
+		}
+		return maxChild;
 	}
 
 }
