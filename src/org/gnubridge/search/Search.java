@@ -123,6 +123,7 @@ public class Search {
 
 		Player player = position.getNextToPlay();
 		node.setPlayerTurn(player.getDirection());
+		node.setPosition(position);
 
 		for (Card card : player.getPossibleMoves(position.getCurrentTrick())) {
 			makeChildNodeForCardPlayed(node, player, card);
@@ -133,7 +134,8 @@ public class Search {
 		}
 
 		if (position.getTricksPlayed() >= maxTricks || position.isDone()) {
-			handleLeafNode(node, position);
+			node.setLeaf(true);
+			trim(node);
 		} else {
 			for (Node move : node.children) {
 				removeSiblingsInSequence(move, position);
@@ -244,17 +246,6 @@ public class Search {
 
 	}
 
-	private void handleLeafNode(Node node, Game position) {
-		node.setLeaf(true);
-		node.setTricksTaken(Player.WEST_EAST, position
-				.getTricksTaken(Player.WEST_EAST));
-		node.setTricksTaken(Player.NORTH_SOUTH, position
-				.getTricksTaken(Player.NORTH_SOUTH));
-		pruneAlphaBeta(node);
-		removeExpandedBranches(node);
-
-	}
-
 	/**
 	 * 1. evaluate all child nodes and find one where current player or his
 	 * partner takes the most tricks. 2. delete all other nodes 3. set tricks
@@ -263,18 +254,12 @@ public class Search {
 	 */
 
 	public void trim(Node node) {
-		Node maxChild = node.getUnprunedChildWithMostTricksForCurrentPair();
-		node.trimAllChildrenExceptOne(maxChild);
-		if (maxChild != null) {
-			node.setTricksTaken(Player.WEST_EAST, maxChild
-					.getTricksTaken(Player.WEST_EAST));
-			node.setTricksTaken(Player.NORTH_SOUTH, maxChild
-					.getTricksTaken(Player.NORTH_SOUTH));
-            pruneAlphaBeta(node);
-			
-
+		node.nullAllChildrenExceptOne();
+		node.calculateValue();
+        pruneAlphaBeta(node);
+		if (node.canTrim()) {
+			trim(node.parent);
 		}
-		removeExpandedBranches(node);
 		node.trimmed = true;
 
 	}
@@ -291,12 +276,6 @@ public class Search {
 
 	private boolean useDuplicateRemoval() {
 		return useDuplicateRemoval;
-	}
-
-	private void removeExpandedBranches(Node node) {
-		if (node.parent != null && (node.parent.isLastVisitedChild(node))) {
-			trim(node.parent);
-		}
 	}
 
 	public List<Card> getBestMoves() {

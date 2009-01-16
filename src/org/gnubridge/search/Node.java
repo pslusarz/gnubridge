@@ -49,6 +49,10 @@ public class Node {
 
 	private Player playerCardPlayed;
 
+	private boolean valueSet = false;
+
+	private Game position;
+
 	public Node(Node parent) {
 		this.parent = parent;
 		children = new ArrayList<Node>();
@@ -84,6 +88,7 @@ public class Node {
 	}
 
 	public void setTricksTaken(int pair, int i) {
+		valueSet  = true;
 		tricksTaken[pair] = i;
 	}
 
@@ -350,12 +355,12 @@ public class Node {
 	
 
 	public boolean shouldBeAlphaPruned() {
-		return parent != null && parent.parent != null && hasAlphaAncestor() && !parent.isAlpha()
+		return valueSet && parent != null && parent.parent != null && hasAlphaAncestor() && !parent.isAlpha()
 	    && (getTricksTaken(getMaxPlayer()) <= parent.getLocalAlpha());
 	}
 
 	public boolean shouldBeBetaPruned() {
-		return parent != null && parent.parent != null && hasBetaAncestor() && !parent.isBeta()
+		return valueSet && parent != null && parent.parent != null && hasBetaAncestor() && !parent.isBeta()
 	    && (getTricksTaken(getMaxPlayer()) >= parent.getLocalBeta());
 	
 	}
@@ -416,7 +421,8 @@ public class Node {
 		return result;
 	}
 
-	public void trimAllChildrenExceptOne(Node exception) {
+	public void nullAllChildrenExceptOne() {
+		Node exception = getUnprunedChildWithMostTricksForCurrentPair();
 		for (int i = 0; i< children.size(); i++) {
 		  if (exception == null || !exception.equals(children.get(i))) {
 			  children.get(i).trimmed = true;
@@ -429,12 +435,52 @@ public class Node {
 	Node getUnprunedChildWithMostTricksForCurrentPair() {
 		Node maxChild = null;
 		for (Node child : children) {
-			if (!child.isPruned()
+			if (child != null && !child.isPruned()
 					&& (maxChild == null || child.getTricksTaken(getCurrentPair()) > maxChild.getTricksTaken(getCurrentPair()))) {
 				maxChild = child;
 			} 
 		}
 		return maxChild;
+	}
+
+	public void calculateValueFromChild() {
+		Node maxChild = getUnprunedChildWithMostTricksForCurrentPair();
+		if (maxChild != null) {
+			setTricksTaken(Player.WEST_EAST, maxChild
+					.getTricksTaken(Player.WEST_EAST));
+			setTricksTaken(Player.NORTH_SOUTH, maxChild
+					.getTricksTaken(Player.NORTH_SOUTH));
+            
+			
+
+		}
+		
+	}
+
+	public void calculateValueFromPosition() {
+		setTricksTaken(Player.WEST_EAST, position
+				.getTricksTaken(Player.WEST_EAST));
+		setTricksTaken(Player.NORTH_SOUTH, position
+				.getTricksTaken(Player.NORTH_SOUTH));
+		
+	}
+
+	public void setPosition(Game position) {
+		this.position = position;
+		
+	}
+
+	public void calculateValue() {
+		if (isLeaf()) {
+			calculateValueFromPosition();
+		} else {
+			calculateValueFromChild();
+		}
+		
+	}
+
+	public boolean canTrim() {
+		return parent != null && (parent.isLastVisitedChild(this));
 	}
 
 }
