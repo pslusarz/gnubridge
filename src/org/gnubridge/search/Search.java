@@ -35,7 +35,7 @@ public class Search {
 
 	private int prunedPlayedSequence;
 
-	private boolean useDuplicateRemoval = false;
+	private boolean useDuplicateRemoval = true;
 
 	private int prunedDuplicatePosition;
 	PositionLookup lookup;
@@ -132,19 +132,28 @@ public class Search {
 		if (position.oneTrickLeft()) {
 			position.playMoves(finalMoves);
 		}
-
-		if (position.getTricksPlayed() >= maxTricks || position.isDone()) {
+        checkDuplicatePositions(node, position);
+		if (position.getTricksPlayed() >= maxTricks || position.isDone() || node.hasIdenticalTwin()) {
 			node.setLeaf(true);
 			trim(node);
 		} else {
 			for (Node move : node.children) {
 				removeSiblingsInSequence(move, position);
 				removeSiblingsInSequenceWithPlayedCards(move, position);
-				removeDuplicatePositions(move);
 				//TODO later if (!move.isPruned()) {
 				stack.push(move);
 			}
 		}
+	}
+
+	private void checkDuplicatePositions(Node node, Game position) {
+		if (useDuplicateRemoval()) {
+			if (lookup.positionEncountered(position, node)) {
+				Node previouslyEncounteredNode = lookup.getNode(position);
+                node.setIdenticalTwin(previouslyEncounteredNode);
+			}	
+		}
+		
 	}
 
 	private void makeChildNodeForCardPlayed(Node parent, Player player,
@@ -154,20 +163,6 @@ public class Search {
 		move.setPlayerCardPlayed(player);
 	}
 
-	private void removeDuplicatePositions(Node node) {
-		if (useDuplicateRemoval()) {
-			Game position = game.duplicate();
-			position.playMoves(node.getMoves());
-			if (lookup.positionEncountered(position)) {
-				node.pruneAsDuplicatePosition();
-
-				if (node.parent != null
-						&& (node.parent.isLastVisitedChild(node))) {
-					// removeExpandedBranches(node);
-				}
-			}
-		}
-	}
 
 	private void removeSiblingsInSequenceWithPlayedCards(Node move,
 			Game position) {

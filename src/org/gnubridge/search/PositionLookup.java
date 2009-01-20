@@ -2,6 +2,7 @@ package org.gnubridge.search;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.gnubridge.core.Card;
@@ -14,74 +15,106 @@ public class PositionLookup {
 	private PositionLookupNode root;
 
 	public PositionLookup() {
-		root = new PositionLookupNode(null);
+		root = new PositionLookupNode(null, null);
 	}
 
-	public boolean positionEncountered(Game g) {
+	public boolean positionEncountered(Game g,
+			Node candidateFirstNodeForThePosition) {
 		List<Card> playedCards = g.getPlayedCards().getCardsHighToLow();
 		if (isFreshTrick(playedCards)) {
-			return root.positionEncountered(g, playedCards);
+			return root.positionEncountered(g, playedCards,
+					candidateFirstNodeForThePosition) != null;
 		} else {
 			return false;
 		}
+
 	}
 
 	private boolean isFreshTrick(List<Card> playedCards) {
 		return playedCards.size() % 4 == 0;
 	}
 
+	public Node getNode(Game g) {
+		List<Card> playedCards = g.getPlayedCards().getCardsHighToLow();
+		return root.positionEncountered(g, playedCards, null);
+	}
+
 }
 
 class PositionLookupNode {
-	PositionLookupNode[] moves;
+	//PositionLookupNode[] moves;
+	List<PositionLookupNode> children;
 	private boolean terminatesAPosition;
-	private List<AdditionalUniquePositionIdentifiers> additionalUniquePositionIdentifiers;
+	private List<AdditionalUniquePositionIdentifiers> identifiersList;
+	private Card card;
 
-	PositionLookupNode(PositionLookupNode parent) {
-		moves = new PositionLookupNode[Card.COUNT];
+	PositionLookupNode(PositionLookupNode parent, Card card) {
+		//moves = new PositionLookupNode[Card.COUNT];
+		children = new LinkedList<PositionLookupNode>();
 		terminatesAPosition = false;
-		additionalUniquePositionIdentifiers = new ArrayList<AdditionalUniquePositionIdentifiers>();
+		identifiersList = new LinkedList<AdditionalUniquePositionIdentifiers>();
+		this.card = card;
 	}
 
-	public boolean positionEncountered(Game g, List<Card> playedCards) {
+	public Node positionEncountered(Game g, List<Card> playedCards,
+			Node candidateFirstNodeForThePosition) {
 		if (playedCards.size() == 0) {
-			return false;
+			return null;
 		}
 		Card top = playedCards.get(0);
-		AdditionalUniquePositionIdentifiers additionalUniquePositionIdentifiers = new AdditionalUniquePositionIdentifiers(
-				g);
+		AdditionalUniquePositionIdentifiers identifiersForCurrentPosition = new AdditionalUniquePositionIdentifiers(
+				g, candidateFirstNodeForThePosition);
 		if (!haveCard(top)) {
-			store(additionalUniquePositionIdentifiers, playedCards);
-			return false;
+			store(identifiersForCurrentPosition, playedCards,
+					candidateFirstNodeForThePosition);
+			return null;
 		} else {
-			PositionLookupNode currentNode = moves[top.getIndex()];
+			PositionLookupNode currentNode = findNode(top);//moves[top.getIndex()];
 			if (playedCards.size() > 1) {
 				playedCards.remove(0);
-				return currentNode.positionEncountered(g, playedCards);
+				return currentNode.positionEncountered(g, playedCards,
+						candidateFirstNodeForThePosition);
 			} else {
 
 				boolean result = currentNode.terminatesAPosition
 						&& currentNode
-								.playersTurnContains(additionalUniquePositionIdentifiers);
+								.playersTurnContains(identifiersForCurrentPosition);
 				currentNode.terminatesAPosition = true;
 				currentNode
-						.addAdditionalUniquePositionIdentifiers(additionalUniquePositionIdentifiers);
-				return result;
+						.addAdditionalUniquePositionIdentifiers(identifiersForCurrentPosition, candidateFirstNodeForThePosition);
+				Node toBeReturned = null;
+				if (result) {
+					for (AdditionalUniquePositionIdentifiers currentUnique : currentNode.identifiersList) {
+						if (currentUnique.hasSameIdentifiers(identifiersForCurrentPosition)) {
+							toBeReturned = currentUnique.getNode();
+						}
+					} 	
+				} 
+				return toBeReturned;
 			}
 		}
 	}
 
+	private PositionLookupNode findNode(Card card) {
+		for (PositionLookupNode node : children) {
+			if (card.equals(node.card)) {
+				return node;
+			}
+		} 
+		return null;
+	}
+
 	private void addAdditionalUniquePositionIdentifiers(
-			AdditionalUniquePositionIdentifiers unique) {
+			AdditionalUniquePositionIdentifiers unique, Node node) {
 		if (!playersTurnContains(unique)) {
-			additionalUniquePositionIdentifiers.add(unique);
+			identifiersList.add(unique);
 		}
 
 	}
 
 	private boolean playersTurnContains(
 			AdditionalUniquePositionIdentifiers candidate) {
-		for (AdditionalUniquePositionIdentifiers currentUnique : additionalUniquePositionIdentifiers) {
+		for (AdditionalUniquePositionIdentifiers currentUnique : identifiersList) {
 			if (currentUnique.hasSameIdentifiers(candidate)) {
 				return true;
 			}
@@ -91,33 +124,41 @@ class PositionLookupNode {
 
 	private void store(
 			AdditionalUniquePositionIdentifiers additionalUniquePositionIdentifiers,
-			List<Card> cards) {
+			List<Card> cards, Node node) {
 		Card top = cards.get(0);
-		moves[top.getIndex()] = new PositionLookupNode(this);
+		PositionLookupNode nodeForTopCard = new PositionLookupNode(this, top);
+		//moves[top.getIndex()] = nodeForTopCard;
+		children.add(nodeForTopCard);
 		if (cards.size() > 1) {
 			cards.remove(0);
-			moves[top.getIndex()].store(additionalUniquePositionIdentifiers,
-					cards);
+			nodeForTopCard.store(additionalUniquePositionIdentifiers,
+					cards, node);
 		} else {
-			moves[top.getIndex()].terminatesAPosition = true;
-			moves[top.getIndex()]
-					.addAdditionalUniquePositionIdentifiers(additionalUniquePositionIdentifiers);
+			nodeForTopCard.terminatesAPosition = true;
+			nodeForTopCard
+					.addAdditionalUniquePositionIdentifiers(additionalUniquePositionIdentifiers, node);
 		}
 
 	}
 
 	private boolean haveCard(Card c) {
-		return moves[c.getIndex()] != null;
+		return findNode(c) != null;//moves[c.getIndex()] != null;
 	}
 }
 
 class AdditionalUniquePositionIdentifiers {
 	private final Direction nextToMove;
-	private final int tricksTakenByNorthSouth;
+	private final byte tricksTakenByNorthSouth;
+	private Node node;
 
-	public AdditionalUniquePositionIdentifiers(Game g) {
+	public AdditionalUniquePositionIdentifiers(Game g, Node node) {
 		this.nextToMove = g.getNextToPlay().getDirection2();
-		this.tricksTakenByNorthSouth = g.getTricksTaken(Player.NORTH_SOUTH);
+		this.tricksTakenByNorthSouth = (byte) g.getTricksTaken(Player.NORTH_SOUTH);
+		this.node = node;
+	}
+
+	public Node getNode() {
+		return node;
 	}
 
 	public boolean hasSameIdentifiers(AdditionalUniquePositionIdentifiers other) {

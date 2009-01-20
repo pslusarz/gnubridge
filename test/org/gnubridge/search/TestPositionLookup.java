@@ -31,16 +31,39 @@ public class TestPositionLookup extends TestCase {
 		playOneTrick(g);
 		
 		PositionLookup pl = new PositionLookup();
-		assertFalse(pl.positionEncountered(g));
-		assertTrue(pl.positionEncountered(g));
+		Node node = new Node(null);
+		assertFalse(pl.positionEncountered(g, node));
+		assertEquals(node, pl.getNode(g));
+		assertTrue(pl.positionEncountered(g, null));
 	}
+	
+	@SuppressWarnings("unused")
+	public void testOnlyReturnFirstNodeEncounteredForThePosition() {
+		Game g = new Game(NoTrump.i());
+		GameUtils.initializeSingleColorSuits(g);
+		playOneTrick(g);
+		
+		PositionLookup pl = new PositionLookup();
+		Node node = new Node(null);
+		boolean justPresentThePosition = pl.positionEncountered(g, node);
+		
+		Game identicalTwin = new Game(NoTrump.i());
+		GameUtils.initializeSingleColorSuits(identicalTwin);
+		playOneTrick(identicalTwin);
+		
+		Node identicalTwinNode = new Node(null);
+		assertTrue(pl.positionEncountered(identicalTwin, identicalTwinNode));
+		assertEquals(node, pl.getNode(identicalTwin));
+		
+	}
+	
 	public void testIgnoreStartupGame() {
 		Game g = new Game(NoTrump.i());
 		GameUtils.initializeSingleColorSuits(g);
 		
 		PositionLookup pl = new PositionLookup();
-		assertFalse(pl.positionEncountered(g));
-		assertFalse(pl.positionEncountered(g));
+		assertFalse(pl.positionEncountered(g, null));
+		assertFalse(pl.positionEncountered(g, null));
 	}
 	private void playOneTrick(Game g) {
 		for (int i = 0; i< 4; i++) {
@@ -56,13 +79,13 @@ public class TestPositionLookup extends TestCase {
 		playOneTrick(g);
 		
 		PositionLookup pl = new PositionLookup();
-		boolean justPresentThePosition = pl.positionEncountered(g);
+		boolean justPresentThePosition = pl.positionEncountered(g, null);
 
 		Game g2 = new Game(NoTrump.i());
 		GameUtils.initializeSingleColorSuits(g2);
 		playOneTrickWithSlightTwist(g2);
 		
-		assertFalse(pl.positionEncountered(g2));
+		assertFalse(pl.positionEncountered(g2, null));
 	}
 	
 	private void playOneTrickWithSlightTwist(Game g2) {
@@ -80,12 +103,14 @@ public class TestPositionLookup extends TestCase {
 		playOneTrick(g);
 		
 		PositionLookup pl = new PositionLookup();
-		boolean justPresentThePosition = pl.positionEncountered(g);
+		Node node = new Node(null);
+		boolean justPresentThePosition = pl.positionEncountered(g, node);
 		
 		Game g2 = new Game(NoTrump.i());
 		GameUtils.initializeSingleColorSuits(g2);
 		playOneTrick(g2);
-		assertTrue(pl.positionEncountered(g2));
+		assertTrue(pl.positionEncountered(g2, null));
+		assertEquals(node, pl.getNode(g2));
 	}
 	
 	public void testOneCardPlayedDifferentCards() {
@@ -95,12 +120,12 @@ public class TestPositionLookup extends TestCase {
 		
 		PositionLookup pl = new PositionLookup();
 		@SuppressWarnings("unused")
-		boolean justPresentThePosition = pl.positionEncountered(g);
+		boolean justPresentThePosition = pl.positionEncountered(g, null);
 		
 		Game gameWithDifferentCardPlayed = new Game(NoTrump.i());
 		GameUtils.initializeSingleColorSuits(gameWithDifferentCardPlayed);
 		gameWithDifferentCardPlayed.play(gameWithDifferentCardPlayed.getNextToPlay().getHand().get(1));
-		assertFalse(pl.positionEncountered(gameWithDifferentCardPlayed));		
+		assertFalse(pl.positionEncountered(gameWithDifferentCardPlayed, null));		
 	}
 
 	@SuppressWarnings("unused")
@@ -115,11 +140,15 @@ public class TestPositionLookup extends TestCase {
 		GameUtils.initializeSingleColorSuits(gameWithDifferentCardPlayed);
 		playOneTrickWithSlightTwist(gameWithDifferentCardPlayed);
 		
-		boolean justPresentThePosition = pl.positionEncountered(gameWithDifferentCardPlayed);
-		justPresentThePosition = pl.positionEncountered(g);
+		Node node = new Node(null);
+		Node nodeWithDifferentCardPlayed = new Node(null);
+		boolean justPresentThePosition = pl.positionEncountered(gameWithDifferentCardPlayed, nodeWithDifferentCardPlayed);
+		justPresentThePosition = pl.positionEncountered(g, node);
 
-		assertTrue(pl.positionEncountered(g));
-		assertTrue(pl.positionEncountered(gameWithDifferentCardPlayed));
+		assertTrue(pl.positionEncountered(g, null));
+		assertEquals(node, pl.getNode(g));
+		assertTrue(pl.positionEncountered(gameWithDifferentCardPlayed, null));
+		assertEquals(nodeWithDifferentCardPlayed, pl.getNode(gameWithDifferentCardPlayed));
 	}
 	
 	@SuppressWarnings("unused")
@@ -135,9 +164,9 @@ public class TestPositionLookup extends TestCase {
 		playOneTrickWithSlightTwist(sameFirstTrick);
 		
 		PositionLookup pl = new PositionLookup();
-		boolean justPresentThePosition = pl.positionEncountered(g);
+		boolean justPresentThePosition = pl.positionEncountered(g, null);
 
-		assertFalse(pl.positionEncountered(sameFirstTrick));	
+		assertFalse(pl.positionEncountered(sameFirstTrick, null));	
 		
 	}
 	
@@ -161,8 +190,10 @@ public class TestPositionLookup extends TestCase {
 		g.play(Nine.of(Clubs.i()));
 		
 		PositionLookup pl = new PositionLookup();
-		boolean justPresentThePosition = pl.positionEncountered(g);
-		assertTrue(pl.positionEncountered(g));
+		Node node = new Node(null);
+		boolean justPresentThePosition = pl.positionEncountered(g, node);
+		assertTrue(pl.positionEncountered(g, null));
+		assertEquals(node, pl.getNode(g));
 		
 		differentOrder.play(Three.of(Hearts.i()));
 		differentOrder.play(Seven.of(Spades.i()));
@@ -173,7 +204,9 @@ public class TestPositionLookup extends TestCase {
 		differentOrder.play(Five.of(Clubs.i()));
 		differentOrder.play(Nine.of(Clubs.i()));
 		differentOrder.play(Two.of(Hearts.i()));
-		assertFalse(pl.positionEncountered(differentOrder));
+		Node differentOrderNode = new Node(null);
+		assertFalse(pl.positionEncountered(differentOrder, differentOrderNode));
+		assertEquals(differentOrderNode, pl.getNode(differentOrder));
 	}
 	
 	public void testDistinguishPlayerTurn() {
@@ -195,9 +228,11 @@ public class TestPositionLookup extends TestCase {
 		g.play(Nine.of(Clubs.i()));
 		g.play(Ten.of(Spades.i()));
 		
+		Node node = new Node(null);
 		PositionLookup pl = new PositionLookup();
-		boolean justPresentThePosition = pl.positionEncountered(g);
-		assertTrue(pl.positionEncountered(g));
+		
+		boolean justPresentThePosition = pl.positionEncountered(g, node);
+		assertTrue(pl.positionEncountered(g, null));
 		
 		differentOrder.play(Ten.of(Spades.i()));
 		differentOrder.play(Seven.of(Spades.i()));
@@ -208,7 +243,7 @@ public class TestPositionLookup extends TestCase {
 		differentOrder.play(Eight.of(Hearts.i()));
 		differentOrder.play(Five.of(Clubs.i()));
 		differentOrder.play(Nine.of(Hearts.i()));
-		assertFalse(pl.positionEncountered(differentOrder));
+		assertFalse(pl.positionEncountered(differentOrder, null));
 	}
 	public void testOnlyApplyToCompletedTricks() {
 		Game g = new Game(Spades.i());
@@ -228,7 +263,7 @@ public class TestPositionLookup extends TestCase {
 		g.play(Seven.of(Spades.i()));
 		
 		PositionLookup pl = new PositionLookup();
-		boolean justPresentThePosition = pl.positionEncountered(g);
+		boolean justPresentThePosition = pl.positionEncountered(g, null);
 		
 		differentOrder.play(Ace.of(Spades.i()));
 		differentOrder.play(Seven.of(Spades.i()));
@@ -237,7 +272,7 @@ public class TestPositionLookup extends TestCase {
 		
 		differentOrder.play(Three.of(Spades.i()));
 		differentOrder.play(Two.of(Spades.i()));
-		assertFalse(pl.positionEncountered(differentOrder));
+		assertFalse(pl.positionEncountered(differentOrder, null));
 	}
 
 
