@@ -267,7 +267,8 @@ public class Game {
 		for (Player player : players) {
 			System.out.println("game.get"+player+"().init("+printHandDebug(player.getHand())+");");
 		}
-		System.out.println("game.setNextToPlay(Player."+getNextToPlay().toString().toUpperCase()+");");
+		System.out.println("game.setNextToPlay(Direction."+getNextToPlay().toString().toUpperCase()+");");
+		System.out.println("game.setTrump("+getTrump().toDebugString()+");");
 		
 	}
 
@@ -284,6 +285,22 @@ public class Game {
 		  	
 		}
 		return result;
+	}
+
+	public void playOneTrick() {
+		for (int i = 0; i< 4; i++) {
+			play(getNextToPlay().getHand().get(0));
+		}
+		
+	}
+
+	public String getUniqueString() {
+		String cardsPlayedRepresentation = "";
+		for (Card card: getPlayedCards().getCardsHighToLow()) {
+		  cardsPlayedRepresentation += card.getIndex()+",";	
+		}
+		String unique = cardsPlayedRepresentation +"*"+getTricksTaken(Player.NORTH_SOUTH)+"*"+getNextToPlay().getDirection();
+		return unique;
 	}
 
 }

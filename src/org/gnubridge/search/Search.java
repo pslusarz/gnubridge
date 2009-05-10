@@ -35,7 +35,7 @@ public class Search {
 
 	private int prunedPlayedSequence;
 
-	private boolean useDuplicateRemoval = true;
+	private boolean useDuplicateRemoval = false;
 
 	private int prunedDuplicatePosition;
 	PositionLookup lookup;
@@ -148,8 +148,8 @@ public class Search {
 
 	private void checkDuplicatePositions(Node node, Game position) {
 		if (useDuplicateRemoval()) {
-			if (lookup.positionEncountered(position, node)) {
-				Node previouslyEncounteredNode = lookup.getNode(position);
+			if (lookup.positionEncountered(position, node.getTricksTaken())) {
+				byte[] previouslyEncounteredNode = lookup.getNode(position);
                 node.setIdenticalTwin(previouslyEncounteredNode);
 			}	
 		}
@@ -280,6 +280,7 @@ public class Search {
 	}
 
 	public void printOptimalPath() {
+		System.out.println("Optimal path in this search: ");
 		root.printOptimalPath(game);
 	}
 
@@ -322,6 +323,11 @@ public class Search {
 		if (useDuplicateRemoval()) {
 			System.out.println("  Duplicate position prunes: "
 					+ prunedDuplicatePosition);
+			
+//			System.out.println("    max cards played: "+lookup.maxCardsPlayed);
+//			System.out.println("    positions stored in table: "+lookup.positionsStored);
+//			System.out.println("    duplicates the table identified: "+lookup.duplicates);
+//			System.out.println("    positions not stored in table because table was full: "+lookup.positionsOverMaxNotStored);
 		}
 		System.out.println("West/East tricks taken: "
 				+ root.getTricksTaken(Player.WEST_EAST));

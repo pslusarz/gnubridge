@@ -11,21 +11,21 @@ import org.gnubridge.core.Player;
 import org.gnubridge.core.Trick;
 
 public class Node {
-	public static final int UNITNITIALIZED = -1;
+	public static final byte UNITNITIALIZED = -1;
 
-	public static final int PRUNE_ALPHA = 0;
+	public static final byte PRUNE_ALPHA = 0;
 
-	public static final int PRUNE_BETA = PRUNE_ALPHA + 1;
+	public static final byte PRUNE_BETA = PRUNE_ALPHA + 1;
 
-	private static final int ALPHA_UNINIT = -1;
+	private static final byte ALPHA_UNINIT = -1;
 
-	static final int BETA_UNINIT = 14;
+	static final byte BETA_UNINIT = 14;
 
-	public static final int PRUNE_SEQUENCE_SIBLINGS = PRUNE_BETA + 1;
+	public static final byte PRUNE_SEQUENCE_SIBLINGS = PRUNE_BETA + 1;
 
-	public static final int PRUNE_SEQUENCE_SIBLINGS_PLAYED = PRUNE_SEQUENCE_SIBLINGS + 1;
+	public static final byte PRUNE_SEQUENCE_SIBLINGS_PLAYED = PRUNE_SEQUENCE_SIBLINGS + 1;
 
-	private static final int PRUNE_DUPLICATE_POSITION = PRUNE_SEQUENCE_SIBLINGS_PLAYED + 1;
+	private static final byte PRUNE_DUPLICATE_POSITION = PRUNE_SEQUENCE_SIBLINGS_PLAYED + 1;
 
 	int value;
 
@@ -33,9 +33,9 @@ public class Node {
 
 	List<Node> children;
 
-	private int playerTurn;
+	private byte playerTurn;
 
-	private int[] tricksTaken = new int[2];
+	private byte[] tricksTaken = new byte[2];
 
 	private Card cardPlayed;
 
@@ -45,7 +45,7 @@ public class Node {
 
 	private boolean pruned = false;
 
-	private int pruneType;
+	private byte pruneType;
 
 	private Player playerCardPlayed;
 
@@ -53,7 +53,7 @@ public class Node {
 
 	private Game position;
 
-	private Node identicalTwin;
+	private byte[] identicalTwin;
 
 	public Node(Node parent) {
 		this.parent = parent;
@@ -85,13 +85,13 @@ public class Node {
 	}
 
 	public void setPlayerTurn(int direction) {
-		this.playerTurn = direction;
+		this.playerTurn = (byte) direction;
 
 	}
 
 	public void setTricksTaken(int pair, int i) {
 		valueSet = true;
-		tricksTaken[pair] = i;
+		tricksTaken[pair] = (byte)i;
 	}
 
 	public boolean isLastVisitedChild(Node child) {
@@ -130,6 +130,10 @@ public class Node {
 
 	public int getTricksTaken(int pair) {
 		return tricksTaken[pair];
+	}
+	
+	public byte[] getTricksTaken() {
+		return tricksTaken;
 	}
 
 	public void setCardPlayed(Card card) {
@@ -202,7 +206,7 @@ public class Node {
 
 	}
 
-	public void setPruned(boolean b, int type) {
+	public void setPruned(boolean b, byte type) {
 		this.pruned = b;
 		this.pruneType = type;
 	}
@@ -486,13 +490,11 @@ public class Node {
 
 	private void calculateValueFromIdenticalTwin() {
 		Assert
-				.assertTrue(identicalTwin.getTricksTaken(Player.NORTH_SOUTH) > -1);
-		Assert.assertTrue(identicalTwin.getTricksTaken(Player.WEST_EAST) > -1);
+				.assertTrue(identicalTwin[Player.NORTH_SOUTH] > -1);
+		Assert.assertTrue(identicalTwin[Player.WEST_EAST] > -1);
 		//Assert.assertFalse("twin is pruned: "+identicalTwin.toDebugString(), identicalTwin.isPruned());
-		setTricksTaken(Player.NORTH_SOUTH, identicalTwin
-				.getTricksTaken(Player.NORTH_SOUTH));
-		setTricksTaken(Player.WEST_EAST, identicalTwin
-				.getTricksTaken(Player.WEST_EAST));
+		setTricksTaken(Player.NORTH_SOUTH, identicalTwin[Player.NORTH_SOUTH]);
+		setTricksTaken(Player.WEST_EAST, identicalTwin[Player.WEST_EAST]);
 
 	}
 
@@ -504,7 +506,7 @@ public class Node {
 		return parent != null && (parent.isLastVisitedChild(this));
 	}
 
-	public void setIdenticalTwin(Node node) {
+	public void setIdenticalTwin(byte[] node) {
 		identicalTwin = node;
 
 	}

@@ -17,4 +17,5 @@ public abstract class Trump {
 		}
 		return result;
 	}
+	public abstract String toDebugString();
 }

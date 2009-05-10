@@ -158,7 +158,6 @@ public class AcceptanceTest extends TestCase {
 		Game g = new Game(null);
 		GameUtils.initializeRandom(g, TRICKS_PER_DEAL);
 		g.setHumanPlayer(g.getNorth());
-		g.printHandsDebug();
 		System.out.println("West's hand: " + g.getWest().getHand());
 		System.out.println("Human's hand: " + g.getNorth().getHand());
 		System.out.println("East's hand: " + g.getEast().getHand());

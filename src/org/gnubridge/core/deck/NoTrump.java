@@ -18,4 +18,9 @@ public class NoTrump extends Trump {
 		return "NT";
 	}
 
+	@Override
+	public String toDebugString() {
+		return "NoTrump.i()";
+	}
+
 }
