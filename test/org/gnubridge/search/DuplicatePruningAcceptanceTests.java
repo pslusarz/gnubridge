@@ -10,6 +10,10 @@ import org.gnubridge.presentation.GameUtils;
 import junit.framework.TestCase;
 
 public class DuplicatePruningAcceptanceTests extends TestCase {
+	public void testMakeJUnitHappy() {
+		assertTrue(true);
+	}
+	
 	public void zzztestPruningDuplicate13CardsRunOutOfMemory() {
 		Game game = new Game(NoTrump.i());
 		game.getWest().init(Four.of(Hearts.i()), Ten.of(Diamonds.i()),
@@ -39,43 +43,13 @@ public class DuplicatePruningAcceptanceTests extends TestCase {
 		Search pruned2 = new Search(game);
 		pruned2.setUseDuplicateRemoval(true);
 		pruned2.setMaxTricks(4);
-		//pruned2.lookup.useEfficientStorage = true;
 		pruned2.search();
 		pruned2.printStats();
 		pruned2 = null;
 	}
-
-	public void testEquivalenceScenario1() {
-		Game game = new Game(Hearts.i());
-		game.getWest().init(Eight.of(Spades.i()), Four.of(Diamonds.i()), Six.of(Diamonds.i()), Three.of(Spades.i()), Five.of(Clubs.i()), Two.of(Spades.i()), Ace.of(Hearts.i()), Nine.of(Spades.i()), Five.of(Diamonds.i()), Three.of(Diamonds.i()), Three.of(Hearts.i()), Nine.of(Hearts.i()));
-		game.getNorth().init(Two.of(Diamonds.i()), Four.of(Hearts.i()), Eight.of(Hearts.i()), Queen.of(Clubs.i()), King.of(Hearts.i()), Queen.of(Diamonds.i()), Four.of(Clubs.i()), King.of(Spades.i()), Ace.of(Clubs.i()), King.of(Clubs.i()), Three.of(Clubs.i()), Ace.of(Diamonds.i()));
-		game.getEast().init(Six.of(Clubs.i()), Ten.of(Clubs.i()), Seven.of(Hearts.i()), Six.of(Hearts.i()), King.of(Diamonds.i()), Eight.of(Diamonds.i()), Ace.of(Spades.i()), Seven.of(Clubs.i()), Nine.of(Diamonds.i()), Six.of(Spades.i()), Seven.of(Spades.i()), Seven.of(Diamonds.i()));
-		game.getSouth().init(Nine.of(Clubs.i()), Jack.of(Clubs.i()), Five.of(Hearts.i()), Five.of(Spades.i()), Four.of(Spades.i()), Two.of(Clubs.i()), Jack.of(Diamonds.i()), Eight.of(Clubs.i()), Ten.of(Diamonds.i()), Ten.of(Spades.i()), Queen.of(Spades.i()), Jack.of(Spades.i()));
-		game.setNextToPlay(Direction.EAST);
-		
-		
-		
-		Search noPruneDuplicatesSearch = new Search(game.duplicate());
-		noPruneDuplicatesSearch.setMaxTricks(4);
-		noPruneDuplicatesSearch.setUseDuplicateRemoval(false);
-		noPruneDuplicatesSearch.search();
-		System.out.println("****** NO Pruned duplicates:");
-		noPruneDuplicatesSearch.printStats();
-		noPruneDuplicatesSearch.printOptimalPath();
-		
-		
-		Search pruneDuplicatesSearch = new Search(game.duplicate());
-		pruneDuplicatesSearch.setMaxTricks(4);
-		pruneDuplicatesSearch.setUseDuplicateRemoval(true);
-		pruneDuplicatesSearch.search();
-		System.out.println("****** Pruned duplicates:");
-		pruneDuplicatesSearch.printStats();
-		pruneDuplicatesSearch.printOptimalPath();
-		assertEquals(noPruneDuplicatesSearch.getRoot().getTricksTaken(Player.WEST_EAST), pruneDuplicatesSearch.getRoot().getTricksTaken(Player.WEST_EAST));
-	}
 	
 	public void zzztestGaugeMaxCardsPlayedDuplicateAt13Cards() {
-		for (int cardDeal = 0; cardDeal < 1; cardDeal++) {
+		for (int cardDeal = 0; cardDeal < 50; cardDeal++) {
 			Trump trump = determineTrump(cardDeal);
 			Game g = new Game(trump);
 			GameUtils.initializeRandom(g, 13);
@@ -91,12 +65,40 @@ public class DuplicatePruningAcceptanceTests extends TestCase {
 			}
 			System.out.println("*********** END SEARCHES ***********");
 		}
-		System.out.println("Average run times (ms)");
-		for (SearchConfiguration config : SearchConfiguration.values()) {
-			System.out.println(config+": "+config.getAverageRunningTime());
-		}
+
+		assertAllSearchesFindSameNumberOfTricksTaken();
+		
+		printAverageRunTimes();
+		
+		printAverageMemoryUsed();
+		
 		
 	}
+
+	private void printAverageMemoryUsed() {
+		System.out.println("Average Memory (Kb) / Max memory");
+		for (SearchConfiguration config : SearchConfiguration.values()) {
+			System.out.println("  "+config+": "+config.getAverageMemoryUsed()+" / "+ config.getMaxMemoryUsed());
+			}
+	}
+
+	private void printAverageRunTimes() {
+		System.out.println("Average run times (ms)");
+		for (SearchConfiguration config : SearchConfiguration.values()) {
+			System.out.println("  "+config+": "+config.getAverageRunningTime());
+		}
+	}
+
+private void assertAllSearchesFindSameNumberOfTricksTaken() {
+	SearchConfiguration previousConfig = null;
+	for (SearchConfiguration config : SearchConfiguration.values()) {
+		if (previousConfig != null) {
+			assertTrue("search did not determine who took which tricks", config.getNorthSouthTricks() > -1);
+		  assertEquals("all searches should be equivalent", previousConfig.getNorthSouthTricks(), config.getNorthSouthTricks());	
+		}
+		previousConfig = config;
+	}
+}
 	
 	
 
@@ -121,32 +123,56 @@ public class DuplicatePruningAcceptanceTests extends TestCase {
 		//DuplicateWith18CardCutoff(18),
 		//DuplicateWith19CardCutoff(19);
 		Search search;
+		static final int MAX_TRICKS = 4;
 		int type;
 		int runCount = 0;
-		int totalTimeMillis = 0;
+		private int totalTimeMillis = 0;
+		private int northSouthTricks = -1;
+		private long totalMemoryUsedK = 0;
+		private long maxMemoryK = 0;
 		private SearchConfiguration(int type) {
 			this.type = type;
 		}
 		
 		public void runSearch(Game g) {
 			search = new Search(g);
-			search.setMaxTricks(4);
+			search.setMaxTricks(MAX_TRICKS);
 			if (type == -1) {
 				search.setUseDuplicateRemoval(false);
 			} else {
 				search.setUseDuplicateRemoval(true);
 			}
-			//search.lookup.maxCardsPlayed = type;
+			Runtime.getRuntime().gc();
+			long initMemory = Runtime.getRuntime().freeMemory();
 			search.search();
+			Runtime.getRuntime().gc();
+            long memoryUsed = (Runtime.getRuntime().freeMemory() - initMemory) / 1024;
+			totalMemoryUsedK  += memoryUsed;	
+            if (maxMemoryK < memoryUsed) {
+            	maxMemoryK = memoryUsed;
+            }
 			search.printStats();
 			
 			runCount++;
 			totalTimeMillis += search.getRunningTime();
+			this.northSouthTricks = search.getRoot().getTricksTaken(Player.NORTH_SOUTH);
 		}
 		
 		public double getAverageRunningTime() {
 			return totalTimeMillis / runCount;
 		}
+		public long getAverageMemoryUsed() {
+			return (long) (totalMemoryUsedK / runCount);
+		}
+		public long getMaxMemoryUsed() {
+			return maxMemoryK;
+		}
+
+		public int getNorthSouthTricks() {
+			return northSouthTricks;
+		}
+		
+		
 		
 		
 		

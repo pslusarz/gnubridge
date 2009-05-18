@@ -14,9 +14,18 @@ public class PositionLookup {
 	}
 	
 	public boolean positionEncountered(Game g, byte[] bs) {
+		if (g.getCurrentTrick().getHighestCard() != null) {
+			return false;
+		}
 		byte[] valueToReturn = getNode(g);
 		if (valueToReturn == null) {
-			putNode(g, bs);
+			byte[] value;
+			if (bs == null) {
+				value = new byte[2];
+			} else {
+				value = bs;
+			}
+			putNode(g, value);
 			return false;
 		}
 		return true;
