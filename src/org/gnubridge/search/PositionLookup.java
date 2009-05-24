@@ -2,16 +2,25 @@ package org.gnubridge.search;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.WeakHashMap;
 
 import org.gnubridge.core.Game;
-
 
 public class PositionLookup {
 
 	Map<String, byte[]> positions;
+	private Game lastGameLookedUp;
+	private byte[] lastNode;
+
 	public PositionLookup() {
-	  positions = new HashMap<String, byte[]>();	
+		try {
+			positions = new WeakHashMap<String, byte[]>(20000000, 0.5f);
+		} catch (OutOfMemoryError e) {
+			positions = new WeakHashMap<String, byte[]>();
+		}
 	}
+
+	
 	
 	public boolean positionEncountered(Game g, byte[] bs) {
 		if (g.getCurrentTrick().getHighestCard() != null) {
@@ -32,9 +41,15 @@ public class PositionLookup {
 	}
 
 	public byte[] getNode(Game g) {
-		return positions.get(getHash(g));
+		if (g == lastGameLookedUp) {
+			return lastNode;
+		}
+		byte[] result = positions.get(getHash(g));
+		lastGameLookedUp = g;
+		lastNode = result;
+		return result;
 	}
-	
+
 	private void putNode(Game g, byte[] value) {
 		positions.put(getHash(g), value);
 	}
@@ -42,6 +57,5 @@ public class PositionLookup {
 	private String getHash(Game g) {
 		return g.getUniqueString();
 	}
-	
-	
+
 }

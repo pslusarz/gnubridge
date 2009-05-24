@@ -11,18 +11,20 @@ import org.gnubridge.core.Player;
 import org.gnubridge.core.bidding.Auctioneer;
 import org.gnubridge.presentation.GameUtils;
 import org.gnubridge.presentation.gui.GBController;
+import org.gnubridge.presentation.gui.GameController;
 import org.gnubridge.presentation.gui.MainView;
 import org.gnubridge.search.ConfigurableRuntimeSettings;
 import org.gnubridge.search.ConfigurableRuntimeSettingsFactory;
 
 public class AcceptanceTest extends TestCase {
 
-	private static final int SEARCH_DEPTH_DURING_TEST = 4;
+	private static final int SEARCH_DEPTH_DURING_TEST = 13;
 	private static final int TRICKS_PER_DEAL = 6;
 
 	public void setUp() {
-		ConfigurableRuntimeSettingsFactory.set(new TestingSettings(
-				SEARCH_DEPTH_DURING_TEST));
+		GameController.MAX_SECONDS_TO_MOVE = 1;
+//		ConfigurableRuntimeSettingsFactory.set(new TestingSettings(
+//				SEARCH_DEPTH_DURING_TEST));
 	}
 
 	public void testAutomatedBidding() {
@@ -64,6 +66,7 @@ public class AcceptanceTest extends TestCase {
 
 	public void testPlayRandomGame() throws InterruptedException,
 			InvocationTargetException {
+		GameController.MAX_SECONDS_TO_MOVE = 2;
 		preInitializeRandomGame();
 		GBController mainController = makeController();
 		mainController.getBiddingController().placeBid(7, "NT");

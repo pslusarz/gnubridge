@@ -1,5 +1,9 @@
 package org.gnubridge.presentation.gui;
 
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+
 import javax.swing.SwingWorker;
 
 import org.gnubridge.core.Card;
@@ -14,21 +18,65 @@ import org.gnubridge.search.Search;
 import org.gnubridge.search.ConfigurableRuntimeSettingsFactory;
 
 public class GameController {
-	public class SearchWorker extends SwingWorker<Void, String> {
-		Search search;
+	public static int MAX_SECONDS_TO_MOVE = 60;
+	public class SearchController extends SwingWorker<Void, String> {
+		private static final int MILISECONDS_PER_SECOND = 1000;
+		private static final long RIDICULOUSLY_LONG_WAIT_TIME = 100000000;
+		Card bestMove;
 
 		@Override
 		protected Void doInBackground() throws Exception {
-			search = new Search(game);
-			search.setMaxTricks(ConfigurableRuntimeSettingsFactory.get().getSearchDepthRecommendation(game));
-			search.search();
+			long start = System.currentTimeMillis();			
+			bestMove = findBestMoveAtDepth(1, RIDICULOUSLY_LONG_WAIT_TIME); 		
+			for (int tricksSearchDepth = 2; tricksSearchDepth <= ConfigurableRuntimeSettingsFactory
+					.get().getSearchDepthRecommendation(game); tricksSearchDepth++) {
+				System.out.println("// now searching depth: "+tricksSearchDepth);
+				long timePassedSinceStart = System.currentTimeMillis() - start;
+				long timeRemaining = MAX_SECONDS_TO_MOVE
+						* MILISECONDS_PER_SECOND - timePassedSinceStart;
+				try {
+					bestMove = findBestMoveAtDepth(tricksSearchDepth, timeRemaining);
+				} catch (TimeoutException e) {
+					System.out.println("// could not complete full search of depth "+tricksSearchDepth+", current best: "+bestMove);
+					break;
+				}
+			}
 			return null;
+		}
+
+		private Card findBestMoveAtDepth(int tricksSearchDepth, long timeoutMs) throws InterruptedException, ExecutionException, TimeoutException {
+			SearchWorker searchWorker = new SearchWorker(tricksSearchDepth);
+			searchWorker.execute();
+			return searchWorker.get(timeoutMs,TimeUnit.MILLISECONDS);
 		}
 
 		@Override
 		public void done() {
-			playCard(search.getBestMoves().get(0));
+			playCard(bestMove);
 		}
+	}
+
+	public class SearchWorker extends SwingWorker<Card, String> {
+		Search search;
+		private final int maxTricksSearchDepth;
+
+		public SearchWorker(int maxTricksSearchDepth) {
+			this.maxTricksSearchDepth = maxTricksSearchDepth;
+
+		}
+
+		@Override
+		protected Card doInBackground() throws Exception {
+			search = new Search(game);
+			search.setMaxTricks(maxTricksSearchDepth);
+			search.search();
+			return search.getBestMoves().get(0);
+		}
+
+		// @Override
+		// public void done() {
+		// playCard(search.getBestMoves().get(0));
+		// }
 	}
 
 	public class TrickDisplayWorker extends SwingWorker<Void, String> {
@@ -48,7 +96,8 @@ public class GameController {
 		public void done() {
 			if (previousTrickDisplayed) {
 				try {
-					Thread.sleep(ConfigurableRuntimeSettingsFactory.get().getMilisecondsToDisplayLastTrick());
+					Thread.sleep(ConfigurableRuntimeSettingsFactory.get()
+							.getMilisecondsToDisplayLastTrick());
 				} catch (InterruptedException e) {
 					throw new RuntimeException(e);
 				}
@@ -108,7 +157,7 @@ public class GameController {
 	}
 
 	public synchronized void playCard(Card c) {
-		System.out.println("game.play("+c.toDebugString()+");");
+		System.out.println("game.play(" + c.toDebugString() + ");");
 		game.play(c);
 		TrickDisplayWorker tdw = new TrickDisplayWorker();
 		tdw.execute();
@@ -131,9 +180,8 @@ public class GameController {
 		if (humanHasMove()) {
 			return;
 		}
-		SearchWorker w = new SearchWorker();
 
-		w.execute();
+		new SearchController().execute();
 
 	}
 

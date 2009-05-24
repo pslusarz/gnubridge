@@ -234,6 +234,12 @@ public class GameTest extends TestCase {
 		
 	}
 	
+	public void testGetUniqueStringCanBeUsedAsKeyToWeakHashMap() {
+		Game game = new Game(NoTrump.i());
+		GameUtils.initializeSingleColorSuits(game);
+		assertFalse(game.getUniqueString() == game.getUniqueString());
+	}
+	
 
 	private void playMove(Game game, List<Integer> moves, List<Card> cards, int i) {
 		Player player = game.getNextToPlay();

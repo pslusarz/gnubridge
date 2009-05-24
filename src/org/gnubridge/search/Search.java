@@ -35,7 +35,7 @@ public class Search {
 
 	private int prunedPlayedSequence;
 
-	private boolean useDuplicateRemoval = false;
+	private boolean useDuplicateRemoval = true;
 
 	private int prunedDuplicatePosition;
 	PositionLookup lookup;
@@ -323,11 +323,6 @@ public class Search {
 		if (useDuplicateRemoval()) {
 			System.out.println("  Duplicate position prunes: "
 					+ prunedDuplicatePosition);
-			
-//			System.out.println("    max cards played: "+lookup.maxCardsPlayed);
-//			System.out.println("    positions stored in table: "+lookup.positionsStored);
-//			System.out.println("    duplicates the table identified: "+lookup.duplicates);
-//			System.out.println("    positions not stored in table because table was full: "+lookup.positionsOverMaxNotStored);
 		}
 		System.out.println("West/East tricks taken: "
 				+ root.getTricksTaken(Player.WEST_EAST));
