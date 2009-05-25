@@ -55,7 +55,7 @@ public class PositionLookup {
 	}
 
 	private String getHash(Game g) {
-		return g.getUniqueString();
+		return g.getKeyForWeakHashMap();
 	}
 
 }

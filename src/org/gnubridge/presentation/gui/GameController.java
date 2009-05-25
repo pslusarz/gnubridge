@@ -18,10 +18,11 @@ import org.gnubridge.search.Search;
 import org.gnubridge.search.ConfigurableRuntimeSettingsFactory;
 
 public class GameController {
-	public static int MAX_SECONDS_TO_MOVE = 60;
+	public static int MAX_SECONDS_TO_MOVE = 45;
 	public class SearchController extends SwingWorker<Void, String> {
 		private static final int MILISECONDS_PER_SECOND = 1000;
 		private static final long RIDICULOUSLY_LONG_WAIT_TIME = 100000000;
+		private final long TIME_ALLOTED_PER_MOVE = MAX_SECONDS_TO_MOVE * MILISECONDS_PER_SECOND;
 		Card bestMove;
 
 		@Override
@@ -30,10 +31,13 @@ public class GameController {
 			bestMove = findBestMoveAtDepth(1, RIDICULOUSLY_LONG_WAIT_TIME); 		
 			for (int tricksSearchDepth = 2; tricksSearchDepth <= ConfigurableRuntimeSettingsFactory
 					.get().getSearchDepthRecommendation(game); tricksSearchDepth++) {
-				System.out.println("// now searching depth: "+tricksSearchDepth);
 				long timePassedSinceStart = System.currentTimeMillis() - start;
-				long timeRemaining = MAX_SECONDS_TO_MOVE
-						* MILISECONDS_PER_SECOND - timePassedSinceStart;
+				long timeRemaining = TIME_ALLOTED_PER_MOVE - timePassedSinceStart;
+				if (!haveEnoughTimeToAttemptNextSearch(timeRemaining)) {
+					System.out.println("// not enough time to attempt next search");
+					break;
+				}
+				System.out.println("// now searching depth: "+tricksSearchDepth);
 				try {
 					bestMove = findBestMoveAtDepth(tricksSearchDepth, timeRemaining);
 				} catch (TimeoutException e) {
@@ -42,6 +46,10 @@ public class GameController {
 				}
 			}
 			return null;
+		}
+
+		private boolean haveEnoughTimeToAttemptNextSearch(long timeRemaining) {
+			return timeRemaining > TIME_ALLOTED_PER_MOVE * 2 / 3;
 		}
 
 		private Card findBestMoveAtDepth(int tricksSearchDepth, long timeoutMs) throws InterruptedException, ExecutionException, TimeoutException {

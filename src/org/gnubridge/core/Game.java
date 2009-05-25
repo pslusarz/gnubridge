@@ -294,7 +294,7 @@ public class Game {
 		
 	}
 
-	public String getUniqueString() {
+	public String getKeyForWeakHashMap() {
 		String cardsPlayedRepresentation = "";
 		for (Card card: getPlayedCards().getCardsHighToLow()) {
 		  cardsPlayedRepresentation += card.getIndex()+",";	

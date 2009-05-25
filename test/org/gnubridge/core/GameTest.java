@@ -234,10 +234,30 @@ public class GameTest extends TestCase {
 		
 	}
 	
-	public void testGetUniqueStringCanBeUsedAsKeyToWeakHashMap() {
+	public void testKeyToWeakHashMapNoReferenceRetainedInsideClass() {
 		Game game = new Game(NoTrump.i());
 		GameUtils.initializeSingleColorSuits(game);
-		assertFalse(game.getUniqueString() == game.getUniqueString());
+		assertFalse(game.getKeyForWeakHashMap() == game.getKeyForWeakHashMap());
+	}
+	public void testKeyToWeakHashMapDoesntChange() {
+		Game game = new Game(NoTrump.i());
+		GameUtils.initializeSingleColorSuits(game);
+		assertTrue(game.getKeyForWeakHashMap().equals(game.getKeyForWeakHashMap()));
+	}
+	public void testTwoDifferentGamesWithSameCards() {
+		Game game = new Game(NoTrump.i());
+		GameUtils.initializeSingleColorSuits(game);
+		Game game2 = new Game(NoTrump.i());
+		GameUtils.initializeSingleColorSuits(game2);
+		assertTrue(game2.getKeyForWeakHashMap().equals(game.getKeyForWeakHashMap()));
+	}
+	public void testTwoDifferentGamesWithSameCardsDifferentMoves() {
+		Game game = new Game(NoTrump.i());
+		GameUtils.initializeSingleColorSuits(game);
+		Game game2 = new Game(NoTrump.i());
+		GameUtils.initializeSingleColorSuits(game2);
+		game2.playOneTrick();
+		assertFalse(game2.getKeyForWeakHashMap().equals(game.getKeyForWeakHashMap()));
 	}
 	
 
