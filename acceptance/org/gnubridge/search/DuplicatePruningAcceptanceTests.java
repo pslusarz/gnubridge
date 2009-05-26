@@ -10,11 +10,8 @@ import org.gnubridge.presentation.GameUtils;
 import junit.framework.TestCase;
 
 public class DuplicatePruningAcceptanceTests extends TestCase {
-	public void testMakeJUnitHappy() {
-		assertTrue(true);
-	}
 	
-	public void zzztestPruningDuplicate13CardsRunOutOfMemory() {
+	public void testPruningDuplicate13CardsRunOutOfMemory() {
 		Game game = new Game(NoTrump.i());
 		game.getWest().init(Four.of(Hearts.i()), Ten.of(Diamonds.i()),
 				Eight.of(Hearts.i()), Ace.of(Clubs.i()),
@@ -42,17 +39,18 @@ public class DuplicatePruningAcceptanceTests extends TestCase {
 		game.setNextToPlay(Direction.WEST);
 		Search pruned2 = new Search(game);
 		pruned2.setUseDuplicateRemoval(true);
-		pruned2.setMaxTricks(4);
+		pruned2.setMaxTricks(3);
 		pruned2.search();
 		pruned2.printStats();
-		pruned2 = null;
+		assertEquals(2, pruned2.getRoot().getTricksTaken(Player.WEST_EAST));
+		//4 deep: 382 seconds, Positions examined: 25798501
 	}
 	
-	public void testGaugeMaxCardsPlayedDuplicateAt13Cards() {
+	public void testEquivalenceWithoutDuplicateRemoval() {
 		for (int cardDeal = 0; cardDeal < 5; cardDeal++) {
 			Trump trump = determineTrump(cardDeal);
 			Game g = new Game(trump);
-			GameUtils.initializeRandom(g, 4);
+			GameUtils.initializeRandom(g, 6);
 			System.out.println("*********** DEAL "+cardDeal+" ***********");
 			g.printHandsDebug();
 			g.printHands();
@@ -65,7 +63,6 @@ public class DuplicatePruningAcceptanceTests extends TestCase {
 			}
 			System.out.println("*********** END SEARCHES ***********");
 			printAverageRunTimes();			
-			printAverageMemoryUsed();
 		}
 
 		assertAllSearchesFindSameNumberOfTricksTaken();
@@ -74,12 +71,6 @@ public class DuplicatePruningAcceptanceTests extends TestCase {
 		
 	}
 
-	private void printAverageMemoryUsed() {
-		System.out.println("Average Memory (Kb) / Max memory");
-		for (SearchConfiguration config : SearchConfiguration.values()) {
-			System.out.println("  "+config+": "+config.getAverageMemoryUsed()+" / "+ config.getMaxMemoryUsed());
-			}
-	}
 
 	private void printAverageRunTimes() {
 		System.out.println("Average run times (ms)");
@@ -122,13 +113,11 @@ private void assertAllSearchesFindSameNumberOfTricksTaken() {
 		//DuplicateWith18CardCutoff(18),
 		//DuplicateWith19CardCutoff(19);
 		Search search;
-		static final int MAX_TRICKS = 6;
+		static final int MAX_TRICKS = 4;
 		int type;
 		int runCount = 0;
 		private int totalTimeMillis = 0;
 		private int northSouthTricks = -1;
-		private long totalMemoryUsedK = 0;
-		private long maxMemoryK = 0;
 		private SearchConfiguration(int type) {
 			this.type = type;
 		}
@@ -146,10 +135,6 @@ private void assertAllSearchesFindSameNumberOfTricksTaken() {
 			search.search();
 			Runtime.getRuntime().gc();
             long memoryUsed = (Runtime.getRuntime().freeMemory() - initMemory) / 1024;
-			totalMemoryUsedK  += memoryUsed;	
-            if (maxMemoryK < memoryUsed) {
-            	maxMemoryK = memoryUsed;
-            }
 			search.printStats();
 			System.out.println("  Memory used (k): "+memoryUsed);
 			
@@ -160,12 +145,6 @@ private void assertAllSearchesFindSameNumberOfTricksTaken() {
 		
 		public double getAverageRunningTime() {
 			return totalTimeMillis / runCount;
-		}
-		public long getAverageMemoryUsed() {
-			return (long) (totalMemoryUsedK / runCount);
-		}
-		public long getMaxMemoryUsed() {
-			return maxMemoryK;
 		}
 
 		public int getNorthSouthTricks() {

@@ -55,13 +55,7 @@ public class Search {
 		lookup = new PositionLookup();
 	}
 
-	public Stack<Node> getStack() {
-		return stack;
-	}
-
-	public Node getRoot() {
-		return root;
-	}
+	
 
 	public void search() {
 		long start = System.currentTimeMillis();
@@ -344,6 +338,14 @@ public class Search {
 	public void setMaxTricks(int i) {
 		maxTricks = i;
 
+	}
+	
+	public Stack<Node> getStack() {
+		return stack;
+	}
+
+	public Node getRoot() {
+		return root;
 	}
 
 }

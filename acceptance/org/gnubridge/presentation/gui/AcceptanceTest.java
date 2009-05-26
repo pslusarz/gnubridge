@@ -1,4 +1,4 @@
-package org.jbridge.presentation.gui;
+package org.gnubridge.presentation.gui;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
@@ -18,13 +18,10 @@ import org.gnubridge.search.ConfigurableRuntimeSettingsFactory;
 
 public class AcceptanceTest extends TestCase {
 
-	private static final int SEARCH_DEPTH_DURING_TEST = 13;
 	private static final int TRICKS_PER_DEAL = 6;
 
 	public void setUp() {
 		GameController.MAX_SECONDS_TO_MOVE = 1;
-//		ConfigurableRuntimeSettingsFactory.set(new TestingSettings(
-//				SEARCH_DEPTH_DURING_TEST));
 	}
 
 	public void testAutomatedBidding() {
@@ -66,7 +63,7 @@ public class AcceptanceTest extends TestCase {
 
 	public void testPlayRandomGame() throws InterruptedException,
 			InvocationTargetException {
-		GameController.MAX_SECONDS_TO_MOVE = 2;
+		GameController.MAX_SECONDS_TO_MOVE = 3;
 		preInitializeRandomGame();
 		GBController mainController = makeController();
 		mainController.getBiddingController().placeBid(7, "NT");
@@ -171,25 +168,5 @@ public class AcceptanceTest extends TestCase {
 	private GBController makeController() {
 		MainView mw = new MainView("gnubridge");
 		return new GBController(mw);
-	}
-
-	public class TestingSettings extends ConfigurableRuntimeSettings {
-
-		private int depth = 1;
-
-		public TestingSettings(int i) {
-			depth = i;
-		}
-
-		@Override
-		public int getSearchDepthRecommendation(Game game) {
-			return depth;
-		}
-
-		@Override
-		public long getMilisecondsToDisplayLastTrick() {
-			return 0;
-		}
-
 	}
 }
