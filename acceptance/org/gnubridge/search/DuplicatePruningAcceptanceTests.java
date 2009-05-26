@@ -39,14 +39,15 @@ public class DuplicatePruningAcceptanceTests extends TestCase {
 		game.setNextToPlay(Direction.WEST);
 		Search pruned2 = new Search(game);
 		pruned2.setUseDuplicateRemoval(true);
-		pruned2.setMaxTricks(3);
+		pruned2.setUsePruneLowestCardToLostTrick(true);
+		pruned2.setMaxTricks(4);
 		pruned2.search();
 		pruned2.printStats();
 		assertEquals(2, pruned2.getRoot().getTricksTaken(Player.WEST_EAST));
 		//4 deep: 382 seconds, Positions examined: 25798501
 	}
 	
-	public void testEquivalenceWithoutDuplicateRemoval() {
+	public void testEquivalenceVariousPruneStrategies() {
 		for (int cardDeal = 0; cardDeal < 5; cardDeal++) {
 			Trump trump = determineTrump(cardDeal);
 			Game g = new Game(trump);
@@ -108,10 +109,8 @@ private void assertAllSearchesFindSameNumberOfTricksTaken() {
 	
 	public enum SearchConfiguration {
 		NoDuplicatePruning(-1),
-		DuplicatePruning(1);
-		//DuplicateWith16CardCutoff(16),
-		//DuplicateWith18CardCutoff(18),
-		//DuplicateWith19CardCutoff(19);
+		DuplicatePruning(1),
+		DuplicateWithLowestPruning(2);
 		Search search;
 		static final int MAX_TRICKS = 4;
 		int type;
@@ -129,14 +128,14 @@ private void assertAllSearchesFindSameNumberOfTricksTaken() {
 				search.setUseDuplicateRemoval(false);
 			} else {
 				search.setUseDuplicateRemoval(true);
+				if (type == 2) {
+					search.setUsePruneLowestCardToLostTrick(true);
+				} else {
+					search.setUsePruneLowestCardToLostTrick(false);
+				}
 			}
-			Runtime.getRuntime().gc();
-			long initMemory = Runtime.getRuntime().freeMemory();
 			search.search();
-			Runtime.getRuntime().gc();
-            long memoryUsed = (Runtime.getRuntime().freeMemory() - initMemory) / 1024;
 			search.printStats();
-			System.out.println("  Memory used (k): "+memoryUsed);
 			
 			runCount++;
 			totalTimeMillis += search.getRunningTime();

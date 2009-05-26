@@ -8,6 +8,7 @@ import org.gnubridge.core.Card;
 import org.gnubridge.core.Game;
 import org.gnubridge.core.Hand;
 import org.gnubridge.core.Player;
+import org.gnubridge.core.Trick;
 
 public class Search {
 
@@ -40,6 +41,10 @@ public class Search {
 	private int prunedDuplicatePosition;
 	PositionLookup lookup;
 
+	private int prunedLowestCardInLostTrick;
+
+	private boolean shouldPruneLowestCardInLostTrick = true;
+
 	public Search(Node root) {
 		this.root = root;
 	}
@@ -54,8 +59,6 @@ public class Search {
 		finalMoves.add(0);
 		lookup = new PositionLookup();
 	}
-
-	
 
 	public void search() {
 		long start = System.currentTimeMillis();
@@ -82,6 +85,7 @@ public class Search {
 		prunedSequence = 0;
 		prunedPlayedSequence = 0;
 		positionsCount = 0;
+		prunedLowestCardInLostTrick = 0;
 	}
 
 	public void setUseDuplicateRemoval(boolean b) {
@@ -100,6 +104,8 @@ public class Search {
 			prunedPlayedSequence++;
 		} else if (node.isPrunedDuplicatePosition()) {
 			prunedDuplicatePosition++;
+		} else if (node.isPrunedLowestCardInLostTrick()) {
+			prunedLowestCardInLostTrick++;
 		}
 
 	}
@@ -126,28 +132,74 @@ public class Search {
 		if (position.oneTrickLeft()) {
 			position.playMoves(finalMoves);
 		}
-        checkDuplicatePositions(node, position);
-		if (position.getTricksPlayed() >= maxTricks || position.isDone() || node.hasIdenticalTwin()) {
+		checkDuplicatePositions(node, position);
+		if (position.getTricksPlayed() >= maxTricks || position.isDone()
+				|| node.hasIdenticalTwin()) {
 			node.setLeaf(true);
 			trim(node);
 		} else {
 			for (Node move : node.children) {
 				removeSiblingsInSequence(move, position);
 				removeSiblingsInSequenceWithPlayedCards(move, position);
-				//TODO later if (!move.isPruned()) {
+			}
+			if (shouldPruneLowestCardInLostTrick) {
+				for (Node move : node.children) {
+					ifCannotTakeTrickPlayLowestCardInColor(move, position);
+				}
+			}
+			for (Node move : node.children) {
+				// TODO later if (!move.isPruned()) {
 				stack.push(move);
 			}
 		}
+	}
+
+	private void ifCannotTakeTrickPlayLowestCardInColor(Node move, Game position) {
+		Trick currentTrick = position.getCurrentTrick();
+		if (currentTrick.getCards().size() == 0) {
+			return;
+		}
+		if (!currentTrick.getDenomination().equals(
+				move.getCardPlayed().getDenomination())) {
+			return;
+		}
+		if (move.isPruned()) {
+			return;
+		}
+
+		List<Card> siblingsInSuit = move.getSiblingsInColor();
+
+		Card higherCard;
+		for (Card sibling : siblingsInSuit) {
+			if (move.getSiblingNodeForCard(sibling).isPruned()) {
+				continue;
+			}
+			higherCard = getHigher(move.getCardPlayed(), sibling);
+
+			if (higherCard.equals(move.getCardPlayed())
+					&& cannotTakeTrick(higherCard, currentTrick)) {
+				move.setPruned(true, Node.PRUNE_LOWEST_CARD_IN_LOST_TRICK);
+
+				break;
+			}
+		}
+
+	}
+
+	private boolean cannotTakeTrick(Card card, Trick trick) {
+		return trick.getHighestCard().trumps(card, trick.getTrump())
+				|| (trick.getHighestCard().hasSameColorAs(card) && trick
+						.getHighestCard().hasGreaterValueThan(card));
 	}
 
 	private void checkDuplicatePositions(Node node, Game position) {
 		if (useDuplicateRemoval()) {
 			if (lookup.positionEncountered(position, node.getTricksTaken())) {
 				byte[] previouslyEncounteredNode = lookup.getNode(position);
-                node.setIdenticalTwin(previouslyEncounteredNode);
-			}	
+				node.setIdenticalTwin(previouslyEncounteredNode);
+			}
 		}
-		
+
 	}
 
 	private void makeChildNodeForCardPlayed(Node parent, Player player,
@@ -156,7 +208,6 @@ public class Search {
 		move.setCardPlayed(card);
 		move.setPlayerCardPlayed(player);
 	}
-
 
 	private void removeSiblingsInSequenceWithPlayedCards(Node move,
 			Game position) {
@@ -170,8 +221,9 @@ public class Search {
 		for (Card sibling : siblingsInSuit) {
 			higherCard = getHigher(move.getCardPlayed(), sibling);
 			lowerCard = getLower(move.getCardPlayed(), sibling);
-			boolean isSequence = areTwoUnplayedCardsInSequenceIfPlayedCardsAreDiscarded(lowerCard, higherCard, orderedPlayedCardsInSuit);
-			
+			boolean isSequence = areTwoUnplayedCardsInSequenceIfPlayedCardsAreDiscarded(
+					lowerCard, higherCard, orderedPlayedCardsInSuit);
+
 			if (isSequence && higherCard.equals(move.getCardPlayed())) {
 				shouldTrim = true;
 				break;
@@ -245,7 +297,7 @@ public class Search {
 	public void trim(Node node) {
 		node.nullAllChildrenExceptOne();
 		node.calculateValue();
-        pruneAlphaBeta(node);
+		pruneAlphaBeta(node);
 		if (node.canTrim()) {
 			trim(node.parent);
 		}
@@ -260,7 +312,7 @@ public class Search {
 		if (usePruning() && node.shouldBeBetaPruned()) {
 			node.betaPrune();
 		}
-		
+
 	}
 
 	private boolean useDuplicateRemoval() {
@@ -318,9 +370,17 @@ public class Search {
 			System.out.println("  Duplicate position prunes: "
 					+ prunedDuplicatePosition);
 		}
+		if (shouldPruneLowestCardInLostTrick) {
+		System.out.println("  Lowest card to lost trick prunes: "
+				+ getPrunedLowestCardInLostTrick());
+		}
 		System.out.println("West/East tricks taken: "
 				+ root.getTricksTaken(Player.WEST_EAST));
 
+	}
+
+	private int getPrunedLowestCardInLostTrick() {
+		return prunedLowestCardInLostTrick;
 	}
 
 	private int getPrunedPlayedSequence() {
@@ -339,13 +399,18 @@ public class Search {
 		maxTricks = i;
 
 	}
-	
+
 	public Stack<Node> getStack() {
 		return stack;
 	}
 
 	public Node getRoot() {
 		return root;
+	}
+
+	public void setUsePruneLowestCardToLostTrick(boolean b) {
+		shouldPruneLowestCardInLostTrick = b;
+
 	}
 
 }

@@ -27,6 +27,8 @@ public class Node {
 
 	private static final byte PRUNE_DUPLICATE_POSITION = PRUNE_SEQUENCE_SIBLINGS_PLAYED + 1;
 
+	public static final byte PRUNE_LOWEST_CARD_IN_LOST_TRICK = PRUNE_DUPLICATE_POSITION + 1;
+
 	int value;
 
 	Node parent;
@@ -509,6 +511,19 @@ public class Node {
 	public void setIdenticalTwin(byte[] node) {
 		identicalTwin = node;
 
+	}
+
+	public Node getSiblingNodeForCard(Card card) {
+		for (Node sibling : siblings()) {
+			if (sibling.getCardPlayed().equals(card)) {
+				return sibling;
+			}
+		}
+		throw new RuntimeException("Cannot find appropriate sibling node");
+	}
+
+	public boolean isPrunedLowestCardInLostTrick() {
+		return isPruned() && (getPruneType() == PRUNE_LOWEST_CARD_IN_LOST_TRICK);
 	}
 
 }
