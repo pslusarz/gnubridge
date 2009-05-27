@@ -14,8 +14,8 @@ import org.gnubridge.core.North;
 import org.gnubridge.core.South;
 import org.gnubridge.core.West;
 import org.gnubridge.core.bidding.Auctioneer;
+import org.gnubridge.search.ProductionSettings;
 import org.gnubridge.search.Search;
-import org.gnubridge.search.ConfigurableRuntimeSettingsFactory;
 
 public class GameController {
 	public static int MAX_SECONDS_TO_MOVE = 45;
@@ -29,8 +29,7 @@ public class GameController {
 		protected Void doInBackground() throws Exception {
 			long start = System.currentTimeMillis();			
 			bestMove = findBestMoveAtDepth(1, RIDICULOUSLY_LONG_WAIT_TIME); 		
-			for (int tricksSearchDepth = 2; tricksSearchDepth <= ConfigurableRuntimeSettingsFactory
-					.get().getSearchDepthRecommendation(game); tricksSearchDepth++) {
+			for (int tricksSearchDepth = 2; tricksSearchDepth <= ProductionSettings.getSearchDepthRecommendation(game); tricksSearchDepth++) {
 				long timePassedSinceStart = System.currentTimeMillis() - start;
 				long timeRemaining = TIME_ALLOTED_PER_MOVE - timePassedSinceStart;
 				if (!haveEnoughTimeToAttemptNextSearch(timeRemaining)) {
@@ -80,11 +79,6 @@ public class GameController {
 			search.search();
 			return search.getBestMoves().get(0);
 		}
-
-		// @Override
-		// public void done() {
-		// playCard(search.getBestMoves().get(0));
-		// }
 	}
 
 	public class TrickDisplayWorker extends SwingWorker<Void, String> {
@@ -104,8 +98,7 @@ public class GameController {
 		public void done() {
 			if (previousTrickDisplayed) {
 				try {
-					Thread.sleep(ConfigurableRuntimeSettingsFactory.get()
-							.getMilisecondsToDisplayLastTrick());
+					Thread.sleep(ProductionSettings.getMilisecondsToDisplayLastTrick());
 				} catch (InterruptedException e) {
 					throw new RuntimeException(e);
 				}

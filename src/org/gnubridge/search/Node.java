@@ -3,8 +3,6 @@ package org.gnubridge.search;
 import java.util.ArrayList;
 import java.util.List;
 
-import junit.framework.Assert;
-
 import org.gnubridge.core.Card;
 import org.gnubridge.core.Game;
 import org.gnubridge.core.Player;
@@ -491,10 +489,6 @@ public class Node {
 	}
 
 	private void calculateValueFromIdenticalTwin() {
-		Assert
-				.assertTrue(identicalTwin[Player.NORTH_SOUTH] > -1);
-		Assert.assertTrue(identicalTwin[Player.WEST_EAST] > -1);
-		//Assert.assertFalse("twin is pruned: "+identicalTwin.toDebugString(), identicalTwin.isPruned());
 		setTricksTaken(Player.NORTH_SOUTH, identicalTwin[Player.NORTH_SOUTH]);
 		setTricksTaken(Player.WEST_EAST, identicalTwin[Player.WEST_EAST]);
 

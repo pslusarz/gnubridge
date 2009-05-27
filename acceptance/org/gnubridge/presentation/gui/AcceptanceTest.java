@@ -10,11 +10,7 @@ import org.gnubridge.core.Game;
 import org.gnubridge.core.Player;
 import org.gnubridge.core.bidding.Auctioneer;
 import org.gnubridge.presentation.GameUtils;
-import org.gnubridge.presentation.gui.GBController;
-import org.gnubridge.presentation.gui.GameController;
-import org.gnubridge.presentation.gui.MainView;
-import org.gnubridge.search.ConfigurableRuntimeSettings;
-import org.gnubridge.search.ConfigurableRuntimeSettingsFactory;
+import org.gnubridge.search.ProductionSettings;
 
 public class AcceptanceTest extends TestCase {
 
@@ -22,6 +18,11 @@ public class AcceptanceTest extends TestCase {
 
 	public void setUp() {
 		GameController.MAX_SECONDS_TO_MOVE = 1;
+		ProductionSettings.setMilisecondsToDisplayLastTrick(0);
+	}
+	
+	public void tearDown() {
+		ProductionSettings.setMilisecondsToDisplayLastTrick(ProductionSettings.DEFAULT_MILISECONDS_TO_DISPLAY_LAST_TRICK);
 	}
 
 	public void testAutomatedBidding() {

@@ -6,7 +6,6 @@ import java.util.Stack;
 
 import org.gnubridge.core.Card;
 import org.gnubridge.core.Game;
-import org.gnubridge.core.Hand;
 import org.gnubridge.core.Player;
 import org.gnubridge.core.Trick;
 

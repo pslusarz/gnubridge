@@ -2,25 +2,20 @@ package org.gnubridge.search;
 
 import org.gnubridge.core.Game;
 
-public class ProductionSettings extends ConfigurableRuntimeSettings {
+public class ProductionSettings  {
+    public static final int DEFAULT_MILISECONDS_TO_DISPLAY_LAST_TRICK = 4000;
+	private static int milisecondsToDisplayLastTrick = DEFAULT_MILISECONDS_TO_DISPLAY_LAST_TRICK;
 
-	@Override
-	public int getSearchDepthRecommendation(Game game) {
-		int result = 13;
-//
-//		if (game.getTricksPlayed() < 6) {
-//			result = 3;
-//		} else if (game.getTricksPlayed() < 8) {
-//			result = 4;
-//		} else {
-//			result = 6;
-//		}
-		return result;
+	public static void setMilisecondsToDisplayLastTrick(int value) {
+		milisecondsToDisplayLastTrick  = value;
+	}
+	
+	public static int getSearchDepthRecommendation(Game game) {
+		return 13 - game.getTricksPlayed();
 	}
 
-	@Override
-	public long getMilisecondsToDisplayLastTrick() {
-		return 3000;
+	public static long getMilisecondsToDisplayLastTrick() {
+		return milisecondsToDisplayLastTrick;
 	}
 
 }

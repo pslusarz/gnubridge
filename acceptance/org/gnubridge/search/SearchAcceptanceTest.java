@@ -1,9 +1,31 @@
 package org.gnubridge.search;
 
-import org.gnubridge.core.*;
-import org.gnubridge.core.deck.*;
-
 import junit.framework.TestCase;
+
+import org.gnubridge.core.East;
+import org.gnubridge.core.Game;
+import org.gnubridge.core.North;
+import org.gnubridge.core.Player;
+import org.gnubridge.core.South;
+import org.gnubridge.core.West;
+import org.gnubridge.core.deck.Ace;
+import org.gnubridge.core.deck.Clubs;
+import org.gnubridge.core.deck.Diamonds;
+import org.gnubridge.core.deck.Eight;
+import org.gnubridge.core.deck.Five;
+import org.gnubridge.core.deck.Four;
+import org.gnubridge.core.deck.Hearts;
+import org.gnubridge.core.deck.Jack;
+import org.gnubridge.core.deck.King;
+import org.gnubridge.core.deck.Nine;
+import org.gnubridge.core.deck.NoTrump;
+import org.gnubridge.core.deck.Queen;
+import org.gnubridge.core.deck.Seven;
+import org.gnubridge.core.deck.Six;
+import org.gnubridge.core.deck.Spades;
+import org.gnubridge.core.deck.Ten;
+import org.gnubridge.core.deck.Three;
+import org.gnubridge.core.deck.Two;
 
 public class SearchAcceptanceTest extends TestCase {
   public void test13cards4deep(){

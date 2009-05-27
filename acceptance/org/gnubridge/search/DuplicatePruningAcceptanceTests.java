@@ -1,13 +1,30 @@
 package org.gnubridge.search;
 
+import junit.framework.TestCase;
+
 import org.gnubridge.core.Direction;
 import org.gnubridge.core.Game;
 import org.gnubridge.core.Player;
-import org.gnubridge.core.deck.*;
+import org.gnubridge.core.deck.Ace;
+import org.gnubridge.core.deck.Clubs;
+import org.gnubridge.core.deck.Diamonds;
+import org.gnubridge.core.deck.Eight;
+import org.gnubridge.core.deck.Five;
+import org.gnubridge.core.deck.Four;
+import org.gnubridge.core.deck.Hearts;
+import org.gnubridge.core.deck.Jack;
+import org.gnubridge.core.deck.King;
+import org.gnubridge.core.deck.Nine;
+import org.gnubridge.core.deck.NoTrump;
+import org.gnubridge.core.deck.Queen;
+import org.gnubridge.core.deck.Seven;
+import org.gnubridge.core.deck.Six;
+import org.gnubridge.core.deck.Spades;
+import org.gnubridge.core.deck.Ten;
+import org.gnubridge.core.deck.Three;
+import org.gnubridge.core.deck.Trump;
+import org.gnubridge.core.deck.Two;
 import org.gnubridge.presentation.GameUtils;
-
-
-import junit.framework.TestCase;
 
 public class DuplicatePruningAcceptanceTests extends TestCase {
 	
@@ -44,7 +61,6 @@ public class DuplicatePruningAcceptanceTests extends TestCase {
 		pruned2.search();
 		pruned2.printStats();
 		assertEquals(2, pruned2.getRoot().getTricksTaken(Player.WEST_EAST));
-		//4 deep: 382 seconds, Positions examined: 25798501
 	}
 	
 	public void testEquivalenceVariousPruneStrategies() {
@@ -112,7 +128,7 @@ private void assertAllSearchesFindSameNumberOfTricksTaken() {
 		DuplicatePruning(1),
 		DuplicateWithLowestPruning(2);
 		Search search;
-		static final int MAX_TRICKS = 4;
+		static final int MAX_TRICKS = 5;
 		int type;
 		int runCount = 0;
 		private int totalTimeMillis = 0;

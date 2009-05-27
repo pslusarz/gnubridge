@@ -10,7 +10,6 @@ import org.gnubridge.core.West;
 import org.gnubridge.core.bidding.Auctioneer;
 import org.gnubridge.core.bidding.Bid;
 import org.gnubridge.core.bidding.BiddingAgent;
-import org.gnubridge.presentation.GameUtils;
 
 public class BiddingController {
 
