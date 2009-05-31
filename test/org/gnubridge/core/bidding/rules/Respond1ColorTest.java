@@ -24,6 +24,14 @@ public class Respond1ColorTest extends TestCase {
 				"9,8,6", "5,4,3"));
 		assertEquals(new Bid(1, Spades.i()), triangulate.getBid());
 	}
+	public void testRespond1ColorBonusOnDistributionalPoints() {
+		Auctioneer a = new Auctioneer(West.i());
+		a.bid(new Bid(1, Diamonds.i()));
+		a.bid(new Pass());
+		Respond1Color rule = new Respond1Color(a, new Hand("K,3,2", "10,5,4,3,2",
+				"9,8,6,5", "5"));
+		assertEquals(new Bid(1, Hearts.i()), rule.getBid());
+	}
 	public void testRespond1ColorBestSuit() {
 		Auctioneer a = new Auctioneer(West.i());
 		a.bid(new Bid(1, Diamonds.i()));

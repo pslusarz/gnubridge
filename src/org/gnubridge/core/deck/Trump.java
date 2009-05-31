@@ -18,4 +18,7 @@ public abstract class Trump {
 		return result;
 	}
 	public abstract String toDebugString();
+	public boolean isMajorSuit() {
+		return Spades.i().equals(this) || Hearts.i().equals(this);
+	}
 }

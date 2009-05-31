@@ -11,7 +11,7 @@ import org.gnubridge.core.deck.King;
 import org.gnubridge.core.deck.Queen;
 
 public class PointCalculator {
-	private Hand hand;
+	protected Hand hand;
 
 	public PointCalculator(Hand hand) {
 		this.hand = hand;
@@ -45,13 +45,14 @@ public class PointCalculator {
 	public int getDistributionalPoints() {
 		int result = 0;
 		for (Color color : Color.list) {
-			result += distributionalValueForCardsInColor(hand.getColorHi2Low(
-					color).size());
+			result += distributionalValueForCardsInColor(color);
 		}
 		return result;
 	}
 
-	private int distributionalValueForCardsInColor(int cardsCount) {
+	protected int distributionalValueForCardsInColor(Color color) {
+		List<Card> cardsInColor = hand.getColorHi2Low(color);
+		int cardsCount = cardsInColor.size();
 		int result = 0;
 		if (cardsCount == 0) {
 			result = 3;
@@ -69,8 +70,7 @@ public class PointCalculator {
 			List<Card> cardsInColor = hand.getColorHi2Low(color);
 			result += getHighCardPoints(cardsInColor);
 			if (!isFlawed(cardsInColor)) {
-				result += distributionalValueForCardsInColor(cardsInColor
-						.size());
+				result += distributionalValueForCardsInColor(color);
 			}
 		}
 		return result;

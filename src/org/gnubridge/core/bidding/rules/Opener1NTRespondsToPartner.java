@@ -23,8 +23,7 @@ public class Opener1NTRespondsToPartner extends BiddingRule {
 
 		if (partnerWasRespondingToMy1NT()) {
 			Bid partnersBid = auction.getPartnersLastCall().getBid();
-			if (Spades.i().equals(partnersBid.getTrump())
-					|| Hearts.i().equals(partnersBid.getTrump())) {
+			if (partnersBid.getTrump().isMajorSuit()) {
 				if (partnersBid.getValue() == 2) {
 					result = new Pass();
 				} else {

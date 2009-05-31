@@ -33,27 +33,10 @@ public class TestPositionLookup extends TestCase {
 		PositionLookup pl = new PositionLookup();
 		Node node = new Node(null);
 		assertFalse(pl.positionEncountered(g, node.getTricksTaken()));
+		assertTrue(pl.positionEncountered(g, node.getTricksTaken()));
 		assertEquals(node.getTricksTaken(), pl.getNode(g));
-		assertTrue(pl.positionEncountered(g, null));
 	}
 
-	public void testAllowNullTricksTaken() {
-		Game g = new Game(NoTrump.i());
-		GameUtils.initializeSingleColorSuits(g);
-		g.playOneTrick();
-
-		PositionLookup pl = new PositionLookup();
-		assertFalse(pl.positionEncountered(g, null));
-		assertTrue(pl.positionEncountered(g, null));
-		
-		Game duplicate = new Game(NoTrump.i());
-		GameUtils.initializeSingleColorSuits(duplicate);
-		duplicate.playOneTrick();
-		assertTrue(pl.positionEncountered(duplicate, null));
-		
-		
-
-	}
 
 	@SuppressWarnings("unused")
 	public void testOnlyReturnFirstNodeEncountetredForThePosition() {

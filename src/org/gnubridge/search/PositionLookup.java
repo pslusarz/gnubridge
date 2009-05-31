@@ -19,21 +19,13 @@ public class PositionLookup {
 		}
 	}
 
-	
-	
 	public boolean positionEncountered(Game g, byte[] bs) {
 		if (g.getCurrentTrick().getHighestCard() != null) {
 			return false;
 		}
 		byte[] valueToReturn = getNode(g);
 		if (valueToReturn == null) {
-			byte[] value;
-			if (bs == null) {
-				value = new byte[2];
-			} else {
-				value = bs;
-			}
-			putNode(g, value);
+			putNode(g, bs);
 			return false;
 		}
 		return true;
@@ -43,18 +35,16 @@ public class PositionLookup {
 		if (g == lastGameLookedUp) {
 			return lastNode;
 		}
-		byte[] result = positions.get(getHash(g));
-		lastGameLookedUp = g;
-		lastNode = result;
+		byte[] result = positions.get(g.getKeyForWeakHashMap());
+		if (result != null) {
+			lastGameLookedUp = g;
+			lastNode = result;
+		}
 		return result;
 	}
 
 	private void putNode(Game g, byte[] value) {
-		positions.put(getHash(g), value);
-	}
-
-	private String getHash(Game g) {
-		return g.getKeyForWeakHashMap();
+		positions.put(g.getKeyForWeakHashMap(), value);
 	}
 
 }

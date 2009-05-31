@@ -5,6 +5,7 @@ import org.gnubridge.core.bidding.Auctioneer;
 import org.gnubridge.core.bidding.Bid;
 import org.gnubridge.core.bidding.Call;
 import org.gnubridge.core.bidding.PointCalculator;
+import org.gnubridge.core.bidding.ResponseCalculator;
 import org.gnubridge.core.deck.Color;
 import org.gnubridge.core.deck.NoTrump;
 
@@ -14,14 +15,17 @@ public class Respond1Color extends BiddingRule {
 
 	public Respond1Color(Auctioneer a, Hand h) {
 		super(a, h);
-		pc = new PointCalculator(h);
 	}
 
 	@Override
 	protected Bid prepareBid() {
+		if (!partnerBid1Color()) {
+			return null;
+		}
 		Bid result = null;
-		if (partnerBid1Color() && pc.getCombinedPoints() >= 6) {
-			Color highestOver4 = findHighestColorOver4Cards();
+		pc = new ResponseCalculator(hand, auction.getPartnersLastCall().getBid());
+		if (pc.getCombinedPoints() >= 6) {
+			Color highestOver4 = findHighestColorWithFourOrMoreCards();
 
 			if (highestOver4 != null) {
 				if (pc.getCombinedPoints() >= 17
@@ -53,7 +57,7 @@ public class Respond1Color extends BiddingRule {
 		}
 	}
 
-	private Color findHighestColorOver4Cards() {
+	private Color findHighestColorWithFourOrMoreCards() {
 		Color highestOver4 = null;
 		for (Color color : Color.reverseList) {
 			if (hand.getColorLength(color) >= 4
