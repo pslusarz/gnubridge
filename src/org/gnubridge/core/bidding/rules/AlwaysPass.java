@@ -14,4 +14,9 @@ public class AlwaysPass extends BiddingRule {
 		return new Pass();
 	}
 
+	@Override
+	protected boolean applies() {
+		return true;
+	}
+
 }

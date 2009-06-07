@@ -6,7 +6,6 @@ import org.gnubridge.core.bidding.Bid;
 import org.gnubridge.core.bidding.PointCalculator;
 import org.gnubridge.core.deck.NoTrump;
 
-
 public class Open1NT extends BiddingRule {
 
 	private PointCalculator pc;
@@ -18,11 +17,13 @@ public class Open1NT extends BiddingRule {
 
 	@Override
 	protected Bid prepareBid() {
-		if (auction.isOpeningBid() && pc.getHighCardPoints() >= 16 && pc.getHighCardPoints() <= 18 && pc.isBalanced()) {
-			return new Bid(1, NoTrump.i());
-		} else {
-			return null;
-		}
+		return new Bid(1, NoTrump.i());
+	}
+
+	@Override
+	protected boolean applies() {
+		return auction.isOpeningBid() && pc.getHighCardPoints() >= 16
+				&& pc.getHighCardPoints() <= 18 && pc.isBalanced();
 	}
 
 }

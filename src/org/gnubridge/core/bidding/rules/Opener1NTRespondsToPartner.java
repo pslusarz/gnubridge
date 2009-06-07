@@ -21,32 +21,30 @@ public class Opener1NTRespondsToPartner extends BiddingRule {
 	protected Bid prepareBid() {
 		Bid result = null;
 
-		if (partnerWasRespondingToMy1NT()) {
-			Bid partnersBid = auction.getPartnersLastCall().getBid();
-			if (partnersBid.getTrump().isMajorSuit()) {
-				if (partnersBid.getValue() == 2) {
-					result = new Pass();
+		Bid partnersBid = auction.getPartnersLastCall().getBid();
+		if (partnersBid.getTrump().isMajorSuit()) {
+			if (partnersBid.getValue() == 2) {
+				result = new Pass();
+			} else {
+				if (hand.getColorLength((Color) partnersBid.getTrump()) >= 3) {
+					result = new Bid(4, partnersBid.getTrump());
 				} else {
-					if (hand.getColorLength((Color) partnersBid.getTrump()) >= 3) {
-						result = new Bid(4, partnersBid.getTrump());
-					} else {
-						result = new Bid(3, NoTrump.i());
-					}
-				}
-			} else if (NoTrump.i().equals(partnersBid.getTrump())) {
-				if (partnersBid.getValue() == 2) {
-					PointCalculator pc = new PointCalculator(hand);
-					if (pc.getHighCardPoints() == 16) {
-						result = new Pass();
-					} else {
-						result = new Bid(3, NoTrump.i());
-					}
-				} else if (partnersBid.getValue() == 3) {
-					result = new Pass();	
+					result = new Bid(3, NoTrump.i());
 				}
 			}
-
+		} else if (NoTrump.i().equals(partnersBid.getTrump())) {
+			if (partnersBid.getValue() == 2) {
+				PointCalculator pc = new PointCalculator(hand);
+				if (pc.getHighCardPoints() == 16) {
+					result = new Pass();
+				} else {
+					result = new Bid(3, NoTrump.i());
+				}
+			} else if (partnersBid.getValue() == 3) {
+				result = new Pass();
+			}
 		}
+
 		return result;
 	}
 
@@ -58,6 +56,11 @@ public class Opener1NTRespondsToPartner extends BiddingRule {
 		Call partnersCall = auction.getPartnersLastCall();
 		return new Bid(1, NoTrump.i()).equals(auction.getPartnersCall(
 				partnersCall).getBid());
+	}
+
+	@Override
+	protected boolean applies() {
+		return partnerWasRespondingToMy1NT();
 	}
 
 }

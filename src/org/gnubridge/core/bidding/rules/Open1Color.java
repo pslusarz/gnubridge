@@ -19,29 +19,33 @@ public class Open1Color extends BiddingRule {
 	}
 
 	@Override
+	protected boolean applies() {
+		return auction.isOpeningBid() && pc.getCombinedPoints() >= 13;
+	}
+
+	@Override
 	protected Bid prepareBid() {
-      Bid result = null;
-		if (auction.isOpeningBid() && pc.getCombinedPoints() >= 13) {
-			Color highest = null;
-			for (Color color : Color.list) {
-				if (hand.getColorLength(color) >= 5) {
-					if (highest == null) {
-						highest = color;
-					} else if (hand.getColorLength(color) > hand
-							.getColorLength(highest)) {
-						highest = color;
-					}
+		Bid result = null;
+
+		Color highest = null;
+		for (Color color : Color.list) {
+			if (hand.getColorLength(color) >= 5) {
+				if (highest == null) {
+					highest = color;
+				} else if (hand.getColorLength(color) > hand
+						.getColorLength(highest)) {
+					highest = color;
 				}
 			}
-			if (highest != null) {
-				result = new Bid(1, highest);
-			} else {
-				result = new Bid(1, getStrongerMinor());
-			}
+		}
+		if (highest != null) {
+			result = new Bid(1, highest);
+		} else {
+			result = new Bid(1, getStrongerMinor());
 		}
 		return result;
 	}
-	
+
 	private Trump getStrongerMinor() {
 		Trump result = null;
 		if (hand.getColorLength(Clubs.i()) > hand.getColorLength(Diamonds.i())) {
@@ -50,12 +54,12 @@ public class Open1Color extends BiddingRule {
 				&& hand.getColorLength(Diamonds.i()) == 3) {
 			if (pc.getHighCardPoints(hand.getColorHi2Low(Clubs.i())) > pc
 					.getHighCardPoints(hand.getColorHi2Low(Diamonds.i()))) {
-				result =  Clubs.i();
+				result = Clubs.i();
 			} else {
-				result =  Diamonds.i();
+				result = Diamonds.i();
 			}
 		} else {
-			result =  Diamonds.i();
+			result = Diamonds.i();
 		}
 		return result;
 	}

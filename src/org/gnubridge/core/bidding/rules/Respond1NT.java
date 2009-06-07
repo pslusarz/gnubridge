@@ -22,32 +22,36 @@ public class Respond1NT extends BiddingRule {
 	@Override
 	protected Bid prepareBid() {
 		Bid result = null;
-		if (auction.getPartnersLastCall() != null && new Bid(1, NoTrump.i()).equals(auction.getPartnersLastCall().getBid())) {
-			Color longer = Spades.i();
-			if (hand.getColorLength(Spades.i()) < hand.getColorLength(Hearts
-					.i())) {
-				longer = Hearts.i();
+		Color longer = Spades.i();
+		if (hand.getColorLength(Spades.i()) < hand.getColorLength(Hearts.i())) {
+			longer = Hearts.i();
+		}
+		if (hand.getColorLength(longer) < 5) {
+			if (pc.getHighCardPoints() <= 7) {
+				result = new Pass();
+			} else if (pc.getHighCardPoints() <= 9) {
+				result = new Bid(2, NoTrump.i());
+			} else if (pc.getHighCardPoints() <= 14) {
+				result = new Bid(3, NoTrump.i());
 			}
-			if (hand.getColorLength(longer) < 5) {
-			  if (pc.getHighCardPoints() <=7 ) {
-				  result = new Pass();
-			  } else if (pc.getHighCardPoints() <=9) {
-				  result = new Bid(2, NoTrump.i());
-			  } else if (pc.getHighCardPoints() <= 14) {
-				  result = new Bid(3, NoTrump.i());
-			  }
-			} else if (pc.getCombinedPoints() <= 7) {
-				if (hand.getColorLength(longer) >= 5) {
-					result = new Bid(2, longer);
-				}
-			} else if (pc.getCombinedPoints() >= 10) {
-				if (hand.getColorLength(longer) == 5) {
-					result = new Bid(3, longer);
-				} else if (hand.getColorLength(longer) >= 6) {
-					result = new Bid(4, longer);
-				}
+		} else if (pc.getCombinedPoints() <= 7) {
+			if (hand.getColorLength(longer) >= 5) {
+				result = new Bid(2, longer);
+			}
+		} else if (pc.getCombinedPoints() >= 10) {
+			if (hand.getColorLength(longer) == 5) {
+				result = new Bid(3, longer);
+			} else if (hand.getColorLength(longer) >= 6) {
+				result = new Bid(4, longer);
 			}
 		}
 		return result;
+	}
+
+	@Override
+	protected boolean applies() {
+		return auction.getPartnersLastCall() != null
+				&& new Bid(1, NoTrump.i()).equals(auction.getPartnersLastCall()
+						.getBid());
 	}
 }

@@ -27,8 +27,6 @@ public abstract class BiddingRule {
 		}
 	}
 
-	protected boolean applies() {
-		return true;
-	}
+	protected abstract boolean applies();
 	
 }
