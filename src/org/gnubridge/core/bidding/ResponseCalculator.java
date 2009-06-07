@@ -8,27 +8,27 @@ import org.gnubridge.core.deck.Color;
 
 public class ResponseCalculator extends PointCalculator {
 
-	private Bid partnersResponse = null;
+	private Bid partnersBid = null;
 
 	private ResponseCalculator(Hand hand) {
 		super(hand);
 	}
 
-	public ResponseCalculator(Hand hand, Bid partnersResponse) {
+	public ResponseCalculator(Hand hand, Bid partnersBid) {
 		this(hand);
-		this.partnersResponse = partnersResponse;
+		this.partnersBid = partnersBid;
 	}
 
 	@Override
 	protected int distributionalValueForCardsInColor(Color color) {
-		if (!partnersResponseIsASuit()) {
+		if (!partnersBidIsASuit()) {
 		  return super.distributionalValueForCardsInColor(color);	
 		}
-		if (color.equals(partnersResponse.getTrump())) {
+		if (color.equals(partnersBid.getTrump())) {
 		  return 0;	
 		}
 		int result = -1;
-		if ( 4 <= hand.getColorLength((Color) partnersResponse.getTrump())) {
+		if ( 4 <= hand.getColorLength((Color) partnersBid.getTrump())) {
 			List<Card> cardsInColor = hand.getColorHi2Low(color);
 			if (cardsInColor.size() == 0) {
 				result = 5;
@@ -43,8 +43,8 @@ public class ResponseCalculator extends PointCalculator {
 		return result;
 	}
 
-	private boolean partnersResponseIsASuit() {
-		return partnersResponse.getTrump() instanceof Color;
+	private boolean partnersBidIsASuit() {
+		return partnersBid.getTrump() instanceof Color;
 	}
 
 }

@@ -9,40 +9,45 @@ import org.gnubridge.core.bidding.ResponseCalculator;
 import org.gnubridge.core.deck.Color;
 import org.gnubridge.core.deck.NoTrump;
 
-public class Respond1Color extends BiddingRule {
+public class Respond1ColorWithNewSuit extends BiddingRule {
 
-	private PointCalculator pc;
+	private ResponseCalculator pc;
+	private Color highestOver4;
 
-	public Respond1Color(Auctioneer a, Hand h) {
+	@Override
+	protected boolean applies() {
+		boolean result = false;
+		if (partnerBid1Color()) {
+			pc = new ResponseCalculator(hand, auction.getPartnersLastCall()
+					.getBid());
+			highestOver4 = findHighestColorWithFourOrMoreCards();
+			if (pc.getCombinedPoints() >= 6 && highestOver4 != null) {
+				result = true;
+			}
+		}
+		return result;
+	}
+
+	public Respond1ColorWithNewSuit(Auctioneer a, Hand h) {
 		super(a, h);
 	}
 
 	@Override
 	protected Bid prepareBid() {
-		if (!partnerBid1Color()) {
-			return null;
-		}
 		Bid result = null;
-		pc = new ResponseCalculator(hand, auction.getPartnersLastCall().getBid());
-		if (pc.getCombinedPoints() >= 6) {
-			Color highestOver4 = findHighestColorWithFourOrMoreCards();
 
-			if (highestOver4 != null) {
-				if (pc.getCombinedPoints() >= 17
-						&& hand.getColorLength(highestOver4) >= 5) {
-					int jump = auction.getPartnersLastCall().getBid()
-							.getValue() + 1;
-					result = new Bid(jump, highestOver4);
-				} else {
-					result = new Bid(1, highestOver4);
-					if (!result.greaterThan(auction.getPartnersLastCall()
-							.getBid())
-							&& pc.getCombinedPoints() >= 11) {
-						result = new Bid(2, highestOver4);
-					}
-				}
+		if (pc.getCombinedPoints() >= 17
+				&& hand.getColorLength(highestOver4) >= 5) {
+			int jump = auction.getPartnersLastCall().getBid().getValue() + 1;
+			result = new Bid(jump, highestOver4);
+		} else {
+			result = new Bid(1, highestOver4);
+			if (!result.greaterThan(auction.getPartnersLastCall().getBid())
+					&& pc.getCombinedPoints() >= 11) {
+				result = new Bid(2, highestOver4);
 			}
 		}
+
 		return result;
 	}
 

@@ -16,12 +16,19 @@ public abstract class BiddingRule {
 	protected abstract Bid prepareBid();
 	
 	public Bid getBid() {
+		if (!applies()) {
+			return null;
+		}
 		Bid candidate = prepareBid();
 		if (auction == null || auction.isValid(candidate)) {
 			return candidate;
 		} else {
 			return null;
 		}
+	}
+
+	protected boolean applies() {
+		return true;
 	}
 	
 }
