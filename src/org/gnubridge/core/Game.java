@@ -89,7 +89,7 @@ public class Game {
 		playedCards.add(card);
 		currentTrick.addCard(card, players[nextToPlay]); // TODO: test player
 		// assignment
-        
+
 		if (currentTrick.isDone()) {
 			int winner = getWinnerIndex(currentTrick);
 			nextToPlay = winner;
@@ -184,12 +184,6 @@ public class Game {
 				.getHand().size() == 1);
 	}
 
-	public void printHands() {
-		for (Player player : players) {
-			System.out.println(player + ": " + player.getHand());
-		}
-	}
-
 	public void setTrump(Trump d) {
 		this.trump = d;
 
@@ -223,7 +217,7 @@ public class Game {
 		List<Card> possibleMoves = getNextToPlay().getPossibleMoves(
 				currentTrick);
 		doNextCard(possibleMoves.indexOf(c));
-		
+
 	}
 
 	// TODO: note, this is currently only tested by TestPositionLookup
@@ -265,41 +259,54 @@ public class Game {
 
 	public void printHandsDebug() {
 		for (Player player : players) {
-			System.out.println("game.get"+player+"().init("+printHandDebug(player.getHand())+");");
+			System.out.println("game.get" + player + "().init("
+					+ printHandDebug(player.getHand()) + ");");
 		}
-		System.out.println("game.setNextToPlay(Direction."+getNextToPlay().toString().toUpperCase()+");");
-		System.out.println("game.setTrump("+getTrump().toDebugString()+");");
-		
+		System.out.println("game.setNextToPlay(Direction."
+				+ getNextToPlay().toString().toUpperCase() + ");");
+		if (getTrump() != null) {
+			System.out.println("game.setTrump(" + getTrump().toDebugString()
+					+ ");");
+		}
+
+	}
+
+	public void printHands() {
+		for (Player player : players) {
+			System.out.println(player + ": " + player.getHand());
+		}
 	}
 
 	private String printHandDebug(List<Card> cards) {
 		String result = "";
 		boolean noLeadingCommaOnFirstElement = true;
-		for (Card card: cards) {
+		for (Card card : cards) {
 			if (noLeadingCommaOnFirstElement) {
 				noLeadingCommaOnFirstElement = false;
 			} else {
-               result += ", ";				
+				result += ", ";
 			}
-			result += card.toDebugString();	
-		  	
+			result += card.toDebugString();
+
 		}
 		return result;
 	}
 
 	public void playOneTrick() {
-		for (int i = 0; i< 4; i++) {
+		for (int i = 0; i < 4; i++) {
 			play(getNextToPlay().getHand().get(0));
 		}
-		
+
 	}
 
 	public String getKeyForWeakHashMap() {
 		String cardsPlayedRepresentation = "";
-		for (Card card: getPlayedCards().getCardsHighToLow()) {
-		  cardsPlayedRepresentation += card.getIndex()+",";	
+		for (Card card : getPlayedCards().getCardsHighToLow()) {
+			cardsPlayedRepresentation += card.getIndex() + ",";
 		}
-		String unique = cardsPlayedRepresentation +"*"+getTricksTaken(Player.NORTH_SOUTH)+"*"+getNextToPlay().getDirection();
+		String unique = cardsPlayedRepresentation + "*"
+				+ getTricksTaken(Player.NORTH_SOUTH) + "*"
+				+ getNextToPlay().getDirection();
 		return unique;
 	}
 

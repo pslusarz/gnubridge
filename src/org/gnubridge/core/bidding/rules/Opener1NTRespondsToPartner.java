@@ -50,10 +50,14 @@ public class Opener1NTRespondsToPartner extends BiddingRule {
 
 	private boolean partnerWasRespondingToMy1NT() {
 		if (auction.getPartnersLastCall() == null
-				|| auction.getPartnersCall(auction.getPartnersLastCall()) == null) {
+				|| auction.getPartnersCall(auction.getPartnersLastCall()) == null
+				) {
 			return false;
 		}
 		Call partnersCall = auction.getPartnersLastCall();
+		if (new Pass().equals(partnersCall.getBid())) {
+			return false;
+		}
 		return new Bid(1, NoTrump.i()).equals(auction.getPartnersCall(
 				partnersCall).getBid());
 	}

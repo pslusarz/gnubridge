@@ -111,5 +111,16 @@ public class Opener1NTRespondsToPartnerTest extends TestCase {
 				a, new Hand("K,3,2", "A,3", "A,Q,8,6", "K,J,5,3"));
 		assertEquals(null, rule.getBid());
 	}
+	
+	public void testBugIdentifyingPartnersBidThrowsNPE() {
+		Auctioneer a = new Auctioneer(West.i());
+		a.bid(new Bid(1, NoTrump.i()));
+		a.bid(new Pass());
+		a.bid(new Pass());
+		a.bid(new Pass());
+		Opener1NTRespondsToPartner rule = new Opener1NTRespondsToPartner(
+				a, new Hand("A,K,5,2", "8,6,5,2", "A,Q,9", "A,7"));	
+		assertEquals(null, rule.getBid());
+	}
 
 }
