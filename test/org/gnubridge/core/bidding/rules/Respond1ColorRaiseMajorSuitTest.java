@@ -81,5 +81,37 @@ public class Respond1ColorRaiseMajorSuitTest extends TestCase {
 		assertEquals(null, rule.getBid());
 	}
 	
+	/**
+	 *   Pavlicek explicitly states this rule does not apply for 11 and 12 points
+	 */
+	
+	public void testRaiseThePartnerBy1DoNotApplyBetween11and12Points() {
+		Auctioneer a = new Auctioneer(West.i());
+		a.bid(new Bid(1, Hearts.i()));
+		a.bid(new Pass());
+		Respond1ColorRaiseMajorSuit rule = new Respond1ColorRaiseMajorSuit(a,
+				new Hand("K,3,2", "K,5,4", "A,8,6,5", "J,4,3"));
+		
+		assertEquals(null, rule.getBid());
+	}
+	
+	public void testRaiseThePartnerBy2Over12Points() {
+		Auctioneer a = new Auctioneer(West.i());
+		a.bid(new Bid(1, Hearts.i()));
+		a.bid(new Pass());
+		Respond1ColorRaiseMajorSuit rule = new Respond1ColorRaiseMajorSuit(a,
+				new Hand("K,3,2", "K,5,4", "A,8,6,5", "K,3,2"));
+		
+		assertEquals(new Bid(3, Hearts.i()), rule.getBid());
+	}
+	public void testRaiseThePartnerBy1DoNotApplyOver16Points() {
+		Auctioneer a = new Auctioneer(West.i());
+		a.bid(new Bid(1, Hearts.i()));
+		a.bid(new Pass());
+		Respond1ColorRaiseMajorSuit rule = new Respond1ColorRaiseMajorSuit(a,
+				new Hand("K,3,2", "K,5,4", "A,8,6,5", "A,K,3"));
+		
+		assertEquals(null, rule.getBid());
+	}
 	
 }
