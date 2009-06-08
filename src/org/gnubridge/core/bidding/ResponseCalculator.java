@@ -29,10 +29,10 @@ public class ResponseCalculator extends PointCalculator {
 		}
 		int result = -1;
 		if ( 4 <= hand.getColorLength((Color) partnersBid.getTrump())) {
-			List<Card> cardsInColor = hand.getColorHi2Low(color);
-			if (cardsInColor.size() == 0) {
+			int colorLength = hand.getColorLength(color);
+			if (colorLength == 0) {
 				result = 5;
-			} else if (cardsInColor.size() == 1) {
+			} else if (colorLength == 1) {
 				result = 3;
 			}
 		}

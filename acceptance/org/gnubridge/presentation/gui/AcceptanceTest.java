@@ -28,9 +28,12 @@ public class AcceptanceTest extends TestCase {
 	public void testAutomatedBidding() {
 		GBController mainController = makeController();
 		Auctioneer auction = mainController.getBiddingController().getAuction();
+		System.out.println(" ***** Automated bidding on a random game *****");
+		mainController.getBiddingController().getCardHolder().printHands();
+		System.out.println("  Initial Calls: "+auction.getCalls());
 		int initialBids = auction.getCalls().size();
 		mainController.getBiddingController().placeBid(4, "NT");
-		System.out.println(auction.getCalls());
+		System.out.println("  Calls after human bid: "+auction.getCalls());
 		assertEquals(
 				"Automated bidding was not performed after human placed bid",
 				initialBids + 4, auction.getCalls().size());

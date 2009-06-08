@@ -3,12 +3,14 @@ package org.gnubridge.core.bidding.rules;
 import org.gnubridge.core.Hand;
 import org.gnubridge.core.bidding.Auctioneer;
 import org.gnubridge.core.bidding.Bid;
+import org.gnubridge.core.bidding.ResponseCalculator;
 import org.gnubridge.core.deck.NoTrump;
 import org.gnubridge.core.deck.Trump;
 
 public class Respond1ColorRaiseMajorSuit extends BiddingRule {
 
 	private Bid partnersBid;
+	private ResponseCalculator calculator;
 
 	public Respond1ColorRaiseMajorSuit(Auctioneer a, Hand h) {
 		super(a, h);
@@ -19,8 +21,12 @@ public class Respond1ColorRaiseMajorSuit extends BiddingRule {
 		boolean result = false;
 		if (auction.getPartnersLastCall() != null) {
 			partnersBid = auction.getPartnersLastCall().getBid();
-			
-			if (partnersBid.getTrump().isMajorSuit() && partnersBid.getValue() == 1) {
+			calculator = new ResponseCalculator(hand, partnersBid);
+			if (partnersBid.getTrump().isMajorSuit() && 
+					partnersBid.getValue() == 1 && 
+					calculator.getCombinedPoints() >= 6 &&
+					hand.getColorLength(partnersBid.getTrump().asColor()) >= 3
+					) {
 				result = true;
 			}
 		}
@@ -29,7 +35,7 @@ public class Respond1ColorRaiseMajorSuit extends BiddingRule {
 	
 	@Override
 	protected Bid prepareBid() {
-		return new Bid(7, NoTrump.i());
+		return new Bid(2, partnersBid.getTrump());
 	}
 
 }

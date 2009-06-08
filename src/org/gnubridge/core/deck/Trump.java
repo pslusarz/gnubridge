@@ -21,4 +21,11 @@ public abstract class Trump {
 	public boolean isMajorSuit() {
 		return Spades.i().equals(this) || Hearts.i().equals(this);
 	}
+	public Color asColor() {
+		if (this instanceof Color) {
+			return (Color) this;
+		} else {
+			throw new RuntimeException("Trying to treat "+this+" as suit.");
+		}
+	}
 }
