@@ -101,4 +101,8 @@ public class Bid {
 			return new Bid(bidSize, tr);
 		}
 	}
+
+	public boolean isPass() {
+		return new Pass().equals(this);
+	}
 }

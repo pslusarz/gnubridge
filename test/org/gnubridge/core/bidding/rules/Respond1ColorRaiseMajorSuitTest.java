@@ -113,5 +113,14 @@ public class Respond1ColorRaiseMajorSuitTest extends TestCase {
 		
 		assertEquals(null, rule.getBid());
 	}
+	public void testCanHandlePartnersPassWithoutNPE() {
+		Auctioneer a = new Auctioneer(West.i());
+		a.bid(new Pass());
+		a.bid(new Pass());
+		Respond1ColorRaiseMajorSuit rule = new Respond1ColorRaiseMajorSuit(a,
+				new Hand("K,3,2", "K,5,4", "A,8,6,5", "A,K,3"));
+		
+		assertEquals(null, rule.getBid());
+	}
 	
 }

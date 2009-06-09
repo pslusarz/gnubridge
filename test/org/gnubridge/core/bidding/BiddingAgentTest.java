@@ -60,13 +60,22 @@ public class BiddingAgentTest extends TestCase {
 		assertEquals(new Bid(1, Diamonds.i()), ba.getBid());
 	}
 	
-	public void testRespond1Color() {
+	public void testRespond1ColorWithNewSuit() {
 		Auctioneer a = new Auctioneer(West.i());
 		a.bid(new Bid(1, Diamonds.i()));
 		a.bid(new Pass());
 		BiddingAgent ba = new BiddingAgent(a, new Hand("K,3,2", "K,5,4,3",
 				"9,8,6", "5,4,3"));
 		assertEquals(new Bid(1, Hearts.i()), ba.getBid());
+	}
+	
+	public void testRespond1ColorRaisesMajorSuit() {
+		Auctioneer a = new Auctioneer(West.i());
+		a.bid(new Bid(1, Spades.i()));
+		a.bid(new Pass());
+		BiddingAgent ba = new BiddingAgent(a, new Hand("K,3,2", "K,5,4,3",
+				"9,8,6", "5,4,3"));
+		assertEquals(new Bid(2, Spades.i()), ba.getBid());
 	}
 
 	public void testHaveToBidSomething() {

@@ -21,12 +21,16 @@ public class Respond1ColorRaiseMajorSuit extends BiddingRule {
 		boolean result = false;
 		if (auction.getPartnersLastCall() != null) {
 			partnersBid = auction.getPartnersLastCall().getBid();
-			calculator = new ResponseCalculator(hand, partnersBid);
-			if (partnersBid.getTrump().isMajorSuit()
-					&& partnersBid.getValue() == 1
-					&& calculator.getCombinedPoints() >= 6
-					&& hand.getColorLength(partnersBid.getTrump().asColor()) >= 3) {
-				result = true;
+			if (!partnersBid.isPass()) {
+				calculator = new ResponseCalculator(hand, partnersBid);
+				if (partnersBid.getTrump().isMajorSuit()
+						&& partnersBid.getValue() == 1
+						&& calculator.getCombinedPoints() >= 6
+						&& hand
+								.getColorLength(partnersBid.getTrump()
+										.asColor()) >= 3) {
+					result = true;
+				}
 			}
 		}
 		return result;
@@ -40,8 +44,7 @@ public class Respond1ColorRaiseMajorSuit extends BiddingRule {
 		} else if (calculator.getCombinedPoints() >= 13
 				&& calculator.getCombinedPoints() <= 16) {
 			return new Bid(3, partnersBid.getTrump());
-		}
-		else {
+		} else {
 			return null;
 		}
 	}

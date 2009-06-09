@@ -23,7 +23,7 @@ public class BiddingAgent {
 		rules.add(new Open1Color(a,h));
 		rules.add(new Respond1NT(a,h));
 		rules.add(new Respond1ColorWithNewSuit(a,h));
-		//need a test rules.add(new Respond1ColorRaiseMajorSuit(a,h));
+		rules.add(new Respond1ColorRaiseMajorSuit(a,h));
 		rules.add(new Opener1NTRespondsToPartner(a,h));
 		rules.add(new AlwaysPass());
 	}
