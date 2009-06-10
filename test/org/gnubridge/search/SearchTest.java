@@ -693,5 +693,24 @@ public class SearchTest extends TestCase {
 		assertEquals(Four.of(Spades.i()), root.getBestMove().getCardPlayed());
 		
 	}
+	public void testShortCircuitIfRootOnlyHasOneValidMove() {
+		
+		Game game = new Game(NoTrump.i());
+		game.getPlayer(Direction.WEST).init(
+				new Card[] { Ace.of(Spades.i()), Nine.of(Spades.i()) });
+		game.getPlayer(Direction.NORTH).init(
+				new Card[] { Six.of(Spades.i()), Four.of(Spades.i()) });
+		game.getPlayer(Direction.EAST).init(
+				new Card[] { Ten.of(Hearts.i()), Three.of(Hearts.i()) });
+		game.getPlayer(Direction.SOUTH).init(
+				new Card[] { Six.of(Hearts.i()), Two.of(Hearts.i()) });
+		
+		game.setNextToPlay(Direction.WEST);
+		game.play(Ace.of(Spades.i()));
+		Search pruned = new Search(game.duplicate());
+		pruned.search();
+		assertEquals(1, pruned.getPositionsExamined());
+		
+	}
 
 }

@@ -146,11 +146,22 @@ public class Search {
 					ifCannotTakeTrickPlayLowestCardInColor(move, position);
 				}
 			}
-			for (Node move : node.children) {
-				// TODO later if (!move.isPruned()) {
-				stack.push(move);
+			if (!rootOnlyHasOneValidMove(node)) {
+				for (Node move : node.children) {
+					// TODO later if (!move.isPruned()) {
+					stack.push(move);
+
+				}
 			}
 		}
+	}
+
+	private boolean rootOnlyHasOneValidMove(Node node) {
+		if (node == root && node.getUnprunedChildCount() == 1) {
+				return true;
+			} else {
+				return false;
+			}
 	}
 
 	private void ifCannotTakeTrickPlayLowestCardInColor(Node move, Game position) {
@@ -370,8 +381,8 @@ public class Search {
 					+ prunedDuplicatePosition);
 		}
 		if (shouldPruneLowestCardInLostTrick) {
-		System.out.println("  Lowest card to lost trick prunes: "
-				+ getPrunedLowestCardInLostTrick());
+			System.out.println("  Lowest card to lost trick prunes: "
+					+ getPrunedLowestCardInLostTrick());
 		}
 		System.out.println("West/East tricks taken: "
 				+ root.getTricksTaken(Player.WEST_EAST));

@@ -91,7 +91,7 @@ public class Node {
 
 	public void setTricksTaken(int pair, int i) {
 		valueSet = true;
-		tricksTaken[pair] = (byte)i;
+		tricksTaken[pair] = (byte) i;
 	}
 
 	public boolean isLastVisitedChild(Node child) {
@@ -131,7 +131,7 @@ public class Node {
 	public int getTricksTaken(int pair) {
 		return tricksTaken[pair];
 	}
-	
+
 	public byte[] getTricksTaken() {
 		return tricksTaken;
 	}
@@ -517,7 +517,18 @@ public class Node {
 	}
 
 	public boolean isPrunedLowestCardInLostTrick() {
-		return isPruned() && (getPruneType() == PRUNE_LOWEST_CARD_IN_LOST_TRICK);
+		return isPruned()
+				&& (getPruneType() == PRUNE_LOWEST_CARD_IN_LOST_TRICK);
+	}
+
+	public int getUnprunedChildCount() {
+		int unprunedChildCount = 0;
+		for (Node child : children) {
+			if (!child.isPruned()) {
+				unprunedChildCount++;
+			}
+		}
+		return unprunedChildCount;
 	}
 
 }
