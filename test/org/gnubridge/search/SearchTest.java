@@ -6,8 +6,13 @@ import junit.framework.TestCase;
 
 import org.gnubridge.core.Card;
 import org.gnubridge.core.Direction;
+import org.gnubridge.core.East;
 import org.gnubridge.core.Game;
+import org.gnubridge.core.Hand;
+import org.gnubridge.core.North;
 import org.gnubridge.core.Player;
+import org.gnubridge.core.South;
+import org.gnubridge.core.West;
 import org.gnubridge.core.deck.Ace;
 import org.gnubridge.core.deck.Clubs;
 import org.gnubridge.core.deck.Diamonds;
@@ -15,6 +20,7 @@ import org.gnubridge.core.deck.Eight;
 import org.gnubridge.core.deck.Five;
 import org.gnubridge.core.deck.Four;
 import org.gnubridge.core.deck.Hearts;
+import org.gnubridge.core.deck.Jack;
 import org.gnubridge.core.deck.King;
 import org.gnubridge.core.deck.Nine;
 import org.gnubridge.core.deck.NoTrump;
@@ -712,5 +718,75 @@ public class SearchTest extends TestCase {
 		assertEquals(1, pruned.getPositionsExamined());
 		
 	}
+	public void testIfAllMovesTheSameChooseLowestValueCard() {
+		
+		Game game = new Game(NoTrump.i());
+		game.getPlayer(Direction.WEST).init(
+				new Card[] { Ace.of(Spades.i()), Queen.of(Spades.i()) });
+		game.getPlayer(Direction.NORTH).init(
+				new Card[] { Six.of(Spades.i()), Four.of(Spades.i()) });
+		game.getPlayer(Direction.EAST).init(
+				new Card[] { Ten.of(Hearts.i()), Three.of(Hearts.i()) });
+		game.getPlayer(Direction.SOUTH).init(
+				new Card[] { Six.of(Hearts.i()), Two.of(Hearts.i()) });
+		
+		game.setNextToPlay(Direction.WEST);
+		Search pruned = new Search(game.duplicate());
+		pruned.search();
+		assertEquals(Queen.of(Spades.i()), pruned.getRoot().getBestMove().getCardPlayed());
+		
+		Game gameWithCardsFlipped = new Game(NoTrump.i());
+		gameWithCardsFlipped.getPlayer(Direction.WEST).init(
+				new Card[] { Queen.of(Spades.i()), Ace.of(Spades.i()) });
+		gameWithCardsFlipped.getPlayer(Direction.NORTH).init(
+				new Card[] { Six.of(Spades.i()), Four.of(Spades.i()) });
+		gameWithCardsFlipped.getPlayer(Direction.EAST).init(
+				new Card[] { Ten.of(Hearts.i()), Three.of(Hearts.i()) });
+		gameWithCardsFlipped.getPlayer(Direction.SOUTH).init(
+				new Card[] { Six.of(Hearts.i()), Two.of(Hearts.i()) });
+		
+		gameWithCardsFlipped.setNextToPlay(Direction.WEST);
+		Search triangulate = new Search(gameWithCardsFlipped.duplicate());
+		triangulate.pruneAlphaBeta = false;
+		triangulate.search();
+		assertEquals(Queen.of(Spades.i()), triangulate.getRoot().getBestMove().getCardPlayed());
+		
+	}
+	public void testIfAllMovesLoseSameChooseLowestValueCard() {
+		
+		Game game = new Game(NoTrump.i());
+		game.getPlayer(Direction.WEST).init(
+				new Card[] { Ace.of(Spades.i()), King.of(Spades.i()) });
+		game.getPlayer(Direction.NORTH).init(
+				new Card[] { Six.of(Diamonds.i()), Four.of(Hearts.i()) });
+		game.getPlayer(Direction.EAST).init(
+				new Card[] { Ten.of(Hearts.i()), Three.of(Hearts.i()) });
+		game.getPlayer(Direction.SOUTH).init(
+				new Card[] { Six.of(Hearts.i()), Two.of(Hearts.i()) });
+		
+		game.setNextToPlay(Direction.WEST);
+		game.play(Ace.of(Spades.i()));
+		Search pruned = new Search(game.duplicate());
+		pruned.search();
+		assertEquals(Four.of(Hearts.i()), pruned.getRoot().getBestMove().getCardPlayed());
+		Game gameWithCardsFlipped = new Game(NoTrump.i());
+		gameWithCardsFlipped.getPlayer(Direction.WEST).init(
+				new Card[] { Ace.of(Spades.i()), King.of(Spades.i()) });
+		gameWithCardsFlipped.getPlayer(Direction.NORTH).init(
+				new Card[] { Four.of(Hearts.i()), Six.of(Diamonds.i()) });
+		gameWithCardsFlipped.getPlayer(Direction.EAST).init(
+				new Card[] { Ten.of(Hearts.i()), Three.of(Hearts.i()) });
+		gameWithCardsFlipped.getPlayer(Direction.SOUTH).init(
+				new Card[] { Six.of(Hearts.i()), Two.of(Hearts.i()) });
+		
+		gameWithCardsFlipped.setNextToPlay(Direction.WEST);
+		gameWithCardsFlipped.play(Ace.of(Spades.i()));
+		Search triangulate = new Search(gameWithCardsFlipped.duplicate());
+		triangulate.pruneAlphaBeta = false;
+		triangulate.search();
+		assertEquals(Four.of(Hearts.i()), triangulate.getRoot().getBestMove().getCardPlayed());
+		
+	}
+	
 
 }

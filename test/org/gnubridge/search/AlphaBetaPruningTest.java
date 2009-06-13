@@ -307,6 +307,8 @@ public class AlphaBetaPruningTest extends TestCase {
 		Node node_00 = new Node(root, Direction.NORTH);
 		Node node_0 = new Node(node_00, Direction.EAST);
 		node_0.setTricksTaken(Player.WEST_EAST, 0);
+		node_0.setTricksTaken(Player.NORTH_SOUTH, 3);
+		node_0.trimmed = true;
 		Node node_1 = new Node(node_00, Direction.EAST);
 		@SuppressWarnings("unused")
 		Node node_1_0 = new Node(node_1, Direction.SOUTH);
@@ -320,8 +322,11 @@ public class AlphaBetaPruningTest extends TestCase {
 		Search s = new Search(g);
 		s.usePruning(true);
 		s.examinePosition(node_1_1_1);
-		assertTrue(node_1.isPruned());
+		assertTrue(node_1.isBetaPruned());
+		assertTrue(node_00.trimmed());
 	}
+	
+	
 
 
 }

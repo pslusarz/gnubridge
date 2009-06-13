@@ -186,4 +186,9 @@ public class Player {
 		return Direction.instance(direction);
 	}
 
+	public void init(Hand aHand) {
+		init(aHand.cards);
+		
+	}
+
 }

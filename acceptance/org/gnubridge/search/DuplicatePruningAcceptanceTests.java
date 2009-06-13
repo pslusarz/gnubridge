@@ -80,13 +80,19 @@ public class DuplicatePruningAcceptanceTests extends TestCase {
 			}
 			System.out.println("*********** END SEARCHES ***********");
 			printAverageRunTimes();			
+			assertAllSearchesFindSameNumberOfTricksTaken();
 		}
 
-		assertAllSearchesFindSameNumberOfTricksTaken();
 		
 		
 		
 	}
+	
+	public void testAlphaBetaEquivalence() {
+		  for (int i = 0; i< 100; i++ ) {
+			  
+		  }
+		}
 
 
 	private void printAverageRunTimes() {
@@ -125,6 +131,7 @@ private void assertAllSearchesFindSameNumberOfTricksTaken() {
 	
 	public enum SearchConfiguration {
 		NoDuplicatePruning(-1),
+		NoAlphaBetaPruning(0),
 		DuplicatePruning(1),
 		DuplicateWithLowestPruning(2);
 		Search search;
@@ -142,13 +149,19 @@ private void assertAllSearchesFindSameNumberOfTricksTaken() {
 			search.setMaxTricks(MAX_TRICKS);
 			if (type == -1) {
 				search.setUseDuplicateRemoval(false);
-			} else {
+			} 
+			if (type == 0) {
+				search.pruneAlphaBeta = false;
+			}
+			if (type == 1) {
 				search.setUseDuplicateRemoval(true);
-				if (type == 2) {
-					search.setUsePruneLowestCardToLostTrick(true);
-				} else {
-					search.setUsePruneLowestCardToLostTrick(false);
-				}
+				search.setUsePruneLowestCardToLostTrick(false);
+				
+			}
+			if (type == 2) {
+				search.setUseDuplicateRemoval(true);
+				search.setUsePruneLowestCardToLostTrick(true);
+				
 			}
 			search.search();
 			search.printStats();

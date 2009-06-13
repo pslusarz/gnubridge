@@ -146,12 +146,24 @@ public class Node {
 	}
 
 	public Node getBestMove() {
+		List<Node> childrenWithSameTricksTaken = new ArrayList<Node>();
 		for (Node move : children) {
 			if (move != null && !move.isPruned()) {
-				return move;
+				childrenWithSameTricksTaken.add(move);
 			}
 		}
-		return null;
+		return getNodeWithLowestValueCard(childrenWithSameTricksTaken);
+	}
+
+	private Node getNodeWithLowestValueCard(
+			List<Node> nodes) {
+		Node lowest = nodes.get(0);
+		for (Node node : nodes) {
+			if (node.cardPlayed.getValue() < lowest.cardPlayed.getValue()) {
+				lowest = node;
+			}
+		}
+		return lowest;
 	}
 
 	public void printOptimalPath(Game g) {
@@ -287,6 +299,18 @@ public class Node {
 		}
 
 	}
+	public void alphaPrune() {
+		
+		if (parent != null && !parent.isAlpha()) {
+			parent.setTricksTaken(Player.WEST_EAST,
+					getTricksTaken(Player.WEST_EAST));
+			parent.setTricksTaken(Player.NORTH_SOUTH,
+					getTricksTaken(Player.NORTH_SOUTH));
+			parent.setPruned(true, Node.PRUNE_ALPHA);
+			parent.alphaPrune();
+		}
+		
+	}
 
 	public void setPlayerCardPlayed(Player player) {
 		playerCardPlayed = player;
@@ -307,18 +331,6 @@ public class Node {
 		}
 	}
 
-	public void alphaPrune() {
-
-		if (parent != null && !parent.isAlpha()) {
-			parent.setTricksTaken(Player.WEST_EAST,
-					getTricksTaken(Player.WEST_EAST));
-			parent.setTricksTaken(Player.NORTH_SOUTH,
-					getTricksTaken(Player.NORTH_SOUTH));
-			parent.setPruned(true, Node.PRUNE_ALPHA);
-			parent.alphaPrune();
-		}
-
-	}
 
 	public int getLocalAlpha() {
 		if (isAlpha()) {
@@ -529,6 +541,18 @@ public class Node {
 			}
 		}
 		return unprunedChildCount;
+	}
+
+	public void nullAllSubstandardChildren() {
+       Node best = getUnprunedChildWithMostTricksForCurrentPair();
+       for (Node child : children) {
+    	   if (child.isPruned() ||
+    			   child.getTricksTaken(getCurrentPair()) < best.getTricksTaken(getCurrentPair())) {
+    		   children.set(children.indexOf(child), null);
+    		   child.trimmed = true;
+    		   
+    	   }
+       }
 	}
 
 }

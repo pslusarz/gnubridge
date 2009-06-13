@@ -44,6 +44,8 @@ public class Search {
 
 	private boolean shouldPruneLowestCardInLostTrick = true;
 
+	boolean pruneAlphaBeta = true;
+
 	public Search(Node root) {
 		this.root = root;
 	}
@@ -158,10 +160,10 @@ public class Search {
 
 	private boolean rootOnlyHasOneValidMove(Node node) {
 		if (node == root && node.getUnprunedChildCount() == 1) {
-				return true;
-			} else {
-				return false;
-			}
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	private void ifCannotTakeTrickPlayLowestCardInColor(Node move, Game position) {
@@ -305,9 +307,15 @@ public class Search {
 	 */
 
 	public void trim(Node node) {
-		node.nullAllChildrenExceptOne();
+		if (root == node) {
+			node.nullAllSubstandardChildren();
+		} else {
+			node.nullAllChildrenExceptOne();
+		}
 		node.calculateValue();
-		pruneAlphaBeta(node);
+		if (pruneAlphaBeta ) {
+			pruneAlphaBeta(node);
+		}
 		if (node.canTrim()) {
 			trim(node.parent);
 		}
