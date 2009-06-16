@@ -747,7 +747,7 @@ public class SearchTest extends TestCase {
 		
 		gameWithCardsFlipped.setNextToPlay(Direction.WEST);
 		Search triangulate = new Search(gameWithCardsFlipped.duplicate());
-		triangulate.pruneAlphaBeta = false;
+		//triangulate.pruneAlphaBeta = false;
 		triangulate.search();
 		assertEquals(Queen.of(Spades.i()), triangulate.getRoot().getBestMove().getCardPlayed());
 		
@@ -782,7 +782,7 @@ public class SearchTest extends TestCase {
 		gameWithCardsFlipped.setNextToPlay(Direction.WEST);
 		gameWithCardsFlipped.play(Ace.of(Spades.i()));
 		Search triangulate = new Search(gameWithCardsFlipped.duplicate());
-		triangulate.pruneAlphaBeta = false;
+		//triangulate.pruneAlphaBeta = false;
 		triangulate.search();
 		assertEquals(Four.of(Hearts.i()), triangulate.getRoot().getBestMove().getCardPlayed());
 		

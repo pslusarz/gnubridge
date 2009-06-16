@@ -289,7 +289,7 @@ public class Node {
 	}
 
 	public void betaPrune() {
-		if (parent != null && !parent.isBeta()) {
+		if (parent != null && !parent.isBeta() && !parent.parent.isRoot()) {
 			parent.setTricksTaken(Player.WEST_EAST,
 					getTricksTaken(Player.WEST_EAST));
 			parent.setTricksTaken(Player.NORTH_SOUTH,
@@ -301,7 +301,7 @@ public class Node {
 	}
 	public void alphaPrune() {
 		
-		if (parent != null && !parent.isAlpha()) {
+		if (parent != null && !parent.isAlpha() && !parent.parent.isRoot()) {
 			parent.setTricksTaken(Player.WEST_EAST,
 					getTricksTaken(Player.WEST_EAST));
 			parent.setTricksTaken(Player.NORTH_SOUTH,
