@@ -13,6 +13,7 @@ import org.gnubridge.core.Direction;
 import org.gnubridge.core.Game;
 import org.gnubridge.core.North;
 import org.gnubridge.core.Player;
+import org.gnubridge.core.bidding.Bid;
 
 public class PlayView extends GBContainer {
 
@@ -21,12 +22,13 @@ public class PlayView extends GBContainer {
 	final int DHEIGHT = 700;
 	private final int WIDTH = 800;
 
-	private Table table;
+	private final Table table;
 	private GameController controller;
 	private OneColumnPerColor dummy;
 
 	private boolean cardPlayed = false;
 	private AllCardsInOneRow humanHandDisplay;
+	private Bid contract;
 
 	public PlayView(MainView owner) {
 		super(owner);
@@ -51,16 +53,16 @@ public class PlayView extends GBContainer {
 	public void setGame(Game g, Direction human) {
 		game = g;
 		table.setHumanDirection(human);
-		
+
 		humanHandDisplay = new AllCardsInOneRow(human, human, game, this);
 		humanHandDisplay.display();
 		dummy = new OneColumnPerColor(human, North.i(), game, this);
-		displayDummyIfWestPlayed(); 
+		displayDummyIfWestPlayed();
 	}
-	
+
 	private void displayDummyIfWestPlayed() {
 		if (game.getTricksPlayed() > 0 || game.getCurrentTrick().getHighestCard() != null) {
-			
+
 			dummy.display();
 		}
 	}
@@ -79,8 +81,7 @@ public class PlayView extends GBContainer {
 	protected void dockingCard(boolean isDocking) {
 		if (cardPlayed != isDocking) {
 			cardPlayed = isDocking;
-			table.drawPromptArrow(panel.getGraphics(), game.getNextToPlay()
-					.getDirection2(), cardPlayed);
+			table.drawPromptArrow(panel.getGraphics(), game.getNextToPlay().getDirection2(), cardPlayed);
 		}
 	}
 
@@ -89,14 +90,13 @@ public class PlayView extends GBContainer {
 		return new JPanel() {
 			private static final long serialVersionUID = -8275738275275964573L;
 
+			@Override
 			public void paintComponent(Graphics g) {
 				super.paintComponent(g);
 				table.draw(g);
-				g.drawString("Trump: " + game.getTrump() + "            "
-						+ message + " ", 20, DHEIGHT - 25);
+				g.drawString("Contract: " + contract + "            " + message + " ", 20, DHEIGHT - 25);
 
-				table.drawPromptArrow(g, game.getNextToPlay().getDirection2(),
-						cardPlayed);
+				table.drawPromptArrow(g, game.getNextToPlay().getDirection2(), cardPlayed);
 			}
 		};
 	}
@@ -110,13 +110,13 @@ public class PlayView extends GBContainer {
 	}
 
 	void displayCurrentTrick() {
-		message = " Tricks taken North/South: "
-				+ game.getTricksTaken(Player.NORTH_SOUTH) + " out of "
-				+ game.getTricksPlayed();
+		message = " Tricks played: " + game.getTricksPlayed() + "    North/South: "
+				+ game.getTricksTaken(Player.NORTH_SOUTH) + " East/West: " + game.getTricksTaken(Player.WEST_EAST);
 		table.displayTrick(game.getCurrentTrick(), panel);
 		table.setDisplayingPreviousTrick(false);
 		displayDummyIfWestPlayed();
 		humanHandDisplay.display();
+		panel.repaint();
 
 	}
 
@@ -125,7 +125,7 @@ public class PlayView extends GBContainer {
 		private CardPanel theCard;
 		private int startX = -1;
 		private int startY = -1;
-		private Game theGame;
+		private final Game theGame;
 		long previousClick = -1000;
 
 		public DaListener(CardPanel card, Game g) {
@@ -135,16 +135,14 @@ public class PlayView extends GBContainer {
 
 		public void mouseClicked(MouseEvent arg0) {
 			long now = System.currentTimeMillis();
-			if (now - previousClick < DOUBLE_CLICK_DELAY_MS
-					&& theCard.isSelected()) {
+			if (now - previousClick < DOUBLE_CLICK_DELAY_MS && theCard.isSelected()) {
 				play();
 			}
 			previousClick = now;
 		}
 
 		public void mouseEntered(MouseEvent arg0) {
-			if (!theCard.isDragged() && CardPanel.canSelect(theCard)
-					&& theGame.isLegalMove(theCard.getCard())) {
+			if (!theCard.isDragged() && CardPanel.canSelect(theCard) && theGame.isLegalMove(theCard.getCard())) {
 				theCard.setSelected(true);
 			}
 		}
@@ -187,9 +185,7 @@ public class PlayView extends GBContainer {
 				startX = arg0.getX();
 				startY = arg0.getY();
 			}
-			theCard.setLocation(theCard.getX() + arg0.getX() - startX, theCard
-					.getY()
-					+ arg0.getY() - startY);
+			theCard.setLocation(theCard.getX() + arg0.getX() - startX, theCard.getY() + arg0.getY() - startY);
 			if (table.contains(theCard)) {
 				theCard.setPlayed(true);
 				dockingCard(true);
@@ -220,6 +216,11 @@ public class PlayView extends GBContainer {
 	}
 
 	public int getTableBottom() {
-		return (int) (table.getDimensions().getY()+table.getDimensions().getHeight());
+		return (int) (table.getDimensions().getY() + table.getDimensions().getHeight());
+	}
+
+	public void setContract(Bid contract) {
+		this.contract = contract;
+
 	}
 }

@@ -19,6 +19,7 @@ import org.gnubridge.search.Search;
 
 public class GameController {
 	public static int MAX_SECONDS_TO_MOVE = 45;
+
 	public class SearchController extends SwingWorker<Void, String> {
 		private static final int MILISECONDS_PER_SECOND = 1000;
 		private static final long RIDICULOUSLY_LONG_WAIT_TIME = 100000000;
@@ -27,8 +28,8 @@ public class GameController {
 
 		@Override
 		protected Void doInBackground() throws Exception {
-			long start = System.currentTimeMillis();			
-			bestMove = findBestMoveAtDepth(1, RIDICULOUSLY_LONG_WAIT_TIME); 		
+			long start = System.currentTimeMillis();
+			bestMove = findBestMoveAtDepth(1, RIDICULOUSLY_LONG_WAIT_TIME);
 			for (int tricksSearchDepth = 2; tricksSearchDepth <= ProductionSettings.getSearchDepthRecommendation(game); tricksSearchDepth++) {
 				long timePassedSinceStart = System.currentTimeMillis() - start;
 				long timeRemaining = TIME_ALLOTED_PER_MOVE - timePassedSinceStart;
@@ -36,11 +37,12 @@ public class GameController {
 					System.out.println("// not enough time to attempt next search");
 					break;
 				}
-				System.out.println("// now searching depth: "+tricksSearchDepth);
+				System.out.println("// now searching depth: " + tricksSearchDepth);
 				try {
 					bestMove = findBestMoveAtDepth(tricksSearchDepth, timeRemaining);
 				} catch (TimeoutException e) {
-					System.out.println("// could not complete full search of depth "+tricksSearchDepth+", current best: "+bestMove);
+					System.out.println("// could not complete full search of depth " + tricksSearchDepth
+							+ ", current best: " + bestMove);
 					break;
 				}
 			}
@@ -51,10 +53,11 @@ public class GameController {
 			return timeRemaining > TIME_ALLOTED_PER_MOVE * 2 / 3;
 		}
 
-		private Card findBestMoveAtDepth(int tricksSearchDepth, long timeoutMs) throws InterruptedException, ExecutionException, TimeoutException {
+		private Card findBestMoveAtDepth(int tricksSearchDepth, long timeoutMs) throws InterruptedException,
+				ExecutionException, TimeoutException {
 			SearchWorker searchWorker = new SearchWorker(tricksSearchDepth);
 			searchWorker.execute();
-			return searchWorker.get(timeoutMs,TimeUnit.MILLISECONDS);
+			return searchWorker.get(timeoutMs, TimeUnit.MILLISECONDS);
 		}
 
 		@Override
@@ -86,8 +89,7 @@ public class GameController {
 
 		@Override
 		protected Void doInBackground() throws Exception {
-			if (game.getCurrentTrick().getCards().size() == 0
-					&& game.getPreviousTrick() != null) {
+			if (game.getCurrentTrick().getCards().size() == 0 && game.getPreviousTrick() != null) {
 				view.displayPreviousTrick();
 				previousTrickDisplayed = true;
 			}
@@ -102,18 +104,20 @@ public class GameController {
 				} catch (InterruptedException e) {
 					throw new RuntimeException(e);
 				}
-				view.displayCurrentTrick();
+				if (!game.isDone()) {
+					view.displayCurrentTrick();
+				}
 			}
 		}
 	}
 
-	private GBController parent;
-	private Game game;
-	private Direction human;
-	private PlayView view;
+	private final GBController parent;
+	private final Game game;
+	private final Direction human;
+	private final PlayView view;
 
-	public GameController(GBController controller, Auctioneer auctioneer,
-			Game cardHolder, Direction humanDir, PlayView playView) {
+	public GameController(GBController controller, Auctioneer auctioneer, Game cardHolder, Direction humanDir,
+			PlayView playView) {
 		parent = controller;
 		game = makeGame(auctioneer, cardHolder);
 		game.printHandsDebug();
@@ -121,6 +125,7 @@ public class GameController {
 		view = playView;
 		view.setController(this);
 		view.setGame(game, human);
+		view.setContract(auctioneer.getHighBid());
 		doAutomatedPlay();
 	}
 
@@ -135,22 +140,17 @@ public class GameController {
 	private Game makeGame(Auctioneer a, Game cardHolder) {
 		Game result = new Game(a.getHighBid().getTrump());
 
-		result.getPlayer(a.getDummyOffsetDirection(North.i())).init(
-				cardHolder.getPlayer(North.i()).getHand());
-		result.getPlayer(a.getDummyOffsetDirection(East.i())).init(
-				cardHolder.getPlayer(East.i()).getHand());
-		result.getPlayer(a.getDummyOffsetDirection(South.i())).init(
-				cardHolder.getPlayer(South.i()).getHand());
-		result.getPlayer(a.getDummyOffsetDirection(West.i())).init(
-				cardHolder.getPlayer(West.i()).getHand());
+		result.getPlayer(a.getDummyOffsetDirection(North.i())).init(cardHolder.getPlayer(North.i()).getHand());
+		result.getPlayer(a.getDummyOffsetDirection(East.i())).init(cardHolder.getPlayer(East.i()).getHand());
+		result.getPlayer(a.getDummyOffsetDirection(South.i())).init(cardHolder.getPlayer(South.i()).getHand());
+		result.getPlayer(a.getDummyOffsetDirection(West.i())).init(cardHolder.getPlayer(West.i()).getHand());
 		result.setNextToPlay(West.i().getValue());
 		return result;
 	}
 
 	public boolean humanHasMove() {
 		Direction nextToMove = game.getNextToPlay().getDirection2();
-		if (human.equals(nextToMove)
-				|| (human.equals(South.i()) && nextToMove.equals(North.i()))) {
+		if (human.equals(nextToMove) || (human.equals(South.i()) && nextToMove.equals(North.i()))) {
 			return true;
 		} else {
 			return false;
