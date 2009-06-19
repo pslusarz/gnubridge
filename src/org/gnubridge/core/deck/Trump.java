@@ -1,7 +1,9 @@
 package org.gnubridge.core.deck;
 
 public abstract class Trump {
+	@Override
 	public abstract String toString();
+
 	public static Trump instance(String s) {
 		Trump result = null;
 		if (NoTrump.i().toString().equalsIgnoreCase(s)) {
@@ -17,15 +19,22 @@ public abstract class Trump {
 		}
 		return result;
 	}
+
 	public abstract String toDebugString();
+
 	public boolean isMajorSuit() {
 		return Spades.i().equals(this) || Hearts.i().equals(this);
 	}
+
 	public Color asColor() {
 		if (this instanceof Color) {
 			return (Color) this;
 		} else {
-			throw new RuntimeException("Trying to treat "+this+" as suit.");
+			throw new RuntimeException("Trying to treat " + this + " as suit.");
 		}
+	}
+
+	public boolean isMinorSuit() {
+		return Diamonds.i().equals(this) || Clubs.i().equals(this);
 	}
 }
