@@ -30,7 +30,7 @@ public class AlphaBetaPruningTest extends TestCase {
 
 		MockGame g = new MockGame();
 		g.setPositionValue(node_1_0.getMoves(), 0, 2);
-		Search s = new Search(g);
+		DoubleDummySolver s = new DoubleDummySolver(g);
 		s.examinePosition(node_1_0);
 		assertTrue(node_1.isPruned());
 		assertTrue(node_1.trimmed());
@@ -57,7 +57,7 @@ public class AlphaBetaPruningTest extends TestCase {
 
 		MockGame g = new MockGame();
 		g.setPositionValue(node_1_0.getMoves(), 0, 2);
-		Search s = new Search(g);
+		DoubleDummySolver s = new DoubleDummySolver(g);
 		s.examinePosition(node_1_0);
 		assertFalse(node_1.isPruned());
 	}
@@ -84,7 +84,7 @@ public class AlphaBetaPruningTest extends TestCase {
 
 		MockGame g = new MockGame();
 		g.setPositionValue(node_1_0.getMoves(), 0, 2);
-		Search s = new Search(g);
+		DoubleDummySolver s = new DoubleDummySolver(g);
 		s.examinePosition(node_1_0);
 		assertTrue(node_1.isPruned());
 		assertTrue(node_1.trimmed());
@@ -112,7 +112,7 @@ public class AlphaBetaPruningTest extends TestCase {
 
 		MockGame g = new MockGame();
 		g.setPositionValue(node_0_1.getMoves(), 0, 1);
-		Search s = new Search(g);
+		DoubleDummySolver s = new DoubleDummySolver(g);
 		s.examinePosition(node_0_1);
 		assertFalse(node_0.isPruned());
 
@@ -142,7 +142,7 @@ public class AlphaBetaPruningTest extends TestCase {
 
 		MockGame g = new MockGame();
 		g.setPositionValue(node_1_0.getMoves(), 0, 2);
-		Search s = new Search(g);
+		DoubleDummySolver s = new DoubleDummySolver(g);
 		s.examinePosition(node_1_0);
 		assertFalse(node_1.isPruned());
 	}
@@ -175,7 +175,7 @@ public class AlphaBetaPruningTest extends TestCase {
 
 		MockGame g = new MockGame();
 		g.setPositionValue(node_1_1_1.getMoves(), 1, 2);
-		Search s = new Search(g);
+		DoubleDummySolver s = new DoubleDummySolver(g);
 		s.usePruning(true);
 		s.examinePosition(node_1_1_1);
 		assertTrue(node_1.isPruned());
@@ -210,7 +210,7 @@ public class AlphaBetaPruningTest extends TestCase {
 
 		MockGame g = new MockGame();
 		g.setPositionValue(node_1_0_0.getMoves(), 0, 2);
-		Search s = new Search(g);
+		DoubleDummySolver s = new DoubleDummySolver(g);
 		s.examinePosition(node_1_0_0);
 		assertTrue(node_1_0.isPruned());
 		assertTrue(node_1_0.trimmed());
@@ -228,7 +228,7 @@ public class AlphaBetaPruningTest extends TestCase {
 		MockGame g = new MockGame();
 		g.setPositionValue(node_1.getMoves(), 3, 2);
 
-		Search s = new Search(g);
+		DoubleDummySolver s = new DoubleDummySolver(g);
 		assertEquals(1, node_00.getLocalAlpha());
 		s.examinePosition(node_1);
 		assertEquals(3, node_00.getLocalAlpha());
@@ -256,7 +256,7 @@ public class AlphaBetaPruningTest extends TestCase {
 
 		MockGame g = new MockGame();
 		g.setPositionValue(node_0_1_0.getMoves(), 2, 0);
-		Search s = new Search(g);
+		DoubleDummySolver s = new DoubleDummySolver(g);
 		s.examinePosition(node_0_1_0);
 		assertTrue(node_0_1.isBetaPruned());
 		assertTrue(node_0_1.trimmed());
@@ -272,7 +272,7 @@ public class AlphaBetaPruningTest extends TestCase {
 		Node grandchild = new Node(node_0);
 		MockGame g = new MockGame();
 		g.setPositionValue(grandchild.getMoves(), 3, 2);
-		Search s = new Search(g);
+		DoubleDummySolver s = new DoubleDummySolver(g);
 		assertEquals(4, node_0.getLocalBeta());
 		s.examinePosition(grandchild);
 		assertEquals(3, node_0.getLocalBeta());
@@ -288,7 +288,7 @@ public class AlphaBetaPruningTest extends TestCase {
 		Node grandchild = new Node(node_0);
 		MockGame g = new MockGame();
 		g.setPositionValue(grandchild.getMoves(), 3, 2);
-		Search s = new Search(g);
+		DoubleDummySolver s = new DoubleDummySolver(g);
 		assertEquals(Node.BETA_UNINIT, node_0.getLocalBeta());
 		s.examinePosition(grandchild);
 		assertEquals(3, node_0.getLocalBeta());
@@ -322,7 +322,7 @@ public class AlphaBetaPruningTest extends TestCase {
 
 		MockGame g = new MockGame();
 		g.setPositionValue(node_1_1_1.getMoves(), 2, 1);
-		Search s = new Search(g);
+		DoubleDummySolver s = new DoubleDummySolver(g);
 		s.usePruning(true);
 		s.examinePosition(node_1_1_1);
 		assertTrue(node_1.isPruned());
@@ -357,7 +357,7 @@ public class AlphaBetaPruningTest extends TestCase {
 
 		MockGame g = new MockGame();
 		g.setPositionValue(node_1_1_1.getMoves(), 2, 1);
-		Search s = new Search(g);
+		DoubleDummySolver s = new DoubleDummySolver(g);
 		s.usePruning(true);
 		s.examinePosition(node_1_1_1);
 		assertTrue(node_1.isBetaPruned());

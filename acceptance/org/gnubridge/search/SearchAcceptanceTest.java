@@ -54,7 +54,7 @@ public class SearchAcceptanceTest extends TestCase {
 				Ace.of(Hearts.i()), Ace.of(Spades.i()), Eight.of(Diamonds.i()),
 				King.of(Spades.i()), Six.of(Spades.i()));
 
-		Search pruned = new Search(game);
+		DoubleDummySolver pruned = new DoubleDummySolver(game);
 		pruned.setUseDuplicateRemoval(true);
 		pruned.setMaxTricks(3);
 		pruned.search();

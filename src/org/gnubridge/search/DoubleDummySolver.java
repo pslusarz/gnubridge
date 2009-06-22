@@ -9,7 +9,7 @@ import org.gnubridge.core.Game;
 import org.gnubridge.core.Player;
 import org.gnubridge.core.Trick;
 
-public class Search {
+public class DoubleDummySolver {
 
 	private Node root;
 
@@ -46,11 +46,11 @@ public class Search {
 
 	boolean pruneAlphaBeta = true;
 
-	public Search(Node root) {
+	public DoubleDummySolver(Node root) {
 		this.root = root;
 	}
 
-	public Search(Game game) {
+	public DoubleDummySolver(Game game) {
 		this.game = game;
 		stack = new Stack<Node>();
 		finalMoves = new ArrayList<Integer>();

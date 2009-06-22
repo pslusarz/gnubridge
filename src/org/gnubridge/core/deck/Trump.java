@@ -37,4 +37,8 @@ public abstract class Trump {
 	public boolean isMinorSuit() {
 		return Diamonds.i().equals(this) || Clubs.i().equals(this);
 	}
+
+	public boolean isSuit() {
+		return isMajorSuit() || isMinorSuit();
+	}
 }

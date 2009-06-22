@@ -15,7 +15,7 @@ import org.gnubridge.core.South;
 import org.gnubridge.core.West;
 import org.gnubridge.core.bidding.Auctioneer;
 import org.gnubridge.search.ProductionSettings;
-import org.gnubridge.search.Search;
+import org.gnubridge.search.DoubleDummySolver;
 
 public class GameController {
 	public static int MAX_SECONDS_TO_MOVE = 45;
@@ -67,7 +67,7 @@ public class GameController {
 	}
 
 	public class SearchWorker extends SwingWorker<Card, String> {
-		Search search;
+		DoubleDummySolver search;
 		private final int maxTricksSearchDepth;
 
 		public SearchWorker(int maxTricksSearchDepth) {
@@ -77,7 +77,7 @@ public class GameController {
 
 		@Override
 		protected Card doInBackground() throws Exception {
-			search = new Search(game);
+			search = new DoubleDummySolver(game);
 			search.setMaxTricks(maxTricksSearchDepth);
 			search.search();
 			return search.getBestMoves().get(0);

@@ -54,7 +54,7 @@ public class DuplicatePruningAcceptanceTests extends TestCase {
 				Ten.of(Spades.i()), Ace.of(Spades.i()), King.of(Clubs.i()),
 				Three.of(Spades.i()), Jack.of(Clubs.i()));
 		game.setNextToPlay(Direction.WEST);
-		Search pruned2 = new Search(game);
+		DoubleDummySolver pruned2 = new DoubleDummySolver(game);
 		pruned2.setUseDuplicateRemoval(true);
 		pruned2.setUsePruneLowestCardToLostTrick(true);
 		pruned2.setMaxTricks(4);
@@ -134,7 +134,7 @@ private void assertAllSearchesFindSameNumberOfTricksTaken() {
 		NoAlphaBetaPruning(0),
 		DuplicatePruning(1),
 		DuplicateWithLowestPruning(2);
-		Search search;
+		DoubleDummySolver search;
 		static final int MAX_TRICKS = 5;
 		int type;
 		int runCount = 0;
@@ -145,7 +145,7 @@ private void assertAllSearchesFindSameNumberOfTricksTaken() {
 		}
 		
 		public void runSearch(Game g) {
-			search = new Search(g);
+			search = new DoubleDummySolver(g);
 			search.setMaxTricks(MAX_TRICKS);
 			if (type == -1) {
 				search.setUseDuplicateRemoval(false);
