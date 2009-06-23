@@ -94,7 +94,7 @@ public class PlayView extends GBContainer {
 			public void paintComponent(Graphics g) {
 				super.paintComponent(g);
 				table.draw(g);
-				g.drawString("Contract: " + contract + "            " + message + " ", 20, DHEIGHT - 25);
+				g.drawString("Contract (North/South): " + contract + "            " + message + " ", 20, DHEIGHT - 25);
 
 				table.drawPromptArrow(g, game.getNextToPlay().getDirection2(), cardPlayed);
 			}

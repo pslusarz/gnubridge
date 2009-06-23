@@ -1,7 +1,7 @@
 <project name="gnubridge" default="build-jar">
 	<target name="build-jar">
 	  <property name="build.dir" value="../temp/publish/gnubridge/" />
-	  <property name="version" value="0.1.8" />
+	  <property name="version" value="0.1.9" />
 	  <deltree dir="${build.dir}"/>
 	  <mkdir dir="${build.dir}"/>
 		

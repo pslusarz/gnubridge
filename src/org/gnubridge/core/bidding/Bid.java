@@ -8,8 +8,10 @@ import org.gnubridge.core.deck.Spades;
 import org.gnubridge.core.deck.Trump;
 
 public class Bid {
-	private int value;
-	private Trump trump;
+	private final int value;
+	private final Trump trump;
+	private boolean forcing = false;
+	private boolean gameForcing = false;
 
 	public Bid(int v, Trump c) {
 		value = v;
@@ -21,8 +23,7 @@ public class Bid {
 		if (!(other instanceof Bid)) {
 			return super.equals(other);
 		} else {
-			return value == ((Bid) other).getValue()
-					&& trump == ((Bid) other).getTrump();
+			return value == ((Bid) other).getValue() && trump == ((Bid) other).getTrump();
 		}
 	}
 
@@ -65,16 +66,14 @@ public class Bid {
 			}
 		}
 		if (trump.equals(Hearts.i())) {
-			if (other.getTrump().equals(Clubs.i())
-					|| other.getTrump().equals(Diamonds.i())) {
+			if (other.getTrump().equals(Clubs.i()) || other.getTrump().equals(Diamonds.i())) {
 				return true;
 			} else {
 				return false;
 			}
 		}
 		if (trump.equals(Spades.i())) {
-			if (other.getTrump().equals(Clubs.i())
-					|| other.getTrump().equals(Diamonds.i())
+			if (other.getTrump().equals(Clubs.i()) || other.getTrump().equals(Diamonds.i())
 					|| other.getTrump().equals(Hearts.i())) {
 				return true;
 			} else {
@@ -104,5 +103,24 @@ public class Bid {
 
 	public boolean isPass() {
 		return new Pass().equals(this);
+	}
+
+	public boolean isForcing() {
+		return forcing;
+	}
+
+	public boolean isGameForcing() {
+		return gameForcing;
+	}
+
+	public void makeForcing() {
+		forcing = true;
+
+	}
+
+	public void makeGameForcing() {
+		forcing = true;
+		gameForcing = true;
+
 	}
 }

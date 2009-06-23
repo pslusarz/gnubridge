@@ -23,7 +23,7 @@ public class Respond1ColorWithNT extends BiddingRule {
 			if (!partnersBid.isPass()) {
 				calculator = new PointCalculator(hand);
 				if (partnersBid.getTrump().isSuit() && partnersBid.getValue() == 1
-						&& calculator.getCombinedPoints() >= 6) {
+						&& calculator.getHighCardPoints() >= 6) {
 					result = true;
 				}
 			}
@@ -33,7 +33,17 @@ public class Respond1ColorWithNT extends BiddingRule {
 
 	@Override
 	protected Bid prepareBid() {
-		return new Bid(1, NoTrump.i());
+		if (calculator.getHighCardPoints() <= 10) {
+			return new Bid(1, NoTrump.i());
+		} else if (calculator.getHighCardPoints() >= 13 && calculator.getHighCardPoints() < 17
+				&& calculator.isBalanced()) {
+			return new Bid(2, NoTrump.i());
+		} else if (calculator.getHighCardPoints() >= 17 && calculator.getHighCardPoints() < 19
+				&& calculator.isBalanced()) {
+			return new Bid(3, NoTrump.i());
+		} else {
+			return null;
+		}
 	}
 
 }
