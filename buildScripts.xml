@@ -15,7 +15,7 @@
 	  	<fileset dir="./data/images/cards/jfitz/">
 	  	  <include name="**/*.png"/>	
 	  	</fileset>
-	  </copy>
+	  </copy> 
 		
 	  <mkdir dir="${build.dir}/classes/"/>
 	  
