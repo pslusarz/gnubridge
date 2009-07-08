@@ -67,27 +67,8 @@ public class Rebid1ColorRaisePartnerTest extends TestCase {
 		assertEquals(new Bid(3, Spades.i()), rule.getBid());
 	}
 
-	public void testOnlyApplyToRebids() {
-		Auctioneer a = new Auctioneer(West.i());
-		a.bid(new Bid(1, Hearts.i()));
-		a.bid(new Pass());
-		Rebid1ColorRaisePartner rule = new Rebid1ColorRaisePartner(a, new Hand("3,2", "K,Q,J,2", "9,8", "A,K,5,4,3"));
-		assertEquals(null, rule.getBid());
-	}
-
-	public void testDoNotThrowNPEPartnerPass() {
-		Auctioneer a = new Auctioneer(West.i());
-		a.bid(new Pass());
-		a.bid(new Pass());
-		Rebid1ColorRaisePartner rule = new Rebid1ColorRaisePartner(a, new Hand("3,2", "K,Q,J,2", "9,8", "A,K,5,4,3"));
-		assertEquals(null, rule.getBid());
-	}
-
-	public void testDoNotThrowNPEPartnerDidNotBid() {
-		Auctioneer a = new Auctioneer(West.i());
-		a.bid(new Pass());
-		Rebid1ColorRaisePartner rule = new Rebid1ColorRaisePartner(a, new Hand("3,2", "K,Q,J,2", "9,8", "A,K,5,4,3"));
-		assertEquals(null, rule.getBid());
+	public void testDoNotApplyToNoTrumpResponse() {
+		fail("todo");
 	}
 
 }
