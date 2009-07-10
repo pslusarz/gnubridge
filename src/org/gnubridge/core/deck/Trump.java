@@ -26,7 +26,7 @@ public abstract class Trump {
 		return Spades.i().equals(this) || Hearts.i().equals(this);
 	}
 
-	public Color asColor() {
+	public Color asSuit() {
 		if (this instanceof Color) {
 			return (Color) this;
 		} else {

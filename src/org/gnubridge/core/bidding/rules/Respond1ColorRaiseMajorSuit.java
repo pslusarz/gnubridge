@@ -28,7 +28,7 @@ public class Respond1ColorRaiseMajorSuit extends BiddingRule {
 						&& calculator.getCombinedPoints() >= 6
 						&& hand
 								.getColorLength(partnersBid.getTrump()
-										.asColor()) >= 3) {
+										.asSuit()) >= 3) {
 					result = true;
 				}
 			}

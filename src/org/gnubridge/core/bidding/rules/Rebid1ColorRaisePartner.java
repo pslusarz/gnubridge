@@ -12,6 +12,11 @@ public class Rebid1ColorRaisePartner extends Rebid {
 	}
 
 	@Override
+	protected boolean applies() {
+		return super.applies() && response.getTrump().isSuit() && getTrumpCount() >= 4;
+	}
+
+	@Override
 	protected Bid prepareBid() {
 		ResponseCalculator calc = new ResponseCalculator(hand, response);
 		if (calc.getCombinedPoints() >= 19) {
@@ -21,6 +26,10 @@ public class Rebid1ColorRaisePartner extends Rebid {
 		} else {
 			return new Bid(2, response.getTrump());
 		}
+	}
+
+	private int getTrumpCount() {
+		return hand.getColorLength(response.getTrump().asSuit());
 	}
 
 }

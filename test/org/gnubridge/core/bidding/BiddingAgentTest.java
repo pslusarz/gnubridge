@@ -98,6 +98,20 @@ public class BiddingAgentTest extends TestCase {
 		assertEquals(new Bid(3, Diamonds.i()), ba.getBid());
 	}
 
+	public void testRebidNewSuit() {
+		Auctioneer a = new Auctioneer(West.i());
+		a.bid(new Bid(1, Clubs.i()));
+		a.bid(new Pass());
+		a.bid(new Bid(1, Diamonds.i()));
+		a.bid(new Pass());
+		BiddingAgent ba = new BiddingAgent(a, new Hand("J,5,4,2", "8,4", "A,K,9", "K,5,4,3"));
+		assertEquals("add rebid new suit rule to make this pass", new Bid(1, Spades.i()), ba.getBid());
+	}
+
+	public void testOpeningBidsShouldOnlyapplyToOpenings() {
+		fail("same goes for reponses");
+	}
+
 	public void testHaveToBidSomething() {
 		Auctioneer a = new Auctioneer(West.i());
 		BiddingAgent ba = new BiddingAgent(a, new Hand("5,4,3,2", "5,4,3", "6,5,3", "5,4,3"));

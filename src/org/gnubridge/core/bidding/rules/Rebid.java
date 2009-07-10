@@ -11,14 +11,14 @@ public abstract class Rebid extends BiddingRule {
 
 	public Rebid(Auctioneer a, Hand h) {
 		super(a, h);
-		if (validOpeningAndResponse()) {
-			response = auction.getPartnersLastCall().getBid();
-			opening = auction.getPartnersCall(auction.getPartnersLastCall()).getBid();
-		}
 	}
 
 	@Override
 	protected boolean applies() {
+		if (validOpeningAndResponse()) {
+			response = auction.getPartnersLastCall().getBid();
+			opening = auction.getPartnersCall(auction.getPartnersLastCall()).getBid();
+		}
 		return validOpeningAndResponse();
 	}
 

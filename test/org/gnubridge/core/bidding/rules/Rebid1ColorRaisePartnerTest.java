@@ -9,6 +9,7 @@ import org.gnubridge.core.bidding.Bid;
 import org.gnubridge.core.bidding.Pass;
 import org.gnubridge.core.deck.Clubs;
 import org.gnubridge.core.deck.Hearts;
+import org.gnubridge.core.deck.NoTrump;
 import org.gnubridge.core.deck.Spades;
 
 public class Rebid1ColorRaisePartnerTest extends TestCase {
@@ -32,6 +33,17 @@ public class Rebid1ColorRaisePartnerTest extends TestCase {
 		Rebid1ColorRaisePartner rule = new Rebid1ColorRaisePartner(a, new Hand("9,5,3,2", "A,Q", "9,8", "A,K,5,4,3"));
 
 		assertEquals(new Bid(2, Spades.i()), rule.getBid());
+	}
+
+	public void testDoNotApplyIfLessThan4Trumps() {
+		Auctioneer a = new Auctioneer(West.i());
+		a.bid(new Bid(1, Clubs.i()));
+		a.bid(new Pass());
+		a.bid(new Bid(1, Spades.i()));
+		a.bid(new Pass());
+		Rebid1ColorRaisePartner rule = new Rebid1ColorRaisePartner(a, new Hand("9,5,3", "A,Q,2", "9,8", "A,K,5,4,3"));
+
+		assertEquals(null, rule.getBid());
 	}
 
 	public void testRaiseThePartnerTo3() {
@@ -68,7 +80,14 @@ public class Rebid1ColorRaisePartnerTest extends TestCase {
 	}
 
 	public void testDoNotApplyToNoTrumpResponse() {
-		fail("todo");
+		Auctioneer a = new Auctioneer(West.i());
+		a.bid(new Bid(1, Clubs.i()));
+		a.bid(new Pass());
+		a.bid(new Bid(1, NoTrump.i()));
+		a.bid(new Pass());
+		Rebid1ColorRaisePartner rule = new Rebid1ColorRaisePartner(a, new Hand("Q,5,3,2", "Q,9,8,7", "", "A,K,5,4,3"));
+
+		assertEquals(null, rule.getBid());
 	}
 
 }

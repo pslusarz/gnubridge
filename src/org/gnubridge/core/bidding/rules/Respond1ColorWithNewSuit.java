@@ -11,15 +11,15 @@ import org.gnubridge.core.deck.NoTrump;
 public class Respond1ColorWithNewSuit extends BiddingRule {
 
 	private ResponseCalculator pc;
-	private Color highestOver4;
+	private Color highestOver3;
 
 	@Override
 	protected boolean applies() {
 		boolean result = false;
 		if (partnerBid1Color()) {
 			pc = new ResponseCalculator(hand, auction.getPartnersLastCall().getBid());
-			highestOver4 = findHighestColorWithFourOrMoreCards();
-			if (pc.getCombinedPoints() >= 6 && highestOver4 != null) {
+			highestOver3 = findHighestColorWithFourOrMoreCards();
+			if (pc.getCombinedPoints() >= 6 && highestOver3 != null) {
 				result = true;
 			}
 		}
@@ -34,14 +34,14 @@ public class Respond1ColorWithNewSuit extends BiddingRule {
 	protected Bid prepareBid() {
 		Bid result = null;
 
-		if (pc.getCombinedPoints() >= 17 && hand.getColorLength(highestOver4) >= 5) {
+		if (pc.getCombinedPoints() >= 17 && hand.getColorLength(highestOver3) >= 5) {
 			int jump = auction.getPartnersLastCall().getBid().getValue() + 1;
-			result = new Bid(jump, highestOver4);
+			result = new Bid(jump, highestOver3);
 			result.makeGameForcing();
 		} else {
-			result = new Bid(1, highestOver4);
+			result = new Bid(1, highestOver3);
 			if (!result.greaterThan(auction.getPartnersLastCall().getBid()) && pc.getCombinedPoints() >= 11) {
-				result = new Bid(2, highestOver4);
+				result = new Bid(2, highestOver3);
 			}
 			result.makeForcing();
 		}
