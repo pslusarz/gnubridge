@@ -6,9 +6,8 @@ import org.gnubridge.core.bidding.Bid;
 import org.gnubridge.core.bidding.PointCalculator;
 import org.gnubridge.core.deck.NoTrump;
 
-public class Respond1ColorWithNT extends BiddingRule {
+public class Respond1ColorWithNT extends Response {
 
-	private Bid partnersBid;
 	private PointCalculator calculator;
 
 	public Respond1ColorWithNT(Auctioneer a, Hand h) {
@@ -18,14 +17,11 @@ public class Respond1ColorWithNT extends BiddingRule {
 	@Override
 	protected boolean applies() {
 		boolean result = false;
-		if (auction.getPartnersLastCall() != null) {
-			partnersBid = auction.getPartnersLastCall().getBid();
-			if (!partnersBid.isPass()) {
-				calculator = new PointCalculator(hand);
-				if (partnersBid.getTrump().isSuit() && partnersBid.getValue() == 1
-						&& calculator.getHighCardPoints() >= 6) {
-					result = true;
-				}
+		if (super.applies()) {
+			calculator = new PointCalculator(hand);
+			if (partnersOpeningBid.getTrump().isSuit() && partnersOpeningBid.getValue() == 1
+					&& calculator.getHighCardPoints() >= 6) {
+				result = true;
 			}
 		}
 		return result;

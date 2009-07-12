@@ -3,17 +3,14 @@ package org.gnubridge.core.bidding.rules;
 import org.gnubridge.core.Hand;
 import org.gnubridge.core.bidding.Auctioneer;
 import org.gnubridge.core.bidding.Bid;
-import org.gnubridge.core.bidding.Call;
 import org.gnubridge.core.bidding.Pass;
 import org.gnubridge.core.bidding.PointCalculator;
 import org.gnubridge.core.deck.Color;
-import org.gnubridge.core.deck.Hearts;
 import org.gnubridge.core.deck.NoTrump;
-import org.gnubridge.core.deck.Spades;
 
-public class Opener1NTRespondsToPartner extends BiddingRule {
+public class Rebid1NT extends Rebid {
 
-	public Opener1NTRespondsToPartner(Auctioneer a, Hand h) {
+	public Rebid1NT(Auctioneer a, Hand h) {
 		super(a, h);
 	}
 
@@ -49,17 +46,14 @@ public class Opener1NTRespondsToPartner extends BiddingRule {
 	}
 
 	private boolean partnerWasRespondingToMy1NT() {
-		if (auction.getPartnersLastCall() == null
-				|| auction.getPartnersCall(auction.getPartnersLastCall()) == null
-				) {
-			return false;
-		}
-		Call partnersCall = auction.getPartnersLastCall();
-		if (new Pass().equals(partnersCall.getBid())) {
-			return false;
-		}
-		return new Bid(1, NoTrump.i()).equals(auction.getPartnersCall(
-				partnersCall).getBid());
+		//		if (auction.getPartnersLastCall() == null || auction.getPartnersCall(auction.getPartnersLastCall()) == null) {
+		//			return false;
+		//		}
+		//		Call partnersCall = auction.getPartnersLastCall();
+		//		if (new Pass().equals(partnersCall.getBid())) {
+		//			return false;
+		//		}
+		return super.applies() && new Bid(1, NoTrump.i()).equals(opening);
 	}
 
 	@Override

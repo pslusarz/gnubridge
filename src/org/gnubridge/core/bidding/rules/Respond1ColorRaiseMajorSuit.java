@@ -4,12 +4,9 @@ import org.gnubridge.core.Hand;
 import org.gnubridge.core.bidding.Auctioneer;
 import org.gnubridge.core.bidding.Bid;
 import org.gnubridge.core.bidding.ResponseCalculator;
-import org.gnubridge.core.deck.NoTrump;
-import org.gnubridge.core.deck.Trump;
 
-public class Respond1ColorRaiseMajorSuit extends BiddingRule {
+public class Respond1ColorRaiseMajorSuit extends Response {
 
-	private Bid partnersBid;
 	private ResponseCalculator calculator;
 
 	public Respond1ColorRaiseMajorSuit(Auctioneer a, Hand h) {
@@ -19,31 +16,24 @@ public class Respond1ColorRaiseMajorSuit extends BiddingRule {
 	@Override
 	protected boolean applies() {
 		boolean result = false;
-		if (auction.getPartnersLastCall() != null) {
-			partnersBid = auction.getPartnersLastCall().getBid();
-			if (!partnersBid.isPass()) {
-				calculator = new ResponseCalculator(hand, partnersBid);
-				if (partnersBid.getTrump().isMajorSuit()
-						&& partnersBid.getValue() == 1
-						&& calculator.getCombinedPoints() >= 6
-						&& hand
-								.getColorLength(partnersBid.getTrump()
-										.asSuit()) >= 3) {
-					result = true;
-				}
+		if (super.applies()) {
+			calculator = new ResponseCalculator(hand, partnersOpeningBid);
+			if (partnersOpeningBid.getTrump().isMajorSuit() && partnersOpeningBid.getValue() == 1
+					&& calculator.getCombinedPoints() >= 6
+					&& hand.getColorLength(partnersOpeningBid.getTrump().asSuit()) >= 3) {
+				result = true;
 			}
 		}
+
 		return result;
 	}
 
 	@Override
 	protected Bid prepareBid() {
-		if (calculator.getCombinedPoints() >= 6
-				&& calculator.getCombinedPoints() <= 10) {
-			return new Bid(2, partnersBid.getTrump());
-		} else if (calculator.getCombinedPoints() >= 13
-				&& calculator.getCombinedPoints() <= 16) {
-			return new Bid(3, partnersBid.getTrump());
+		if (calculator.getCombinedPoints() >= 6 && calculator.getCombinedPoints() <= 10) {
+			return new Bid(2, partnersOpeningBid.getTrump());
+		} else if (calculator.getCombinedPoints() >= 13 && calculator.getCombinedPoints() <= 16) {
+			return new Bid(3, partnersOpeningBid.getTrump());
 		} else {
 			return null;
 		}

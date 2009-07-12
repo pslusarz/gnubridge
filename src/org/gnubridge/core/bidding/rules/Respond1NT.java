@@ -10,9 +10,9 @@ import org.gnubridge.core.deck.Hearts;
 import org.gnubridge.core.deck.NoTrump;
 import org.gnubridge.core.deck.Spades;
 
-public class Respond1NT extends BiddingRule {
+public class Respond1NT extends Response {
 
-	private PointCalculator pc;
+	private final PointCalculator pc;
 
 	public Respond1NT(Auctioneer a, Hand h) {
 		super(a, h);
@@ -50,8 +50,6 @@ public class Respond1NT extends BiddingRule {
 
 	@Override
 	protected boolean applies() {
-		return auction.getPartnersLastCall() != null
-				&& new Bid(1, NoTrump.i()).equals(auction.getPartnersLastCall()
-						.getBid());
+		return super.applies() && new Bid(1, NoTrump.i()).equals(partnersOpeningBid);
 	}
 }

@@ -3,12 +3,11 @@ package org.gnubridge.core.bidding.rules;
 import org.gnubridge.core.Hand;
 import org.gnubridge.core.bidding.Auctioneer;
 import org.gnubridge.core.bidding.Bid;
-import org.gnubridge.core.bidding.Call;
 import org.gnubridge.core.bidding.ResponseCalculator;
 import org.gnubridge.core.deck.Color;
 import org.gnubridge.core.deck.NoTrump;
 
-public class Respond1ColorWithNewSuit extends BiddingRule {
+public class Respond1ColorWithNewSuit extends Response {
 
 	private ResponseCalculator pc;
 	private Color highestOver3;
@@ -16,8 +15,8 @@ public class Respond1ColorWithNewSuit extends BiddingRule {
 	@Override
 	protected boolean applies() {
 		boolean result = false;
-		if (partnerBid1Color()) {
-			pc = new ResponseCalculator(hand, auction.getPartnersLastCall().getBid());
+		if (super.applies() && partnerBid1Color()) {
+			pc = new ResponseCalculator(hand, partnersOpeningBid);
 			highestOver3 = findHighestColorWithFourOrMoreCards();
 			if (pc.getCombinedPoints() >= 6 && highestOver3 != null) {
 				result = true;
@@ -35,12 +34,12 @@ public class Respond1ColorWithNewSuit extends BiddingRule {
 		Bid result = null;
 
 		if (pc.getCombinedPoints() >= 17 && hand.getColorLength(highestOver3) >= 5) {
-			int jump = auction.getPartnersLastCall().getBid().getValue() + 1;
+			int jump = partnersOpeningBid.getValue() + 1;
 			result = new Bid(jump, highestOver3);
 			result.makeGameForcing();
 		} else {
 			result = new Bid(1, highestOver3);
-			if (!result.greaterThan(auction.getPartnersLastCall().getBid()) && pc.getCombinedPoints() >= 11) {
+			if (!result.greaterThan(partnersOpeningBid) && pc.getCombinedPoints() >= 11) {
 				result = new Bid(2, highestOver3);
 			}
 			result.makeForcing();
@@ -50,8 +49,7 @@ public class Respond1ColorWithNewSuit extends BiddingRule {
 	}
 
 	private boolean partnerBid1Color() {
-		Call partners = auction.getPartnersLastCall();
-		if (partners != null && !NoTrump.i().equals(partners.getBid().getTrump()) && 1 == partners.getBid().getValue()) {
+		if (!NoTrump.i().equals(partnersOpeningBid.getTrump()) && 1 == partnersOpeningBid.getValue()) {
 			return true;
 		} else {
 			return false;
