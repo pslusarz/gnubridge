@@ -4,6 +4,7 @@ import junit.framework.TestCase;
 
 import org.gnubridge.core.Direction;
 import org.gnubridge.core.Game;
+import org.gnubridge.core.Hand;
 import org.gnubridge.core.Player;
 import org.gnubridge.core.deck.Ace;
 import org.gnubridge.core.deck.Clubs;
@@ -78,81 +79,24 @@ public class DuplicatePruningAcceptanceTests extends TestCase {
 
 	}
 
-	public void testBug() {
-		fail("see comments below");
-
-		//	game.getWest().init(Four.of(Spades.i()), Seven.of(Diamonds.i()), Eight.of(Hearts.i()), Ten.of(Clubs.i()), Four.of(Hearts.i()), Seven.of(Clubs.i()));
-		//	game.getNorth().init(Five.of(Spades.i()), Five.of(Diamonds.i()), Three.of(Spades.i()), Six.of(Clubs.i()), King.of(Diamonds.i()), Nine.of(Spades.i()));
-		//	game.getEast().init(Nine.of(Clubs.i()), Two.of(Spades.i()), Six.of(Hearts.i()), Ace.of(Hearts.i()), Eight.of(Spades.i()), Five.of(Hearts.i()));
-		//	game.getSouth().init(Four.of(Clubs.i()), Three.of(Clubs.i()), King.of(Clubs.i()), Two.of(Diamonds.i()), Jack.of(Diamonds.i()), Ten.of(Hearts.i()));
-		//	game.setNextToPlay(Direction.WEST);
-		//	game.setTrump(NoTrump.i());
-		//	West: [4 of SPADES, 7 of DIAMONDS, 8 of HEARTS, 10 of CLUBS, 4 of HEARTS, 7 of CLUBS]
-		//	North: [5 of SPADES, 5 of DIAMONDS, 3 of SPADES, 6 of CLUBS, K of DIAMONDS, 9 of SPADES]
-		//	East: [9 of CLUBS, 2 of SPADES, 6 of HEARTS, A of HEARTS, 8 of SPADES, 5 of HEARTS]
-		//	South: [4 of CLUBS, 3 of CLUBS, K of CLUBS, 2 of DIAMONDS, J of DIAMONDS, 10 of HEARTS]
-		//	*********** SEARCHES ***********
-		//	-----MiniMax---------
-		//	Unpruned search took (msec): 29703
-		//	  Positions examined: 1619677
-		//	West/East tricks taken: 3
-		//	-----------------------
-		//	-----NoDuplicatePruning---------
-		//	Pruned search took (msec): 786
-		//	  Positions examined: 47409
-		//	  Alpha prunes: 3432
-		//	  Beta prunes: 6217
-		//	  Sequence prunes: 1709
-		//	  Played Sequence prunes: 0
-		//	  Lowest card to lost trick prunes: 534
-		//	West/East tricks taken: 2
-		//	-----------------------
-		//	-----NoAlphaBetaPruning---------
-		//	Pruned search took (msec): 22252
-		//	  Positions examined: 875991
-		//	  Alpha prunes: 0
-		//	  Beta prunes: 0
-		//	  Sequence prunes: 42016
-		//	  Played Sequence prunes: 0
-		//	  Duplicate position prunes: 317028
-		//	  Lowest card to lost trick prunes: 8888
-		//	West/East tricks taken: 2
-		//	-----------------------
-		//	-----DuplicatePruning---------
-		//	Pruned search took (msec): 1211
-		//	  Positions examined: 49460
-		//	  Alpha prunes: 4945
-		//	  Beta prunes: 6583
-		//	  Sequence prunes: 1320
-		//	  Played Sequence prunes: 0
-		//	  Duplicate position prunes: 8965
-		//	West/East tricks taken: 3
-		//	-----------------------
-		//	-----DuplicateWithLowestPruning---------
-		//	Pruned search took (msec): 1032
-		//	  Positions examined: 29963
-		//	  Alpha prunes: 2311
-		//	  Beta prunes: 4107
-		//	  Sequence prunes: 1085
-		//	  Played Sequence prunes: 0
-		//	  Duplicate position prunes: 5311
-		//	  Lowest card to lost trick prunes: 395
-		//	West/East tricks taken: 2
-		//	-----------------------
-		//	*********** END SEARCHES ***********
-		//	Average run times (ms)
-		//	  MiniMax: 29703.0
-		//	  NoDuplicatePruning: 786.0
-		//	  NoAlphaBetaPruning: 22252.0
-		//	  DuplicatePruning: 1211.0
-		//	  DuplicateWithLowestPruning: 1032.0
-
-	}
-
-	public void testAlphaBetaEquivalence() {
-		for (int i = 0; i < 100; i++) {
-
-		}
+	public void testPruneLowestCardToLostTrickBugDoNotApplyIfTrickTakenByPartner() {
+		Game game = new Game(NoTrump.i());
+		game.getWest().init(new Hand("", "8,4", "2", ""));//E: AH, W: 4H???
+		game.getNorth().init(new Hand("3", "", "5,4", ""));
+		game.getEast().init(new Hand("", "A,6,5", "", ""));
+		game.getSouth().init(new Hand("", "10", "3", "3"));
+		game.setNextToPlay(Direction.EAST);
+		DoubleDummySolver search = new DoubleDummySolver(game);
+		search.setUseDuplicateRemoval(false);
+		search.pruneAlphaBeta = false;
+		search.setUsePruneLowestCardToLostTrick(true);
+		//search.setUsePruneLowestCardToLostTrick(false);
+		search.usePruning(false);
+		search.search();
+		search.printStats();
+		System.out.println(search.getBestMoves());
+		search.printOptimalPath();
+		assertEquals(3, search.getRoot().getTricksTaken(Player.WEST_EAST));
 	}
 
 	private void printAverageRunTimes() {

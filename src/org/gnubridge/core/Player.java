@@ -9,38 +9,36 @@ public class Player {
 
 	public static final int WEST_EAST = 0;
 	public static final int NORTH_SOUTH = 1;
-	
-	private int direction;
 
-	private List<Card> hand;
+	private final int direction;
 
-	private List<Card> played;
+	private final List<Card> hand;
 
-	private List<Trick> tricks;
+	private final List<Card> played;
 
-//	private Direction direction2;
-//
-//	private Hand openingHand;
+	private final List<Trick> tricks;
 
+	//	private Direction direction2;
+	//
+	//	private Hand openingHand;
 
-	
 	public Player(int i) {
 		hand = new ArrayList<Card>();
 		played = new ArrayList<Card>();
 		tricks = new ArrayList<Trick>();
 		direction = i;
 	}
-	
+
 	public Player(Direction d) {
 		this(d.getValue());
 	}
-	
-//	public Player (Direction d, Hand h) {
-//		this(d.getValue());
-//		direction2 = d;
-//		hand.addAll(h.toList());
-//		openingHand = h;
-//	}
+
+	//	public Player (Direction d, Hand h) {
+	//		this(d.getValue());
+	//		direction2 = d;
+	//		hand.addAll(h.toList());
+	//		openingHand = h;
+	//	}
 
 	public void init(String[]... valueSuits) {
 		for (int i = 0; i < valueSuits.length; i++) {
@@ -52,10 +50,11 @@ public class Player {
 		}
 
 	}
-	
+
+	@Override
 	public String toString() {
 		return getDirection2().toString();
-		
+
 	}
 
 	public void init(Card... cards) {
@@ -64,21 +63,21 @@ public class Player {
 		}
 
 	}
+
 	public void init(List<Card> cards) {
-		for (Card card:cards) {
+		for (Card card : cards) {
 			hand.add(card);
 		}
 
 	}
-	
+
 	public void init(Player other) {
 		init(other.getHand());
-        for (Card card : other.getPlayedCards()) {
-        	played.add(card);
-        }
-	}	
-	
-	
+		for (Card card : other.getPlayedCards()) {
+			played.add(card);
+		}
+	}
+
 	private List<Card> getPlayedCards() {
 		return played;
 	}
@@ -106,8 +105,7 @@ public class Player {
 	}
 
 	public Card play(Trick trick) {
-		return play(trick, getPossibleMoves(trick).size()-1);
-		
+		return play(trick, getPossibleMoves(trick).size() - 1);
 
 	}
 
@@ -144,23 +142,23 @@ public class Player {
 	public Card play(Trick trick, int moveIndex) {
 		List<Card> moves = getPossibleMoves(trick);
 		if (moves.size() == 0) {
-			System.out.println(this +" has no possible move for "+trick+" (hand: "+getHand()+")");			
+			System.out.println(this + " has no possible move for " + trick + " (hand: " + getHand() + ")");
 		}
 		Card result = moves.get(moveIndex);
 		played.add(result);
 		hand.remove(hand.indexOf(result));
 		return result;
-		
+
 	}
 
 	public List<Card> getHand() {
 		return hand;
 	}
-	
+
 	public int pair() {
-      return matchPair(direction);
+		return matchPair(direction);
 	}
-	
+
 	public static int matchPair(int player) {
 		int result;
 		switch (player) {
@@ -188,7 +186,12 @@ public class Player {
 
 	public void init(Hand aHand) {
 		init(aHand.cards);
-		
+
+	}
+
+	public boolean isPartnerWith(Player other) {
+		return pair() == other.pair();
+
 	}
 
 }

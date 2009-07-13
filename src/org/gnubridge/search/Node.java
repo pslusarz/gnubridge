@@ -155,9 +155,9 @@ public class Node {
 	}
 
 	private Node getNodeWithLowestValueCard(List<Node> nodes) {
-		Node lowest = nodes.get(0);
+		Node lowest = null;
 		for (Node node : nodes) {
-			if (node.cardPlayed.getValue() < lowest.cardPlayed.getValue()) {
+			if (lowest == null || node.cardPlayed.getValue() < lowest.cardPlayed.getValue()) {
 				lowest = node;
 			}
 		}

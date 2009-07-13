@@ -134,8 +134,7 @@ public class DoubleDummySolver {
 			position.playMoves(finalMoves);
 		}
 		checkDuplicatePositions(node, position);
-		if (position.getTricksPlayed() >= maxTricks || position.isDone()
-				|| node.hasIdenticalTwin()) {
+		if (position.getTricksPlayed() >= maxTricks || position.isDone() || node.hasIdenticalTwin()) {
 			node.setLeaf(true);
 			trim(node);
 		} else {
@@ -171,11 +170,14 @@ public class DoubleDummySolver {
 		if (currentTrick.getCards().size() == 0) {
 			return;
 		}
-		if (!currentTrick.getDenomination().equals(
-				move.getCardPlayed().getDenomination())) {
+		if (!currentTrick.getDenomination().equals(move.getCardPlayed().getDenomination())) {
 			return;
 		}
 		if (move.isPruned()) {
+			return;
+		}
+
+		if (currentTrick.whoPlayed(currentTrick.getHighestCard()).isPartnerWith(move.getPlayerCardPlayed())) {
 			return;
 		}
 
@@ -188,8 +190,7 @@ public class DoubleDummySolver {
 			}
 			higherCard = getHigher(move.getCardPlayed(), sibling);
 
-			if (higherCard.equals(move.getCardPlayed())
-					&& cannotTakeTrick(higherCard, currentTrick)) {
+			if (higherCard.equals(move.getCardPlayed()) && cannotTakeTrick(higherCard, currentTrick)) {
 				move.setPruned(true, Node.PRUNE_LOWEST_CARD_IN_LOST_TRICK);
 
 				break;
@@ -200,8 +201,7 @@ public class DoubleDummySolver {
 
 	private boolean cannotTakeTrick(Card card, Trick trick) {
 		return trick.getHighestCard().trumps(card, trick.getTrump())
-				|| (trick.getHighestCard().hasSameColorAs(card) && trick
-						.getHighestCard().hasGreaterValueThan(card));
+				|| (trick.getHighestCard().hasSameColorAs(card) && trick.getHighestCard().hasGreaterValueThan(card));
 	}
 
 	private void checkDuplicatePositions(Node node, Game position) {
@@ -214,27 +214,24 @@ public class DoubleDummySolver {
 
 	}
 
-	private void makeChildNodeForCardPlayed(Node parent, Player player,
-			Card card) {
+	private void makeChildNodeForCardPlayed(Node parent, Player player, Card card) {
 		Node move = new Node(parent);
 		move.setCardPlayed(card);
 		move.setPlayerCardPlayed(player);
 	}
 
-	private void removeSiblingsInSequenceWithPlayedCards(Node move,
-			Game position) {
+	private void removeSiblingsInSequenceWithPlayedCards(Node move, Game position) {
 		boolean shouldTrim = false;
 
 		List<Card> siblingsInSuit = move.getSiblingsInColor();
-		List<Card> orderedPlayedCardsInSuit = position
-				.getPlayedCardsHiToLow(move.getCardPlayed().getDenomination());
+		List<Card> orderedPlayedCardsInSuit = position.getPlayedCardsHiToLow(move.getCardPlayed().getDenomination());
 		Card lowerCard;
 		Card higherCard;
 		for (Card sibling : siblingsInSuit) {
 			higherCard = getHigher(move.getCardPlayed(), sibling);
 			lowerCard = getLower(move.getCardPlayed(), sibling);
-			boolean isSequence = areTwoUnplayedCardsInSequenceIfPlayedCardsAreDiscarded(
-					lowerCard, higherCard, orderedPlayedCardsInSuit);
+			boolean isSequence = areTwoUnplayedCardsInSequenceIfPlayedCardsAreDiscarded(lowerCard, higherCard,
+					orderedPlayedCardsInSuit);
 
 			if (isSequence && higherCard.equals(move.getCardPlayed())) {
 				shouldTrim = true;
@@ -247,8 +244,8 @@ public class DoubleDummySolver {
 
 	}
 
-	private boolean areTwoUnplayedCardsInSequenceIfPlayedCardsAreDiscarded(
-			Card lowerCard, Card higherCard, List<Card> orderedPlayedCardsInSuit) {
+	private boolean areTwoUnplayedCardsInSequenceIfPlayedCardsAreDiscarded(Card lowerCard, Card higherCard,
+			List<Card> orderedPlayedCardsInSuit) {
 		boolean result = false;
 		Card previous = higherCard;
 		for (Card played : orderedPlayedCardsInSuit) {
@@ -313,7 +310,7 @@ public class DoubleDummySolver {
 			node.nullAllChildrenExceptOne();
 		}
 		node.calculateValue();
-		if (pruneAlphaBeta ) {
+		if (pruneAlphaBeta) {
 			pruneAlphaBeta(node);
 		}
 		if (node.canTrim()) {
@@ -374,26 +371,21 @@ public class DoubleDummySolver {
 		if (usePruning) {
 			pruneType = "Pruned";
 		}
-		System.out.println(pruneType + " search took (msec): "
-				+ getRunningTime());
+		System.out.println(pruneType + " search took (msec): " + getRunningTime());
 		System.out.println("  Positions examined: " + getPositionsExamined());
 		if (usePruning) {
 			System.out.println("  Alpha prunes: " + getPrunedAlpha());
 			System.out.println("  Beta prunes: " + getPrunedBeta());
 			System.out.println("  Sequence prunes: " + getPrunedSequence());
-			System.out.println("  Played Sequence prunes: "
-					+ getPrunedPlayedSequence());
+			System.out.println("  Played Sequence prunes: " + getPrunedPlayedSequence());
 		}
 		if (useDuplicateRemoval()) {
-			System.out.println("  Duplicate position prunes: "
-					+ prunedDuplicatePosition);
+			System.out.println("  Duplicate position prunes: " + prunedDuplicatePosition);
 		}
 		if (shouldPruneLowestCardInLostTrick) {
-			System.out.println("  Lowest card to lost trick prunes: "
-					+ getPrunedLowestCardInLostTrick());
+			System.out.println("  Lowest card to lost trick prunes: " + getPrunedLowestCardInLostTrick());
 		}
-		System.out.println("West/East tricks taken: "
-				+ root.getTricksTaken(Player.WEST_EAST));
+		System.out.println("West/East tricks taken: " + root.getTricksTaken(Player.WEST_EAST));
 
 	}
 
