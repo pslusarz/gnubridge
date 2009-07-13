@@ -76,6 +76,7 @@ public class DuplicatePruningAcceptanceTests extends TestCase {
 			printAverageRunTimes();
 			assertAllSearchesFindSameNumberOfTricksTaken();
 		}
+		fail("add duplicate pruning to the mix...");
 
 	}
 

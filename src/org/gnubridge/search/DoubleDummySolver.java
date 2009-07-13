@@ -19,8 +19,6 @@ public class DoubleDummySolver {
 
 	private List<Integer> finalMoves;
 
-	private boolean usePruning = true;
-
 	private int prunedAlpha;
 
 	private int prunedBeta;
@@ -35,16 +33,17 @@ public class DoubleDummySolver {
 
 	private int prunedPlayedSequence;
 
+	private boolean usePruning = true;
 	private boolean useDuplicateRemoval = true;
+	private boolean shouldPruneLowestCardInLostTrick = true;
+	boolean pruneAlphaBeta = true;
+	private boolean shouldPruneCardsInSequence = true;
+	private boolean shouldPruneCardsInPlayedSequence = true;
 
 	private int prunedDuplicatePosition;
 	PositionLookup lookup;
 
 	private int prunedLowestCardInLostTrick;
-
-	private boolean shouldPruneLowestCardInLostTrick = true;
-
-	boolean pruneAlphaBeta = true;
 
 	public DoubleDummySolver(Node root) {
 		this.root = root;
@@ -93,6 +92,14 @@ public class DoubleDummySolver {
 		useDuplicateRemoval = b;
 	}
 
+	public void setShouldPruneCardsInSequence(boolean b) {
+		shouldPruneCardsInSequence = b;
+	}
+
+	public void setShouldPruneCardsInPlayedSequence(boolean b) {
+		shouldPruneCardsInPlayedSequence = b;
+	}
+
 	private void collectStats(Node node) {
 		positionsCount++;
 		if (node.isAlphaPruned()) {
@@ -139,8 +146,12 @@ public class DoubleDummySolver {
 			trim(node);
 		} else {
 			for (Node move : node.children) {
-				removeSiblingsInSequence(move, position);
-				removeSiblingsInSequenceWithPlayedCards(move, position);
+				if (shouldPruneCardsInSequence) {
+					removeSiblingsInSequence(move, position);
+				}
+				if (shouldPruneCardsInPlayedSequence) {
+					removeSiblingsInSequenceWithPlayedCards(move, position);
+				}
 			}
 			if (shouldPruneLowestCardInLostTrick) {
 				for (Node move : node.children) {

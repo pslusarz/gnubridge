@@ -7,17 +7,19 @@ import org.gnubridge.core.Card;
 import org.gnubridge.core.Game;
 import org.gnubridge.core.Player;
 import org.gnubridge.core.Trick;
+import org.gnubridge.core.deck.Hearts;
+import org.gnubridge.core.deck.King;
 
 public class Node {
 	public static final byte UNITNITIALIZED = -1;
 
-	public static final byte PRUNE_ALPHA = 0;
-
-	public static final byte PRUNE_BETA = PRUNE_ALPHA + 1;
-
 	private static final byte ALPHA_UNINIT = -1;
 
 	static final byte BETA_UNINIT = 14;
+
+	public static final byte PRUNE_ALPHA = 0;
+
+	public static final byte PRUNE_BETA = PRUNE_ALPHA + 1;
 
 	public static final byte PRUNE_SEQUENCE_SIBLINGS = PRUNE_BETA + 1;
 
