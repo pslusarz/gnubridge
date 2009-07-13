@@ -75,7 +75,7 @@ public class Node {
 			return new ArrayList<Integer>();
 		} else {
 			List<Integer> result = parent.getMoves();
-			result.add(new Integer(parent.getMyIndex(this)));
+			result.add(parent.getMyIndex(this));
 			return result;
 		}
 	}

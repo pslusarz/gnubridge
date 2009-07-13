@@ -737,4 +737,22 @@ public class DoubleDummySolverTest extends TestCase {
 		assertEquals(Eight.of(Hearts.i()), search.getRoot().getBestMove().getCardPlayed());
 	}
 
+	public void testStrangeMinimaxBug() {
+		Game game = new Game(Spades.i());
+		game.getWest().init(new Hand("", "A,Q", "", ""));
+		game.getNorth().init(new Hand("", "K,J", "", ""));
+		game.getEast().init(new Hand("", "3,2", "", ""));
+		game.getSouth().init(new Hand("2", "4", "", ""));
+		game.setNextToPlay(Direction.WEST);
+		DoubleDummySolver search = new DoubleDummySolver(game);
+		search.setUseDuplicateRemoval(false);
+		search.pruneAlphaBeta = false;
+		search.setUsePruneLowestCardToLostTrick(false);
+		search.usePruning(false);
+		search.search();
+		search.printOptimalPath();
+		assertEquals(1, search.getRoot().getTricksTaken(Player.WEST_EAST));
+		assertEquals(Ace.of(Hearts.i()), search.getRoot().getBestMove().getCardPlayed());
+	}
+
 }
