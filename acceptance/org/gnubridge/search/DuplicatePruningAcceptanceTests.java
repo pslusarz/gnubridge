@@ -76,7 +76,6 @@ public class DuplicatePruningAcceptanceTests extends TestCase {
 			printAverageRunTimes();
 			assertAllSearchesFindSameNumberOfTricksTaken();
 		}
-		fail("add duplicate pruning to the mix...");
 
 	}
 
@@ -134,7 +133,8 @@ public class DuplicatePruningAcceptanceTests extends TestCase {
 	}
 
 	public enum SearchConfiguration {
-		MiniMax(-2), NoDuplicatePruning(-1), NoAlphaBetaPruning(0), DuplicatePruning(1), DuplicateWithLowestPruning(2);
+		MiniMax(-2), NoDuplicatePruning(-1), NoAlphaBetaPruning(0), DuplicatePruning(1), DuplicateWithLowestPruning(2), NoSequencePruning(
+				3), NoPlayedSequencePruning(4);
 		DoubleDummySolver search;
 		static final int MAX_TRICKS = 5;
 		int type;
@@ -171,6 +171,12 @@ public class DuplicatePruningAcceptanceTests extends TestCase {
 				search.setUseDuplicateRemoval(true);
 				search.setUsePruneLowestCardToLostTrick(true);
 
+			}
+			if (type == 3) {
+				search.setShouldPruneCardsInSequence(false);
+			}
+			if (type == 4) {
+				search.setShouldPruneCardsInPlayedSequence(false);
 			}
 			search.search();
 			search.printStats();

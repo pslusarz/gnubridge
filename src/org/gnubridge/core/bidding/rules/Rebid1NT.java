@@ -46,13 +46,6 @@ public class Rebid1NT extends Rebid {
 	}
 
 	private boolean partnerWasRespondingToMy1NT() {
-		//		if (auction.getPartnersLastCall() == null || auction.getPartnersCall(auction.getPartnersLastCall()) == null) {
-		//			return false;
-		//		}
-		//		Call partnersCall = auction.getPartnersLastCall();
-		//		if (new Pass().equals(partnersCall.getBid())) {
-		//			return false;
-		//		}
 		return super.applies() && new Bid(1, NoTrump.i()).equals(opening);
 	}
 

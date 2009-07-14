@@ -150,7 +150,7 @@ public class DoubleDummySolver {
 					removeSiblingsInSequence(move, position);
 				}
 				if (shouldPruneCardsInPlayedSequence) {
-					removeSiblingsInSequenceWithPlayedCards(move, position);
+					//removeSiblingsInSequenceWithPlayedCards(move, position);
 				}
 			}
 			if (shouldPruneLowestCardInLostTrick) {
@@ -232,16 +232,17 @@ public class DoubleDummySolver {
 	}
 
 	private void removeSiblingsInSequenceWithPlayedCards(Node move, Game position) {
+		List<Card> orderedPlayedCardsInSuit = position.getPlayedCardsHiToLow(move.getCardPlayed().getDenomination());
+		if (orderedPlayedCardsInSuit.isEmpty()) {
+			return;
+		}
 		boolean shouldTrim = false;
 
 		List<Card> siblingsInSuit = move.getSiblingsInColor();
-		List<Card> orderedPlayedCardsInSuit = position.getPlayedCardsHiToLow(move.getCardPlayed().getDenomination());
-		Card lowerCard;
-		Card higherCard;
 		for (Card sibling : siblingsInSuit) {
-			higherCard = getHigher(move.getCardPlayed(), sibling);
-			lowerCard = getLower(move.getCardPlayed(), sibling);
-			boolean isSequence = areTwoUnplayedCardsInSequenceIfPlayedCardsAreDiscarded(lowerCard, higherCard,
+			Card higherCard = getHigher(move.getCardPlayed(), sibling);
+			Card lowerCard = getLower(move.getCardPlayed(), sibling);
+			boolean isSequence = cardsInSuitContainSequence(lowerCard.getValue(), higherCard.getValue(),
 					orderedPlayedCardsInSuit);
 
 			if (isSequence && higherCard.equals(move.getCardPlayed())) {
@@ -255,21 +256,17 @@ public class DoubleDummySolver {
 
 	}
 
-	private boolean areTwoUnplayedCardsInSequenceIfPlayedCardsAreDiscarded(Card lowerCard, Card higherCard,
-			List<Card> orderedPlayedCardsInSuit) {
-		boolean result = false;
-		Card previous = higherCard;
-		for (Card played : orderedPlayedCardsInSuit) {
-			if (played.getValue() > higherCard.getValue()) {
-				continue;
+	private boolean cardsInSuitContainSequence(int low, int high, List<Card> othersInSuitHighToLow) {
+		List<Card> inBetween = discardCardsOutsideLimits(low, high, othersInSuitHighToLow);
+		return high - low == inBetween.size() + 1;
+	}
+
+	private List<Card> discardCardsOutsideLimits(int low, int high, List<Card> orderedPlayedCardsInSuit) {
+		List<Card> result = new ArrayList<Card>();
+		for (Card card : orderedPlayedCardsInSuit) {
+			if (card.getValue() > low && card.getValue() < high) {
+				result.add(card);
 			}
-			if (previous.getValue() == played.getValue() + 1) {
-				result = true;
-			} else {
-				result = false;
-				break;
-			}
-			previous = played;
 		}
 		return result;
 	}

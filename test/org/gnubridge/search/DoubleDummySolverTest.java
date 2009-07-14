@@ -16,6 +16,7 @@ import org.gnubridge.core.deck.Eight;
 import org.gnubridge.core.deck.Five;
 import org.gnubridge.core.deck.Four;
 import org.gnubridge.core.deck.Hearts;
+import org.gnubridge.core.deck.Jack;
 import org.gnubridge.core.deck.King;
 import org.gnubridge.core.deck.Nine;
 import org.gnubridge.core.deck.NoTrump;
@@ -147,46 +148,89 @@ public class DoubleDummySolverTest extends TestCase {
 		assertFalse(node.children.get(2).isPruned());
 	}
 
-	public void testOnlyExpandFirstCardInSequenceCardPlayedBetweenTwoUnplayedCards() {
+	public void testDoNotCountCurrentTrickAsPlayedCardWhenPruningPlayedSequence() {
 		Node node = new Node(null);
 		Game game = new Game(NoTrump.i());
-		// game.getPlayer(Direction.WEST).init(new String[] { "A", "5", "Q" });
-		game.getPlayer(Direction.NORTH).init(new String[] { "10", "6" });
-		game.getPlayer(Direction.EAST).init(new String[] { "9", "J" });
-		// game.getPlayer(Direction.EAST).init(new String[] { "K", "7", "8" });
+		game.getPlayer(Direction.NORTH).init(new Hand("10,6", "", "", ""));
+		game.getPlayer(Direction.EAST).init(new Hand("9,J", "", "", ""));
 		game.setNextToPlay(Direction.NORTH);
 		game.play(Ten.of(Spades.i()));
 		DoubleDummySolver s = new DoubleDummySolver(game);
 		s.examinePosition(node);
 		assertEquals(2, s.getStack().size());
 		assertTrue(s.getStack().contains(node.children.get(0)));
+		assertTrue(s.getStack().contains(node.children.get(1)));
+		assertFalse(node.children.get(1).isPruned());
+		assertFalse(node.children.get(0).isPruned());
+
+	}
+
+	public void testOnlyExpandFirstCardInSequenceCardPlayedBetweenTwoUnplayedCards() {
+		Node node = new Node(null);
+		Game game = new Game(NoTrump.i());
+		game.getPlayer(Direction.WEST).init(new Hand("", "", "4,3,2", ""));
+		game.getPlayer(Direction.NORTH).init(new Hand("K,10,3", "", "", ""));
+		game.getPlayer(Direction.EAST).init(new Hand("Q,A,2", "", "", ""));
+		game.getPlayer(Direction.SOUTH).init(new Hand("", "4,3,2", "", ""));
+		game.setNextToPlay(Direction.NORTH);
+		game.play(King.of(Spades.i()));
+		game.play(Two.of(Spades.i()));
+		game.play(Two.of(Hearts.i()));
+		game.play(Two.of(Diamonds.i())); //north takes trick
+		game.play(Ten.of(Spades.i()));
+		DoubleDummySolver s = new DoubleDummySolver(game);
+		s.examinePosition(node);
+		assertEquals(2, s.getStack().size());
+		assertTrue(s.getStack().contains(node.children.get(0)));
+		assertEquals(Ace.of(Spades.i()), node.children.get(1).getCardPlayed());
 		assertTrue(node.children.get(1).isPruned());
+		assertTrue(node.children.get(1).isPlayedSequencePruned());
+		assertEquals(Queen.of(Spades.i()), node.children.get(0).getCardPlayed());
+		assertFalse(node.children.get(0).isPruned());
 	}
 
 	public void testOnlyExpandFirstCardInSequenceCardTwoPlayedBetweenTwoUnplayedCards() {
 		Node node = new Node(null);
 		Game game = new Game(NoTrump.i());
-		// game.getPlayer(Direction.WEST).init(new String[] { "A", "5", "Q" });
-		game.getPlayer(Direction.NORTH).init(new String[] { "10", "6" });
-		game.getPlayer(Direction.EAST).init(new String[] { "9", "A" });
-		game.getPlayer(Direction.SOUTH).init(new String[] { "8", "J" });
+		game.getPlayer(Direction.WEST).init(new Hand("", "", "4,3,2", ""));
+		game.getPlayer(Direction.NORTH).init(new Hand("K,10,3", "", "", ""));
+		game.getPlayer(Direction.EAST).init(new Hand("A,J,2", "", "", ""));
+		game.getPlayer(Direction.SOUTH).init(new Hand("Q", "3,2", "", ""));
 		game.setNextToPlay(Direction.NORTH);
+		game.play(King.of(Spades.i()));
+		game.play(Two.of(Spades.i()));
+		game.play(Queen.of(Spades.i()));
+		game.play(Two.of(Diamonds.i())); //north takes trick
 		game.play(Ten.of(Spades.i()));
-		game.play(Nine.of(Spades.i()));
 		DoubleDummySolver s = new DoubleDummySolver(game);
-		// s.search();
-		// assertFalse(s.getRoot().children.get(0).isPlayedSequencePruned());
-		// assertFalse(s.getRoot().children.get(0).isPruned());
-		// assertTrue(s.getRoot().children.get(1).isPruned());
-		// assertTrue(s.getRoot().children.get(1).isPlayedSequencePruned());
 
 		s.examinePosition(node);
 		assertEquals(2, s.getStack().size());
 		assertTrue(s.getStack().contains(node.children.get(0)));
-		assertFalse(node.children.get(0).isPlayedSequencePruned());
-		assertFalse(node.children.get(0).isPruned());
-		assertTrue(node.children.get(1).isPruned());
-		assertTrue(node.children.get(1).isPlayedSequencePruned());
+		assertEquals(Jack.of(Spades.i()), node.children.get(1).getCardPlayed());
+		assertFalse(node.children.get(1).isPlayedSequencePruned());
+		assertFalse(node.children.get(1).isPruned());
+		assertEquals(Ace.of(Spades.i()), node.children.get(0).getCardPlayed());
+		assertTrue(node.children.get(0).isPruned());
+		assertTrue(node.children.get(0).isPlayedSequencePruned());
+	}
+
+	public void testWhenPruningPlayedSequenceDoNotConsiderCardsInCurrentTrickAsPlayed() {
+		Game game = new Game(Spades.i());
+		game.getWest().init(new Hand("", "A,Q", "", ""));
+		game.getNorth().init(new Hand("", "K,J", "", ""));
+		game.getEast().init(new Hand("", "3,2", "", ""));
+		game.getSouth().init(new Hand("2", "4", "", ""));
+		game.setNextToPlay(Direction.WEST);
+		DoubleDummySolver search = new DoubleDummySolver(game);
+		search.setUseDuplicateRemoval(false);
+		search.pruneAlphaBeta = false;
+		search.setUsePruneLowestCardToLostTrick(false);
+		search.usePruning(false);
+		//search.setShouldPruneCardsInPlayedSequence(false);
+		search.search();
+		assertEquals(1, search.getRoot().getTricksTaken(Player.WEST_EAST));
+		assertEquals(Ace.of(Hearts.i()), search.getRoot().getBestMove().getCardPlayed());
 	}
 
 	public void testTricksTallyIsTrickLimit() {
@@ -735,25 +779,6 @@ public class DoubleDummySolverTest extends TestCase {
 		search.usePruning(false);
 		search.search();
 		assertEquals(Eight.of(Hearts.i()), search.getRoot().getBestMove().getCardPlayed());
-	}
-
-	public void testWhenPruningPlayedSequenceDoNOtConsiderCardsInCurrentTrickAsPlayed() {
-		Game game = new Game(Spades.i());
-		game.getWest().init(new Hand("", "A,Q", "", ""));
-		game.getNorth().init(new Hand("", "K,J", "", ""));
-		game.getEast().init(new Hand("", "3,2", "", ""));
-		game.getSouth().init(new Hand("2", "4", "", ""));
-		game.setNextToPlay(Direction.WEST);
-		DoubleDummySolver search = new DoubleDummySolver(game);
-		search.setUseDuplicateRemoval(false);
-		search.pruneAlphaBeta = false;
-		search.setUsePruneLowestCardToLostTrick(false);
-		search.usePruning(false);
-		//search.setShouldPruneCardsInPlayedSequence(false);
-		search.search();
-		search.printOptimalPath();
-		assertEquals(1, search.getRoot().getTricksTaken(Player.WEST_EAST));
-		assertEquals(Ace.of(Hearts.i()), search.getRoot().getBestMove().getCardPlayed());
 	}
 
 }
