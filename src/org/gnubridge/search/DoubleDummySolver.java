@@ -96,6 +96,8 @@ public class DoubleDummySolver {
 		shouldPruneCardsInSequence = b;
 	}
 
+	@Deprecated
+	// @deprecated "feature currently disabled"
 	public void setShouldPruneCardsInPlayedSequence(boolean b) {
 		shouldPruneCardsInPlayedSequence = b;
 	}

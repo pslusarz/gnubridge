@@ -165,7 +165,8 @@ public class DoubleDummySolverTest extends TestCase {
 
 	}
 
-	public void testOnlyExpandFirstCardInSequenceCardPlayedBetweenTwoUnplayedCards() {
+	// this pruning disabled for now 
+	public void _testOnlyExpandFirstCardInSequenceCardPlayedBetweenTwoUnplayedCards() {
 		Node node = new Node(null);
 		Game game = new Game(NoTrump.i());
 		game.getPlayer(Direction.WEST).init(new Hand("", "", "4,3,2", ""));
@@ -189,7 +190,8 @@ public class DoubleDummySolverTest extends TestCase {
 		assertFalse(node.children.get(0).isPruned());
 	}
 
-	public void testOnlyExpandFirstCardInSequenceCardTwoPlayedBetweenTwoUnplayedCards() {
+	// this pruning disabled for now
+	public void _testOnlyExpandFirstCardInSequenceCardTwoPlayedBetweenTwoUnplayedCards() {
 		Node node = new Node(null);
 		Game game = new Game(NoTrump.i());
 		game.getPlayer(Direction.WEST).init(new Hand("", "", "4,3,2", ""));

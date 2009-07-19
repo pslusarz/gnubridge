@@ -5,7 +5,7 @@ import junit.framework.TestCase;
 import org.gnubridge.core.Direction;
 import org.gnubridge.core.Player;
 
-public class AlphaBetaPruningTest extends TestCase {
+public class DoubleDummySolverAlphaBetaPruningTest extends TestCase {
 	/**
 	 *
 	 *        root         W
