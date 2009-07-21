@@ -68,9 +68,9 @@
 				<fileset dir="${build.dir}/classes/test/">
 					<include name="**/*Test.class" />
 				</fileset>
-				<fileset dir="${build.dir}/classes/acceptance/">
+				<!--fileset dir="${build.dir}/classes/acceptance/">
 					<include name="**/*Test.class" />
-				</fileset>
+				</fileset-->
 			</batchtest>
 
 		</junit>
