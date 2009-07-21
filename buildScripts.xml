@@ -1,59 +1,65 @@
-<project name="gnubridge" default="run-tests">
-	<target name="run-tests">
-		<property name="build.dir" value="../temp/publish/gnubridge/" />
-		<property name="version" value="0.1.11" />
-		<deltree dir="${build.dir}" />
-		<mkdir dir="${build.dir}" />
-		<copy todir="${build.dir}/src/">
-			<fileset dir="./src/">
-				<include name="**/*.java" />
-			</fileset>
-		</copy>
+<project name="gnubridge" default="integrate">
+
+	<property name="build.dir" value="../temp/publish/gnubridge/" />
+	<property name="jar.publish.dir" value="${build.dir}/publish/" />
+	<property name="jar.candidate.dir" value="${build.dir}/candidate/" />
+
+
+	<!--    *************     INTEGRATE   *****************            -->
+
+	<target name="integrate" depends="set-version-latest, build-jar, run-tests, publish" description="Continuous Integration: build-test-publish " />
+
+	<target name="set-version-latest">
+		<property name="version" value="latest" />
+	</target>
+
+	<!--    *************     RUN TESTS   *****************            -->
+
+	<target name="run-tests" depends="build-jar, prepare-unit-tests, prepare-acceptance-tests, execute-tests" description="run all tests" />
+
+	<target name="prepare-unit-tests">
 		<copy todir="${build.dir}/test/">
 			<fileset dir="./test/">
 				<include name="**/*.java" />
 			</fileset>
 		</copy>
+		<mkdir dir="${build.dir}/classes/test/" />
+		<javac srcdir="${build.dir}/test/" destdir="${build.dir}/classes/test/" debug="on">
+			<classpath>
+				<pathelement location="${jar.candidate.dir}gnubridge-${version}.jar" />
+				<pathelement location="/Applications/eclipse/plugins/org.junit_3.8.2.v20080602-1318/junit.jar" />
+				<pathelement path="${java.class.path}" />
+			</classpath>
+		</javac>
+	</target>
+
+	<target name="prepare-acceptance-tests">
+
 		<copy todir="${build.dir}/acceptance/">
 			<fileset dir="./acceptance/">
 				<include name="**/*.java" />
 			</fileset>
 		</copy>
-
-		<copy todir="${build.dir}/resources/">
-			<fileset dir="./data/images/cards/jfitz/">
-				<include name="**/*.png" />
-			</fileset>
-		</copy>
-
-		<mkdir dir="${build.dir}/classes/core/" />
-		<mkdir dir="${build.dir}/classes/test/" />
 		<mkdir dir="${build.dir}/classes/acceptance/" />
 
-		<javac srcdir="${build.dir}/src/" destdir="${build.dir}/classes/core/" debug="on" />
-		<javac srcdir="${build.dir}/test/" destdir="${build.dir}/classes/test/" debug="on">
-			<classpath>
-				<pathelement location="/Applications/eclipse/plugins/org.junit_3.8.2.v20080602-1318/junit.jar" />
-				<pathelement location="${build.dir}/classes/core/" />
-				<pathelement path="${java.class.path}" />
-			</classpath>
-		</javac>
 		<javac srcdir="${build.dir}/acceptance/" destdir="${build.dir}/classes/acceptance/" debug="on">
 			<classpath>
+				<pathelement location="${jar.candidate.dir}gnubridge-${version}.jar" />
 				<pathelement location="/Applications/eclipse/plugins/org.junit_3.8.2.v20080602-1318/junit.jar" />
-				<pathelement location="${build.dir}/classes/core/" />
 				<pathelement location="${build.dir}/classes/test/" />
 				<pathelement path="${java.class.path}" />
 			</classpath>
 		</javac>
+	</target>
 
-        <mkdir dir="${build.dir}/test/temp/" />
+	<target name="execute-tests">
+
+		<mkdir dir="${build.dir}/test/temp/" />
 		<junit showoutput="true" printsummary="on" tempdir="${build.dir}/test/temp/">
 			<classpath>
-				<pathelement location="${build.dir}/classes/core/" />
+				<pathelement location="${jar.candidate.dir}gnubridge-${version}.jar" />
 				<pathelement location="${build.dir}/classes/test/" />
 				<pathelement location="${build.dir}/classes/acceptance/" />
-				<pathelement location="${build.dir}/resources/" />
 				<pathelement path="/Applications/eclipse/plugins/org.junit_3.8.2.v20080602-1318/junit.jar" />
 				<pathelement path="${java.class.path}" />
 			</classpath>
@@ -62,21 +68,18 @@
 				<fileset dir="${build.dir}/classes/test/">
 					<include name="**/*Test.class" />
 				</fileset>
-				<!--fileset dir="${build.dir}/classes/acceptance/">
+				<fileset dir="${build.dir}/classes/acceptance/">
 					<include name="**/*Test.class" />
-				</fileset-->
-
+				</fileset>
 			</batchtest>
 
 		</junit>
 	</target>
 
 
-	<target name="build-jar">
-		<property name="build.dir" value="../temp/publish/gnubridge/" />
-		<property name="version" value="0.1.11" />
-		<deltree dir="${build.dir}" />
-		<mkdir dir="${build.dir}" />
+	<!--    *************     BUILD JAR   *****************            -->
+
+	<target name="build-jar" depends="clean, set-version-release" description="build jar">
 
 		<copy todir="${build.dir}/src/">
 			<fileset dir="./src/">
@@ -94,8 +97,9 @@
 
 		<javac srcdir="${build.dir}/src/" destdir="${build.dir}/classes/" debug="on" />
 
-		<mkdir dir="${build.dir}/publish/" />
-		<jar destfile="${build.dir}/publish/gnubridge-${version}.jar">
+		<mkdir dir="${jar.candidate.dir}" />
+
+		<jar destfile="${jar.candidate.dir}gnubridge-${version}.jar">
 			<fileset dir="${build.dir}/classes/" />
 			<fileset dir="${build.dir}/resources/" />
 			<manifest>
@@ -103,5 +107,39 @@
 			</manifest>
 		</jar>
 
+	</target>
+
+	<target name="clean">
+		<deltree dir="${build.dir}" />
+		<mkdir dir="${build.dir}" />
+	</target>
+
+	<target name="set-version-release" unless="${version}">
+		<property name="version" value="0.1.11" />
+	</target>
+
+	<!--    *************     PUBLISH   *****************            -->
+
+	<target name="publish" depends="clean-publish-dir,publish-jar,publish-test-results" />
+
+	<target name="clean-publish-dir">
+		<deltree dir="${jar.publish.dir}" />
+		<mkdir dir="${jar.publish.dir}" />
+	</target>
+
+	<target name="publish-jar">
+		<copy todir="${jar.publish.dir}">
+			<fileset dir="${jar.candidate.dir}">
+				<include name="**/*.jar" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="publish-test-results">
+		<copy todir="${jar.publish.dir}">
+			<fileset dir="${build.dir}/test/">
+				<include name="*.*" />
+			</fileset>
+		</copy>
 	</target>
 </project>
