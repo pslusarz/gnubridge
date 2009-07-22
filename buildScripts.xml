@@ -3,7 +3,8 @@
 	<property name="build.dir" value="../temp/publish/gnubridge/" />
 	<property name="jar.publish.dir" value="${build.dir}/publish/" />
 	<property name="jar.candidate.dir" value="${build.dir}/candidate/" />
-
+    <echo> java classpath: ${java.class.path}</echo>
+    <echo> ant java version: ${ant.java.version}</echo>
 
 	<!--    *************     INTEGRATE   *****************            -->
 
@@ -68,9 +69,9 @@
 				<fileset dir="${build.dir}/classes/test/">
 					<include name="**/*Test.class" />
 				</fileset>
-				<!--fileset dir="${build.dir}/classes/acceptance/">
-					<include name="**/*Test.class" />
-				</fileset-->
+				<fileset dir="${build.dir}/classes/acceptance/">
+					<include name="**/BiddingAcceptanceTest.class" />
+				</fileset>
 			</batchtest>
 
 		</junit>
