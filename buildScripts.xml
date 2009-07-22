@@ -3,8 +3,7 @@
 	<property name="build.dir" value="../temp/publish/gnubridge/" />
 	<property name="jar.publish.dir" value="${build.dir}/publish/" />
 	<property name="jar.candidate.dir" value="${build.dir}/candidate/" />
-    <echo> java classpath: ${java.class.path}</echo>
-    <echo> ant java version: ${ant.java.version}</echo>
+    
 
 	<!--    *************     INTEGRATE   *****************            -->
 
@@ -53,7 +52,7 @@
 		</javac>
 	</target>
 
-	<target name="execute-tests">
+	<target name="execute-tests" depends="clean-publish-dir">
 
 		<mkdir dir="${build.dir}/test/temp/" />
 		<junit failureproperty="junit.failure" showoutput="true" printsummary="on" tempdir="${build.dir}/test/temp/">
@@ -64,7 +63,7 @@
 				<pathelement path="/Applications/eclipse/plugins/org.junit_3.8.2.v20080602-1318/junit.jar" />
 				<pathelement path="${java.class.path}" />
 			</classpath>
-			<formatter type="plain" />
+			<formatter type="xml" />
 			<batchtest fork="yes" todir="${build.dir}/test/">
 				<fileset dir="${build.dir}/classes/test/">
 					<include name="**/*Test.class" />
@@ -75,7 +74,15 @@
 			</batchtest>
 
 		</junit>
-		<fail message="test failed" if="junit.failure" />
+		<mkdir dir="${jar.publish.dir}tests/" />
+		<junitreport todir="${jar.publish.dir}tests/">
+		  <fileset dir="${build.dir}/test/">
+		    <include name="TEST-*.xml"/>
+		  </fileset>
+		  <report format="frames" todir="${jar.publish.dir}tests/"/>
+		</junitreport>
+
+		<fail message="Test(s) failed." if="junit.failure" />
 	</target>
 
 
