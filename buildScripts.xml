@@ -56,7 +56,7 @@
 	<target name="execute-tests">
 
 		<mkdir dir="${build.dir}/test/temp/" />
-		<junit showoutput="true" printsummary="on" tempdir="${build.dir}/test/temp/">
+		<junit failureproperty="junit.failure" showoutput="true" printsummary="on" tempdir="${build.dir}/test/temp/">
 			<classpath>
 				<pathelement location="${jar.candidate.dir}gnubridge-${version}.jar" />
 				<pathelement location="${build.dir}/classes/test/" />
@@ -75,6 +75,7 @@
 			</batchtest>
 
 		</junit>
+		<fail message="test failed" if="junit.failure" />
 	</target>
 
 
