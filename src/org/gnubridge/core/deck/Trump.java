@@ -41,4 +41,8 @@ public abstract class Trump {
 	public boolean isSuit() {
 		return isMajorSuit() || isMinorSuit();
 	}
+
+	public boolean isNoTrump() {
+		return NoTrump.i().equals(this);
+	}
 }

@@ -6,7 +6,7 @@ import org.gnubridge.core.bidding.Bid;
 import org.gnubridge.core.bidding.PointCalculator;
 import org.gnubridge.core.deck.Color;
 
-public class Rebid1ColorWithNewSuit extends Rebid {
+public class Rebid1ColorWithNewSuit extends RebidToLevel1Response {
 
 	private Color unbidSuit;
 

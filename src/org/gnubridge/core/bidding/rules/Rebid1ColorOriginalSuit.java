@@ -5,9 +5,9 @@ import org.gnubridge.core.bidding.Auctioneer;
 import org.gnubridge.core.bidding.Bid;
 import org.gnubridge.core.bidding.PointCalculator;
 
-public class RebidOriginalSuit extends Rebid {
+public class Rebid1ColorOriginalSuit extends RebidToLevel1Response {
 
-	public RebidOriginalSuit(Auctioneer a, Hand h) {
+	public Rebid1ColorOriginalSuit(Auctioneer a, Hand h) {
 		super(a, h);
 	}
 

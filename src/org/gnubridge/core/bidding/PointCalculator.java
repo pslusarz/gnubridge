@@ -87,8 +87,7 @@ public class PointCalculator {
 				return true;
 			}
 		} else if (cardsInColor.size() == 2) {
-			if (King.isValueOf(cardsInColor.get(0))
-					&& isQorJ(cardsInColor.get(1))) {
+			if (King.isValueOf(cardsInColor.get(0)) && isQorJ(cardsInColor.get(1))) {
 				return true;
 			} else if (isQorJ(cardsInColor.get(0))) {
 				return true;
@@ -115,14 +114,34 @@ public class PointCalculator {
 				voids = true;
 			} else if (cardsInColor == 1) {
 				singletons = true;
-			} else if (cardsInColor  == 2) {
-				doubletons ++;
+			} else if (cardsInColor == 2) {
+				doubletons++;
 			}
 		}
 		if (doubletons >= 2 || singletons || voids) {
-			return false; 
+			return false;
 		} else {
 			return true;
 		}
+	}
+
+	public boolean isTame() {
+		if (hand.matchesSuitLengthsLongToShort(4, 4, 4, 1)) {
+			return true;
+		}
+		if (hand.matchesSuitLengthsLongToShort(5, 4, 2, 2)) {
+			return true;
+		}
+		if (hand.matchesSuitLengthsLongToShort(5, 4, 3, 1)) {
+			return true;
+		}
+		if (hand.matchesSuitLengthsLongToShort(6, 3, 2, 2)) {
+			return true;
+		}
+		if (hand.matchesSuitLengthsLongToShort(6, 3, 3, 1)) {
+			return true;
+		}
+
+		return false;
 	}
 }

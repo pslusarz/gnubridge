@@ -27,6 +27,22 @@ public class RebidTest extends TestCase {
 		assertEquals(null, rule.getBid());
 	}
 
+	public void testOnlyApplyToRebidsFrom1LevelResponseAsPerLesson5() {
+		Auctioneer a = new Auctioneer(West.i());
+		a.bid(new Bid(1, Hearts.i()));
+		a.bid(new Pass());
+		a.bid(new Bid(2, Diamonds.i()));
+		a.bid(new Pass());
+		Rebid rule = new Rebid(a, new Hand("3,2", "K,Q,J,2", "9,8", "A,K,5,4,3")) {
+			@Override
+			protected Bid prepareBid() {
+				throw new RuntimeException("should not try to prepare bid when partner responsed above level 1");
+			}
+
+		};
+		assertEquals(null, rule.getBid());
+	}
+
 	public void testPrepareBidInRebidSituation() {
 		Auctioneer a = new Auctioneer(West.i());
 		a.bid(new Bid(1, Clubs.i()));

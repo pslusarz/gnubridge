@@ -2,14 +2,14 @@ package org.gnubridge.core;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import org.gnubridge.core.deck.Color;
 
-
 public class Hand {
 	List<Card> cards;
-	
+
 	/**
 	 * Caching optimization for pruning played cards
 	 * and perhaps others
@@ -21,17 +21,17 @@ public class Hand {
 	public Hand() {
 		this.cards = new ArrayList<Card>();
 	}
-	
+
 	public Hand(Card... cards) {
 		this();
 		for (Card card : cards) {
 			this.cards.add(card);
 		}
 	}
-	
+
 	public Hand(List<Card> cards) {
-	  this();
-	  this.cards.addAll(cards);
+		this();
+		this.cards.addAll(cards);
 	}
 
 	public Hand(String... colorSuits) {
@@ -43,14 +43,14 @@ public class Hand {
 		}
 
 	}
-	
+
 	public void add(Card c) {
 		cards.add(c);
 		orderedCards = null;
 		if (c.getDenomination().equals(color)) {
 			colorInOrder = null;
 		}
-		
+
 	}
 
 	private Collection<? extends Card> createCards(String colorSuit, Color color) {
@@ -108,13 +108,13 @@ public class Hand {
 
 	public List<Card> getCardsHighToLow() {
 		if (orderedCards != null) {
-			List<Card> copyOfOrderedCards = new ArrayList<Card> ();
+			List<Card> copyOfOrderedCards = new ArrayList<Card>();
 			copyOfOrderedCards.addAll(orderedCards);
-			return copyOfOrderedCards ;
+			return copyOfOrderedCards;
 		}
 		List<Card> orderedCards = new ArrayList<Card>();
 		for (Color color : Color.list) {
-		  orderedCards.addAll(getColorHi2Low(color));	
+			orderedCards.addAll(getColorHi2Low(color));
 		}
 		this.orderedCards = orderedCards;
 		return getCardsHighToLow();
@@ -142,6 +142,19 @@ public class Hand {
 		return cards.isEmpty();
 	}
 
-	
+	public boolean matchesSuitLengthsLongToShort(int suitLength1, int suitLength2, int suitLength3, int suitLength4) {
+		List<Integer> suitLengths = new ArrayList<Integer>();
+		for (Color color : Color.list) {
+			suitLengths.add(getColorLength(color));
+		}
+		Collections.sort(suitLengths);
+		Collections.reverse(suitLengths);
+		if (suitLengths.get(0) == suitLength1 && suitLengths.get(1) == suitLength2 && suitLengths.get(2) == suitLength3
+				&& suitLengths.get(3) == suitLength4) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 
 }

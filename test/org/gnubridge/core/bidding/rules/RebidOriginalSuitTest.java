@@ -20,7 +20,7 @@ public class RebidOriginalSuitTest extends TestCase {
 		a.bid(new Pass());
 		a.bid(new Bid(1, Diamonds.i()));
 		a.bid(new Pass());
-		RebidOriginalSuit rule = new RebidOriginalSuit(a, new Hand("3,2", "K,Q,J", "9,8", "A,K,5,4,3,2"));
+		Rebid1ColorOriginalSuit rule = new Rebid1ColorOriginalSuit(a, new Hand("3,2", "K,Q,J", "9,8", "A,K,5,4,3,2"));
 		assertEquals(new Bid(2, Clubs.i()), rule.getBid());
 	}
 
@@ -30,7 +30,7 @@ public class RebidOriginalSuitTest extends TestCase {
 		a.bid(new Pass());
 		a.bid(new Bid(1, Spades.i()));
 		a.bid(new Pass());
-		RebidOriginalSuit rule = new RebidOriginalSuit(a, new Hand("3,2", "A,K,5,4,3,2", "K,Q,J", "K,8"));
+		Rebid1ColorOriginalSuit rule = new Rebid1ColorOriginalSuit(a, new Hand("3,2", "A,K,5,4,3,2", "K,Q,J", "K,8"));
 		assertEquals(new Bid(3, Hearts.i()), rule.getBid());
 	}
 
@@ -40,7 +40,7 @@ public class RebidOriginalSuitTest extends TestCase {
 		a.bid(new Pass());
 		a.bid(new Bid(1, Spades.i()));
 		a.bid(new Pass());
-		RebidOriginalSuit rule = new RebidOriginalSuit(a, new Hand("K,2", "A,K,J,5,4,3,2", "K,Q", "K,8"));
+		Rebid1ColorOriginalSuit rule = new Rebid1ColorOriginalSuit(a, new Hand("K,2", "A,K,J,5,4,3,2", "K,Q", "K,8"));
 		assertEquals(new Bid(4, Hearts.i()), rule.getBid());
 	}
 
@@ -50,7 +50,7 @@ public class RebidOriginalSuitTest extends TestCase {
 		a.bid(new Pass());
 		a.bid(new Bid(1, Diamonds.i()));
 		a.bid(new Pass());
-		RebidOriginalSuit rule = new RebidOriginalSuit(a, new Hand("3,2", "K,Q,J", "9,8,2", "A,K,5,4,3"));
+		Rebid1ColorOriginalSuit rule = new Rebid1ColorOriginalSuit(a, new Hand("3,2", "K,Q,J", "9,8,2", "A,K,5,4,3"));
 		assertEquals(null, rule.getBid());
 	}
 
@@ -60,7 +60,7 @@ public class RebidOriginalSuitTest extends TestCase {
 		a.bid(new Pass());
 		a.bid(new Bid(1, Diamonds.i()));
 		a.bid(new Pass());
-		RebidOriginalSuit rule = new RebidOriginalSuit(a, new Hand("3,2", "K,Q,J", "9,8", "A,K,5,4,3,2"));
+		Rebid1ColorOriginalSuit rule = new Rebid1ColorOriginalSuit(a, new Hand("3,2", "K,Q,J", "9,8", "A,K,5,4,3,2"));
 		assertEquals(null, rule.getBid());
 	}
 }

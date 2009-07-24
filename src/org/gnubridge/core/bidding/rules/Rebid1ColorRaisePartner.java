@@ -5,7 +5,7 @@ import org.gnubridge.core.bidding.Auctioneer;
 import org.gnubridge.core.bidding.Bid;
 import org.gnubridge.core.bidding.ResponseCalculator;
 
-public class Rebid1ColorRaisePartner extends Rebid {
+public class Rebid1ColorRaisePartner extends RebidToLevel1Response {
 
 	public Rebid1ColorRaisePartner(Auctioneer a, Hand h) {
 		super(a, h);
