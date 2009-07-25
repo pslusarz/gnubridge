@@ -85,11 +85,11 @@ public class Rebid1ColorWithNewSuitTest extends TestCase {
 
 	public void testLowerRankedSuitThanOriginalIsNotAReverseBid() {
 		Auctioneer a = new Auctioneer(West.i());
+		a.bid(new Bid(1, Hearts.i()));
+		a.bid(new Pass());
 		a.bid(new Bid(1, Spades.i()));
 		a.bid(new Pass());
-		a.bid(new Bid(2, Clubs.i()));
-		a.bid(new Pass());
-		Rebid1ColorWithNewSuit rule = new Rebid1ColorWithNewSuit(a, new Hand("K,Q,J,2", "9,8", "K,Q,J,3,2", "J,2"));
+		Rebid1ColorWithNewSuit rule = new Rebid1ColorWithNewSuit(a, new Hand("9,8", "K,Q,J,2", "K,Q,J,3,2", "J,2"));
 		assertEquals(new Bid(2, Diamonds.i()), rule.getBid());
 	}
 

@@ -50,7 +50,7 @@ public class Rebid1ColorRaisePartnerTest extends TestCase {
 		Auctioneer a = new Auctioneer(West.i());
 		a.bid(new Bid(1, Clubs.i()));
 		a.bid(new Pass());
-		a.bid(new Bid(2, Hearts.i()));
+		a.bid(new Bid(1, Hearts.i()));
 		a.bid(new Pass());
 		Rebid1ColorRaisePartner rule = new Rebid1ColorRaisePartner(a, new Hand("3,2", "K,Q,J,2", "K,8", "A,K,5,4,3"));
 
@@ -61,7 +61,7 @@ public class Rebid1ColorRaisePartnerTest extends TestCase {
 		Auctioneer a = new Auctioneer(West.i());
 		a.bid(new Bid(1, Clubs.i()));
 		a.bid(new Pass());
-		a.bid(new Bid(2, Hearts.i()));
+		a.bid(new Bid(1, Hearts.i()));
 		a.bid(new Pass());
 		Rebid1ColorRaisePartner rule = new Rebid1ColorRaisePartner(a, new Hand("3,2", "K,Q,J,2", "K,8", "A,K,J,4,3"));
 

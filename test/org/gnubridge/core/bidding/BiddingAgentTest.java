@@ -59,7 +59,7 @@ public class BiddingAgentTest extends TestCase {
 		Auctioneer a = new Auctioneer(West.i());
 		a.bid(new Bid(1, Diamonds.i()));
 		a.bid(new Pass());
-		BiddingAgent ba = new BiddingAgent(a, new Hand("K,3,2", "K,5,4,3", "9,8,6", "5,4,3"));
+		BiddingAgent ba = new BiddingAgent(a, new Hand("K,3", "K,5,4,3,2", "9,8", "5,4,3,2"));
 		assertEquals(new Bid(1, Hearts.i()), ba.getBid());
 	}
 
@@ -116,6 +116,16 @@ public class BiddingAgentTest extends TestCase {
 		a.bid(new Pass());
 		BiddingAgent ba = new BiddingAgent(a, new Hand("3,2", "A,K,5,4,3,2", "K,Q,J", "K,8"));
 		assertEquals(new Bid(3, Hearts.i()), ba.getBid());
+	}
+
+	public void testRebid1ColorWithNT() {
+		Auctioneer a = new Auctioneer(West.i());
+		a.bid(new Bid(1, Spades.i()));
+		a.bid(new Pass());
+		a.bid(new Bid(1, NoTrump.i()));
+		a.bid(new Pass());
+		BiddingAgent ba = new BiddingAgent(a, new Hand("A,Q,3,2", "K,Q,J,2", "9", "A,K,5,4"));
+		assertEquals(new Bid(3, NoTrump.i()), ba.getBid());
 	}
 
 	public void testHaveToBidSomething() {
