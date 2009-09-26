@@ -83,7 +83,7 @@ public class DoubleDummySolverTest extends TestCase {
 		assertEquals(0, s.getStack().size());
 	}
 
-	public void testOnlyExpandFirstCardInSequenceTwoCards() {
+	public void testOnlyExpandOneCardInSequenceTwoCards() {
 		Node node = new Node(null);
 		Game game = new Game(NoTrump.i());
 		// game.getPlayer(Direction.WEST).init(new String[] { "A", "5" });
@@ -94,24 +94,27 @@ public class DoubleDummySolverTest extends TestCase {
 		DoubleDummySolver s = new DoubleDummySolver(game);
 		s.examinePosition(node);
 		assertEquals(2, s.getStack().size());
-		assertTrue(s.getStack().contains(node.children.get(0)));
-		assertTrue(node.children.get(1).isPruned());
+		assertTrue(s.getStack().contains(node.children.get(1)));
+		assertTrue(node.children.get(0).isPruned());
+		assertFalse(node.children.get(1).isPruned());
 	}
 
-	public void testOnlyExpandFirstCardInSequenceThreeCards() {
+	public void testOnlyExpandOneCardInSequenceThreeCards() {
 		Node node = new Node(null);
 		Game game = new Game(NoTrump.i());
 		// game.getPlayer(Direction.WEST).init(new String[] { "A", "5", "Q" });
 		// game.getPlayer(Direction.NORTH).init(new String[] { "2", "4", "6" });
-		game.getPlayer(Direction.SOUTH).init(new String[] { "J", "10", "9" });
+		game.getPlayer(Direction.SOUTH).init(new String[] { "J", "9", "10" });
 		// game.getPlayer(Direction.EAST).init(new String[] { "K", "7", "8" });
 		game.setNextToPlay(Direction.SOUTH);
 		DoubleDummySolver s = new DoubleDummySolver(game);
 		s.examinePosition(node);
 		assertEquals(3, s.getStack().size());
-		assertTrue(s.getStack().contains(node.children.get(0)));
+		assertTrue(s.getStack().contains(node.children.get(1)));
 		assertTrue(node.children.get(1).isPruned());
-		assertTrue(node.children.get(2).isPruned());
+		assertTrue(node.children.get(0).isPruned());
+		assertFalse(node.children.get(2).isPruned());
+		System.out.println(node.children.get(2).getCardPlayed());
 	}
 
 	public void testOnlyExpandFirstCardInSequenceThreeCardsOutOfOrder() {
@@ -226,9 +229,9 @@ public class DoubleDummySolverTest extends TestCase {
 		game.setNextToPlay(Direction.WEST);
 		DoubleDummySolver search = new DoubleDummySolver(game);
 		search.setUseDuplicateRemoval(false);
-		search.pruneAlphaBeta = false;
+		search.useAlphaBetaPruning(false);
 		search.setUsePruneLowestCardToLostTrick(false);
-		search.usePruning(false);
+		search.useAlphaBetaPruning(false);
 		//search.setShouldPruneCardsInPlayedSequence(false);
 		search.search();
 		assertEquals(1, search.getRoot().getTricksTaken(Player.WEST_EAST));
@@ -339,7 +342,7 @@ public class DoubleDummySolverTest extends TestCase {
 				new Card[] { Six.of(Hearts.i()), Two.of(Hearts.i()), Queen.of(Spades.i()), King.of(Clubs.i()) });
 
 		DoubleDummySolver pruned = new DoubleDummySolver(game.duplicate());
-		pruned.usePruning(true);
+		pruned.useAlphaBetaPruning(true);
 		pruned.search();
 		assertEquals(2, pruned.getRoot().getTricksTaken(Player.WEST_EAST));
 	}
@@ -354,7 +357,7 @@ public class DoubleDummySolverTest extends TestCase {
 
 		game.setNextToPlay(Direction.SOUTH);
 		DoubleDummySolver pruned = new DoubleDummySolver(game.duplicate());
-		pruned.usePruning(true);
+		pruned.useAlphaBetaPruning(true);
 		pruned.search();
 		assertEquals(2, pruned.getRoot().getTricksTaken(Player.WEST_EAST));
 
@@ -372,7 +375,7 @@ public class DoubleDummySolverTest extends TestCase {
 
 	public void testPrunedParentNoEvaluation() {
 		Node root = new Node(null);
-		root.setPruned(true, Node.PRUNE_ALPHA);
+		root.pruneAsAlpha();
 		Node child = new Node(root);
 		Game g = new Game(NoTrump.i());
 		GameUtils.initializeSingleColorSuits(g, 2);
@@ -383,7 +386,8 @@ public class DoubleDummySolverTest extends TestCase {
 
 	public void testPrunedAncestorNoEvaluation() {
 		Node root = new Node(null);
-		root.setPruned(true, Node.PRUNE_ALPHA);
+
+		root.pruneAsAlpha();
 		Node child = new Node(root);
 		Node grandChild = new Node(child);
 		Game g = new Game(NoTrump.i());
@@ -551,7 +555,7 @@ public class DoubleDummySolverTest extends TestCase {
 	public void testTrimPruned() {
 		Node root = new Node(null);
 		root.setPlayerTurn(Direction.WEST);
-		root.setPruned(true, Node.PRUNE_ALPHA);
+		root.pruneAsAlpha();
 		@SuppressWarnings("unused")
 		Node child1 = new Node(root);
 		@SuppressWarnings("unused")
@@ -590,18 +594,20 @@ public class DoubleDummySolverTest extends TestCase {
 
 	public void testNorthTrumps() {
 		Game game = new Game(Spades.i());
-		game.getPlayer(Direction.WEST).init(new Card[] { Nine.of(Clubs.i()), Four.of(Clubs.i()) });
+		game.getPlayer(Direction.WEST).init(new Card[] { Nine.of(Clubs.i()), Four.of(Spades.i()) });
 		game.getPlayer(Direction.NORTH).init(new Card[] { Two.of(Spades.i()), Two.of(Hearts.i()) });
 		game.getPlayer(Direction.EAST).init(new Card[] { Three.of(Clubs.i()), Three.of(Diamonds.i()) });
 		game.getPlayer(Direction.SOUTH).init(new Card[] { Six.of(Clubs.i()), Five.of(Diamonds.i()) });
-		game.doNextCard(0);
+		game.play(Nine.of(Clubs.i()));
 		DoubleDummySolver s = new DoubleDummySolver(game);
 		s.search();
+		s.printStats();
+		s.printOptimalPath();
 		assertEquals(1, s.getBestMoves().size());
 		assertEquals(Two.of(Spades.i()), s.getBestMoves().get(0));
 
 		Game game2 = new Game(Spades.i());
-		game2.getPlayer(Direction.WEST).init(new Card[] { Nine.of(Clubs.i()), Four.of(Clubs.i()) });
+		game2.getPlayer(Direction.WEST).init(new Card[] { Nine.of(Clubs.i()), Four.of(Spades.i()) });
 		game2.getPlayer(Direction.NORTH).init(new Card[] { Two.of(Hearts.i()), Two.of(Spades.i()) }); // order
 		// reverted
 		game2.getPlayer(Direction.EAST).init(new Card[] { Three.of(Clubs.i()), Three.of(Diamonds.i()) });
@@ -685,9 +691,9 @@ public class DoubleDummySolverTest extends TestCase {
 		Node root = new Node(null);
 		pruned.examinePosition(root);
 		assertNotNull(root.children.get(0));
-		assertEquals(Six.of(Spades.i()), root.children.get(0).getCardPlayed());
-		assertTrue(root.children.get(0).isPruned());
-		assertFalse(root.children.get(1).isPrunedLowestCardInLostTrick());
+		assertEquals(Six.of(Spades.i()), root.children.get(1).getCardPlayed());
+		assertTrue(root.children.get(1).isPruned());
+		assertFalse(root.children.get(0).isPrunedLowestCardInLostTrick());
 		assertNotNull(root.getBestMove());
 		assertEquals(Four.of(Spades.i()), root.getBestMove().getCardPlayed());
 
@@ -719,6 +725,7 @@ public class DoubleDummySolverTest extends TestCase {
 
 		game.setNextToPlay(Direction.WEST);
 		DoubleDummySolver pruned = new DoubleDummySolver(game.duplicate());
+		//	pruned.useAlphaBetaPruning(false);
 		pruned.search();
 		assertEquals(Queen.of(Spades.i()), pruned.getRoot().getBestMove().getCardPlayed());
 
@@ -730,7 +737,8 @@ public class DoubleDummySolverTest extends TestCase {
 
 		gameWithCardsFlipped.setNextToPlay(Direction.WEST);
 		DoubleDummySolver triangulate = new DoubleDummySolver(gameWithCardsFlipped.duplicate());
-		//triangulate.pruneAlphaBeta = false;
+
+		//	triangulate.useAlphaBetaPruning(false);
 		triangulate.search();
 		assertEquals(Queen.of(Spades.i()), triangulate.getRoot().getBestMove().getCardPlayed());
 
@@ -775,10 +783,9 @@ public class DoubleDummySolverTest extends TestCase {
 		game.play(Ten.of(Hearts.i()));
 		DoubleDummySolver search = new DoubleDummySolver(game);
 		search.setUseDuplicateRemoval(false);
-		search.pruneAlphaBeta = false;
 		search.setUsePruneLowestCardToLostTrick(true);
 		//search.setUsePruneLowestCardToLostTrick(false);
-		search.usePruning(false);
+		search.useAlphaBetaPruning(true);
 		search.search();
 		assertEquals(Eight.of(Hearts.i()), search.getRoot().getBestMove().getCardPlayed());
 	}

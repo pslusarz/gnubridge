@@ -4,7 +4,7 @@
 	<classpathentry kind="src" path="data/images/cards/jfitz"/>
 	<classpathentry kind="src" path="test"/>
 	<classpathentry kind="src" path="acceptance"/>
-	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/3.8.1"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

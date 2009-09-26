@@ -33,10 +33,9 @@ public class DoubleDummySolver {
 
 	private int prunedPlayedSequence;
 
-	private boolean usePruning = true;
+	private boolean useAlphaBetaPruning = true;
 	private boolean useDuplicateRemoval = true;
 	private boolean shouldPruneLowestCardInLostTrick = true;
-	boolean pruneAlphaBeta = true;
 	private boolean shouldPruneCardsInSequence = true;
 	private boolean shouldPruneCardsInPlayedSequence = true;
 
@@ -44,6 +43,12 @@ public class DoubleDummySolver {
 	PositionLookup lookup;
 
 	private int prunedLowestCardInLostTrick;
+
+	private boolean terminateIfRootOnlyHasOneValidMove = true;
+
+	public void setTerminateIfRootOnlyHasOneValidMove(boolean terminateIfRootOnlyHasOneValidMove) {
+		this.terminateIfRootOnlyHasOneValidMove = terminateIfRootOnlyHasOneValidMove;
+	}
 
 	public DoubleDummySolver(Node root) {
 		this.root = root;
@@ -97,7 +102,9 @@ public class DoubleDummySolver {
 	}
 
 	@Deprecated
-	// @deprecated "feature currently disabled"
+	/**
+	 *  @deprecated "feature currently disabled"
+	 */
 	public void setShouldPruneCardsInPlayedSequence(boolean b) {
 		shouldPruneCardsInPlayedSequence = b;
 	}
@@ -134,7 +141,6 @@ public class DoubleDummySolver {
 		Player player = position.getNextToPlay();
 		node.setPlayerTurn(player.getDirection());
 		node.setPosition(position);
-
 		for (Card card : player.getPossibleMoves(position.getCurrentTrick())) {
 			makeChildNodeForCardPlayed(node, player, card);
 		}
@@ -160,7 +166,7 @@ public class DoubleDummySolver {
 					ifCannotTakeTrickPlayLowestCardInColor(move, position);
 				}
 			}
-			if (!rootOnlyHasOneValidMove(node)) {
+			if (!rootOnlyHasOneValidMove(node) || !terminateIfRootOnlyHasOneValidMove) {
 				for (Node move : node.children) {
 					// TODO later if (!move.isPruned()) {
 					stack.push(move);
@@ -204,7 +210,7 @@ public class DoubleDummySolver {
 			higherCard = getHigher(move.getCardPlayed(), sibling);
 
 			if (higherCard.equals(move.getCardPlayed()) && cannotTakeTrick(higherCard, currentTrick)) {
-				move.setPruned(true, Node.PRUNE_LOWEST_CARD_IN_LOST_TRICK);
+				move.pruneAsLowestCardInLostTrick();
 
 				break;
 			}
@@ -253,7 +259,7 @@ public class DoubleDummySolver {
 			}
 		}
 		if (shouldTrim) {
-			move.setPruned(true, Node.PRUNE_SEQUENCE_SIBLINGS_PLAYED);
+			move.pruneAsSequenceSiblingPlayed();
 		}
 
 	}
@@ -301,16 +307,16 @@ public class DoubleDummySolver {
 		}
 
 		if (shouldTrim) {
-			move.setPruned(true, Node.PRUNE_SEQUENCE_SIBLINGS);
+			move.pruneAsSequenceSibling();
 		}
 
 	}
 
 	/**
-	 * 1. evaluate all child nodes and find one where current player or his
-	 * partner takes the most tricks. 2. delete all other nodes 3. set tricks
-	 * taken on current node to the value of the child selected in 1. 4. if last
-	 * child, then call trim on parent
+	 * 1. evaluate all child nodes and find one where current player or his partner takes the most tricks. 
+	 * 2. delete all other nodes 
+	 * 3. set tricks taken on current node to the value of the child selected in 1. 
+	 * 4. if last child, then call trim on parent
 	 */
 
 	public void trim(Node node) {
@@ -320,7 +326,7 @@ public class DoubleDummySolver {
 			node.nullAllChildrenExceptOne();
 		}
 		node.calculateValue();
-		if (pruneAlphaBeta) {
+		if (useAlphaBetaPruning) {
 			pruneAlphaBeta(node);
 		}
 		if (node.canTrim()) {
@@ -331,10 +337,10 @@ public class DoubleDummySolver {
 	}
 
 	private void pruneAlphaBeta(Node node) {
-		if (usePruning() && node.shouldBeAlphaPruned()) {
+		if (node.shouldBeAlphaPruned()) {
 			node.alphaPrune();
 		}
-		if (usePruning() && node.shouldBeBetaPruned()) {
+		if (node.shouldBeBetaPruned()) {
 			node.betaPrune();
 		}
 
@@ -355,8 +361,8 @@ public class DoubleDummySolver {
 		root.printOptimalPath(game);
 	}
 
-	public void usePruning(boolean b) {
-		usePruning = b;
+	public void useAlphaBetaPruning(boolean b) {
+		useAlphaBetaPruning = b;
 
 	}
 
@@ -378,12 +384,12 @@ public class DoubleDummySolver {
 
 	public void printStats() {
 		String pruneType = "Unpruned";
-		if (usePruning) {
+		if (useAlphaBetaPruning) {
 			pruneType = "Pruned";
 		}
 		System.out.println(pruneType + " search took (msec): " + getRunningTime());
 		System.out.println("  Positions examined: " + getPositionsExamined());
-		if (usePruning) {
+		if (useAlphaBetaPruning) {
 			System.out.println("  Alpha prunes: " + getPrunedAlpha());
 			System.out.println("  Beta prunes: " + getPrunedBeta());
 			System.out.println("  Sequence prunes: " + getPrunedSequence());
@@ -396,6 +402,7 @@ public class DoubleDummySolver {
 			System.out.println("  Lowest card to lost trick prunes: " + getPrunedLowestCardInLostTrick());
 		}
 		System.out.println("West/East tricks taken: " + root.getTricksTaken(Player.WEST_EAST));
+		System.out.println("North/South tricks taken: " + root.getTricksTaken(Player.NORTH_SOUTH));
 
 	}
 
@@ -411,8 +418,8 @@ public class DoubleDummySolver {
 		return prunedSequence;
 	}
 
-	public boolean usePruning() {
-		return usePruning;
+	public boolean isAlphaBetaPruning() {
+		return useAlphaBetaPruning;
 	}
 
 	public void setMaxTricks(int i) {

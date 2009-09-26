@@ -7,8 +7,6 @@ import org.gnubridge.core.Card;
 import org.gnubridge.core.Game;
 import org.gnubridge.core.Player;
 import org.gnubridge.core.Trick;
-import org.gnubridge.core.deck.Hearts;
-import org.gnubridge.core.deck.King;
 
 public class Node {
 	public static final byte UNITNITIALIZED = -1;
@@ -47,7 +45,7 @@ public class Node {
 
 	private boolean pruned = false;
 
-	private byte pruneType;
+	private byte pruneType = PRUNE_ALPHA - 1;
 
 	private Player playerCardPlayed;
 
@@ -202,8 +200,26 @@ public class Node {
 			return "";
 		} else {
 			return parent.printMoves() + getPlayerCardPlayed() + ": " + getCardPlayed()
-					+ (isPruned() ? " (pruned)" : "") + "\n";
+					+ (isPruned() ? " (pruned " + pruneTypeToString() + ")" : "") + "\n";
 		}
+	}
+
+	private String pruneTypeToString() {
+		String result = "UNKNOWN";
+		if (pruneType == PRUNE_ALPHA) {
+			result = "ALPHA";
+		} else if (pruneType == PRUNE_BETA) {
+			result = "BETA";
+		} else if (pruneType == PRUNE_DUPLICATE_POSITION) {
+			result = "DUPLICATE POSITION";
+		} else if (pruneType == PRUNE_LOWEST_CARD_IN_LOST_TRICK) {
+			result = "LOWEST CARD IN LOST TRICK";
+		} else if (pruneType == PRUNE_SEQUENCE_SIBLINGS) {
+			result = "SIBLING SEQUENCE";
+		} else if (pruneType == PRUNE_SEQUENCE_SIBLINGS_PLAYED) {
+			result = "SIBLING IN PLAYED SEQUENCE";
+		}
+		return result;
 	}
 
 	private boolean isRoot() {
@@ -215,7 +231,7 @@ public class Node {
 
 	}
 
-	public void setPruned(boolean b, byte type) {
+	private void setPruned(boolean b, byte type) {
 		this.pruned = b;
 		this.pruneType = type;
 	}
@@ -370,7 +386,9 @@ public class Node {
 
 	@Override
 	public String toString() {
-		return "Node " + getMoves().toString();
+		return "Node " + getMoves().toString() + " / pruning status: " + isPruned() + " " + pruneTypeToString() + " / "
+				+ getPlayerCardPlayed() + ": " + getCardPlayed() + " Tricks WE|NS: " + getTricksTaken()[0] + "|"
+				+ getTricksTaken()[1];
 	}
 
 	private List<Node> siblings() {
@@ -531,9 +549,28 @@ public class Node {
 			if (child.isPruned() || child.getTricksTaken(getCurrentPair()) < best.getTricksTaken(getCurrentPair())) {
 				children.set(children.indexOf(child), null);
 				child.trimmed = true;
-
 			}
 		}
+	}
+
+	public void pruneAsSequenceSibling() {
+		setPruned(true, Node.PRUNE_SEQUENCE_SIBLINGS);
+	}
+
+	public void pruneAsSequenceSiblingPlayed() {
+		setPruned(true, Node.PRUNE_SEQUENCE_SIBLINGS_PLAYED);
+	}
+
+	public void pruneAsLowestCardInLostTrick() {
+		setPruned(true, Node.PRUNE_LOWEST_CARD_IN_LOST_TRICK);
+	}
+
+	public void pruneAsAlpha() {
+		setPruned(true, Node.PRUNE_ALPHA);
+	}
+
+	public void pruneAsBeta() {
+		setPruned(true, Node.PRUNE_BETA);
 	}
 
 }

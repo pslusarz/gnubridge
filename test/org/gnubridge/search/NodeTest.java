@@ -37,65 +37,48 @@ public class NodeTest extends TestCase {
 		assertEquals(0, grandChild.getMoves().get(1).intValue());
 	}
 
-
-
-
-
-
-
-
-
-
-
-
-	
-
-	
 	public void testPrunedIfParentThenChild() {
 		Node root = new Node(null);
 		Node child = new Node(root);
 		assertFalse(child.isPruned());
-		root.setPruned(true, Node.PRUNE_ALPHA);
+		root.pruneAsAlpha();
 		assertTrue(child.isPruned());
 	}
-	
+
 	public void testIsAlpha() {
-	    Node root = new Node(null);
-	    root.setPlayerTurn(Direction.WEST);
-	    Node n_1 = new Node(root);
-	    n_1.setPlayerTurn(Direction.NORTH);
-	    Node n_1_1 = new Node(n_1);
-	    n_1_1.setPlayerTurn(Direction.EAST);	    
-	    Node n_1_1_1 = new Node(n_1_1);
-	    n_1_1_1.setPlayerTurn(Direction.SOUTH);
-	    Node n_1_1_1_1 = new Node(n_1_1_1);
-	    n_1_1_1_1.setPlayerTurn(Direction.SOUTH);
-	    Node n_1_1_1_2 = new Node(n_1_1_1);
-	    n_1_1_1_2.setPlayerTurn(Direction.EAST);
-	    assertTrue(root.isAlpha());
-	    assertFalse(n_1.isAlpha());
-	    assertTrue(n_1_1.isAlpha());
-	    assertFalse(n_1_1_1.isAlpha());
-	    assertFalse(n_1_1_1_1.isAlpha());
-	    assertTrue(n_1_1_1_2.isAlpha());
+		Node root = new Node(null);
+		root.setPlayerTurn(Direction.WEST);
+		Node n_1 = new Node(root);
+		n_1.setPlayerTurn(Direction.NORTH);
+		Node n_1_1 = new Node(n_1);
+		n_1_1.setPlayerTurn(Direction.EAST);
+		Node n_1_1_1 = new Node(n_1_1);
+		n_1_1_1.setPlayerTurn(Direction.SOUTH);
+		Node n_1_1_1_1 = new Node(n_1_1_1);
+		n_1_1_1_1.setPlayerTurn(Direction.SOUTH);
+		Node n_1_1_1_2 = new Node(n_1_1_1);
+		n_1_1_1_2.setPlayerTurn(Direction.EAST);
+		assertTrue(root.isAlpha());
+		assertFalse(n_1.isAlpha());
+		assertTrue(n_1_1.isAlpha());
+		assertFalse(n_1_1_1.isAlpha());
+		assertFalse(n_1_1_1_1.isAlpha());
+		assertTrue(n_1_1_1_2.isAlpha());
 	}
-	
+
 	public void testIsAlphaBetaPruned() {
 		Node root = new Node(null);
 		Node child = new Node(root);
-		root.setPruned(true, Node.PRUNE_ALPHA);
+		root.pruneAsAlpha();
 		assertTrue(child.isAlphaPruned());
 		assertTrue(child.isPruned());
 		assertFalse(child.isBetaPruned());
-		
-		root.setPruned(true, Node.PRUNE_BETA);
+
+		root.pruneAsBeta();
 		assertTrue(child.isBetaPruned());
 		assertTrue(child.isPruned());
-		assertFalse(child.isAlphaPruned());		
+		assertFalse(child.isAlphaPruned());
 	}
-	
-	
-	
 
 }
 
@@ -119,6 +102,7 @@ class MockNode extends Node {
 		this.trimmed = true;
 	}
 
+	@Override
 	public boolean trimmed() {
 		return this.trimmed;
 	}

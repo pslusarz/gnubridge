@@ -1,6 +1,7 @@
 package org.gnubridge.core;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.gnubridge.core.deck.Color;
@@ -133,10 +134,17 @@ public class Player {
 			}
 		}
 		if (matching.size() == 0) {
-			return nonMatching;
+
+			return orderLowToHigh(nonMatching);
 		} else {
-			return matching;
+			return orderLowToHigh(matching);
 		}
+	}
+
+	private List<Card> orderLowToHigh(List<Card> cards) {
+		List<Card> result = new Hand(cards).getCardsHighToLow();
+		Collections.reverse(result);
+		return result;
 	}
 
 	public Card play(Trick trick, int moveIndex) {

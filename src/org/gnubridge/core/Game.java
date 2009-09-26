@@ -13,7 +13,7 @@ public class Game {
 
 	private static Game preInitializedGame;
 
-	private Player[] players;
+	private final Player[] players;
 
 	int nextToPlay;
 
@@ -116,8 +116,7 @@ public class Game {
 				return i;
 			}
 		}
-		throw new RuntimeException("Cannot find winning player for trick: "
-				+ trick);
+		throw new RuntimeException("Cannot find winning player for trick: " + trick);
 	}
 
 	public boolean isDone() {
@@ -135,8 +134,7 @@ public class Game {
 		}
 		result.nextToPlay = nextToPlay;
 		result.setCurrentTrick(currentTrick.duplicate());
-		result.setPlayedCards(playedCards.getCardsHighToLow()); // TODO:
-		// untested
+		result.setPlayedCards(playedCards.getCardsHighToLow()); // TODO: untested
 		return result;
 	}
 
@@ -168,11 +166,9 @@ public class Game {
 	public int getTricksTaken(int pair) {
 		switch (pair) {
 		case Player.WEST_EAST:
-			return getPlayer(Direction.WEST).countTricksTaken()
-					+ getPlayer(Direction.EAST).countTricksTaken();
+			return getPlayer(Direction.WEST).countTricksTaken() + getPlayer(Direction.EAST).countTricksTaken();
 		case Player.NORTH_SOUTH:
-			return getPlayer(Direction.NORTH).countTricksTaken()
-					+ getPlayer(Direction.SOUTH).countTricksTaken();
+			return getPlayer(Direction.NORTH).countTricksTaken() + getPlayer(Direction.SOUTH).countTricksTaken();
 		default:
 			throw new RuntimeException("Unknown pair: " + pair);
 		}
@@ -180,8 +176,7 @@ public class Game {
 	}
 
 	public boolean oneTrickLeft() {
-		return (getCurrentTrick().getHighestCard() == null && getNextToPlay()
-				.getHand().size() == 1);
+		return (getCurrentTrick().getHighestCard() == null && getNextToPlay().getHand().size() == 1);
 	}
 
 	public void setTrump(Trump d) {
@@ -214,8 +209,7 @@ public class Game {
 	}
 
 	public void play(Card c) {
-		List<Card> possibleMoves = getNextToPlay().getPossibleMoves(
-				currentTrick);
+		List<Card> possibleMoves = getNextToPlay().getPossibleMoves(currentTrick);
 		doNextCard(possibleMoves.indexOf(c));
 
 	}
@@ -259,14 +253,11 @@ public class Game {
 
 	public void printHandsDebug() {
 		for (Player player : players) {
-			System.out.println("game.get" + player + "().init("
-					+ printHandDebug(player.getHand()) + ");");
+			System.out.println("game.get" + player + "().init(" + printHandDebug(player.getHand()) + ");");
 		}
-		System.out.println("game.setNextToPlay(Direction."
-				+ getNextToPlay().toString().toUpperCase() + ");");
+		System.out.println("game.setNextToPlay(Direction." + getNextToPlay().toString().toUpperCase() + ");");
 		if (getTrump() != null) {
-			System.out.println("game.setTrump(" + getTrump().toDebugString()
-					+ ");");
+			System.out.println("game.setTrump(" + getTrump().toDebugString() + ");");
 		}
 
 	}
@@ -304,8 +295,7 @@ public class Game {
 		for (Card card : getPlayedCards().getCardsHighToLow()) {
 			cardsPlayedRepresentation += card.getIndex() + ",";
 		}
-		String unique = cardsPlayedRepresentation + "*"
-				+ getTricksTaken(Player.NORTH_SOUTH) + "*"
+		String unique = cardsPlayedRepresentation + "*" + getTricksTaken(Player.NORTH_SOUTH) + "*"
 				+ getNextToPlay().getDirection();
 		return unique;
 	}
