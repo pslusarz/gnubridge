@@ -13,9 +13,9 @@ import javax.swing.JRadioButton;
 public class BiddingControls extends GBContainer {
 	private ButtonGroup radioButtons;
 	private List<JPanel> subpanels;
-	private BiddingView listener;
+	private BiddingViewImpl listener;
 	
-	public BiddingControls(BiddingView view) {
+	public BiddingControls(BiddingViewImpl view) {
 		super(null);
 		listener = view;
 		subpanels = new ArrayList<JPanel>();

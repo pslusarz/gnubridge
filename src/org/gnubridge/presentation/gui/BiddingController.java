@@ -13,15 +13,16 @@ import org.gnubridge.core.bidding.BiddingAgent;
 
 public class BiddingController {
 
-	private BiddingView view;
-	private Game cardHolder;
-	private Auctioneer auction;
-	private Player human;
-	private GBController parent;
+	private final BiddingView view;
+	private final Game cardHolder;
+	private final Auctioneer auction;
+	private final Player human;
+	private final GBController parent;
 
 	public BiddingController(BiddingView v, GBController p) {
 		view = v;
 		view.setController(this);
+		view.show();
 		parent = p;
 		cardHolder = Game.construct();
 		auction = new Auctioneer(West.i());
@@ -29,7 +30,7 @@ public class BiddingController {
 		human = cardHolder.selectHumanPlayer();
 		view.setCards(new Hand(human.getHand()));
 		doAutomatedBidding();
-		
+
 		// fake bidding to get to the other page
 		//		auction.bid(new Bid(7, NoTrump.i()));
 		//		doAutomatedBidding();
@@ -47,19 +48,17 @@ public class BiddingController {
 	public Player getHuman() {
 		return human;
 	}
-	
+
 	private void doAutomatedBidding() {
-		while (!auction.biddingFinished()
-				&& !auction.getNextToBid().equals(human.getDirection2())) {
-			Hand hand = new Hand(cardHolder.getPlayer(
-					auction.getNextToBid().getValue()).getHand());
+		while (!auction.biddingFinished() && !auction.getNextToBid().equals(human.getDirection2())) {
+			Hand hand = new Hand(cardHolder.getPlayer(auction.getNextToBid().getValue()).getHand());
 			BiddingAgent ba = new BiddingAgent(auction, hand);
 			auction.bid(ba.getBid());
 			view.auctionStateChanged();
 		}
 
 	}
-	
+
 	public void placeBid(int bidSize, String trump) {
 		if (!auction.biddingFinished()) {
 			if (!auction.getNextToBid().equals(human.getDirection2())) {
@@ -81,17 +80,18 @@ public class BiddingController {
 			if (auction.getHighBid() != null) {
 				message += " High bid: " + auction.getHighBid();
 			} else {
-				message += " No contract reached. Cannot play game.";	
+				message += " No contract reached. Cannot play game.";
 			}
 			view.display(message);
 		}
 	}
 
 	public void playGame() {
+		view.hide();
 		parent.playGame();
-		
+
 	}
-	
+
 	public Direction allowHumanToPlayIfDummy() {
 		Direction newHuman = auction.getDummyOffsetDirection(getHuman().getDirection2());
 		if (North.i().equals(newHuman)) {

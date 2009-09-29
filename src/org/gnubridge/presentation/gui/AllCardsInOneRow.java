@@ -8,7 +8,7 @@ import org.gnubridge.core.Hand;
 public class AllCardsInOneRow extends HandDisplay {
 
 	public AllCardsInOneRow(Direction human, Direction player, Game game,
-			PlayView owner) {
+			PlayViewImpl owner) {
 		super(human, player, game, owner);
 	}
 

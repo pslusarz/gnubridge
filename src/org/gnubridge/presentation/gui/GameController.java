@@ -14,8 +14,8 @@ import org.gnubridge.core.North;
 import org.gnubridge.core.South;
 import org.gnubridge.core.West;
 import org.gnubridge.core.bidding.Auctioneer;
-import org.gnubridge.search.ProductionSettings;
 import org.gnubridge.search.DoubleDummySolver;
+import org.gnubridge.search.ProductionSettings;
 
 public class GameController {
 	public static int MAX_SECONDS_TO_MOVE = 45;

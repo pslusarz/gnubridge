@@ -16,9 +16,9 @@ public class BiddingDisplay extends GBContainer {
 
 	private Auctioneer auction;
 	private JButton playGameButton;
-	private BiddingView parentView;
+	private BiddingViewImpl parentView;
 
-	public BiddingDisplay(BiddingView pv) {
+	public BiddingDisplay(BiddingViewImpl pv) {
 		super(null);
 		parentView = pv;
 		panel.setLayout(null);

@@ -16,7 +16,7 @@ public class OneColumnPerColor extends HandDisplay {
 
 	
 	public OneColumnPerColor(Direction human, Direction player, Game game,
-			PlayView owner) {
+			PlayViewImpl owner) {
 		super(human, player, game, owner);
 	}
 

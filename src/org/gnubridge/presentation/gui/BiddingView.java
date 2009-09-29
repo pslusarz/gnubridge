@@ -1,85 +1,22 @@
 package org.gnubridge.presentation.gui;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.swing.JRadioButton;
-import javax.swing.JSplitPane;
-
 import org.gnubridge.core.Hand;
 import org.gnubridge.core.bidding.Auctioneer;
 
-public class BiddingView implements ActionListener{
+public interface BiddingView {
 
-	private MainView owner;
-	private BiddingDisplay biddingDisplay;
-	private JSplitPane pane;
-	private BiddingController controller;
-	private int bidSize = 1;
+	public abstract void setCards(Hand hand);
 
-	public BiddingView(MainView o) {
-		owner = o;
-		biddingDisplay = new BiddingDisplay(this);
-		pane = createBiddingPane();
-	}
+	public abstract void setAuction(Auctioneer auction);
 
-	public BiddingDisplay getBiddingDisplay() {
-		return biddingDisplay;
-	}
+	public abstract void auctionStateChanged();
 
-	public void setCards(Hand hand) {
-		biddingDisplay.setCards(hand);
-	}
+	public abstract void display(String msg);
 
-	public void setAuction(Auctioneer auction) {
-		biddingDisplay.setAuction(auction);
-		
-	}
+	public abstract void hide();
 
-	public void auctionStateChanged() {
-		biddingDisplay.auctionStateChanged();
-		
-	}
+	public abstract void show();
 
-	public void display(String msg) {
-		biddingDisplay.display(msg);
-		
-	}
-
-	private JSplitPane createBiddingPane() {
-			BiddingControls biddingControls = new BiddingControls(this);
-			JSplitPane content = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
-			biddingDisplay.placeOn(content);
-			biddingControls.placeOn(content);
-			content.setDividerLocation(500);
-			return content;
-	}
-
-
-	public void hide() {
-		pane.setVisible(false);
-		
-	}
-
-	public void show() {
-		owner.setContent(pane);
-		
-	}
-
-	public void setController(BiddingController c) {
-		controller = c;
-		
-	}
-
-	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() instanceof JRadioButton) {
-			bidSize  = Integer.valueOf(e.getActionCommand()).intValue();
-		} else if ("Play game...".equals(e.getActionCommand())) {
-			controller.playGame();
-		} else {
-			controller.placeBid(bidSize, e.getActionCommand());
-		}
-
-	}
+	public abstract void setController(BiddingController c);
 
 }

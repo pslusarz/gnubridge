@@ -67,7 +67,7 @@ public class BiddingAcceptanceTest extends TestCase {
 	}
 
 	private GBController makeController() {
-		MainView mw = new MainView("gnubridge");
+		MainView mw = new MockMainView("gnubridge");
 		return new GBController(mw);
 	}
 }

@@ -10,10 +10,10 @@ public abstract class HandDisplay {
 	protected final Direction human;
 	protected final Direction player;
 	protected final Game game;
-	protected final PlayView owner;
+	protected final PlayViewImpl owner;
 	List<CardPanel> cards;
 	
-	public HandDisplay(Direction human, Direction player, Game game, PlayView owner) {
+	public HandDisplay(Direction human, Direction player, Game game, PlayViewImpl owner) {
 		this.human = human;
 		this.player = player;
 		this.game = game;
