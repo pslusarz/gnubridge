@@ -28,7 +28,7 @@ import org.gnubridge.presentation.gui.Table;
 public class AnalysisView implements PlayView, CardPanelHost {
 
 	private Game game;
-	final int DHEIGHT = 700;
+	private final int DHEIGHT = 700;
 	private final int WIDTH = 800;
 
 	private final Table table;
