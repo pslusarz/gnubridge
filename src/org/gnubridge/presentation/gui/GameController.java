@@ -17,7 +17,7 @@ import org.gnubridge.core.bidding.Auctioneer;
 import org.gnubridge.search.DoubleDummySolver;
 import org.gnubridge.search.ProductionSettings;
 
-public class GameController {
+public class GameController implements CardPlayedListener {
 	public static int MAX_SECONDS_TO_MOVE = 45;
 
 	public class SearchController extends SwingWorker<Void, String> {
@@ -114,6 +114,7 @@ public class GameController {
 	private final GBController parent;
 	private final Game game;
 	private final Direction human;
+
 	private final PlayView view;
 
 	public GameController(GBController controller, Auctioneer auctioneer, Game cardHolder, Direction humanDir,
@@ -123,7 +124,7 @@ public class GameController {
 		game.printHandsDebug();
 		human = humanDir;
 		view = playView;
-		view.setController(this);
+		view.setListener(this);
 		view.setGame(game, human);
 		view.setContract(auctioneer.getHighBid());
 		doAutomatedPlay();

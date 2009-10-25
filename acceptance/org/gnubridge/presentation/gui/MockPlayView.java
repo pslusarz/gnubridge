@@ -43,7 +43,7 @@ public class MockPlayView implements PlayView {
 	}
 
 	@Override
-	public void setController(GameController c) {
+	public void setListener(CardPlayedListener c) {
 		// TODO Auto-generated method stub
 
 	}

@@ -7,8 +7,7 @@ import org.gnubridge.core.Hand;
 
 public class AllCardsInOneRow extends HandDisplay {
 
-	public AllCardsInOneRow(Direction human, Direction player, Game game,
-			PlayViewImpl owner) {
+	public AllCardsInOneRow(Direction human, Direction player, Game game, CardPanelHost owner) {
 		super(human, player, game, owner);
 	}
 
@@ -22,10 +21,10 @@ public class AllCardsInOneRow extends HandDisplay {
 			cards.add(cardPanel);
 			cardPanel.setPlayable(true);
 			owner.addCard(cardPanel);
-			cardPanel.setLocation(200 + OneColumnPerColor.CARD_OFFSET * i, owner.DHEIGHT
+			cardPanel.setLocation(200 + OneColumnPerColor.CARD_OFFSET * i, owner.getTotalHeight()
 					- CardPanel.IMAGE_HEIGHT - 35);
 			i++;
-		}		
+		}
 	}
 
 }

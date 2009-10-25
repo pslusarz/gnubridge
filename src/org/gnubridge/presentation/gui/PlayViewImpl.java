@@ -15,14 +15,14 @@ import org.gnubridge.core.North;
 import org.gnubridge.core.Player;
 import org.gnubridge.core.bidding.Bid;
 
-public class PlayViewImpl implements PlayView {
+public class PlayViewImpl implements PlayView, CardPanelHost {
 
 	private Game game;
 	final int DHEIGHT = 700;
 	private final int WIDTH = 800;
 
 	private final Table table;
-	private GameController controller;
+	private CardPlayedListener controller;
 	private OneColumnPerColor dummy;
 
 	private boolean cardPlayed = false;
@@ -42,7 +42,7 @@ public class PlayViewImpl implements PlayView {
 
 	}
 
-	public void setController(GameController c) {
+	public void setListener(CardPlayedListener c) {
 		controller = c;
 	}
 
@@ -70,17 +70,6 @@ public class PlayViewImpl implements PlayView {
 		}
 	}
 
-	void addCard(CardPanel card) {
-		if (card.isPlayable()) {
-			DaListener listener = new DaListener(card, game);
-			card.addMouseListener(listener);
-			card.addMouseMotionListener(listener);
-		}
-		panel.add(card);
-		panel.setComponentZOrder(card, 0);
-
-	}
-
 	protected void dockingCard(boolean isDocking) {
 		if (cardPlayed != isDocking) {
 			cardPlayed = isDocking;
@@ -88,7 +77,7 @@ public class PlayViewImpl implements PlayView {
 		}
 	}
 
-	protected JPanel createDisplayPanel() {
+	public JPanel createDisplayPanel() {
 		return new JPanel() {
 			private static final long serialVersionUID = -8275738275275964573L;
 
@@ -217,6 +206,7 @@ public class PlayViewImpl implements PlayView {
 
 	}
 
+	@Override
 	public int getTableBottom() {
 		return (int) (table.getDimensions().getY() + table.getDimensions().getHeight());
 	}
@@ -233,6 +223,23 @@ public class PlayViewImpl implements PlayView {
 	public void display(String message) {
 		this.message = message;
 		panel.repaint();
+
+	}
+
+	@Override
+	public int getTotalHeight() {
+		return DHEIGHT;
+	}
+
+	@Override
+	public void addCard(CardPanel card) {
+		if (card.isPlayable()) {
+			DaListener listener = new DaListener(card, game);
+			card.addMouseListener(listener);
+			card.addMouseMotionListener(listener);
+		}
+		panel.add(card);
+		panel.setComponentZOrder(card, 0);
 
 	}
 }

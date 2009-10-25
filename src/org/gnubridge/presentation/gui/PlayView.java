@@ -8,7 +8,7 @@ public interface PlayView {
 
 	public static final long DOUBLE_CLICK_DELAY_MS = 750;
 
-	public abstract void setController(GameController c);
+	public abstract void setListener(CardPlayedListener c);
 
 	public abstract void setGame(Game g, Direction human);
 

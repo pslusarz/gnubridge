@@ -4,13 +4,12 @@ import java.lang.reflect.InvocationTargetException;
 
 import javax.swing.SwingUtilities;
 
-public class Main  {
+public class Main {
 
-	public static void main(String[] args) throws InterruptedException, InvocationTargetException  {
-		
+	public static void main(String[] args) throws InterruptedException, InvocationTargetException {
+
 		buildGui();
-		
-		
+
 	}
 
 	private static void buildGui() throws InterruptedException, InvocationTargetException {
@@ -22,7 +21,6 @@ public class Main  {
 			}
 		});
 
-		
 	}
 
 }

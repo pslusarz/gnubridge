@@ -10,19 +10,19 @@ public abstract class HandDisplay {
 	protected final Direction human;
 	protected final Direction player;
 	protected final Game game;
-	protected final PlayViewImpl owner;
+	protected final CardPanelHost owner;
 	List<CardPanel> cards;
-	
-	public HandDisplay(Direction human, Direction player, Game game, PlayViewImpl owner) {
+
+	public HandDisplay(Direction human, Direction player, Game game, CardPanelHost owner) {
 		this.human = human;
 		this.player = player;
 		this.game = game;
 		this.owner = owner;
 		cards = new ArrayList<CardPanel>();
 	}
-	
+
 	public abstract void display();
-	
+
 	protected void dispose(List<CardPanel> trash) {
 		for (CardPanel card : trash) {
 			card.dispose();
