@@ -1,5 +1,6 @@
 package org.gnubridge.presentation.gui;
 
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Graphics;
 
@@ -12,14 +13,16 @@ import org.gnubridge.core.Hand;
 import org.gnubridge.core.bidding.Auctioneer;
 import org.gnubridge.core.bidding.Call;
 
-public class BiddingDisplay extends GBContainer {
+public class BiddingDisplay {
 
 	private Auctioneer auction;
 	private JButton playGameButton;
-	private BiddingViewImpl parentView;
+	private final BiddingViewImpl parentView;
+	protected JPanel panel;
+	protected String message = "";
 
 	public BiddingDisplay(BiddingViewImpl pv) {
-		super(null);
+		panel = createDisplayPanel();
 		parentView = pv;
 		panel.setLayout(null);
 		panel.setPreferredSize(new Dimension(500, 500));
@@ -49,8 +52,7 @@ public class BiddingDisplay extends GBContainer {
 	}
 
 	private int getTopOfCards() {
-		return (int) Math.round(panel.getPreferredSize().getHeight()
-				- CardPanel.IMAGE_HEIGHT - 25);
+		return (int) Math.round(panel.getPreferredSize().getHeight() - CardPanel.IMAGE_HEIGHT - 25);
 	}
 
 	public void setAuction(Auctioneer auction) {
@@ -65,12 +67,12 @@ public class BiddingDisplay extends GBContainer {
 		panel.repaint();
 	}
 
-	@Override
 	protected JPanel createDisplayPanel() {
 		return new JPanel() {
 			private static final long serialVersionUID = 2776807090785540403L;
 			int colWidth = 90;
 
+			@Override
 			public void paintComponent(Graphics g) {
 				super.paintComponent(g);
 				int top = 15;
@@ -81,17 +83,13 @@ public class BiddingDisplay extends GBContainer {
 				g.drawString("Partner 2", getColumnForDirection(3), top);
 				top += rowHeight;
 				for (Call call : auction.getCalls()) {
-					g.drawString(call.getBid().toString(),
-							getColumnForDirection(call.getDirection()
-									.getValue()), top);
-					if (call.getDirection().equals(
-							Direction.instance(Direction.SOUTH))) {
+					g.drawString(call.getBid().toString(), getColumnForDirection(call.getDirection().getValue()), top);
+					if (call.getDirection().equals(Direction.instance(Direction.SOUTH))) {
 						top += rowHeight;
 					}
 				}
 				if (!auction.biddingFinished()) {
-					g.drawString("?", getColumnForDirection(auction
-							.getNextToBid().getValue()), top);
+					g.drawString("?", getColumnForDirection(auction.getNextToBid().getValue()), top);
 				}
 
 				g.drawString(message, 5, getTopOfCards() - 20);
@@ -107,6 +105,16 @@ public class BiddingDisplay extends GBContainer {
 				return result;
 			}
 		};
+	}
+
+	public void placeOn(Container parent) {
+		parent.add(panel);
+	}
+
+	public void display(String message) {
+		this.message = message;
+		panel.repaint();
+
 	}
 
 }

@@ -15,7 +15,7 @@ import org.gnubridge.core.North;
 import org.gnubridge.core.Player;
 import org.gnubridge.core.bidding.Bid;
 
-public class PlayViewImpl extends GBContainer implements PlayView {
+public class PlayViewImpl implements PlayView {
 
 	private Game game;
 	final int DHEIGHT = 700;
@@ -28,9 +28,13 @@ public class PlayViewImpl extends GBContainer implements PlayView {
 	private boolean cardPlayed = false;
 	private AllCardsInOneRow humanHandDisplay;
 	private Bid contract;
+	protected JPanel panel;
+	protected final MainView owner;
+	protected String message = "";
 
 	public PlayViewImpl(MainView owner) {
-		super(owner);
+		this.owner = owner;
+		panel = createDisplayPanel();
 		panel.setLayout(null);
 		panel.setPreferredSize(new Dimension(WIDTH, DHEIGHT));
 		panel.setSize(new Dimension(WIDTH, DHEIGHT));
@@ -84,7 +88,6 @@ public class PlayViewImpl extends GBContainer implements PlayView {
 		}
 	}
 
-	@Override
 	protected JPanel createDisplayPanel() {
 		return new JPanel() {
 			private static final long serialVersionUID = -8275738275275964573L;
@@ -220,6 +223,16 @@ public class PlayViewImpl extends GBContainer implements PlayView {
 
 	public void setContract(Bid contract) {
 		this.contract = contract;
+
+	}
+
+	public void placeOn(Container parent) {
+		parent.add(panel);
+	}
+
+	public void display(String message) {
+		this.message = message;
+		panel.repaint();
 
 	}
 }
