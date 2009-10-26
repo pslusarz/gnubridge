@@ -2,8 +2,6 @@ package org.jbridge.presentation.gui;
 
 import java.lang.reflect.InvocationTargetException;
 
-import junit.framework.TestCase;
-
 import org.gnubridge.core.Game;
 import org.gnubridge.core.South;
 import org.gnubridge.core.bidding.Bid;
@@ -11,7 +9,7 @@ import org.gnubridge.core.deck.NoTrump;
 import org.gnubridge.presentation.GameUtils;
 import org.gnubridge.presentation.gui.MainViewImpl;
 
-public class AnalysisTest extends TestCase {
+public class AnalysisTool {
 	public static void main(String[] args) throws InterruptedException, InvocationTargetException {
 
 		buildGui();
@@ -33,11 +31,6 @@ public class AnalysisTest extends TestCase {
 
 		//	}
 		//});
-	}
-
-	public void testZZZ() throws InterruptedException, InvocationTargetException {
-		buildGui();
-
 	}
 
 	private static Game createSampleGame() {
