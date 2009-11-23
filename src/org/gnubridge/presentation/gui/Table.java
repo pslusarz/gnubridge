@@ -26,12 +26,12 @@ public class Table {
 	public Table(int parentHeight) {
 		dimensions = new Rectangle(290, parentHeight - CardPanel.IMAGE_HEIGHT - 35 - 5 - HEIGHT, 222, HEIGHT);
 		currentTrickCards = new ArrayList<CardPanel>();
+
 	}
 
 	public void draw(Graphics g) {
 		g.drawRect((int) dimensions.getX(), (int) dimensions.getY(), (int) dimensions.getWidth(), (int) dimensions
 				.getHeight());
-
 	}
 
 	public Point getExpectedSlot(Direction d) {
@@ -103,8 +103,8 @@ public class Table {
 			currentTrickCards.add(cardPanel);
 			cardPanel.setLocation(getExpectedSlot(trick.whoPlayed(card).getDirection2()));
 			thePanel.add(cardPanel);
-			thePanel.repaint();
 		}
+		thePanel.repaint();
 
 	}
 
@@ -118,6 +118,14 @@ public class Table {
 
 	public Rectangle getDimensions() {
 		return dimensions;
+	}
+
+	public int getTopLeftX() {
+		return (int) dimensions.getX();
+	}
+
+	public int getTopLeftY() {
+		return (int) dimensions.getY();
 	}
 
 }

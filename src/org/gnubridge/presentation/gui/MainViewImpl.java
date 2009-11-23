@@ -44,7 +44,6 @@ public class MainViewImpl implements MainView {
 	public PlayView getPlayView() {
 		if (playView == null) {
 			playView = new PlayViewImpl(this);
-			playView.show();
 		}
 		return playView;
 	}

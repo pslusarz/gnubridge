@@ -10,7 +10,11 @@ public class MockCardPlayedListener implements CardPlayedListener {
 
 	@Override
 	public void playCard(Card c) {
-		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void displayPreviousTrick() {
 
 	}
 

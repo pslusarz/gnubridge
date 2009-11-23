@@ -7,22 +7,21 @@ import org.gnubridge.core.deck.Color;
 import org.gnubridge.core.deck.Trump;
 
 public class Trick {
-	private List<Card> cards;
+	private final List<Card> cards;
 
 	private Trump trump;
 
-	private List<Player> players;
-
+	private final List<Player> players;
 
 	public Trick(Trump trump2) {
 		cards = new ArrayList<Card>();
 		players = new ArrayList<Player>();
 		this.trump = trump2;
 	}
-	
+
 	public Trick duplicate() {
 		Trick result = new Trick(getTrump());
-		for (Card card: cards) {
+		for (Card card : cards) {
 			result.addCard(card, players.get(cards.indexOf(card))); //TODO: test player duplication
 		}
 		return result;
@@ -44,14 +43,14 @@ public class Trick {
 				highest = card;
 			} else if (card.trumps(highest, trump)) {
 				highest = card;
-			} else if (	card.hasSameColorAs(highest) && card.hasGreaterValueThan(highest)) {
+			} else if (card.hasSameColorAs(highest) && card.hasGreaterValueThan(highest)) {
 				highest = card;
 			}
 		}
 		return highest;
 	}
 
-	public void setTrump(Color trump) {
+	public void setTrump(Trump trump) {
 		this.trump = trump;
 	}
 
@@ -66,14 +65,14 @@ public class Trick {
 	public Trump getTrump() {
 		return trump;
 	}
-	
+
 	@Override
 	public String toString() {
 		return cards.toString();
 	}
 
 	public List<Card> getCards() {
-		List<Card> result = new ArrayList<Card> ();
+		List<Card> result = new ArrayList<Card>();
 		result.addAll(cards);
 		return result;
 	}
@@ -81,10 +80,10 @@ public class Trick {
 	public Player whoPlayed(Card card) {
 		Player result = null;
 		for (Card current : cards) {
-		  if (card.equals(current)) {
-			  result = players.get(cards.indexOf(current));
-			  break;
-		  }
+			if (card.equals(current)) {
+				result = players.get(cards.indexOf(current));
+				break;
+			}
 		}
 		return result;
 	}

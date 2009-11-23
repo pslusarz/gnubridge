@@ -54,7 +54,7 @@ public class PlayAcceptanceTest extends TestCase {
 	public void testPlayGameEndToEndTrumpAllTricks() throws InterruptedException, InvocationTargetException {
 		preInitializeGameWithSingleColorSuits();
 		GBController mainController = makeController();
-		mainController.getBiddingController().placeBid(7, "Spades"); // TODO:
+		mainController.getBiddingController().placeBid(7, "Hearts"); // TODO:
 		// what
 		// are
 		// valid

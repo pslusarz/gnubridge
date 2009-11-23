@@ -1,12 +1,17 @@
 package org.gnubridge.presentation.gui;
 
-import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.net.URL;
 
+import javax.swing.AbstractButton;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import org.gnubridge.core.Direction;
@@ -15,7 +20,7 @@ import org.gnubridge.core.North;
 import org.gnubridge.core.Player;
 import org.gnubridge.core.bidding.Bid;
 
-public class PlayViewImpl implements PlayView, CardPanelHost {
+public class PlayViewImpl implements PlayView, CardPanelHost, ActionListener {
 
 	private Game game;
 	final int DHEIGHT = 700;
@@ -31,6 +36,7 @@ public class PlayViewImpl implements PlayView, CardPanelHost {
 	protected JPanel panel;
 	protected final MainView owner;
 	protected String message = "";
+	private JButton previousTrickButton;
 
 	public PlayViewImpl(MainView owner) {
 		this.owner = owner;
@@ -39,18 +45,32 @@ public class PlayViewImpl implements PlayView, CardPanelHost {
 		panel.setPreferredSize(new Dimension(WIDTH, DHEIGHT));
 		panel.setSize(new Dimension(WIDTH, DHEIGHT));
 		table = new Table(DHEIGHT);
+		createPreviousTrickButton();
+		owner.setContent(panel);
+
+	}
+
+	private void createPreviousTrickButton() {
+		URL imageURL = getClass().getResource("/b1fh.png");
+		ImageIcon image = new ImageIcon(imageURL);
+		final int IMAGE_WIDTH2 = 65;
+		final int IMAGE_HEIGHT2 = 52;
+
+		previousTrickButton = new JButton("Previous trick buttton", image);
+		previousTrickButton.setToolTipText("Display previous trick");
+		previousTrickButton.setLocation(table.getTopLeftX() + 4, table.getTopLeftY() + 4);
+		previousTrickButton.setVerticalTextPosition(AbstractButton.CENTER);
+		previousTrickButton.setHorizontalTextPosition(AbstractButton.LEADING);
+		previousTrickButton.addActionListener(this);
+		previousTrickButton.setActionCommand("displayPreviousTrick");
+		previousTrickButton.setSize(IMAGE_WIDTH2, IMAGE_HEIGHT2);
+		previousTrickButton.setEnabled(true);
+		panel.add(previousTrickButton);
 
 	}
 
 	public void setListener(CardPlayedListener c) {
 		controller = c;
-	}
-
-	private Container createPlayPane() {
-		Container result = new JPanel();
-		result.setPreferredSize(new Dimension(WIDTH, DHEIGHT));
-		placeOn(result);
-		return result;
 	}
 
 	public void setGame(Game g, Direction human) {
@@ -92,13 +112,10 @@ public class PlayViewImpl implements PlayView, CardPanelHost {
 		};
 	}
 
-	public void gameStateChanged() {
-		if (table.isDisplayingPreviousTrick()) {
-			return;
-		}
-		displayCurrentTrick();
-
-	}
+	//	public void gameStateChanged() {
+	//		displayCurrentTrick();
+	//
+	//	}
 
 	public void displayCurrentTrick() {
 		message = " Tricks played: " + game.getTricksPlayed() + "    North/South: "
@@ -194,16 +211,11 @@ public class PlayViewImpl implements PlayView, CardPanelHost {
 
 	}
 
-	public void show() {
-		owner.setContent(createPlayPane());
-	}
-
 	public void displayPreviousTrick() {
 		table.setDisplayingPreviousTrick(true);
 		table.displayTrick(game.getPreviousTrick(), panel);
 		dummy.display();
 		humanHandDisplay.display();
-
 	}
 
 	@Override
@@ -214,10 +226,6 @@ public class PlayViewImpl implements PlayView, CardPanelHost {
 	public void setContract(Bid contract) {
 		this.contract = contract;
 
-	}
-
-	public void placeOn(Container parent) {
-		parent.add(panel);
 	}
 
 	public void display(String message) {
@@ -240,6 +248,16 @@ public class PlayViewImpl implements PlayView, CardPanelHost {
 		}
 		panel.add(card);
 		panel.setComponentZOrder(card, 0);
+
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if (game.getPreviousTrick() != null) {
+			controller.displayPreviousTrick();
+		} else {
+			System.out.println("Requested display of previous trick, but no previous trick exists");
+		}
 
 	}
 }

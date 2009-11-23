@@ -134,8 +134,16 @@ public class Game {
 		}
 		result.nextToPlay = nextToPlay;
 		result.setCurrentTrick(currentTrick.duplicate());
+		if (previousTrick != null) {
+			result.setPreviousTrick(previousTrick.duplicate());
+		}
 		result.setPlayedCards(playedCards.getCardsHighToLow()); // TODO: untested
 		return result;
+	}
+
+	private void setPreviousTrick(Trick trick) {
+		previousTrick = trick;
+
 	}
 
 	private void setPlayedCards(List<Card> cards) {
@@ -181,6 +189,9 @@ public class Game {
 
 	public void setTrump(Trump d) {
 		this.trump = d;
+		if (currentTrick != null) {
+			currentTrick.setTrump(d);
+		}
 
 	}
 

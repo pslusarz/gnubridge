@@ -12,9 +12,7 @@ public interface PlayView {
 
 	public abstract void setGame(Game g, Direction human);
 
-	public abstract void gameStateChanged();
-
-	public abstract void show();
+	//public abstract void gameStateChanged();
 
 	public abstract void displayPreviousTrick();
 

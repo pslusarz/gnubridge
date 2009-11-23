@@ -18,6 +18,7 @@ public class GameTest extends TestCase {
 
 	Game game;
 
+	@Override
 	protected void setUp() {
 		game = new Game(NoTrump.i());
 	}
@@ -28,7 +29,7 @@ public class GameTest extends TestCase {
 			assertEquals(i, game.getPlayer(i).getDirection());
 		}
 	}
-	
+
 	public void testFirstTrickPlayedClockwise() {
 		GameUtils.initializeSingleColorSuits(game);
 		game.doNextCard();
@@ -59,17 +60,12 @@ public class GameTest extends TestCase {
 	}
 
 	public void testGameEndsWhenPlayersRunOutOfCards() {
-		game.getPlayer(Direction.WEST).init(
-				new Card[] { Two.of(Spades.i()) });
-		game.getPlayer(Direction.NORTH).init(
-				new Card[] { Two.of(Hearts.i()) });
-		game.getPlayer(Direction.SOUTH).init(
-				new Card[] { Two.of(Diamonds.i()) });
-		game.getPlayer(Direction.EAST).init(
-				new Card[] { Two.of(Clubs.i()) });
+		game.getPlayer(Direction.WEST).init(new Card[] { Two.of(Spades.i()) });
+		game.getPlayer(Direction.NORTH).init(new Card[] { Two.of(Hearts.i()) });
+		game.getPlayer(Direction.SOUTH).init(new Card[] { Two.of(Diamonds.i()) });
+		game.getPlayer(Direction.EAST).init(new Card[] { Two.of(Clubs.i()) });
 		for (int i = 0; i < 4; i++) {
-			assertFalse("game ended before all cards were played", game
-					.isDone());
+			assertFalse("game ended before all cards were played", game.isDone());
 			game.doNextCard();
 		}
 		assertTrue("not ended, but all cards have been played", game.isDone());
@@ -79,8 +75,7 @@ public class GameTest extends TestCase {
 		GameUtils.initializeSingleColorSuits(game);
 		int cardCount = 0;
 		while (!game.isDone()) {
-			assertNotSame("Ran out of cards, but game not finished", 52,
-					cardCount);
+			assertNotSame("Ran out of cards, but game not finished", 52, cardCount);
 			game.doNextCard();
 			cardCount++;
 
@@ -89,14 +84,10 @@ public class GameTest extends TestCase {
 	}
 
 	public void testPreviousTrickTakerFirstToPlay() {
-		game.getPlayer(Direction.WEST).init(Ace.of(Hearts.i()),
-				Two.of(Spades.i()));
-		game.getPlayer(Direction.NORTH).init(Ace.of(Diamonds.i()),
-				Two.of(Hearts.i()));
-		game.getPlayer(Direction.SOUTH).init(Two.of(Diamonds.i()),
-				Ace.of(Spades.i()));
-		game.getPlayer(Direction.EAST).init(Ace.of(Clubs.i()),
-				Two.of(Clubs.i()));
+		game.getPlayer(Direction.WEST).init(Ace.of(Hearts.i()), Two.of(Spades.i()));
+		game.getPlayer(Direction.NORTH).init(Ace.of(Diamonds.i()), Two.of(Hearts.i()));
+		game.getPlayer(Direction.SOUTH).init(Two.of(Diamonds.i()), Ace.of(Spades.i()));
+		game.getPlayer(Direction.EAST).init(Ace.of(Clubs.i()), Two.of(Clubs.i()));
 		assertEquals(game.getPlayer(Direction.WEST), game.getNextToPlay());
 		playTrick(game);
 		assertEquals(game.getPlayer(Direction.SOUTH), game.getNextToPlay());
@@ -104,14 +95,10 @@ public class GameTest extends TestCase {
 	}
 
 	public void testGameKeepsTrackOfTricksTaken() {
-		game.getPlayer(Direction.WEST).init(Ace.of(Hearts.i()),
-				Two.of(Spades.i()));
-		game.getPlayer(Direction.NORTH).init(Ace.of(Diamonds.i()),
-				Two.of(Hearts.i()));
-		game.getPlayer(Direction.SOUTH).init(Two.of(Diamonds.i()),
-				Ace.of(Spades.i()));
-		game.getPlayer(Direction.EAST).init(Ace.of(Clubs.i()),
-				Two.of(Clubs.i()));
+		game.getPlayer(Direction.WEST).init(Ace.of(Hearts.i()), Two.of(Spades.i()));
+		game.getPlayer(Direction.NORTH).init(Ace.of(Diamonds.i()), Two.of(Hearts.i()));
+		game.getPlayer(Direction.SOUTH).init(Two.of(Diamonds.i()), Ace.of(Spades.i()));
+		game.getPlayer(Direction.EAST).init(Ace.of(Clubs.i()), Two.of(Clubs.i()));
 		assertEquals(game.getPlayer(Direction.WEST), game.getNextToPlay());
 		playTrick(game);
 		assertFalse(game.isDone());
@@ -139,14 +126,12 @@ public class GameTest extends TestCase {
 		Player originalPlayer = original.getNextToPlay();
 		Player clonedPlayer = clone.getNextToPlay();
 		Card card = originalPlayer.getPossibleMoves(new Trick(NoTrump.i())).get(12);
-		assertTrue("Precondition - clone does not have original's cards",
-				clonedPlayer.hasUnplayedCard(card));
+		assertTrue("Precondition - clone does not have original's cards", clonedPlayer.hasUnplayedCard(card));
 		original.doNextCard();
-		assertFalse("Precondition - original didn't play the expected card",
-				originalPlayer.hasUnplayedCard(card));
+		assertFalse("Precondition - original didn't play the expected card", originalPlayer.hasUnplayedCard(card));
 		assertTrue(clonedPlayer.hasUnplayedCard(card));
 	}
-	
+
 	public void testDuplicatePlayedCards() {
 		Game original = new Game(NoTrump.i());
 		GameUtils.initializeSingleColorSuits(original);
@@ -156,8 +141,7 @@ public class GameTest extends TestCase {
 		Game clone = original.duplicate();
 		Player clonedPlayer = clone.getPlayer(originalPlayer.getDirection());
 
-		assertFalse("Precondition - original didn't play the expected card",
-				originalPlayer.hasUnplayedCard(card));
+		assertFalse("Precondition - original didn't play the expected card", originalPlayer.hasUnplayedCard(card));
 		assertFalse(clonedPlayer.hasUnplayedCard(card));
 		assertTrue(clonedPlayer.hasPlayedCard(card));
 	}
@@ -180,7 +164,7 @@ public class GameTest extends TestCase {
 		Game clone2 = original2.duplicate();
 		assertEquals(NoTrump.i(), clone2.getTrump());
 	}
-	
+
 	public void testDuplicateCurrentTrick() {
 		Game original = new Game(Clubs.i());
 		GameUtils.initializeSingleColorSuits(original);
@@ -189,6 +173,16 @@ public class GameTest extends TestCase {
 		assertNotNull(clone.getCurrentTrick());
 		assertEquals(Ace.of(Spades.i()), clone.getCurrentTrick().getHighestCard());
 		assertEquals(Clubs.i(), clone.getCurrentTrick().getTrump());
+	}
+
+	public void testDuplicatePreviousTrick() {
+		Game original = new Game(Clubs.i());
+		GameUtils.initializeSingleColorSuits(original);
+		original.playOneTrick();
+		Game clone = original.duplicate();
+		assertNotNull(clone.getPreviousTrick());
+		assertEquals(Two.of(Clubs.i()), clone.getPreviousTrick().getHighestCard());
+		assertEquals(Clubs.i(), clone.getPreviousTrick().getTrump());
 	}
 
 	public void testPlayMovesOneByOne() {
@@ -203,13 +197,13 @@ public class GameTest extends TestCase {
 		game.playMoves(newList(2));
 		assertTrue(player.hasPlayedCard(card));
 	}
-	
+
 	public void testPlayMovesTricksTaken() {
 		Game game = new Game(NoTrump.i());
 		GameUtils.initializeSingleColorSuits(game);
-		game.playMoves(newList(0,1,2,3));
+		game.playMoves(newList(0, 1, 2, 3));
 		assertEquals(1, game.getPlayer(Direction.WEST).countTricksTaken());
-		game.playMoves(newList(1,1,2,3,4,5,6,0,6));
+		game.playMoves(newList(1, 1, 2, 3, 4, 5, 6, 0, 6));
 		assertEquals(3, game.getPlayer(Direction.WEST).countTricksTaken());
 	}
 
@@ -227,23 +221,25 @@ public class GameTest extends TestCase {
 		playMove(original, moves, cards, 4);
 
 		clone.playMoves(moves);
-		
+
 		for (int i = Direction.WEST; i <= Direction.SOUTH; i++) {
-		  assertTrue(clone.getPlayer(i).hasPlayedCard(cards.get(i)));	
+			assertTrue(clone.getPlayer(i).hasPlayedCard(cards.get(i)));
 		}
-		
+
 	}
-	
+
 	public void testKeyToWeakHashMapNoReferenceRetainedInsideClass() {
 		Game game = new Game(NoTrump.i());
 		GameUtils.initializeSingleColorSuits(game);
 		assertFalse(game.getKeyForWeakHashMap() == game.getKeyForWeakHashMap());
 	}
+
 	public void testKeyToWeakHashMapDoesntChange() {
 		Game game = new Game(NoTrump.i());
 		GameUtils.initializeSingleColorSuits(game);
 		assertTrue(game.getKeyForWeakHashMap().equals(game.getKeyForWeakHashMap()));
 	}
+
 	public void testTwoDifferentGamesWithSameCards() {
 		Game game = new Game(NoTrump.i());
 		GameUtils.initializeSingleColorSuits(game);
@@ -251,6 +247,7 @@ public class GameTest extends TestCase {
 		GameUtils.initializeSingleColorSuits(game2);
 		assertTrue(game2.getKeyForWeakHashMap().equals(game.getKeyForWeakHashMap()));
 	}
+
 	public void testTwoDifferentGamesWithSameCardsDifferentMoves() {
 		Game game = new Game(NoTrump.i());
 		GameUtils.initializeSingleColorSuits(game);
@@ -259,14 +256,13 @@ public class GameTest extends TestCase {
 		game2.playOneTrick();
 		assertFalse(game2.getKeyForWeakHashMap().equals(game.getKeyForWeakHashMap()));
 	}
-	
 
 	private void playMove(Game game, List<Integer> moves, List<Card> cards, int i) {
 		Player player = game.getNextToPlay();
 		Card card = player.getPossibleMoves(game.getCurrentTrick()).get(i);
 		game.playMoves(newList(i));
 		moves.add(i);
-		cards.add(card);		
+		cards.add(card);
 	}
 
 	private List<Integer> newList(int... numbers) {

@@ -25,12 +25,6 @@ public class MockPlayView implements PlayView {
 	}
 
 	@Override
-	public void gameStateChanged() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	public int getTableBottom() {
 		// TODO Auto-generated method stub
 		return 0;
@@ -50,12 +44,6 @@ public class MockPlayView implements PlayView {
 
 	@Override
 	public void setGame(Game g, Direction human) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void show() {
 		// TODO Auto-generated method stub
 
 	}

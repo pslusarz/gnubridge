@@ -8,17 +8,15 @@ import javax.swing.SwingWorker;
 
 import org.gnubridge.core.Card;
 import org.gnubridge.core.Direction;
-import org.gnubridge.core.East;
 import org.gnubridge.core.Game;
 import org.gnubridge.core.North;
 import org.gnubridge.core.South;
-import org.gnubridge.core.West;
 import org.gnubridge.core.bidding.Auctioneer;
 import org.gnubridge.search.DoubleDummySolver;
 import org.gnubridge.search.ProductionSettings;
 
 public class GameController implements CardPlayedListener {
-	public static int MAX_SECONDS_TO_MOVE = 45;
+	public static int MAX_SECONDS_TO_MOVE = 5;
 
 	public class SearchController extends SwingWorker<Void, String> {
 		private static final int MILISECONDS_PER_SECOND = 1000;
@@ -84,30 +82,23 @@ public class GameController implements CardPlayedListener {
 		}
 	}
 
-	public class TrickDisplayWorker extends SwingWorker<Void, String> {
-		boolean previousTrickDisplayed = false;
+	public class PreviousTrickDisplayWorker extends SwingWorker<Void, String> {
 
 		@Override
 		protected Void doInBackground() throws Exception {
-			if (game.getCurrentTrick().getCards().size() == 0 && game.getPreviousTrick() != null) {
-				view.displayPreviousTrick();
-				previousTrickDisplayed = true;
-			}
+			view.displayPreviousTrick();
 			return null;
 		}
 
 		@Override
 		public void done() {
-			if (previousTrickDisplayed) {
-				try {
-					Thread.sleep(ProductionSettings.getMilisecondsToDisplayLastTrick());
-				} catch (InterruptedException e) {
-					throw new RuntimeException(e);
-				}
-				if (!game.isDone()) {
-					view.displayCurrentTrick();
-				}
+			try {
+				Thread.sleep(ProductionSettings.getMilisecondsToDisplayLastTrick());
+			} catch (InterruptedException e) {
+				throw new RuntimeException(e);
 			}
+			view.displayCurrentTrick();
+
 		}
 	}
 
@@ -139,13 +130,8 @@ public class GameController implements CardPlayedListener {
 	}
 
 	private Game makeGame(Auctioneer a, Game cardHolder) {
-		Game result = new Game(a.getHighBid().getTrump());
-
-		result.getPlayer(a.getDummyOffsetDirection(North.i())).init(cardHolder.getPlayer(North.i()).getHand());
-		result.getPlayer(a.getDummyOffsetDirection(East.i())).init(cardHolder.getPlayer(East.i()).getHand());
-		result.getPlayer(a.getDummyOffsetDirection(South.i())).init(cardHolder.getPlayer(South.i()).getHand());
-		result.getPlayer(a.getDummyOffsetDirection(West.i())).init(cardHolder.getPlayer(West.i()).getHand());
-		result.setNextToPlay(West.i().getValue());
+		Game result = cardHolder.duplicate();
+		result.setTrump(a.getHighBid().getTrump());
 		return result;
 	}
 
@@ -161,7 +147,20 @@ public class GameController implements CardPlayedListener {
 	public synchronized void playCard(Card c) {
 		System.out.println("game.play(" + c.toDebugString() + ");");
 		game.play(c);
-		TrickDisplayWorker tdw = new TrickDisplayWorker();
+		if (game.getCurrentTrick().getCards().size() == 0 && game.getPreviousTrick() != null) {
+			displayPreviousTrick();
+		} else {
+			view.displayCurrentTrick();
+		}
+		if (game.isDone()) {
+			parent.gameFinished();
+		} else {
+			doAutomatedPlay();
+		}
+	}
+
+	public void displayPreviousTrick() {
+		PreviousTrickDisplayWorker tdw = new PreviousTrickDisplayWorker();
 		tdw.execute();
 		while (!tdw.isDone()) {
 			try {
@@ -170,12 +169,7 @@ public class GameController implements CardPlayedListener {
 				throw new RuntimeException(e);
 			}
 		}
-		if (game.isDone()) {
-			parent.gameFinished();
-		} else {
-			view.gameStateChanged();
-			doAutomatedPlay();
-		}
+
 	}
 
 	public void doAutomatedPlay() {
