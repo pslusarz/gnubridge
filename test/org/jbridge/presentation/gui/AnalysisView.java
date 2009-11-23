@@ -256,4 +256,10 @@ public class AnalysisView implements PlayView, CardPanelHost {
 		return DHEIGHT;
 	}
 
+	@Override
+	public void displayTimeRemaining(int i) {
+		// TODO Auto-generated method stub
+
+	}
+
 }

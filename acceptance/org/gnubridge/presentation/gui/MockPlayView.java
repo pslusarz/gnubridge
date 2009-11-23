@@ -48,4 +48,10 @@ public class MockPlayView implements PlayView {
 
 	}
 
+	@Override
+	public void displayTimeRemaining(int i) {
+		// TODO Auto-generated method stub
+
+	}
+
 }

@@ -22,6 +22,7 @@ public class Table {
 	private boolean displayingPreviousTrick;
 	private Direction human;
 	private final int HEIGHT = CardPanel.IMAGE_HEIGHT * 2 + 2;
+	private int timeRemaining = -1;
 
 	public Table(int parentHeight) {
 		dimensions = new Rectangle(290, parentHeight - CardPanel.IMAGE_HEIGHT - 35 - 5 - HEIGHT, 222, HEIGHT);
@@ -73,6 +74,12 @@ public class Table {
 			g.setFont(new Font(font.getName(), Font.BOLD, font.getSize() + 30));
 			g.drawString("?", (int) topLeft.getX() + CardPanel.IMAGE_WIDTH / 2 - 10, (int) topLeft.getY()
 					+ CardPanel.IMAGE_HEIGHT / 2 + 15);
+			g.setFont(new Font(font.getName(), Font.BOLD, font.getSize() + 8));
+			if (timeRemaining > -1) {
+				g.drawString("" + timeRemaining, (int) topLeft.getX() + CardPanel.IMAGE_WIDTH / 2 - 10, (int) topLeft
+						.getY()
+						+ CardPanel.IMAGE_HEIGHT / 2 + 15 + 30);
+			}
 		}
 	}
 
@@ -126,6 +133,11 @@ public class Table {
 
 	public int getTopLeftY() {
 		return (int) dimensions.getY();
+	}
+
+	public void setTimeRemaining(int i) {
+		timeRemaining = i;
+
 	}
 
 }

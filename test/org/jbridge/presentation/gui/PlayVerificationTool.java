@@ -50,10 +50,10 @@ public class PlayVerificationTool {
 
 	private static Game constructGame() {
 		Game game = new Game(NoTrump.i());
-		game.getWest().init(new Hand("", "8,4", "2", ""));//E: AH, W: 4H???
-		game.getNorth().init(new Hand("3", "", "5,4", ""));
-		game.getEast().init(new Hand("", "A,6,5", "", ""));
-		game.getSouth().init(new Hand("", "10", "3", "3"));
+		game.getWest().init(new Hand("", "8,4", "2", "A,K,9,8,7"));//E: AH, W: 4H???
+		game.getNorth().init(new Hand("3", "", "5,4", "6,5,4,3,2"));
+		game.getEast().init(new Hand("A,K,J,10,9", "A,6,5", "", ""));
+		game.getSouth().init(new Hand("6,5,4,3,2", "10", "3", "3"));
 		game.setNextToPlay(Direction.EAST);
 		game.play(Ace.of(Hearts.i()));
 		game.play(Ten.of(Hearts.i()));

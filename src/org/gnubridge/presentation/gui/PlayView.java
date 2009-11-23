@@ -24,4 +24,6 @@ public interface PlayView {
 
 	public abstract void setContract(Bid contract);
 
+	public abstract void displayTimeRemaining(int i);
+
 }

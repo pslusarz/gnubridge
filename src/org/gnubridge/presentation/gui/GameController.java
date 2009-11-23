@@ -1,5 +1,7 @@
 package org.gnubridge.presentation.gui;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -15,18 +17,36 @@ import org.gnubridge.core.bidding.Auctioneer;
 import org.gnubridge.search.DoubleDummySolver;
 import org.gnubridge.search.ProductionSettings;
 
-public class GameController implements CardPlayedListener {
-	public static int MAX_SECONDS_TO_MOVE = 5;
+public class GameController implements CardPlayedListener, PropertyChangeListener {
+	public static int MAX_SECONDS_TO_MOVE = 45;
+	long start = -1;
+	private static final int MILISECONDS_PER_SECOND = 1000;
+	private static final long RIDICULOUSLY_LONG_WAIT_TIME = 100000000;
+	private final long TIME_ALLOTED_PER_MOVE = MAX_SECONDS_TO_MOVE * MILISECONDS_PER_SECOND;
 
-	public class SearchController extends SwingWorker<Void, String> {
-		private static final int MILISECONDS_PER_SECOND = 1000;
-		private static final long RIDICULOUSLY_LONG_WAIT_TIME = 100000000;
-		private final long TIME_ALLOTED_PER_MOVE = MAX_SECONDS_TO_MOVE * MILISECONDS_PER_SECOND;
+	public class Clock extends Thread {
+		@Override
+		public void run() {
+			while (start > 0) {
+				view
+						.displayTimeRemaining((int) (0.001 * (TIME_ALLOTED_PER_MOVE - (System.currentTimeMillis() - start))));
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+					throw new RuntimeException(e);
+				}
+			}
+			view.displayTimeRemaining(-1);
+		}
+	}
+
+	public class SearchController extends Thread {
 		Card bestMove;
 
 		@Override
-		protected Void doInBackground() throws Exception {
-			long start = System.currentTimeMillis();
+		public void run() {
+			start = System.currentTimeMillis();
 			bestMove = findBestMoveAtDepth(1, RIDICULOUSLY_LONG_WAIT_TIME);
 			for (int tricksSearchDepth = 2; tricksSearchDepth <= ProductionSettings.getSearchDepthRecommendation(game); tricksSearchDepth++) {
 				long timePassedSinceStart = System.currentTimeMillis() - start;
@@ -36,32 +56,58 @@ public class GameController implements CardPlayedListener {
 					break;
 				}
 				System.out.println("// now searching depth: " + tricksSearchDepth);
-				try {
-					bestMove = findBestMoveAtDepth(tricksSearchDepth, timeRemaining);
-				} catch (TimeoutException e) {
+				//try {
+				Card bestMoveCandidate = findBestMoveAtDepth(tricksSearchDepth, timeRemaining);
+				if (bestMove == null) {
+					//} catch (TimeoutException e) {
 					System.out.println("// could not complete full search of depth " + tricksSearchDepth
 							+ ", current best: " + bestMove);
 					break;
+				} else {
+					bestMove = bestMoveCandidate;
 				}
+				//}
 			}
-			return null;
+			start = -1;
+			playCard(bestMove);
+
 		}
 
 		private boolean haveEnoughTimeToAttemptNextSearch(long timeRemaining) {
 			return timeRemaining > TIME_ALLOTED_PER_MOVE * 2 / 3;
 		}
 
-		private Card findBestMoveAtDepth(int tricksSearchDepth, long timeoutMs) throws InterruptedException,
-				ExecutionException, TimeoutException {
+		private Card findBestMoveAtDepth(int tricksSearchDepth, long timeoutMs) {
+			Card result = null;
 			SearchWorker searchWorker = new SearchWorker(tricksSearchDepth);
 			searchWorker.execute();
-			return searchWorker.get(timeoutMs, TimeUnit.MILLISECONDS);
+			long localStart = System.currentTimeMillis();
+			while (result == null && (System.currentTimeMillis() - localStart) < timeoutMs) {
+				try {
+					result = searchWorker.get(1000, TimeUnit.MILLISECONDS);
+					//					System.out.println("***** TICK ******"
+					//							+ (int) (0.001 * (TIME_ALLOTED_PER_MOVE - (System.currentTimeMillis() - start))));
+					//setProgress((int) (0.001 * (TIME_ALLOTED_PER_MOVE - (System.currentTimeMillis() - start))));
+
+				} catch (TimeoutException e) {
+					//ignore
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+					throw new RuntimeException(e);
+				} catch (ExecutionException e) {
+					e.printStackTrace();
+					throw new RuntimeException(e);
+				}
+
+			}
+			return result;
 		}
 
-		@Override
-		public void done() {
-			playCard(bestMove);
-		}
+		//		@Override
+		//		public void done() {
+		//			start = -1;
+		//			playCard(bestMove);
+		//		}
 	}
 
 	public class SearchWorker extends SwingWorker<Card, String> {
@@ -177,7 +223,16 @@ public class GameController implements CardPlayedListener {
 			return;
 		}
 
-		new SearchController().execute();
+		new SearchController().start();
+		new Clock().start();
+
+	}
+
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		if ("progress".equals(evt.getPropertyName())) {
+			System.out.println("*****TICK: " + (evt.getNewValue()));
+		}
 
 	}
 

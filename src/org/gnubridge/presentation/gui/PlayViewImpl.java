@@ -260,4 +260,11 @@ public class PlayViewImpl implements PlayView, CardPanelHost, ActionListener {
 		}
 
 	}
+
+	@Override
+	public void displayTimeRemaining(int i) {
+		table.setTimeRemaining(i);
+		panel.repaint();
+
+	}
 }
