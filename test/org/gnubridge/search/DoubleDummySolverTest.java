@@ -790,4 +790,26 @@ public class DoubleDummySolverTest extends TestCase {
 		assertEquals(Eight.of(Hearts.i()), search.getRoot().getBestMove().getCardPlayed());
 	}
 
+	//	public void testPruneLowestCardToLostTrickHandlesOnlyOneCardGracefully() {
+	//		Game game = new Game(NoTrump.i());
+	//		game.getWest().init(new Hand("8,2", "", "", ""));
+	//		game.getNorth().init(new Hand("A,3", "", "", ""));
+	//		game.getEast().init(new Hand("Q,9", "", "", ""));
+	//		game.getSouth().init(new Hand("7,5", "", "", ""));
+	//		game.setNextToPlay(Direction.WEST);
+	//		game.play(Two.of(Spades.i()));
+	//		game.play(Ace.of(Spades.i()));
+	//		DoubleDummySolver search = new DoubleDummySolver(game);
+	//		search.setUseDuplicateRemoval(false);
+	//		search.setUsePruneLowestCardToLostTrick(true);
+	//		//search.setUsePruneLowestCardToLostTrick(false);
+	//		search.useAlphaBetaPruning(false);
+	//		search.search();
+	//		search.printStats();
+	//		search.printOptimalPath();
+	//		assertEquals(Nine.of(Spades.i()), search.getRoot().getBestMove().getCardPlayed());
+	//		assertEquals(1, search.getRoot().getTricksTaken(Player.NORTH_SOUTH));
+	//		assertEquals(1, search.getRoot().getTricksTaken(Player.WEST_EAST));
+	//	}
+
 }

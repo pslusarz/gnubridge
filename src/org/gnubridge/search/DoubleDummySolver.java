@@ -35,7 +35,7 @@ public class DoubleDummySolver {
 
 	private boolean useAlphaBetaPruning = true;
 	private boolean useDuplicateRemoval = true;
-	private boolean shouldPruneLowestCardInLostTrick = true;
+	private boolean shouldPruneLowestCardInLostTrick = false;
 	private boolean shouldPruneCardsInSequence = true;
 	private boolean shouldPruneCardsInPlayedSequence = true;
 

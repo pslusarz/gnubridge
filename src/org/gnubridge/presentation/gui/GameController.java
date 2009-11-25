@@ -18,7 +18,7 @@ import org.gnubridge.search.DoubleDummySolver;
 import org.gnubridge.search.ProductionSettings;
 
 public class GameController implements CardPlayedListener, PropertyChangeListener {
-	public static int MAX_SECONDS_TO_MOVE = 45;
+	public static int MAX_SECONDS_TO_MOVE = 15;
 	long start = -1;
 	private static final int MILISECONDS_PER_SECOND = 1000;
 	private static final long RIDICULOUSLY_LONG_WAIT_TIME = 100000000;
@@ -41,11 +41,11 @@ public class GameController implements CardPlayedListener, PropertyChangeListene
 		}
 	}
 
-	public class SearchController extends Thread {
+	public class SearchController extends SwingWorker<Void, String> {
 		Card bestMove;
 
 		@Override
-		public void run() {
+		protected Void doInBackground() throws Exception {
 			start = System.currentTimeMillis();
 			bestMove = findBestMoveAtDepth(1, RIDICULOUSLY_LONG_WAIT_TIME);
 			for (int tricksSearchDepth = 2; tricksSearchDepth <= ProductionSettings.getSearchDepthRecommendation(game); tricksSearchDepth++) {
@@ -56,59 +56,103 @@ public class GameController implements CardPlayedListener, PropertyChangeListene
 					break;
 				}
 				System.out.println("// now searching depth: " + tricksSearchDepth);
-				//try {
-				Card bestMoveCandidate = findBestMoveAtDepth(tricksSearchDepth, timeRemaining);
-				if (bestMove == null) {
-					//} catch (TimeoutException e) {
+				try {
+					bestMove = findBestMoveAtDepth(tricksSearchDepth, timeRemaining);
+				} catch (TimeoutException e) {
 					System.out.println("// could not complete full search of depth " + tricksSearchDepth
 							+ ", current best: " + bestMove);
 					break;
-				} else {
-					bestMove = bestMoveCandidate;
 				}
-				//}
 			}
 			start = -1;
-			playCard(bestMove);
-
+			return null;
 		}
 
 		private boolean haveEnoughTimeToAttemptNextSearch(long timeRemaining) {
 			return timeRemaining > TIME_ALLOTED_PER_MOVE * 2 / 3;
 		}
 
-		private Card findBestMoveAtDepth(int tricksSearchDepth, long timeoutMs) {
-			Card result = null;
+		private Card findBestMoveAtDepth(int tricksSearchDepth, long timeoutMs) throws InterruptedException,
+				ExecutionException, TimeoutException {
 			SearchWorker searchWorker = new SearchWorker(tricksSearchDepth);
 			searchWorker.execute();
-			long localStart = System.currentTimeMillis();
-			while (result == null && (System.currentTimeMillis() - localStart) < timeoutMs) {
-				try {
-					result = searchWorker.get(1000, TimeUnit.MILLISECONDS);
-					//					System.out.println("***** TICK ******"
-					//							+ (int) (0.001 * (TIME_ALLOTED_PER_MOVE - (System.currentTimeMillis() - start))));
-					//setProgress((int) (0.001 * (TIME_ALLOTED_PER_MOVE - (System.currentTimeMillis() - start))));
-
-				} catch (TimeoutException e) {
-					//ignore
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-					throw new RuntimeException(e);
-				} catch (ExecutionException e) {
-					e.printStackTrace();
-					throw new RuntimeException(e);
-				}
-
-			}
-			return result;
+			return searchWorker.get(timeoutMs, TimeUnit.MILLISECONDS);
 		}
 
-		//		@Override
-		//		public void done() {
-		//			start = -1;
-		//			playCard(bestMove);
-		//		}
+		@Override
+		public void done() {
+			playCard(bestMove);
+		}
 	}
+
+	//	public class SearchController extends Thread {
+	//		Card bestMove;
+	//
+	//		@Override
+	//		public void run() {
+	//			start = System.currentTimeMillis();
+	//			bestMove = findBestMoveAtDepth(1, RIDICULOUSLY_LONG_WAIT_TIME);
+	//			for (int tricksSearchDepth = 2; tricksSearchDepth <= ProductionSettings.getSearchDepthRecommendation(game); tricksSearchDepth++) {
+	//				long timePassedSinceStart = System.currentTimeMillis() - start;
+	//				long timeRemaining = TIME_ALLOTED_PER_MOVE - timePassedSinceStart;
+	//				if (!haveEnoughTimeToAttemptNextSearch(timeRemaining)) {
+	//					System.out.println("// not enough time to attempt next search");
+	//					break;
+	//				}
+	//				System.out.println("// now searching depth: " + tricksSearchDepth);
+	//				//try {
+	//				Card bestMoveCandidate = findBestMoveAtDepth(tricksSearchDepth, timeRemaining);
+	//				if (bestMove == null) {
+	//					//} catch (TimeoutException e) {
+	//					System.out.println("// could not complete full search of depth " + tricksSearchDepth
+	//							+ ", current best: " + bestMove);
+	//					break;
+	//				} else {
+	//					bestMove = bestMoveCandidate;
+	//				}
+	//				//}
+	//			}
+	//			start = -1;
+	//			playCard(bestMove);
+	//
+	//		}
+	//
+	//		private boolean haveEnoughTimeToAttemptNextSearch(long timeRemaining) {
+	//			return timeRemaining > TIME_ALLOTED_PER_MOVE * 2 / 3;
+	//		}
+	//
+	//		private Card findBestMoveAtDepth(int tricksSearchDepth, long timeoutMs) {
+	//			Card result = null;
+	//			SearchWorker searchWorker = new SearchWorker(tricksSearchDepth);
+	//			searchWorker.execute();
+	//			long localStart = System.currentTimeMillis();
+	//			while (result == null && (System.currentTimeMillis() - localStart) < timeoutMs) {
+	//				try {
+	//					result = searchWorker.get(1000, TimeUnit.MILLISECONDS);
+	//					//					System.out.println("***** TICK ******"
+	//					//							+ (int) (0.001 * (TIME_ALLOTED_PER_MOVE - (System.currentTimeMillis() - start))));
+	//					//setProgress((int) (0.001 * (TIME_ALLOTED_PER_MOVE - (System.currentTimeMillis() - start))));
+	//
+	//				} catch (TimeoutException e) {
+	//					//ignore
+	//				} catch (InterruptedException e) {
+	//					e.printStackTrace();
+	//					throw new RuntimeException(e);
+	//				} catch (ExecutionException e) {
+	//					e.printStackTrace();
+	//					throw new RuntimeException(e);
+	//				}
+	//
+	//			}
+	//			return result;
+	//		}
+	//
+	//		//		@Override
+	//		//		public void done() {
+	//		//			start = -1;
+	//		//			playCard(bestMove);
+	//		//		}
+	//	}
 
 	public class SearchWorker extends SwingWorker<Card, String> {
 		DoubleDummySolver search;
@@ -223,7 +267,7 @@ public class GameController implements CardPlayedListener, PropertyChangeListene
 			return;
 		}
 
-		new SearchController().start();
+		new SearchController().execute();
 		new Clock().start();
 
 	}
