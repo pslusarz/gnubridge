@@ -104,7 +104,7 @@
 
 		<mkdir dir="${build.dir}/classes/" />
 
-		<javac srcdir="${build.dir}/src/" destdir="${build.dir}/classes/" debug="on" target="1.5"/>
+		<javac srcdir="${build.dir}/src/" destdir="${build.dir}/classes/" debug="on" target="1.6"/>
 
 		<mkdir dir="${jar.candidate.dir}" />
 
@@ -124,7 +124,7 @@
 	</target>
 
 	<target name="set-version-release" unless="${version}">
-		<property name="version" value="0.1.12" />
+		<property name="version" value="0.1.14" />
 	</target>
 
 	<!--    *************     PUBLISH   *****************            -->

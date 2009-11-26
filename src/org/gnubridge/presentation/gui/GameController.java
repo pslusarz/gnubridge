@@ -1,7 +1,5 @@
 package org.gnubridge.presentation.gui;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -10,14 +8,17 @@ import javax.swing.SwingWorker;
 
 import org.gnubridge.core.Card;
 import org.gnubridge.core.Direction;
+import org.gnubridge.core.East;
 import org.gnubridge.core.Game;
 import org.gnubridge.core.North;
 import org.gnubridge.core.South;
+import org.gnubridge.core.West;
 import org.gnubridge.core.bidding.Auctioneer;
 import org.gnubridge.search.DoubleDummySolver;
 import org.gnubridge.search.ProductionSettings;
 
-public class GameController implements CardPlayedListener, PropertyChangeListener {
+public class GameController implements CardPlayedListener {
+	private static final int COMPUTER_PLAYER_IS_THINKING = 0;
 	public static int MAX_SECONDS_TO_MOVE = 15;
 	long start = -1;
 	private static final int MILISECONDS_PER_SECOND = 1000;
@@ -27,7 +28,7 @@ public class GameController implements CardPlayedListener, PropertyChangeListene
 	public class Clock extends Thread {
 		@Override
 		public void run() {
-			while (start > 0) {
+			while (start >= COMPUTER_PLAYER_IS_THINKING) {
 				view
 						.displayTimeRemaining((int) (0.001 * (TIME_ALLOTED_PER_MOVE - (System.currentTimeMillis() - start))));
 				try {
@@ -42,6 +43,7 @@ public class GameController implements CardPlayedListener, PropertyChangeListene
 	}
 
 	public class SearchController extends SwingWorker<Void, String> {
+		private static final int COMPUTER_PLAYER_FINISHED_THINKING = -1;
 		Card bestMove;
 
 		@Override
@@ -64,7 +66,7 @@ public class GameController implements CardPlayedListener, PropertyChangeListene
 					break;
 				}
 			}
-			start = -1;
+			start = COMPUTER_PLAYER_FINISHED_THINKING;
 			return null;
 		}
 
@@ -84,75 +86,6 @@ public class GameController implements CardPlayedListener, PropertyChangeListene
 			playCard(bestMove);
 		}
 	}
-
-	//	public class SearchController extends Thread {
-	//		Card bestMove;
-	//
-	//		@Override
-	//		public void run() {
-	//			start = System.currentTimeMillis();
-	//			bestMove = findBestMoveAtDepth(1, RIDICULOUSLY_LONG_WAIT_TIME);
-	//			for (int tricksSearchDepth = 2; tricksSearchDepth <= ProductionSettings.getSearchDepthRecommendation(game); tricksSearchDepth++) {
-	//				long timePassedSinceStart = System.currentTimeMillis() - start;
-	//				long timeRemaining = TIME_ALLOTED_PER_MOVE - timePassedSinceStart;
-	//				if (!haveEnoughTimeToAttemptNextSearch(timeRemaining)) {
-	//					System.out.println("// not enough time to attempt next search");
-	//					break;
-	//				}
-	//				System.out.println("// now searching depth: " + tricksSearchDepth);
-	//				//try {
-	//				Card bestMoveCandidate = findBestMoveAtDepth(tricksSearchDepth, timeRemaining);
-	//				if (bestMove == null) {
-	//					//} catch (TimeoutException e) {
-	//					System.out.println("// could not complete full search of depth " + tricksSearchDepth
-	//							+ ", current best: " + bestMove);
-	//					break;
-	//				} else {
-	//					bestMove = bestMoveCandidate;
-	//				}
-	//				//}
-	//			}
-	//			start = -1;
-	//			playCard(bestMove);
-	//
-	//		}
-	//
-	//		private boolean haveEnoughTimeToAttemptNextSearch(long timeRemaining) {
-	//			return timeRemaining > TIME_ALLOTED_PER_MOVE * 2 / 3;
-	//		}
-	//
-	//		private Card findBestMoveAtDepth(int tricksSearchDepth, long timeoutMs) {
-	//			Card result = null;
-	//			SearchWorker searchWorker = new SearchWorker(tricksSearchDepth);
-	//			searchWorker.execute();
-	//			long localStart = System.currentTimeMillis();
-	//			while (result == null && (System.currentTimeMillis() - localStart) < timeoutMs) {
-	//				try {
-	//					result = searchWorker.get(1000, TimeUnit.MILLISECONDS);
-	//					//					System.out.println("***** TICK ******"
-	//					//							+ (int) (0.001 * (TIME_ALLOTED_PER_MOVE - (System.currentTimeMillis() - start))));
-	//					//setProgress((int) (0.001 * (TIME_ALLOTED_PER_MOVE - (System.currentTimeMillis() - start))));
-	//
-	//				} catch (TimeoutException e) {
-	//					//ignore
-	//				} catch (InterruptedException e) {
-	//					e.printStackTrace();
-	//					throw new RuntimeException(e);
-	//				} catch (ExecutionException e) {
-	//					e.printStackTrace();
-	//					throw new RuntimeException(e);
-	//				}
-	//
-	//			}
-	//			return result;
-	//		}
-	//
-	//		//		@Override
-	//		//		public void done() {
-	//		//			start = -1;
-	//		//			playCard(bestMove);
-	//		//		}
-	//	}
 
 	public class SearchWorker extends SwingWorker<Card, String> {
 		DoubleDummySolver search;
@@ -220,8 +153,12 @@ public class GameController implements CardPlayedListener, PropertyChangeListene
 	}
 
 	private Game makeGame(Auctioneer a, Game cardHolder) {
-		Game result = cardHolder.duplicate();
-		result.setTrump(a.getHighBid().getTrump());
+		Game result = new Game(a.getHighBid().getTrump());
+		result.getPlayer(a.getDummyOffsetDirection(North.i())).init(cardHolder.getPlayer(North.i()).getHand());
+		result.getPlayer(a.getDummyOffsetDirection(East.i())).init(cardHolder.getPlayer(East.i()).getHand());
+		result.getPlayer(a.getDummyOffsetDirection(South.i())).init(cardHolder.getPlayer(South.i()).getHand());
+		result.getPlayer(a.getDummyOffsetDirection(West.i())).init(cardHolder.getPlayer(West.i()).getHand());
+		result.setNextToPlay(West.i().getValue());
 		return result;
 	}
 
@@ -268,15 +205,8 @@ public class GameController implements CardPlayedListener, PropertyChangeListene
 		}
 
 		new SearchController().execute();
+		start = COMPUTER_PLAYER_IS_THINKING;
 		new Clock().start();
-
-	}
-
-	@Override
-	public void propertyChange(PropertyChangeEvent evt) {
-		if ("progress".equals(evt.getPropertyName())) {
-			System.out.println("*****TICK: " + (evt.getNewValue()));
-		}
 
 	}
 

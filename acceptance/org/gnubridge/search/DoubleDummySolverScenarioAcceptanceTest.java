@@ -30,7 +30,7 @@ import org.gnubridge.core.deck.Three;
 import org.gnubridge.core.deck.Two;
 
 public class DoubleDummySolverScenarioAcceptanceTest extends TestCase {
-	public void test13cards4deep() {
+	public void test13cards3deep() {
 		Game game = new Game(NoTrump.i());
 		game.getPlayer(West.i()).init(King.of(Clubs.i()), King.of(Hearts.i()), Two.of(Diamonds.i()),
 				Seven.of(Clubs.i()), Jack.of(Diamonds.i()), Eight.of(Clubs.i()), Four.of(Diamonds.i()),
@@ -55,6 +55,31 @@ public class DoubleDummySolverScenarioAcceptanceTest extends TestCase {
 		pruned.setMaxTricks(3);
 		pruned.search();
 		assertEquals(0, pruned.getRoot().getTricksTaken(Player.WEST_EAST));
+	}
+
+	public void testPlayLowestToLosingTrick() {
+		Game game = new Game(null);
+		game.getWest().init(Two.of(Diamonds.i()), Six.of(Spades.i()), Jack.of(Diamonds.i()), Eight.of(Hearts.i()),
+				Three.of(Clubs.i()));
+		game.getNorth().init(Five.of(Diamonds.i()), Eight.of(Diamonds.i()), Eight.of(Clubs.i()), Ace.of(Diamonds.i()),
+				Four.of(Clubs.i()));
+		game.getEast().init(Queen.of(Diamonds.i()), Nine.of(Diamonds.i()), Ace.of(Clubs.i()), Queen.of(Hearts.i()),
+				Six.of(Clubs.i()));
+		game.getSouth().init(Seven.of(Hearts.i()), Seven.of(Diamonds.i()), Nine.of(Spades.i()), Six.of(Hearts.i()),
+				Ten.of(Spades.i()));
+		game.setNextToPlay(Direction.WEST);
+		game.setTrump(NoTrump.i());
+		game.play(Two.of(Diamonds.i()));
+		game.play(Ace.of(Diamonds.i()));
+
+		DoubleDummySolver pruned = new DoubleDummySolver(game);
+		pruned.setUseDuplicateRemoval(false);
+		pruned.setUsePruneLowestCardToLostTrick(true);
+		pruned.setMaxTricks(6);
+		pruned.search();
+		pruned.printOptimalPath();
+		pruned.printStats();
+
 	}
 
 	//  taking too long - commenting out for now. This should be a performance benchmark test.

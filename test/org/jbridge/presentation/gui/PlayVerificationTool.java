@@ -59,7 +59,6 @@ public class PlayVerificationTool {
 		game.play(Ten.of(Hearts.i()));
 		game.play(Four.of(Hearts.i()));
 		game.play(Four.of(Diamonds.i()));
-		System.out.println("FGFGFG Previous trick: " + game.getPreviousTrick());
 		return game;
 	}
 }

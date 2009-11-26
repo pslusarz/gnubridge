@@ -17,9 +17,9 @@ import org.gnubridge.core.deck.Trump;
 import org.gnubridge.presentation.GameUtils;
 
 public class StochasticDoubleDummySolverAcceptanceTests extends TestCase {
-	static final int SEARCH_DEPTH_CUTOFF = 3;
+	static final int SEARCH_DEPTH_CUTOFF = 6;
 	static final int CARDS_TO_DEAL = 5;
-	private static final int DEALS_TO_TRY = 10;
+	private static final int DEALS_TO_TRY = 10000;
 	private Game g;
 	List<SearchMonkey> monkeys;
 
@@ -30,7 +30,7 @@ public class StochasticDoubleDummySolverAcceptanceTests extends TestCase {
 			g = new Game(trump);
 			GameUtils.initializeRandom(g, CARDS_TO_DEAL);
 			System.out.println("*********** DEAL " + cardDeal + " ***********");
-			g.playOneTrick(); //somewhat randomizes who's to move next
+			//g.playOneTrick(); //somewhat randomizes who's to move next
 			g.printHands();
 			g.printHandsDebug();
 			System.out.println("*********** SEARCHES ***********");
@@ -111,7 +111,8 @@ public class StochasticDoubleDummySolverAcceptanceTests extends TestCase {
 	}
 
 	public enum SearchConfiguration {
-		MiniMax, NoDuplicatePruning, NoAlphaBetaPruning, DuplicatePruning, DuplicateWithLowestPruning, NoSequencePruning, NoPlayedSequencePruning;
+		//MiniMax, NoDuplicatePruning, NoAlphaBetaPruning, DuplicatePruning, DuplicateWithLowestPruning, NoSequencePruning, NoPlayedSequencePruning;
+		DuplicatePruning, DuplicateWithLowestPruning;
 	}
 
 	class SearchMonkey {
@@ -136,20 +137,20 @@ public class StochasticDoubleDummySolverAcceptanceTests extends TestCase {
 			search = new DoubleDummySolver(g);
 			search.setMaxTricks(SEARCH_DEPTH_CUTOFF);
 			search.setTerminateIfRootOnlyHasOneValidMove(false);
-			if (config == SearchConfiguration.MiniMax) {
-				search.setUseDuplicateRemoval(false);
-				search.setUsePruneLowestCardToLostTrick(false);
-				search.useAlphaBetaPruning(false);
-				search.setShouldPruneCardsInSequence(false);
-				search.setShouldPruneCardsInPlayedSequence(false);
-
-			}
-			if (config == SearchConfiguration.NoDuplicatePruning) {
-				search.setUseDuplicateRemoval(false);
-			}
-			if (config == SearchConfiguration.NoAlphaBetaPruning) {
-				search.useAlphaBetaPruning(false);
-			}
+			//			if (config == SearchConfiguration.MiniMax) {
+			//				search.setUseDuplicateRemoval(false);
+			//				search.setUsePruneLowestCardToLostTrick(false);
+			//				search.useAlphaBetaPruning(false);
+			//				search.setShouldPruneCardsInSequence(false);
+			//				search.setShouldPruneCardsInPlayedSequence(false);
+			//
+			//			}
+			//			if (config == SearchConfiguration.NoDuplicatePruning) {
+			//				search.setUseDuplicateRemoval(false);
+			//			}
+			//			if (config == SearchConfiguration.NoAlphaBetaPruning) {
+			//				search.useAlphaBetaPruning(false);
+			//			}
 			if (config == SearchConfiguration.DuplicatePruning) {
 				search.setUseDuplicateRemoval(true);
 				search.setUsePruneLowestCardToLostTrick(false);
@@ -160,12 +161,12 @@ public class StochasticDoubleDummySolverAcceptanceTests extends TestCase {
 				search.setUsePruneLowestCardToLostTrick(true);
 
 			}
-			if (config == SearchConfiguration.NoSequencePruning) {
-				search.setShouldPruneCardsInSequence(false);
-			}
-			if (config == SearchConfiguration.NoPlayedSequencePruning) {
-				search.setShouldPruneCardsInPlayedSequence(false);
-			}
+			//			if (config == SearchConfiguration.NoSequencePruning) {
+			//				search.setShouldPruneCardsInSequence(false);
+			//			}
+			//			if (config == SearchConfiguration.NoPlayedSequencePruning) {
+			//				search.setShouldPruneCardsInPlayedSequence(false);
+			//			}
 			search.search();
 			search.printStats();
 
