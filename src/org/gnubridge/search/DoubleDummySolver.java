@@ -239,54 +239,53 @@ public class DoubleDummySolver {
 		move.setPlayerCardPlayed(player);
 	}
 
-	private void removeSiblingsInSequenceWithPlayedCards(Node move, Game position) {
-		List<Card> orderedPlayedCardsInSuit = position.getPlayedCardsHiToLow(move.getCardPlayed().getDenomination());
-		if (orderedPlayedCardsInSuit.isEmpty()) {
-			return;
-		}
-		boolean shouldTrim = false;
-
-		List<Card> siblingsInSuit = move.getSiblingsInColor();
-		for (Card sibling : siblingsInSuit) {
-			Card higherCard = getHigher(move.getCardPlayed(), sibling);
-			Card lowerCard = getLower(move.getCardPlayed(), sibling);
-			boolean isSequence = cardsInSuitContainSequence(lowerCard.getValue(), higherCard.getValue(),
-					orderedPlayedCardsInSuit);
-
-			if (isSequence && higherCard.equals(move.getCardPlayed())) {
-				shouldTrim = true;
-				break;
-			}
-		}
-		if (shouldTrim) {
-			move.pruneAsSequenceSiblingPlayed();
-		}
-
-	}
-
-	private boolean cardsInSuitContainSequence(int low, int high, List<Card> othersInSuitHighToLow) {
-		List<Card> inBetween = discardCardsOutsideLimits(low, high, othersInSuitHighToLow);
-		return high - low == inBetween.size() + 1;
-	}
-
-	private List<Card> discardCardsOutsideLimits(int low, int high, List<Card> orderedPlayedCardsInSuit) {
-		List<Card> result = new ArrayList<Card>();
-		for (Card card : orderedPlayedCardsInSuit) {
-			if (card.getValue() > low && card.getValue() < high) {
-				result.add(card);
-			}
-		}
-		return result;
-	}
-
-	private Card getLower(Card c1, Card c2) {
-		if (c1.getValue() < c2.getValue()) {
-			return c1;
-		} else {
-			return c2;
-		}
-	}
-
+	/**
+	 * TODO: broken trimming strategy removeSiblingsInSequenceWithPlayedCards
+	 */
+	//	private void removeSiblingsInSequenceWithPlayedCards(Node move, Game position) {
+	//		List<Card> orderedPlayedCardsInSuit = position.getPlayedCardsHiToLow(move.getCardPlayed().getDenomination());
+	//		if (orderedPlayedCardsInSuit.isEmpty()) {
+	//			return;
+	//		}
+	//		boolean shouldTrim = false;
+	//
+	//		List<Card> siblingsInSuit = move.getSiblingsInColor();
+	//		for (Card sibling : siblingsInSuit) {
+	//			Card higherCard = getHigher(move.getCardPlayed(), sibling);
+	//			Card lowerCard = getLower(move.getCardPlayed(), sibling);
+	//			boolean isSequence = cardsInSuitContainSequence(lowerCard.getValue(), higherCard.getValue(),
+	//					orderedPlayedCardsInSuit);
+	//
+	//			if (isSequence && higherCard.equals(move.getCardPlayed())) {
+	//				shouldTrim = true;
+	//				break;
+	//			}
+	//		}
+	//		if (shouldTrim) {
+	//			move.pruneAsSequenceSiblingPlayed();
+	//		}
+	//
+	//	}
+	//	private boolean cardsInSuitContainSequence(int low, int high, List<Card> othersInSuitHighToLow) {
+	//		List<Card> inBetween = discardCardsOutsideLimits(low, high, othersInSuitHighToLow);
+	//		return high - low == inBetween.size() + 1;
+	//	}
+	//	private List<Card> discardCardsOutsideLimits(int low, int high, List<Card> orderedPlayedCardsInSuit) {
+	//		List<Card> result = new ArrayList<Card>();
+	//		for (Card card : orderedPlayedCardsInSuit) {
+	//			if (card.getValue() > low && card.getValue() < high) {
+	//				result.add(card);
+	//			}
+	//		}
+	//		return result;
+	//	}
+	//	private Card getLower(Card c1, Card c2) {
+	//		if (c1.getValue() < c2.getValue()) {
+	//			return c1;
+	//		} else {
+	//			return c2;
+	//		}
+	//	}
 	private Card getHigher(Card c1, Card c2) {
 		if (c1.getValue() > c2.getValue()) {
 			return c1;

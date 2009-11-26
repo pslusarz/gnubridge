@@ -364,7 +364,6 @@ public class DoubleDummySolverTest extends TestCase {
 	}
 
 	public void testLastTrickAutoExpands() {
-		Node root = new Node(null);
 		Game g = new Game(NoTrump.i());
 		GameUtils.initializeSingleColorSuits(g, 1);
 		DoubleDummySolver s = new DoubleDummySolver(g);

@@ -53,6 +53,7 @@ public class AnalysisTool {
 		});
 	}
 
+	@SuppressWarnings("unused")
 	private static Game createCounterexample() {
 		Game game = new Game(NoTrump.i());
 		game.getWest().init(new Hand("", "8,4", "2", ""));//E: AH, W: 4H???
@@ -81,6 +82,7 @@ public class AnalysisTool {
 		return game;
 	}
 
+	@SuppressWarnings("unused")
 	private static Game createSampleGame() {
 		Game g = new Game(null);
 		GameUtils.initializeRandom(g, 13);

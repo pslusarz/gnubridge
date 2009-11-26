@@ -1,8 +1,5 @@
 package org.gnubridge.core.bidding;
 
-import java.util.List;
-
-import org.gnubridge.core.Card;
 import org.gnubridge.core.Hand;
 import org.gnubridge.core.deck.Color;
 
@@ -22,13 +19,13 @@ public class ResponseCalculator extends PointCalculator {
 	@Override
 	protected int distributionalValueForCardsInColor(Color color) {
 		if (!partnersBidIsASuit()) {
-		  return super.distributionalValueForCardsInColor(color);	
+			return super.distributionalValueForCardsInColor(color);
 		}
 		if (color.equals(partnersBid.getTrump())) {
-		  return 0;	
+			return 0;
 		}
 		int result = -1;
-		if ( 4 <= hand.getColorLength((Color) partnersBid.getTrump())) {
+		if (4 <= hand.getColorLength((Color) partnersBid.getTrump())) {
 			int colorLength = hand.getColorLength(color);
 			if (colorLength == 0) {
 				result = 5;
