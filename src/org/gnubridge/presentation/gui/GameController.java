@@ -8,12 +8,10 @@ import javax.swing.SwingWorker;
 
 import org.gnubridge.core.Card;
 import org.gnubridge.core.Direction;
-import org.gnubridge.core.East;
 import org.gnubridge.core.Game;
 import org.gnubridge.core.North;
 import org.gnubridge.core.South;
-import org.gnubridge.core.West;
-import org.gnubridge.core.bidding.Auctioneer;
+import org.gnubridge.core.bidding.Bid;
 import org.gnubridge.search.DoubleDummySolver;
 import org.gnubridge.search.ProductionSettings;
 
@@ -131,16 +129,15 @@ public class GameController implements CardPlayedListener {
 
 	private final PlayView view;
 
-	public GameController(GBController controller, Auctioneer auctioneer, Game cardHolder, Direction humanDir,
-			PlayView playView) {
+	public GameController(GBController controller, Bid highBid, Game g, Direction humanDir, PlayView playView) {
 		parent = controller;
-		game = makeGame(auctioneer, cardHolder);
+		game = g;
 		game.printHandsDebug();
 		human = humanDir;
 		view = playView;
 		view.setListener(this);
 		view.setGame(game, human);
-		view.setContract(auctioneer.getHighBid());
+		view.setContract(highBid);
 		doAutomatedPlay();
 	}
 
@@ -150,16 +147,6 @@ public class GameController implements CardPlayedListener {
 
 	public Direction getHuman() {
 		return human;
-	}
-
-	private Game makeGame(Auctioneer a, Game cardHolder) {
-		Game result = new Game(a.getHighBid().getTrump());
-		result.getPlayer(a.getDummyOffsetDirection(North.i())).init(cardHolder.getPlayer(North.i()).getHand());
-		result.getPlayer(a.getDummyOffsetDirection(East.i())).init(cardHolder.getPlayer(East.i()).getHand());
-		result.getPlayer(a.getDummyOffsetDirection(South.i())).init(cardHolder.getPlayer(South.i()).getHand());
-		result.getPlayer(a.getDummyOffsetDirection(West.i())).init(cardHolder.getPlayer(West.i()).getHand());
-		result.setNextToPlay(West.i().getValue());
-		return result;
 	}
 
 	public boolean humanHasMove() {

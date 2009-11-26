@@ -6,6 +6,7 @@ import java.util.List;
 import junit.framework.TestCase;
 
 import org.gnubridge.core.Card;
+import org.gnubridge.core.Direction;
 import org.gnubridge.core.Game;
 import org.gnubridge.core.Player;
 import org.gnubridge.presentation.GameUtils;
@@ -38,6 +39,18 @@ public class PlayAcceptanceTest extends TestCase {
 		assertEquals(0, mainController.getGameController().getGame().getTricksTaken(Player.NORTH_SOUTH));
 	}
 
+	public void testWhenPlayingHumanRetainsHisCardsFromBidding() throws InterruptedException, InvocationTargetException {
+		preInitializeGameWithSingleColorSuits();
+		GBController mainController = makeController();
+		Player humanInBidding = mainController.getBiddingController().getHuman();
+		mainController.getBiddingController().placeBid(7, "NT");
+		mainController.playGame();
+		Direction humanInPlay = mainController.getGameController().getHuman();
+		assertEquals(humanInBidding.getHand(), mainController.getGameController().getGame().getPlayer(humanInPlay)
+				.getHand());
+
+	}
+
 	public void testPlayRandomGame() throws InterruptedException, InvocationTargetException {
 		GameController.MAX_SECONDS_TO_MOVE = 3;
 		preInitializeRandomGame();
@@ -54,17 +67,8 @@ public class PlayAcceptanceTest extends TestCase {
 	public void testPlayGameEndToEndTrumpAllTricks() throws InterruptedException, InvocationTargetException {
 		preInitializeGameWithSingleColorSuits();
 		GBController mainController = makeController();
-		mainController.getBiddingController().placeBid(7, "Hearts"); // TODO:
-		// what
-		// are
-		// valid
-		// names?
-		// hidden
-		// in
-		// biddingControls
-		// -
-		// force
-		// programmaticaly
+		mainController.getBiddingController().placeBid(7, "Spades");
+		// TODO: what are valid names? hidden in biddingControls - force programmaticaly
 		mainController.playGame();
 		playGameToTheEnd(mainController);
 		System.out.println("Game finished. Declarers took "
