@@ -5,7 +5,6 @@ import junit.framework.TestCase;
 import org.gnubridge.core.Direction;
 import org.gnubridge.core.East;
 import org.gnubridge.core.Game;
-import org.gnubridge.core.Hand;
 import org.gnubridge.core.North;
 import org.gnubridge.core.Player;
 import org.gnubridge.core.South;
@@ -57,31 +56,6 @@ public class DoubleDummySolverScenarioAcceptanceTest extends TestCase {
 		assertEquals(0, pruned.getRoot().getTricksTaken(Player.WEST_EAST));
 	}
 
-	public void testPlayLowestToLosingTrick() {
-		Game game = new Game(null);
-		game.getWest().init(Two.of(Diamonds.i()), Six.of(Spades.i()), Jack.of(Diamonds.i()), Eight.of(Hearts.i()),
-				Three.of(Clubs.i()));
-		game.getNorth().init(Five.of(Diamonds.i()), Eight.of(Diamonds.i()), Eight.of(Clubs.i()), Ace.of(Diamonds.i()),
-				Four.of(Clubs.i()));
-		game.getEast().init(Queen.of(Diamonds.i()), Nine.of(Diamonds.i()), Ace.of(Clubs.i()), Queen.of(Hearts.i()),
-				Six.of(Clubs.i()));
-		game.getSouth().init(Seven.of(Hearts.i()), Seven.of(Diamonds.i()), Nine.of(Spades.i()), Six.of(Hearts.i()),
-				Ten.of(Spades.i()));
-		game.setNextToPlay(Direction.WEST);
-		game.setTrump(NoTrump.i());
-		game.play(Two.of(Diamonds.i()));
-		game.play(Ace.of(Diamonds.i()));
-
-		DoubleDummySolver pruned = new DoubleDummySolver(game);
-		pruned.setUseDuplicateRemoval(false);
-		pruned.setUsePruneLowestCardToLostTrick(true);
-		pruned.setMaxTricks(6);
-		pruned.search();
-		pruned.printOptimalPath();
-		pruned.printStats();
-
-	}
-
 	//  taking too long - commenting out for now. This should be a performance benchmark test.
 	//	public void testPruningDuplicate13CardsRunOutOfMemory() {
 	//		Game game = new Game(NoTrump.i());
@@ -110,25 +84,6 @@ public class DoubleDummySolverScenarioAcceptanceTest extends TestCase {
 	//		pruned2.printStats();
 	//		assertEquals(2, pruned2.getRoot().getTricksTaken(Player.WEST_EAST));
 	//	}
-
-	public void testPruneLowestCardToLostTrickBugDoNotApplyIfTrickTakenByPartner() {
-		Game game = new Game(NoTrump.i());
-		game.getWest().init(new Hand("", "8,4", "2", ""));//E: AH, W: 4H???
-		game.getNorth().init(new Hand("3", "", "5,4", ""));
-		game.getEast().init(new Hand("", "A,6,5", "", ""));
-		game.getSouth().init(new Hand("", "10", "3", "3"));
-		game.setNextToPlay(Direction.EAST);
-		DoubleDummySolver search = new DoubleDummySolver(game);
-		search.setUseDuplicateRemoval(false);
-		search.setUsePruneLowestCardToLostTrick(true);
-		//search.setUsePruneLowestCardToLostTrick(false);
-		search.useAlphaBetaPruning(false);
-		search.search();
-		search.printStats();
-		System.out.println(search.getBestMoves());
-		search.printOptimalPath();
-		assertEquals(3, search.getRoot().getTricksTaken(Player.WEST_EAST));
-	}
 
 	//	public void testBugAlphaBetaGivingUpTrick() {
 	//		Game game = new Game(Clubs.i());
@@ -170,12 +125,9 @@ public class DoubleDummySolverScenarioAcceptanceTest extends TestCase {
 		DoubleDummySolver search = new DoubleDummySolver(game);
 
 		search.setUseDuplicateRemoval(false);
-		search.setUsePruneLowestCardToLostTrick(false);
 		search.setShouldPruneCardsInSequence(false);
 
 		search.useAlphaBetaPruning(true);
-
-		//search.setUsePruneLowestCardToLostTrick(false);
 
 		search.setMaxTricks(3);
 		search.search();

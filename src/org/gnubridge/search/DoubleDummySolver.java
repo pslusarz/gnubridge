@@ -7,7 +7,6 @@ import java.util.Stack;
 import org.gnubridge.core.Card;
 import org.gnubridge.core.Game;
 import org.gnubridge.core.Player;
-import org.gnubridge.core.Trick;
 
 public class DoubleDummySolver {
 
@@ -35,14 +34,11 @@ public class DoubleDummySolver {
 
 	private boolean useAlphaBetaPruning = true;
 	private boolean useDuplicateRemoval = true;
-	private boolean shouldPruneLowestCardInLostTrick = false;
 	private boolean shouldPruneCardsInSequence = true;
 	private boolean shouldPruneCardsInPlayedSequence = true;
 
 	private int prunedDuplicatePosition;
 	PositionLookup lookup;
-
-	private int prunedLowestCardInLostTrick;
 
 	private boolean terminateIfRootOnlyHasOneValidMove = true;
 
@@ -90,7 +86,6 @@ public class DoubleDummySolver {
 		prunedSequence = 0;
 		prunedPlayedSequence = 0;
 		positionsCount = 0;
-		prunedLowestCardInLostTrick = 0;
 	}
 
 	public void setUseDuplicateRemoval(boolean b) {
@@ -121,8 +116,6 @@ public class DoubleDummySolver {
 			prunedPlayedSequence++;
 		} else if (node.isPrunedDuplicatePosition()) {
 			prunedDuplicatePosition++;
-		} else if (node.isPrunedLowestCardInLostTrick()) {
-			prunedLowestCardInLostTrick++;
 		}
 
 	}
@@ -161,11 +154,6 @@ public class DoubleDummySolver {
 					//removeSiblingsInSequenceWithPlayedCards(move, position);
 				}
 			}
-			if (shouldPruneLowestCardInLostTrick) {
-				for (Node move : node.children) {
-					ifCannotTakeTrickPlayLowestCardInColor(move, position);
-				}
-			}
 			if (!rootOnlyHasOneValidMove(node) || !terminateIfRootOnlyHasOneValidMove) {
 				for (Node move : node.children) {
 					// TODO later if (!move.isPruned()) {
@@ -182,45 +170,6 @@ public class DoubleDummySolver {
 		} else {
 			return false;
 		}
-	}
-
-	private void ifCannotTakeTrickPlayLowestCardInColor(Node move, Game position) {
-		Trick currentTrick = position.getCurrentTrick();
-		if (currentTrick.getCards().size() == 0) {
-			return;
-		}
-		if (!currentTrick.getDenomination().equals(move.getCardPlayed().getDenomination())) {
-			return;
-		}
-		if (move.isPruned()) {
-			return;
-		}
-
-		if (currentTrick.whoPlayed(currentTrick.getHighestCard()).isPartnerWith(move.getPlayerCardPlayed())) {
-			return;
-		}
-
-		List<Card> siblingsInSuit = move.getSiblingsInColor();
-
-		Card higherCard;
-		for (Card sibling : siblingsInSuit) {
-			if (move.getSiblingNodeForCard(sibling).isPruned()) {
-				continue;
-			}
-			higherCard = getHigher(move.getCardPlayed(), sibling);
-
-			if (higherCard.equals(move.getCardPlayed()) && cannotTakeTrick(higherCard, currentTrick)) {
-				move.pruneAsLowestCardInLostTrick();
-
-				break;
-			}
-		}
-
-	}
-
-	private boolean cannotTakeTrick(Card card, Trick trick) {
-		return trick.getHighestCard().trumps(card, trick.getTrump())
-				|| (trick.getHighestCard().hasSameColorAs(card) && trick.getHighestCard().hasGreaterValueThan(card));
 	}
 
 	private void checkDuplicatePositions(Node node, Game position) {
@@ -286,13 +235,6 @@ public class DoubleDummySolver {
 	//			return c2;
 	//		}
 	//	}
-	private Card getHigher(Card c1, Card c2) {
-		if (c1.getValue() > c2.getValue()) {
-			return c1;
-		} else {
-			return c2;
-		}
-	}
 
 	private void removeSiblingsInSequence(Node move, Game position) {
 		boolean shouldTrim = false;
@@ -397,16 +339,9 @@ public class DoubleDummySolver {
 		if (useDuplicateRemoval()) {
 			System.out.println("  Duplicate position prunes: " + prunedDuplicatePosition);
 		}
-		if (shouldPruneLowestCardInLostTrick) {
-			System.out.println("  Lowest card to lost trick prunes: " + getPrunedLowestCardInLostTrick());
-		}
 		System.out.println("West/East tricks taken: " + root.getTricksTaken(Player.WEST_EAST));
 		System.out.println("North/South tricks taken: " + root.getTricksTaken(Player.NORTH_SOUTH));
 
-	}
-
-	private int getPrunedLowestCardInLostTrick() {
-		return prunedLowestCardInLostTrick;
 	}
 
 	private int getPrunedPlayedSequence() {
@@ -423,7 +358,6 @@ public class DoubleDummySolver {
 
 	public void setMaxTricks(int i) {
 		maxTricks = i;
-
 	}
 
 	public Stack<Node> getStack() {
@@ -432,11 +366,6 @@ public class DoubleDummySolver {
 
 	public Node getRoot() {
 		return root;
-	}
-
-	public void setUsePruneLowestCardToLostTrick(boolean b) {
-		shouldPruneLowestCardInLostTrick = b;
-
 	}
 
 }

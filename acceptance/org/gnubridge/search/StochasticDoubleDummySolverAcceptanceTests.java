@@ -17,9 +17,9 @@ import org.gnubridge.core.deck.Trump;
 import org.gnubridge.presentation.GameUtils;
 
 public class StochasticDoubleDummySolverAcceptanceTests extends TestCase {
-	static final int SEARCH_DEPTH_CUTOFF = 6;
-	static final int CARDS_TO_DEAL = 5;
-	private static final int DEALS_TO_TRY = 10000;
+	static final int SEARCH_DEPTH_CUTOFF = 13;
+	static final int CARDS_TO_DEAL = 4;
+	private static final int DEALS_TO_TRY = 100;
 	private Game g;
 	List<SearchMonkey> monkeys;
 
@@ -30,18 +30,18 @@ public class StochasticDoubleDummySolverAcceptanceTests extends TestCase {
 			g = new Game(trump);
 			GameUtils.initializeRandom(g, CARDS_TO_DEAL);
 			System.out.println("*********** DEAL " + cardDeal + " ***********");
-			//g.playOneTrick(); //somewhat randomizes who's to move next
+			g.playOneTrick(); //somewhat randomizes who's to move next
 			g.printHands();
 			g.printHandsDebug();
-			System.out.println("*********** SEARCHES ***********");
+			//System.out.println("*********** SEARCHES ***********");
 			for (SearchConfiguration config : SearchConfiguration.values()) {
 				SearchMonkey monkey = new SearchMonkey(config);
 				monkeys.add(monkey);
-				System.out.println("-----" + config + "---------");
+				//System.out.println("-----" + config + "---------");
 				monkey.runSearch(g.duplicate());
-				System.out.println("-----------------------");
+				//System.out.println("-----------------------");
 			}
-			System.out.println("*********** END SEARCHES ***********");
+			//System.out.println("*********** END SEARCHES ***********");
 			assertAllSearchesFindSameNumberOfTricksTaken();
 		}
 
@@ -59,7 +59,7 @@ public class StochasticDoubleDummySolverAcceptanceTests extends TestCase {
 				if (!previousMonkey.getBestMove().equals(currentMonkey.getBestMove())) {
 					compareEachOthersBestMoves(previousMonkey, currentMonkey, g.duplicate());
 				}
-				System.out.println("**** Equivalence achieved: " + previousMonkey + " and " + currentMonkey + "***");
+				//System.out.println("**** Equivalence achieved: " + previousMonkey + " and " + currentMonkey + "***");
 			}
 			previousMonkey = currentMonkey;
 		}
@@ -111,8 +111,7 @@ public class StochasticDoubleDummySolverAcceptanceTests extends TestCase {
 	}
 
 	public enum SearchConfiguration {
-		//MiniMax, NoDuplicatePruning, NoAlphaBetaPruning, DuplicatePruning, DuplicateWithLowestPruning, NoSequencePruning, NoPlayedSequencePruning;
-		DuplicatePruning, DuplicateWithLowestPruning;
+		MiniMax, NoDuplicatePruning, NoAlphaBetaPruning, DuplicatePruning, DuplicateWithLowestPruning, NoSequencePruning, NoPlayedSequencePruning;
 	}
 
 	class SearchMonkey {
@@ -137,38 +136,31 @@ public class StochasticDoubleDummySolverAcceptanceTests extends TestCase {
 			search = new DoubleDummySolver(g);
 			search.setMaxTricks(SEARCH_DEPTH_CUTOFF);
 			search.setTerminateIfRootOnlyHasOneValidMove(false);
-			//			if (config == SearchConfiguration.MiniMax) {
-			//				search.setUseDuplicateRemoval(false);
-			//				search.setUsePruneLowestCardToLostTrick(false);
-			//				search.useAlphaBetaPruning(false);
-			//				search.setShouldPruneCardsInSequence(false);
-			//				search.setShouldPruneCardsInPlayedSequence(false);
-			//
-			//			}
-			//			if (config == SearchConfiguration.NoDuplicatePruning) {
-			//				search.setUseDuplicateRemoval(false);
-			//			}
-			//			if (config == SearchConfiguration.NoAlphaBetaPruning) {
-			//				search.useAlphaBetaPruning(false);
-			//			}
+			if (config == SearchConfiguration.MiniMax) {
+				search.setUseDuplicateRemoval(false);
+				search.useAlphaBetaPruning(false);
+				search.setShouldPruneCardsInSequence(false);
+				search.setShouldPruneCardsInPlayedSequence(false);
+
+			}
+			if (config == SearchConfiguration.NoDuplicatePruning) {
+				search.setUseDuplicateRemoval(false);
+			}
+			if (config == SearchConfiguration.NoAlphaBetaPruning) {
+				search.useAlphaBetaPruning(false);
+			}
 			if (config == SearchConfiguration.DuplicatePruning) {
 				search.setUseDuplicateRemoval(true);
-				search.setUsePruneLowestCardToLostTrick(false);
 
 			}
-			if (config == SearchConfiguration.DuplicateWithLowestPruning) {
-				search.setUseDuplicateRemoval(true);
-				search.setUsePruneLowestCardToLostTrick(true);
-
+			if (config == SearchConfiguration.NoSequencePruning) {
+				search.setShouldPruneCardsInSequence(false);
 			}
-			//			if (config == SearchConfiguration.NoSequencePruning) {
-			//				search.setShouldPruneCardsInSequence(false);
-			//			}
-			//			if (config == SearchConfiguration.NoPlayedSequencePruning) {
-			//				search.setShouldPruneCardsInPlayedSequence(false);
-			//			}
+			if (config == SearchConfiguration.NoPlayedSequencePruning) {
+				search.setShouldPruneCardsInPlayedSequence(false);
+			}
 			search.search();
-			search.printStats();
+			//search.printStats();
 
 			this.card = search.getRoot().getBestMove().getCardPlayed();
 			this.northSouthTricks = search.getRoot().getTricksTaken(Player.NORTH_SOUTH);

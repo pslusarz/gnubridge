@@ -25,8 +25,6 @@ public class Node {
 
 	private static final byte PRUNE_DUPLICATE_POSITION = PRUNE_SEQUENCE_SIBLINGS_PLAYED + 1;
 
-	public static final byte PRUNE_LOWEST_CARD_IN_LOST_TRICK = PRUNE_DUPLICATE_POSITION + 1;
-
 	int value;
 
 	Node parent;
@@ -212,8 +210,6 @@ public class Node {
 			result = "BETA";
 		} else if (pruneType == PRUNE_DUPLICATE_POSITION) {
 			result = "DUPLICATE POSITION";
-		} else if (pruneType == PRUNE_LOWEST_CARD_IN_LOST_TRICK) {
-			result = "LOWEST CARD IN LOST TRICK";
 		} else if (pruneType == PRUNE_SEQUENCE_SIBLINGS) {
 			result = "SIBLING SEQUENCE";
 		} else if (pruneType == PRUNE_SEQUENCE_SIBLINGS_PLAYED) {
@@ -529,10 +525,6 @@ public class Node {
 		throw new RuntimeException("Cannot find appropriate sibling node");
 	}
 
-	public boolean isPrunedLowestCardInLostTrick() {
-		return isPruned() && (getPruneType() == PRUNE_LOWEST_CARD_IN_LOST_TRICK);
-	}
-
 	public int getUnprunedChildCount() {
 		int unprunedChildCount = 0;
 		for (Node child : children) {
@@ -559,10 +551,6 @@ public class Node {
 
 	public void pruneAsSequenceSiblingPlayed() {
 		setPruned(true, Node.PRUNE_SEQUENCE_SIBLINGS_PLAYED);
-	}
-
-	public void pruneAsLowestCardInLostTrick() {
-		setPruned(true, Node.PRUNE_LOWEST_CARD_IN_LOST_TRICK);
 	}
 
 	public void pruneAsAlpha() {

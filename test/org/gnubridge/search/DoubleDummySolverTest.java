@@ -230,7 +230,6 @@ public class DoubleDummySolverTest extends TestCase {
 		DoubleDummySolver search = new DoubleDummySolver(game);
 		search.setUseDuplicateRemoval(false);
 		search.useAlphaBetaPruning(false);
-		search.setUsePruneLowestCardToLostTrick(false);
 		search.useAlphaBetaPruning(false);
 		//search.setShouldPruneCardsInPlayedSequence(false);
 		search.search();
@@ -676,29 +675,6 @@ public class DoubleDummySolverTest extends TestCase {
 
 	}
 
-	public void testIfCannotBeatPlayLowestToColorPruning() {
-
-		Game game = new Game(NoTrump.i());
-		game.getPlayer(Direction.WEST).init(new Card[] { Ace.of(Spades.i()), Nine.of(Spades.i()) });
-		game.getPlayer(Direction.NORTH).init(new Card[] { Six.of(Spades.i()), Four.of(Spades.i()) });
-		game.getPlayer(Direction.EAST).init(new Card[] { Ten.of(Hearts.i()), Three.of(Hearts.i()) });
-		game.getPlayer(Direction.SOUTH).init(new Card[] { Six.of(Hearts.i()), Two.of(Hearts.i()) });
-
-		game.setNextToPlay(Direction.WEST);
-		game.play(Ace.of(Spades.i()));
-		DoubleDummySolver pruned = new DoubleDummySolver(game.duplicate());
-		Node root = new Node(null);
-		pruned.setUsePruneLowestCardToLostTrick(true);
-		pruned.examinePosition(root);
-		assertNotNull(root.children.get(0));
-		assertEquals(Six.of(Spades.i()), root.children.get(1).getCardPlayed());
-		assertTrue(root.children.get(1).isPruned());
-		assertFalse(root.children.get(0).isPrunedLowestCardInLostTrick());
-		assertNotNull(root.getBestMove());
-		assertEquals(Four.of(Spades.i()), root.getBestMove().getCardPlayed());
-
-	}
-
 	public void testShortCircuitIfRootOnlyHasOneValidMove() {
 
 		Game game = new Game(NoTrump.i());
@@ -772,45 +748,5 @@ public class DoubleDummySolverTest extends TestCase {
 		assertEquals(Four.of(Hearts.i()), triangulate.getRoot().getBestMove().getCardPlayed());
 
 	}
-
-	public void testPruneLowestCardToLostTrickBugDoNotApplyIfTrickTakenByPartner() {
-		Game game = new Game(NoTrump.i());
-		game.getWest().init(new Hand("", "8,4", "2", ""));//E: AH, S: ..., W: 4H???
-		game.getNorth().init(new Hand("3", "", "5,4", ""));
-		game.getEast().init(new Hand("", "A,6,5", "", ""));
-		game.getSouth().init(new Hand("", "10", "3", "3"));
-		game.setNextToPlay(Direction.EAST);
-		game.play(Ace.of(Hearts.i()));
-		game.play(Ten.of(Hearts.i()));
-		DoubleDummySolver search = new DoubleDummySolver(game);
-		search.setUseDuplicateRemoval(false);
-		search.setUsePruneLowestCardToLostTrick(true);
-		//search.setUsePruneLowestCardToLostTrick(false);
-		search.useAlphaBetaPruning(true);
-		search.search();
-		assertEquals(Eight.of(Hearts.i()), search.getRoot().getBestMove().getCardPlayed());
-	}
-
-	//	public void testPruneLowestCardToLostTrickHandlesOnlyOneCardGracefully() {
-	//		Game game = new Game(NoTrump.i());
-	//		game.getWest().init(new Hand("8,2", "", "", ""));
-	//		game.getNorth().init(new Hand("A,3", "", "", ""));
-	//		game.getEast().init(new Hand("Q,9", "", "", ""));
-	//		game.getSouth().init(new Hand("7,5", "", "", ""));
-	//		game.setNextToPlay(Direction.WEST);
-	//		game.play(Two.of(Spades.i()));
-	//		game.play(Ace.of(Spades.i()));
-	//		DoubleDummySolver search = new DoubleDummySolver(game);
-	//		search.setUseDuplicateRemoval(false);
-	//		search.setUsePruneLowestCardToLostTrick(true);
-	//		//search.setUsePruneLowestCardToLostTrick(false);
-	//		search.useAlphaBetaPruning(false);
-	//		search.search();
-	//		search.printStats();
-	//		search.printOptimalPath();
-	//		assertEquals(Nine.of(Spades.i()), search.getRoot().getBestMove().getCardPlayed());
-	//		assertEquals(1, search.getRoot().getTricksTaken(Player.NORTH_SOUTH));
-	//		assertEquals(1, search.getRoot().getTricksTaken(Player.WEST_EAST));
-	//	}
 
 }
