@@ -4,8 +4,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-import javax.swing.SwingWorker;
-
 import org.gnubridge.core.Card;
 import org.gnubridge.core.Direction;
 import org.gnubridge.core.Game;
@@ -14,6 +12,7 @@ import org.gnubridge.core.South;
 import org.gnubridge.core.bidding.Bid;
 import org.gnubridge.search.DoubleDummySolver;
 import org.gnubridge.search.ProductionSettings;
+import org.jdesktop.swingworker.SwingWorker;
 
 public class GameController implements CardPlayedListener {
 	private static final int COMPUTER_PLAYER_IS_THINKING = 0;

@@ -6,5 +6,6 @@
 	<classpathentry kind="src" path="acceptance"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/3.8.1"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="lib/swing-worker-1.2.jar" sourcepath="lib/swing-worker-src-1.2.zip"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

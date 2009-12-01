@@ -88,7 +88,7 @@
 
 	<!--    *************     BUILD JAR   *****************            -->
 
-	<target name="build-jar" depends="clean, set-version-release" description="build jar">
+	<target name="build-jar" depends="clean, create-compile-dir, set-version-release,unjar-swing-worker" description="build jar">
 
 		<copy todir="${build.dir}/src/">
 			<fileset dir="./src/">
@@ -102,9 +102,9 @@
 			</fileset>
 		</copy>
 
-		<mkdir dir="${build.dir}/classes/" />
+		
 
-		<javac srcdir="${build.dir}/src/" destdir="${build.dir}/classes/" debug="on" target="1.6"/>
+		<javac srcdir="${build.dir}/src/" destdir="${build.dir}/classes/" debug="on" target="1.5"/>
 
 		<mkdir dir="${jar.candidate.dir}" />
 
@@ -118,6 +118,14 @@
 
 	</target>
 
+	<target name="unjar-swing-worker" depends="clean, create-compile-dir">
+		<unjar src="./lib/swing-worker-1.2.jar" dest="${build.dir}/classes/" />
+	</target>	
+	
+	<target name="create-compile-dir">
+		<mkdir dir="${build.dir}/classes/" />
+	</target>	
+	
 	<target name="clean">
 		<deltree dir="${build.dir}" />
 		<mkdir dir="${build.dir}" />
