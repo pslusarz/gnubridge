@@ -117,7 +117,9 @@ public class GameController implements CardPlayedListener {
 			} catch (InterruptedException e) {
 				throw new RuntimeException(e);
 			}
-			view.displayCurrentTrick();
+			if (!game.isDone()) {
+				view.displayCurrentTrick();
+			}
 
 		}
 	}
@@ -194,6 +196,12 @@ public class GameController implements CardPlayedListener {
 		start = COMPUTER_PLAYER_IS_THINKING;
 		new Clock().start();
 
+	}
+
+	@Override
+	public void newGame() {
+		view.hide();
+		parent.newGame();
 	}
 
 }

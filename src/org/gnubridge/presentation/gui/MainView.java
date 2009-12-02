@@ -8,6 +8,8 @@ public interface MainView {
 
 	public abstract void show();
 
+	public abstract void hide();
+
 	public abstract BiddingView getBiddingView();
 
 	public abstract PlayView getPlayView();

@@ -37,6 +37,7 @@ public class PlayViewImpl implements PlayView, CardPanelHost, ActionListener {
 	protected final MainView owner;
 	protected String message = "";
 	private JButton previousTrickButton;
+	private JButton newGameButton;
 
 	public PlayViewImpl(MainView owner) {
 		this.owner = owner;
@@ -47,16 +48,31 @@ public class PlayViewImpl implements PlayView, CardPanelHost, ActionListener {
 		table = new Table(DHEIGHT);
 		createPreviousTrickButton();
 		owner.setContent(panel);
+		addNewGameButton();
+
+	}
+
+	private void addNewGameButton() {
+		newGameButton = new JButton("New game...");
+		newGameButton.setActionCommand("newGame");
+		newGameButton.addActionListener(this);
+		panel.add(newGameButton);
+		int height = 25;
+		int width = 125;
+		newGameButton.setLocation(table.getTopLeftX(), table.getTopLeftY() - height - 5);
+		newGameButton.setSize(width, height);
+		newGameButton.setVisible(false);
 
 	}
 
 	private void createPreviousTrickButton() {
 		URL imageURL = getClass().getResource("/b1fh.png");
-		ImageIcon image = new ImageIcon(imageURL);
 		final int IMAGE_WIDTH2 = 65;
 		final int IMAGE_HEIGHT2 = 52;
+		ImageIcon image = new ImageIcon(new ImageIcon(imageURL).getImage().getScaledInstance(IMAGE_WIDTH2,
+				IMAGE_HEIGHT2, java.awt.Image.SCALE_DEFAULT));
 
-		previousTrickButton = new JButton("Previous trick buttton", image);
+		previousTrickButton = new JButton(null, image);
 		previousTrickButton.setToolTipText("Display previous trick");
 		previousTrickButton.setLocation(table.getTopLeftX() + 4, table.getTopLeftY() + 4);
 		previousTrickButton.setVerticalTextPosition(AbstractButton.CENTER);
@@ -64,6 +80,7 @@ public class PlayViewImpl implements PlayView, CardPanelHost, ActionListener {
 		previousTrickButton.addActionListener(this);
 		previousTrickButton.setActionCommand("displayPreviousTrick");
 		previousTrickButton.setSize(IMAGE_WIDTH2, IMAGE_HEIGHT2);
+		previousTrickButton.setBorderPainted(false);
 		previousTrickButton.setEnabled(true);
 		panel.add(previousTrickButton);
 
@@ -253,10 +270,15 @@ public class PlayViewImpl implements PlayView, CardPanelHost, ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if (game.getPreviousTrick() != null) {
-			controller.displayPreviousTrick();
-		} else {
-			System.out.println("Requested display of previous trick, but no previous trick exists");
+		if ("displayPreviousTrick".equals(e.getActionCommand())) {
+			if (game.getPreviousTrick() != null) {
+				controller.displayPreviousTrick();
+			} else {
+				System.out.println("Requested display of previous trick, but no previous trick exists");
+
+			}
+		} else if ("newGame".equals(e.getActionCommand())) {
+			controller.newGame();
 		}
 
 	}
@@ -266,5 +288,16 @@ public class PlayViewImpl implements PlayView, CardPanelHost, ActionListener {
 		table.setTimeRemaining(i);
 		panel.repaint();
 
+	}
+
+	@Override
+	public void displayGameFinishedOptions() {
+		newGameButton.setVisible(true);
+	}
+
+	@Override
+	public void hide() {
+		panel.removeAll();
+		panel.setVisible(false);
 	}
 }

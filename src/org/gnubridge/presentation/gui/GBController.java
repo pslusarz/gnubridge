@@ -10,13 +10,12 @@ import org.gnubridge.core.bidding.Auctioneer;
 
 public class GBController {
 
-	private final MainView view;
+	private MainView view;
 	private BiddingController biddingController;
 	private GameController gameController;
 
-	public GBController(MainView view) {
-		this.view = view;
-		setBiddingController(new BiddingController(view.getBiddingView(), this));
+	public GBController() {
+		newGame();
 	}
 
 	public void playGame() {
@@ -40,6 +39,7 @@ public class GBController {
 				"GAME FINISHED. Contract was: " + getBiddingController().getAuction().getHighBid()
 						+ ", declarers took " + getGameController().getGame().getTricksTaken(Player.NORTH_SOUTH)
 						+ " tricks.");
+		view.getPlayView().displayGameFinishedOptions();
 	}
 
 	public void setBiddingController(BiddingController biddingController) {
@@ -56,6 +56,15 @@ public class GBController {
 
 	public GameController getGameController() {
 		return gameController;
+	}
+
+	public void newGame() {
+		if (view != null) {
+			view.hide();
+		}
+		this.view = ViewFactory.getMainView();
+		setBiddingController(new BiddingController(view.getBiddingView(), this));
+		view.show();
 	}
 
 }

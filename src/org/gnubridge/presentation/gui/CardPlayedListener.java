@@ -6,4 +6,6 @@ public interface CardPlayedListener {
 	public void playCard(Card c);
 
 	public void displayPreviousTrick();
+
+	public void newGame();
 }

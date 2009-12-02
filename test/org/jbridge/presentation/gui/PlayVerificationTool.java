@@ -9,15 +9,8 @@ import org.gnubridge.core.Game;
 import org.gnubridge.core.Hand;
 import org.gnubridge.core.bidding.Bid;
 import org.gnubridge.core.bidding.Pass;
-import org.gnubridge.core.deck.Ace;
-import org.gnubridge.core.deck.Diamonds;
-import org.gnubridge.core.deck.Four;
-import org.gnubridge.core.deck.Hearts;
 import org.gnubridge.core.deck.NoTrump;
-import org.gnubridge.core.deck.Ten;
 import org.gnubridge.presentation.gui.GBController;
-import org.gnubridge.presentation.gui.MainView;
-import org.gnubridge.presentation.gui.MainViewImpl;
 
 /**
  * Use this class to manually verify the play screen under various conditions
@@ -34,14 +27,12 @@ public class PlayVerificationTool {
 		SwingUtilities.invokeAndWait(new Runnable() {
 			public void run() {
 				Game.setPreInitializedGame(constructGame());
-				MainView mw = new MainViewImpl("gnubridge");
-				GBController controller = new GBController(mw);
+				GBController controller = new GBController();
 				controller.getBiddingController().getAuction().bid(new Bid(1, NoTrump.i()));
 				controller.getBiddingController().getAuction().bid(new Pass());
 				controller.getBiddingController().getAuction().bid(new Pass());
 				controller.getBiddingController().getAuction().bid(new Pass());
 				controller.getBiddingController().playGame();
-				mw.show();
 			}
 
 		});
@@ -50,15 +41,11 @@ public class PlayVerificationTool {
 
 	private static Game constructGame() {
 		Game game = new Game(NoTrump.i());
-		game.getWest().init(new Hand("", "8,4", "2", "A,K,9,8,7"));//E: AH, W: 4H???
-		game.getNorth().init(new Hand("3", "", "5,4", "6,5,4,3,2"));
-		game.getEast().init(new Hand("A,K,J,10,9", "A,6,5", "", ""));
-		game.getSouth().init(new Hand("6,5,4,3,2", "10", "3", "3"));
+		game.getWest().init(new Hand("", "8", "", ""));
+		game.getNorth().init(new Hand("3", "", "", ""));
+		game.getEast().init(new Hand("A", "", "", ""));
+		game.getSouth().init(new Hand("", "", "", "3"));
 		game.setNextToPlay(Direction.EAST);
-		game.play(Ace.of(Hearts.i()));
-		game.play(Ten.of(Hearts.i()));
-		game.play(Four.of(Hearts.i()));
-		game.play(Four.of(Diamonds.i()));
 		return game;
 	}
 }

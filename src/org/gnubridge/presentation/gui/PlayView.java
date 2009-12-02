@@ -26,4 +26,8 @@ public interface PlayView {
 
 	public abstract void displayTimeRemaining(int i);
 
+	public abstract void displayGameFinishedOptions();
+
+	public abstract void hide();
+
 }

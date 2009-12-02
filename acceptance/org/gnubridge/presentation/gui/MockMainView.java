@@ -29,4 +29,10 @@ public class MockMainView implements MainView {
 
 	}
 
+	@Override
+	public void hide() {
+		// TODO Auto-generated method stub
+
+	}
+
 }

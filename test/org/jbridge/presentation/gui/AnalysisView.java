@@ -262,4 +262,16 @@ public class AnalysisView implements PlayView, CardPanelHost {
 
 	}
 
+	@Override
+	public void displayGameFinishedOptions() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void hide() {
+		// TODO Auto-generated method stub
+
+	}
+
 }
