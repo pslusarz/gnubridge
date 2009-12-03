@@ -39,7 +39,6 @@ public class GBController {
 				"GAME FINISHED. Contract was: " + getBiddingController().getAuction().getHighBid()
 						+ ", declarers took " + getGameController().getGame().getTricksTaken(Player.NORTH_SOUTH)
 						+ " tricks.");
-		view.getPlayView().displayGameFinishedOptions();
 	}
 
 	public void setBiddingController(BiddingController biddingController) {

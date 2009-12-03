@@ -20,6 +20,7 @@ public class BiddingDisplay {
 	private final BiddingViewImpl parentView;
 	protected JPanel panel;
 	protected String message = "";
+	private JButton newGameButton;
 
 	public BiddingDisplay(BiddingViewImpl pv) {
 		panel = createDisplayPanel();
@@ -27,6 +28,7 @@ public class BiddingDisplay {
 		panel.setLayout(null);
 		panel.setPreferredSize(new Dimension(500, 500));
 		addPlayGameButton();
+		addNewGameButton();
 	}
 
 	private void addPlayGameButton() {
@@ -37,6 +39,19 @@ public class BiddingDisplay {
 		playGameButton.setLocation(175, getTopOfCards() - 125);
 		playGameButton.setSize(125, 25);
 		playGameButton.setVisible(false);
+
+	}
+
+	private void addNewGameButton() {
+		newGameButton = new JButton("New game...");
+		newGameButton.setActionCommand("newGame");
+		newGameButton.addActionListener(parentView);
+		panel.add(newGameButton);
+		int height = 25;
+		int width = 125;
+		newGameButton.setLocation(4, 10);
+		newGameButton.setSize(width, height);
+		newGameButton.setVisible(true);
 
 	}
 
@@ -98,7 +113,7 @@ public class BiddingDisplay {
 			}
 
 			private int getColumnForDirection(int direction) {
-				int result = colWidth * 5;
+				int result = colWidth * 5 + 55;
 				for (int i = direction; i <= Direction.SOUTH; i++) {
 					result -= colWidth;
 				}

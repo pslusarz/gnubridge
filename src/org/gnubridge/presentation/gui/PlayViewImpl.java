@@ -59,9 +59,9 @@ public class PlayViewImpl implements PlayView, CardPanelHost, ActionListener {
 		panel.add(newGameButton);
 		int height = 25;
 		int width = 125;
-		newGameButton.setLocation(table.getTopLeftX(), table.getTopLeftY() - height - 5);
+		newGameButton.setLocation(4, 10);
 		newGameButton.setSize(width, height);
-		newGameButton.setVisible(false);
+		newGameButton.setVisible(true);
 
 	}
 
@@ -278,6 +278,7 @@ public class PlayViewImpl implements PlayView, CardPanelHost, ActionListener {
 
 			}
 		} else if ("newGame".equals(e.getActionCommand())) {
+			newGameButton.setEnabled(false);
 			controller.newGame();
 		}
 
@@ -291,13 +292,8 @@ public class PlayViewImpl implements PlayView, CardPanelHost, ActionListener {
 	}
 
 	@Override
-	public void displayGameFinishedOptions() {
-		newGameButton.setVisible(true);
-	}
-
-	@Override
 	public void hide() {
-		panel.removeAll();
+		//panel.removeAll();
 		panel.setVisible(false);
 	}
 }

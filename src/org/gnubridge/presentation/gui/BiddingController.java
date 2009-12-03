@@ -100,4 +100,10 @@ public class BiddingController {
 		return newHuman;
 	}
 
+	public void newGame() {
+		view.hide();
+		parent.newGame();
+
+	}
+
 }

@@ -55,12 +55,6 @@ public class MockPlayView implements PlayView {
 	}
 
 	@Override
-	public void displayGameFinishedOptions() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	public void hide() {
 		// TODO Auto-generated method stub
 
