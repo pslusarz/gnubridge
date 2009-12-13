@@ -1,6 +1,13 @@
 package org.gnubridge.core.deck;
 
 public abstract class Trump {
+
+	public static Trump CLUBS = Clubs.i();
+	public static Trump DIAMONDS = Diamonds.i();
+	public static Trump HEARTS = Hearts.i();
+	public static Trump SPADES = Spades.i();
+	public static Trump NOTRUMP = NoTrump.i();
+
 	@Override
 	public abstract String toString();
 

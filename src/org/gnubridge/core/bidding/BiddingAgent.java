@@ -34,9 +34,9 @@ public class BiddingAgent {
 		rules.add(new Respond1ColorWithNT(a, h));
 		rules.add(new Rebid1NT(a, h));
 		rules.add(new Rebid1ColorRaisePartner(a, h));
-		rules.add(new Rebid1ColorWithNT(a, h));
 		rules.add(new Rebid1ColorWithNewSuit(a, h));
 		rules.add(new Rebid1ColorOriginalSuit(a, h));
+		rules.add(new Rebid1ColorWithNT(a, h));
 		rules.add(new AlwaysPass());
 	}
 

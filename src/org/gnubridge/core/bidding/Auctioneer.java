@@ -1,5 +1,7 @@
 package org.gnubridge.core.bidding;
 
+import static org.gnubridge.core.bidding.Bid.PASS;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +19,7 @@ public class Auctioneer {
 	private int bidCount;
 	private Call last;
 	private Call beforeLast;
-	private List<Call> calls;
+	private final List<Call> calls;
 
 	public Auctioneer(Direction firstToBid) {
 		this.nextToBid = firstToBid;
@@ -97,8 +99,7 @@ public class Auctioneer {
 	public boolean isValid(Bid candidate) {
 		boolean result = false;
 		if (candidate != null) {
-			if (candidate.equals(new Pass())
-					|| candidate.greaterThan(getHighBid())) {
+			if (candidate.equals(new Pass()) || candidate.greaterThan(getHighBid())) {
 				result = true;
 			}
 		}
@@ -109,8 +110,7 @@ public class Auctioneer {
 		Direction result = null;
 		if (biddingFinished() && getHighCall() != null) {
 			for (Call call : calls) {
-				if (!call.isPass()
-						&& call.getTrump().equals(getHighCall().getTrump())
+				if (!call.isPass() && call.getTrump().equals(getHighCall().getTrump())
 						&& call.pairMatches(getHighCall().getDirection())) {
 					result = call.getDirection().opposite();
 					break;
@@ -152,4 +152,26 @@ public class Auctioneer {
 		}
 		return offset;
 	}
+
+	public boolean mayOvercall() {
+		if (bidCount == 1) {
+			if (!isPass(0)) {
+				return true;
+			}
+		} else if (bidCount == 2) {
+			if (isPass(0) && !isPass(1)) {
+				return true;
+			}
+		} else if (bidCount == 3) {
+			if (isPass(0) && isPass(1) && !isPass(2)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private boolean isPass(int i) {
+		return PASS.equals(calls.get(i).getBid());
+	}
+
 }

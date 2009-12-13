@@ -1,5 +1,11 @@
 package org.gnubridge.core.bidding;
 
+import static org.gnubridge.core.deck.Trump.CLUBS;
+import static org.gnubridge.core.deck.Trump.DIAMONDS;
+import static org.gnubridge.core.deck.Trump.HEARTS;
+import static org.gnubridge.core.deck.Trump.NOTRUMP;
+import static org.gnubridge.core.deck.Trump.SPADES;
+
 import org.gnubridge.core.deck.Clubs;
 import org.gnubridge.core.deck.Diamonds;
 import org.gnubridge.core.deck.Hearts;
@@ -8,6 +14,32 @@ import org.gnubridge.core.deck.Spades;
 import org.gnubridge.core.deck.Trump;
 
 public class Bid {
+	public static Bid PASS = new Pass();
+
+	public static Bid ONE_NOTRUMP = new Bid(1, NOTRUMP);
+	public static Bid ONE_SPADES = new Bid(1, SPADES);
+	public static Bid ONE_HEARTS = new Bid(1, HEARTS);
+	public static Bid ONE_DIAMONDS = new Bid(1, DIAMONDS);
+	public static Bid ONE_CLUBS = new Bid(1, CLUBS);
+
+	public static Bid TWO_NOTRUMP = new Bid(2, NOTRUMP);
+	public static Bid TWO_SPADES = new Bid(2, SPADES);
+	public static Bid TWO_HEARTS = new Bid(2, HEARTS);
+	public static Bid TWO_DIAMONDS = new Bid(2, DIAMONDS);
+	public static Bid TWO_CLUBS = new Bid(2, CLUBS);
+
+	public static Bid THREE_NOTRUMP = new Bid(3, NOTRUMP);
+	public static Bid THREE_SPADES = new Bid(3, SPADES);
+	public static Bid THREE_HEARTS = new Bid(3, HEARTS);
+	public static Bid THREE_DIAMONDS = new Bid(3, DIAMONDS);
+	public static Bid THREE_CLUBS = new Bid(3, CLUBS);
+
+	public static Bid FOUR_NOTRUMP = new Bid(4, NOTRUMP);
+	public static Bid FOUR_SPADES = new Bid(4, SPADES);
+	public static Bid FOUR_HEARTS = new Bid(4, HEARTS);
+	public static Bid FOUR_DIAMONDS = new Bid(4, DIAMONDS);
+	public static Bid FOUR_CLUBS = new Bid(4, CLUBS);
+
 	private final int value;
 	private final Trump trump;
 	private boolean forcing = false;
