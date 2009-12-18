@@ -120,6 +120,18 @@ public class Hand {
 		return getCardsHighToLow();
 	}
 
+	public Color getLongestSuit() {
+		int longest = 0;
+		Color result = null;
+		for (Color color : Color.list) {
+			if (longest < getColorLength(color)) {
+				longest = getColorLength(color);
+				result = color;
+			}
+		}
+		return result;
+	}
+
 	public int getLongestColorLength() {
 		int result = 0;
 		for (Color color : Color.list) {

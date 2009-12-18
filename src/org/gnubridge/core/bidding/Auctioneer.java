@@ -1,7 +1,5 @@
 package org.gnubridge.core.bidding;
 
-import static org.gnubridge.core.bidding.Bid.PASS;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -155,23 +153,31 @@ public class Auctioneer {
 
 	public boolean mayOvercall() {
 		if (bidCount == 1) {
-			if (!isPass(0)) {
+			if (firstBid().is1Suit()) {
 				return true;
 			}
 		} else if (bidCount == 2) {
-			if (isPass(0) && !isPass(1)) {
+			if (firstBid().isPass() && secondBid().is1Suit()) {
 				return true;
 			}
 		} else if (bidCount == 3) {
-			if (isPass(0) && isPass(1) && !isPass(2)) {
+			if (firstBid().isPass() && secondBid().isPass() && thirdBid().is1Suit()) {
 				return true;
 			}
 		}
 		return false;
 	}
 
-	private boolean isPass(int i) {
-		return PASS.equals(calls.get(i).getBid());
+	private Bid thirdBid() {
+		return calls.get(2).getBid();
+	}
+
+	private Bid secondBid() {
+		return calls.get(1).getBid();
+	}
+
+	private Bid firstBid() {
+		return calls.get(0).getBid();
 	}
 
 }

@@ -155,4 +155,12 @@ public class Bid {
 		gameForcing = true;
 
 	}
+
+	public boolean is1Suit() {
+		if (getValue() == 1 && getTrump().isSuit()) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 }
