@@ -8,7 +8,7 @@ import javax.swing.JFrame;
 public class MainViewImpl implements MainView {
 
 	private final JFrame theWindow;
-	PlayView playView;
+	DealView playView;
 	private BiddingView biddingView;
 
 	public MainViewImpl(String title) {
@@ -41,9 +41,9 @@ public class MainViewImpl implements MainView {
 		return biddingView;
 	}
 
-	public PlayView getPlayView() {
+	public DealView getPlayView() {
 		if (playView == null) {
-			playView = new PlayViewImpl(this);
+			playView = new DealViewImpl(this);
 		}
 		return playView;
 	}

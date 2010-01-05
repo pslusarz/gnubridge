@@ -7,7 +7,7 @@ import junit.framework.TestCase;
 
 import org.gnubridge.core.Card;
 import org.gnubridge.core.Direction;
-import org.gnubridge.core.Game;
+import org.gnubridge.core.Deal;
 import org.gnubridge.core.Player;
 import org.gnubridge.core.bidding.ScoreCalculator;
 import org.gnubridge.presentation.GameUtils;
@@ -19,7 +19,7 @@ public class PlayAcceptanceTest extends TestCase {
 
 	@Override
 	public void setUp() {
-		GameController.MAX_SECONDS_TO_MOVE = 1;
+		DealController.MAX_SECONDS_TO_MOVE = 1;
 		ProductionSettings.setMilisecondsToDisplayLastTrick(0);
 	}
 
@@ -31,7 +31,7 @@ public class PlayAcceptanceTest extends TestCase {
 
 	public void testPlayGameEndToEndTakeNoTricks() throws InterruptedException, InvocationTargetException {
 		preInitializeGameWithSingleColorSuits();
-		GBController mainController = makeController();
+		MainController mainController = makeController();
 		mainController.getBiddingController().placeBid(7, "NT");
 		mainController.playGame();
 		playGameToTheEnd(mainController);
@@ -42,7 +42,7 @@ public class PlayAcceptanceTest extends TestCase {
 
 	public void testWhenPlayingHumanRetainsHisCardsFromBidding() throws InterruptedException, InvocationTargetException {
 		preInitializeGameWithSingleColorSuits();
-		GBController mainController = makeController();
+		MainController mainController = makeController();
 		Player humanInBidding = mainController.getBiddingController().getHuman();
 		mainController.getBiddingController().placeBid(7, "NT");
 		mainController.playGame();
@@ -53,9 +53,9 @@ public class PlayAcceptanceTest extends TestCase {
 	}
 
 	public void testPlayRandomGame() throws InterruptedException, InvocationTargetException {
-		GameController.MAX_SECONDS_TO_MOVE = 3;
+		DealController.MAX_SECONDS_TO_MOVE = 3;
 		preInitializeRandomGame();
-		GBController mainController = makeController();
+		MainController mainController = makeController();
 		mainController.getBiddingController().placeBid(7, "NT");
 		mainController.playGame();
 		playGameToTheEnd(mainController);
@@ -67,7 +67,7 @@ public class PlayAcceptanceTest extends TestCase {
 
 	public void testPlayGameEndToEndTrumpAllTricks() throws InterruptedException, InvocationTargetException {
 		preInitializeGameWithSingleColorSuits();
-		GBController mainController = makeController();
+		MainController mainController = makeController();
 		mainController.getBiddingController().placeBid(7, "Spades");
 		// TODO: what are valid names? hidden in biddingControls - force programmaticaly
 		mainController.playGame();
@@ -79,7 +79,7 @@ public class PlayAcceptanceTest extends TestCase {
 
 	public void testRunningScoreEndToEnd() throws InterruptedException, InvocationTargetException {
 		preInitializeGame13Tricks();
-		GBController mainController = makeController();
+		MainController mainController = makeController();
 		mainController.getBiddingController().placeBid(7, "Clubs");
 		mainController.playGame();
 		playGameToTheEnd(mainController);
@@ -118,8 +118,8 @@ public class PlayAcceptanceTest extends TestCase {
 		assertEquals(50 * 13, mainController.getRunningComputerScore());
 	}
 
-	private void playGameToTheEnd(GBController mainController) throws InterruptedException {
-		Game game = mainController.getGameController().getGame();
+	private void playGameToTheEnd(MainController mainController) throws InterruptedException {
+		Deal game = mainController.getGameController().getGame();
 		int cardsPlayed = -1;
 		while (!game.isDone()) {
 			int previousCardsPlayed = cardsPlayed;
@@ -151,35 +151,35 @@ public class PlayAcceptanceTest extends TestCase {
 	}
 	
 	private void preInitializeGame13Tricks() {
-		Game g = new Game(null);
+		Deal g = new Deal(null);
 		GameUtils.initializeSingleColorSuits(g, 13);
 		g.setHumanPlayer(g.getSouth());
 		System.out.println("Human's hand: " + g.getSouth().getHand());
-		Game.setPreInitializedGame(g);
+		Deal.setPreInitializedGame(g);
 	}
 
 	private void preInitializeGameWithSingleColorSuits() {
-		Game g = new Game(null);
+		Deal g = new Deal(null);
 		GameUtils.initializeSingleColorSuits(g, TRICKS_PER_DEAL);
 		g.setHumanPlayer(g.getWest());
 		System.out.println("Human's hand: " + g.getWest().getHand());
-		Game.setPreInitializedGame(g);
+		Deal.setPreInitializedGame(g);
 	}
 
 	private void preInitializeRandomGame() {
-		Game g = new Game(null);
+		Deal g = new Deal(null);
 		GameUtils.initializeRandom(g, TRICKS_PER_DEAL);
 		g.setHumanPlayer(g.getNorth());
 		System.out.println("West's hand: " + g.getWest().getHand());
 		System.out.println("Human's hand: " + g.getNorth().getHand());
 		System.out.println("East's hand: " + g.getEast().getHand());
 		System.out.println("South's hand: " + g.getSouth().getHand());
-		Game.setPreInitializedGame(g);
+		Deal.setPreInitializedGame(g);
 	}
 
-	private GBController makeController() {
+	private MainController makeController() {
 		MainView mw = new MockMainView("gnubridge");
 		ViewFactory.setMockMainView(mw);
-		return new GBController();
+		return new MainController();
 	}
 }

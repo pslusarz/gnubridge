@@ -15,7 +15,7 @@ public class Main {
 	private static void buildGui() throws InterruptedException, InvocationTargetException {
 		SwingUtilities.invokeAndWait(new Runnable() {
 			public void run() {
-				new GBController();
+				new MainController();
 			}
 		});
 

@@ -4,7 +4,7 @@ import junit.framework.TestCase;
 
 import org.gnubridge.core.Direction;
 import org.gnubridge.core.East;
-import org.gnubridge.core.Game;
+import org.gnubridge.core.Deal;
 import org.gnubridge.core.North;
 import org.gnubridge.core.Player;
 import org.gnubridge.core.South;
@@ -30,7 +30,7 @@ import org.gnubridge.core.deck.Two;
 
 public class DoubleDummySolverScenarioAcceptanceTest extends TestCase {
 	public void test13cards3deep() {
-		Game game = new Game(NoTrump.i());
+		Deal game = new Deal(NoTrump.i());
 		game.getPlayer(West.i()).init(King.of(Clubs.i()), King.of(Hearts.i()), Two.of(Diamonds.i()),
 				Seven.of(Clubs.i()), Jack.of(Diamonds.i()), Eight.of(Clubs.i()), Four.of(Diamonds.i()),
 				Ten.of(Hearts.i()), Three.of(Clubs.i()), Ten.of(Spades.i()), Eight.of(Hearts.i()), Five.of(Spades.i()),
@@ -114,7 +114,7 @@ public class DoubleDummySolverScenarioAcceptanceTest extends TestCase {
 	//	}
 
 	public void testBugAlphaBetaGivingUpTrickShort() {
-		Game game = new Game(Clubs.i());
+		Deal game = new Deal(Clubs.i());
 		game.getWest().init(Seven.of(Spades.i()), Three.of(Clubs.i()), Jack.of(Spades.i()));
 		game.getNorth().init(Four.of(Spades.i()), Five.of(Diamonds.i()), Three.of(Spades.i()));
 		game.getEast().init(Queen.of(Diamonds.i()), Five.of(Spades.i()), King.of(Spades.i()));

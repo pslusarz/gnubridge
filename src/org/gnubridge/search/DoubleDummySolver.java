@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Stack;
 
 import org.gnubridge.core.Card;
-import org.gnubridge.core.Game;
+import org.gnubridge.core.Deal;
 import org.gnubridge.core.Player;
 
 public class DoubleDummySolver {
@@ -14,7 +14,7 @@ public class DoubleDummySolver {
 
 	private Stack<Node> stack;
 
-	private Game game;
+	private Deal game;
 
 	private List<Integer> finalMoves;
 
@@ -50,7 +50,7 @@ public class DoubleDummySolver {
 		this.root = root;
 	}
 
-	public DoubleDummySolver(Game game) {
+	public DoubleDummySolver(Deal game) {
 		this.game = game;
 		stack = new Stack<Node>();
 		finalMoves = new ArrayList<Integer>();
@@ -128,7 +128,7 @@ public class DoubleDummySolver {
 		if (node.isPruned()) {
 			return;
 		}
-		Game position = game.duplicate();
+		Deal position = game.duplicate();
 		position.playMoves(node.getMoves());
 
 		Player player = position.getNextToPlay();
@@ -172,7 +172,7 @@ public class DoubleDummySolver {
 		}
 	}
 
-	private void checkDuplicatePositions(Node node, Game position) {
+	private void checkDuplicatePositions(Node node, Deal position) {
 		if (useDuplicateRemoval()) {
 			if (lookup.positionEncountered(position, node.getTricksTaken())) {
 				byte[] previouslyEncounteredNode = lookup.getNode(position);
@@ -236,7 +236,7 @@ public class DoubleDummySolver {
 	//		}
 	//	}
 
-	private void removeSiblingsInSequence(Node move, Game position) {
+	private void removeSiblingsInSequence(Node move, Deal position) {
 		boolean shouldTrim = false;
 		List<Card> cardsInSuit = move.getSiblingsInColor();
 		for (Card sibling : cardsInSuit) {

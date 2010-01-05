@@ -2,12 +2,12 @@ package org.gnubridge.presentation.gui;
 
 import org.gnubridge.core.Card;
 import org.gnubridge.core.Direction;
-import org.gnubridge.core.Game;
+import org.gnubridge.core.Deal;
 import org.gnubridge.core.Hand;
 
 public class AllCardsInOneRow extends HandDisplay {
 
-	public AllCardsInOneRow(Direction human, Direction player, Game game, CardPanelHost owner) {
+	public AllCardsInOneRow(Direction human, Direction player, Deal game, CardPanelHost owner) {
 		super(human, player, game, owner);
 	}
 

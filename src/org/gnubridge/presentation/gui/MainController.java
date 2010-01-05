@@ -2,7 +2,7 @@ package org.gnubridge.presentation.gui;
 
 import org.gnubridge.core.Direction;
 import org.gnubridge.core.East;
-import org.gnubridge.core.Game;
+import org.gnubridge.core.Deal;
 import org.gnubridge.core.North;
 import org.gnubridge.core.Player;
 import org.gnubridge.core.South;
@@ -10,28 +10,28 @@ import org.gnubridge.core.West;
 import org.gnubridge.core.bidding.Auctioneer;
 import org.gnubridge.core.bidding.ScoreCalculator;
 
-public class GBController {
+public class MainController {
 
 	private MainView view;
 	private BiddingController biddingController;
-	private GameController gameController;
+	private DealController gameController;
 
 	private int runningHumanScore;
 	private int runningComputerScore;
 
-	public GBController() {
+	public MainController() {
 		newGame();
 	}
 
 	public void playGame() {
-		setGameController(new GameController(this, getBiddingController().getAuction().getHighBid(),
+		setGameController(new DealController(this, getBiddingController().getAuction().getHighBid(),
 				repositionHandsSoThatSouthIsDeclarer(getBiddingController().getAuction(), getBiddingController()
 						.getCardHolder()), getBiddingController().allowHumanToPlayIfDummy(), view.getPlayView()));
 		view.getPlayView().displayScore("Human: " + runningHumanScore + ", Computer: " + runningComputerScore);
 	}
 
-	private Game repositionHandsSoThatSouthIsDeclarer(Auctioneer a, Game cardHolder) {
-		Game result = new Game(a.getHighBid().getTrump());
+	private Deal repositionHandsSoThatSouthIsDeclarer(Auctioneer a, Deal cardHolder) {
+		Deal result = new Deal(a.getHighBid().getTrump());
 		result.getPlayer(a.getDummyOffsetDirection(North.i())).init(cardHolder.getPlayer(North.i()).getHand());
 		result.getPlayer(a.getDummyOffsetDirection(East.i())).init(cardHolder.getPlayer(East.i()).getHand());
 		result.getPlayer(a.getDummyOffsetDirection(South.i())).init(cardHolder.getPlayer(South.i()).getHand());
@@ -73,11 +73,11 @@ public class GBController {
 		return biddingController;
 	}
 
-	public void setGameController(GameController gameController) {
+	public void setGameController(DealController gameController) {
 		this.gameController = gameController;
 	}
 
-	public GameController getGameController() {
+	public DealController getGameController() {
 		return gameController;
 	}
 	

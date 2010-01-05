@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.gnubridge.core.Card;
-import org.gnubridge.core.Game;
+import org.gnubridge.core.Deal;
 import org.gnubridge.core.Player;
 import org.gnubridge.core.Trick;
 
@@ -49,7 +49,7 @@ public class Node {
 
 	private boolean valueSet = false;
 
-	private Game position;
+	private Deal position;
 
 	private byte[] identicalTwin;
 
@@ -162,7 +162,7 @@ public class Node {
 		return lowest;
 	}
 
-	public void printOptimalPath(Game g) {
+	public void printOptimalPath(Deal g) {
 		Node move = getBestMove();
 		if (move == null) {
 			for (int moveIdx : getMoves()) {
@@ -479,7 +479,7 @@ public class Node {
 
 	}
 
-	public void setPosition(Game position) {
+	public void setPosition(Deal position) {
 		this.position = position;
 
 	}

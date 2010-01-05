@@ -6,7 +6,7 @@ import junit.framework.TestCase;
 
 import org.gnubridge.core.Card;
 import org.gnubridge.core.Direction;
-import org.gnubridge.core.Game;
+import org.gnubridge.core.Deal;
 import org.gnubridge.core.Hand;
 import org.gnubridge.core.Player;
 import org.gnubridge.core.deck.Ace;
@@ -33,7 +33,7 @@ public class DoubleDummySolverTest extends TestCase {
 
 	public void testExaminePositionSetsNextToPlay() {
 		Node node = new Node(null);
-		Game game = new Game(NoTrump.i());
+		Deal game = new Deal(NoTrump.i());
 		GameUtils.initializeSingleColorSuits(game, 2);
 		game.setNextToPlay(Direction.SOUTH);
 		DoubleDummySolver s = new DoubleDummySolver(game);
@@ -44,7 +44,7 @@ public class DoubleDummySolverTest extends TestCase {
 
 	public void testExaminePositionInitsChildren() {
 		Node node = new Node(null);
-		Game game = new Game(NoTrump.i());
+		Deal game = new Deal(NoTrump.i());
 		game.getPlayer(Direction.WEST).init(new String[] { "3", "10" });
 		game.getPlayer(Direction.NORTH).init(new String[] { "2", "9" });
 		game.getPlayer(Direction.SOUTH).init(new String[] { "A", "5" });
@@ -57,7 +57,7 @@ public class DoubleDummySolverTest extends TestCase {
 
 	public void testExaminePositionPushesChildrenOnStack() {
 		Node node = new Node(null);
-		Game game = new Game(NoTrump.i());
+		Deal game = new Deal(NoTrump.i());
 		game.getPlayer(Direction.WEST).init(new String[] { "3", "10" });
 		game.getPlayer(Direction.NORTH).init(new String[] { "2", "9" });
 		game.getPlayer(Direction.SOUTH).init(new String[] { "A", "5" });
@@ -70,7 +70,7 @@ public class DoubleDummySolverTest extends TestCase {
 	}
 
 	public void testDoNotExpandNodesBeyondTrickLimit() {
-		Game game = new Game(NoTrump.i());
+		Deal game = new Deal(NoTrump.i());
 		game.getPlayer(Direction.WEST).init(new String[] { "3", "10", "4" });
 		game.getPlayer(Direction.NORTH).init(new String[] { "2", "9", "6" });
 		game.getPlayer(Direction.SOUTH).init(new String[] { "A", "5", "J" });
@@ -85,7 +85,7 @@ public class DoubleDummySolverTest extends TestCase {
 
 	public void testOnlyExpandOneCardInSequenceTwoCards() {
 		Node node = new Node(null);
-		Game game = new Game(NoTrump.i());
+		Deal game = new Deal(NoTrump.i());
 		// game.getPlayer(Direction.WEST).init(new String[] { "A", "5" });
 		// game.getPlayer(Direction.NORTH).init(new String[] { "2", "9" });
 		game.getPlayer(Direction.SOUTH).init(new String[] { "J", "10" });
@@ -101,7 +101,7 @@ public class DoubleDummySolverTest extends TestCase {
 
 	public void testOnlyExpandOneCardInSequenceThreeCards() {
 		Node node = new Node(null);
-		Game game = new Game(NoTrump.i());
+		Deal game = new Deal(NoTrump.i());
 		// game.getPlayer(Direction.WEST).init(new String[] { "A", "5", "Q" });
 		// game.getPlayer(Direction.NORTH).init(new String[] { "2", "4", "6" });
 		game.getPlayer(Direction.SOUTH).init(new String[] { "J", "9", "10" });
@@ -119,7 +119,7 @@ public class DoubleDummySolverTest extends TestCase {
 
 	public void testOnlyExpandFirstCardInSequenceThreeCardsOutOfOrder() {
 		Node node = new Node(null);
-		Game game = new Game(NoTrump.i());
+		Deal game = new Deal(NoTrump.i());
 		// game.getPlayer(Direction.WEST).init(new String[] { "A", "5", "Q" });
 		// game.getPlayer(Direction.NORTH).init(new String[] { "2", "4", "6" });
 		game.getPlayer(Direction.SOUTH).init(new String[] { "10", "9", "J" });
@@ -136,7 +136,7 @@ public class DoubleDummySolverTest extends TestCase {
 
 	public void testOnlyExpandFirstCardInSequenceThreeCardsOutOfOrder2() {
 		Node node = new Node(null);
-		Game game = new Game(NoTrump.i());
+		Deal game = new Deal(NoTrump.i());
 		// game.getPlayer(Direction.WEST).init(new String[] { "A", "5", "Q" });
 		// game.getPlayer(Direction.NORTH).init(new String[] { "2", "4", "6" });
 		game.getPlayer(Direction.SOUTH).init(new String[] { "9", "10", "J" });
@@ -153,7 +153,7 @@ public class DoubleDummySolverTest extends TestCase {
 
 	public void testDoNotCountCurrentTrickAsPlayedCardWhenPruningPlayedSequence() {
 		Node node = new Node(null);
-		Game game = new Game(NoTrump.i());
+		Deal game = new Deal(NoTrump.i());
 		game.getPlayer(Direction.NORTH).init(new Hand("10,6", "", "", ""));
 		game.getPlayer(Direction.EAST).init(new Hand("9,J", "", "", ""));
 		game.setNextToPlay(Direction.NORTH);
@@ -171,7 +171,7 @@ public class DoubleDummySolverTest extends TestCase {
 	// this pruning disabled for now 
 	public void _testOnlyExpandFirstCardInSequenceCardPlayedBetweenTwoUnplayedCards() {
 		Node node = new Node(null);
-		Game game = new Game(NoTrump.i());
+		Deal game = new Deal(NoTrump.i());
 		game.getPlayer(Direction.WEST).init(new Hand("", "", "4,3,2", ""));
 		game.getPlayer(Direction.NORTH).init(new Hand("K,10,3", "", "", ""));
 		game.getPlayer(Direction.EAST).init(new Hand("Q,A,2", "", "", ""));
@@ -196,7 +196,7 @@ public class DoubleDummySolverTest extends TestCase {
 	// this pruning disabled for now
 	public void _testOnlyExpandFirstCardInSequenceCardTwoPlayedBetweenTwoUnplayedCards() {
 		Node node = new Node(null);
-		Game game = new Game(NoTrump.i());
+		Deal game = new Deal(NoTrump.i());
 		game.getPlayer(Direction.WEST).init(new Hand("", "", "4,3,2", ""));
 		game.getPlayer(Direction.NORTH).init(new Hand("K,10,3", "", "", ""));
 		game.getPlayer(Direction.EAST).init(new Hand("A,J,2", "", "", ""));
@@ -221,7 +221,7 @@ public class DoubleDummySolverTest extends TestCase {
 	}
 
 	public void testWhenPruningPlayedSequenceDoNotConsiderCardsInCurrentTrickAsPlayed() {
-		Game game = new Game(Spades.i());
+		Deal game = new Deal(Spades.i());
 		game.getWest().init(new Hand("", "A,Q", "", ""));
 		game.getNorth().init(new Hand("", "K,J", "", ""));
 		game.getEast().init(new Hand("", "3,2", "", ""));
@@ -238,7 +238,7 @@ public class DoubleDummySolverTest extends TestCase {
 	}
 
 	public void testTricksTallyIsTrickLimit() {
-		Game game = new Game(NoTrump.i());
+		Deal game = new Deal(NoTrump.i());
 		game.getPlayer(Direction.WEST).init(new String[] { "3", "A", "4" });
 		game.getPlayer(Direction.NORTH).init(new String[] { "2", "9", "6" });
 		game.getPlayer(Direction.SOUTH).init(new String[] { "10", "5", "J" });
@@ -252,7 +252,7 @@ public class DoubleDummySolverTest extends TestCase {
 
 	public void testExaminePositionInitsChildMove() {
 		Node node = new Node(null);
-		Game game = new Game(NoTrump.i());
+		Deal game = new Deal(NoTrump.i());
 		game.getPlayer(Direction.WEST).init(new String[] { "3", "10" });
 		game.getPlayer(Direction.NORTH).init(new String[] { "2", "9" });
 		game.getPlayer(Direction.SOUTH).init(new String[] { "A", "5" });
@@ -270,7 +270,7 @@ public class DoubleDummySolverTest extends TestCase {
 
 	public void testExaminePositionExpandsChild() {
 		Node node = new Node(null);
-		Game game = new Game(NoTrump.i());
+		Deal game = new Deal(NoTrump.i());
 		game.getPlayer(Direction.WEST).init(new String[] { "3" }, new String[] { "10" });
 		game.getPlayer(Direction.NORTH).init(new String[] { "2", "9" });
 		game.getPlayer(Direction.SOUTH).init(new String[] { "A", "5" });
@@ -287,7 +287,7 @@ public class DoubleDummySolverTest extends TestCase {
 	}
 
 	public void testTwoTricks() {
-		Game game = new Game(NoTrump.i());
+		Deal game = new Deal(NoTrump.i());
 		game.getPlayer(Direction.WEST).init(new String[] { "2" }, new String[] { "3" });
 		game.getPlayer(Direction.NORTH).init(new String[] { "3" }, new String[] { "2" });
 		game.getPlayer(Direction.SOUTH).init(new String[] {}, new String[] { "K", "10" });
@@ -301,7 +301,7 @@ public class DoubleDummySolverTest extends TestCase {
 	}
 
 	public void testTwoTricks2() {
-		Game game = new Game(NoTrump.i());
+		Deal game = new Deal(NoTrump.i());
 		game.getPlayer(Direction.WEST).init(new String[] { "3" }, new String[] { "2" });
 		game.getPlayer(Direction.NORTH).init(new String[] { "2" }, new String[] { "3" });
 		game.getPlayer(Direction.SOUTH).init(new String[] { "K", "10" });
@@ -315,7 +315,7 @@ public class DoubleDummySolverTest extends TestCase {
 	}
 
 	public void testOneTrick() {
-		Game game = new Game(NoTrump.i());
+		Deal game = new Deal(NoTrump.i());
 		game.getPlayer(Direction.WEST).init(new String[] { "3" });
 		game.getPlayer(Direction.NORTH).init(new String[] { "2" });
 		game.getPlayer(Direction.SOUTH).init(new String[] { "K" });
@@ -330,7 +330,7 @@ public class DoubleDummySolverTest extends TestCase {
 
 	public void testAlphaBetaScenario1() {
 
-		Game game = new Game(NoTrump.i());
+		Deal game = new Deal(NoTrump.i());
 		game.getPlayer(Direction.WEST).init(
 				new Card[] { Nine.of(Clubs.i()), Four.of(Spades.i()), Six.of(Spades.i()), Nine.of(Spades.i()) });
 		game.getPlayer(Direction.NORTH).init(
@@ -348,7 +348,7 @@ public class DoubleDummySolverTest extends TestCase {
 
 	public void testAlphaBetaScenario2() {
 
-		Game game = new Game(NoTrump.i());
+		Deal game = new Deal(NoTrump.i());
 		game.getPlayer(Direction.WEST).init(new Card[] { Six.of(Spades.i()), Nine.of(Spades.i()) });
 		game.getPlayer(Direction.NORTH).init(new Card[] { Ace.of(Spades.i()), Eight.of(Spades.i()) });
 		game.getPlayer(Direction.EAST).init(new Card[] { Ten.of(Hearts.i()), Three.of(Hearts.i()) });
@@ -363,7 +363,7 @@ public class DoubleDummySolverTest extends TestCase {
 	}
 
 	public void testLastTrickAutoExpands() {
-		Game g = new Game(NoTrump.i());
+		Deal g = new Deal(NoTrump.i());
 		GameUtils.initializeSingleColorSuits(g, 1);
 		DoubleDummySolver s = new DoubleDummySolver(g);
 		s.search();
@@ -375,7 +375,7 @@ public class DoubleDummySolverTest extends TestCase {
 		Node root = new Node(null);
 		root.pruneAsAlpha();
 		Node child = new Node(root);
-		Game g = new Game(NoTrump.i());
+		Deal g = new Deal(NoTrump.i());
 		GameUtils.initializeSingleColorSuits(g, 2);
 		DoubleDummySolver s = new DoubleDummySolver(g);
 		s.examinePosition(child);
@@ -388,7 +388,7 @@ public class DoubleDummySolverTest extends TestCase {
 		root.pruneAsAlpha();
 		Node child = new Node(root);
 		Node grandChild = new Node(child);
-		Game g = new Game(NoTrump.i());
+		Deal g = new Deal(NoTrump.i());
 		GameUtils.initializeSingleColorSuits(g, 2);
 		DoubleDummySolver s = new DoubleDummySolver(g);
 		s.examinePosition(grandChild);
@@ -565,7 +565,7 @@ public class DoubleDummySolverTest extends TestCase {
 	}
 
 	public void testBestMoveWhenRootDoesNotStartTrick() {
-		Game game = new Game(NoTrump.i());
+		Deal game = new Deal(NoTrump.i());
 		game.getPlayer(Direction.WEST).init(new Card[] { Nine.of(Clubs.i()), Four.of(Spades.i()) });
 		game.getPlayer(Direction.NORTH).init(new Card[] { Seven.of(Spades.i()), Queen.of(Hearts.i()) });
 		game.getPlayer(Direction.EAST).init(new Card[] { Three.of(Clubs.i()), Three.of(Hearts.i()) });
@@ -577,7 +577,7 @@ public class DoubleDummySolverTest extends TestCase {
 		assertEquals(Queen.of(Hearts.i()), s.getBestMoves().get(0));
 
 		// triangulate
-		Game game2 = new Game(NoTrump.i());
+		Deal game2 = new Deal(NoTrump.i());
 		game2.getPlayer(Direction.WEST).init(new Card[] { Nine.of(Clubs.i()), Four.of(Spades.i()) });
 		game2.getPlayer(Direction.NORTH).init(new Card[] { Queen.of(Hearts.i()), Seven.of(Spades.i()) }); // invert
 		// order
@@ -591,7 +591,7 @@ public class DoubleDummySolverTest extends TestCase {
 	}
 
 	public void testNorthTrumps() {
-		Game game = new Game(Spades.i());
+		Deal game = new Deal(Spades.i());
 		game.getPlayer(Direction.WEST).init(new Card[] { Nine.of(Clubs.i()), Four.of(Spades.i()) });
 		game.getPlayer(Direction.NORTH).init(new Card[] { Two.of(Spades.i()), Two.of(Hearts.i()) });
 		game.getPlayer(Direction.EAST).init(new Card[] { Three.of(Clubs.i()), Three.of(Diamonds.i()) });
@@ -604,7 +604,7 @@ public class DoubleDummySolverTest extends TestCase {
 		assertEquals(1, s.getBestMoves().size());
 		assertEquals(Two.of(Spades.i()), s.getBestMoves().get(0));
 
-		Game game2 = new Game(Spades.i());
+		Deal game2 = new Deal(Spades.i());
 		game2.getPlayer(Direction.WEST).init(new Card[] { Nine.of(Clubs.i()), Four.of(Spades.i()) });
 		game2.getPlayer(Direction.NORTH).init(new Card[] { Two.of(Hearts.i()), Two.of(Spades.i()) }); // order
 		// reverted
@@ -619,7 +619,7 @@ public class DoubleDummySolverTest extends TestCase {
 	}
 
 	public void testNorthCannotTrumpBecauseHasColor() {
-		Game game = new Game(Spades.i());
+		Deal game = new Deal(Spades.i());
 		game.getPlayer(Direction.WEST).init(new Card[] { Nine.of(Clubs.i()), Four.of(Spades.i()) });
 		game.getPlayer(Direction.NORTH).init(new Card[] { Two.of(Spades.i()), Two.of(Clubs.i()) });
 		game.getPlayer(Direction.EAST).init(new Card[] { Three.of(Diamonds.i()), Three.of(Hearts.i()) });
@@ -632,7 +632,7 @@ public class DoubleDummySolverTest extends TestCase {
 	}
 
 	public void testBestMoveForOneTrick() {
-		Game game = new Game(NoTrump.i());
+		Deal game = new Deal(NoTrump.i());
 		game.getPlayer(Direction.WEST).init(new String[] { "3" });
 		game.getPlayer(Direction.NORTH).init(new String[] { "2" });
 		game.getPlayer(Direction.SOUTH).init(new String[] { "A" });
@@ -645,7 +645,7 @@ public class DoubleDummySolverTest extends TestCase {
 	}
 
 	public void testBestMoveForOneTrickRootDidNotStartTrick() {
-		Game game = new Game(NoTrump.i());
+		Deal game = new Deal(NoTrump.i());
 		game.getPlayer(Direction.WEST).init(new String[] { "3" });
 		game.getPlayer(Direction.NORTH).init(new String[] { "2" });
 		game.getPlayer(Direction.SOUTH).init(new String[] { "A" });
@@ -660,7 +660,7 @@ public class DoubleDummySolverTest extends TestCase {
 
 	public void testIfCannotBeatPlayLowestToColorPruningNoConflictWithSequencePruning() {
 
-		Game game = new Game(NoTrump.i());
+		Deal game = new Deal(NoTrump.i());
 		game.getPlayer(Direction.WEST).init(new Card[] { Ace.of(Spades.i()), Nine.of(Spades.i()) });
 		game.getPlayer(Direction.NORTH).init(new Card[] { Five.of(Spades.i()), Four.of(Spades.i()) });
 		game.getPlayer(Direction.EAST).init(new Card[] { Ten.of(Hearts.i()), Three.of(Hearts.i()) });
@@ -677,7 +677,7 @@ public class DoubleDummySolverTest extends TestCase {
 
 	public void testShortCircuitIfRootOnlyHasOneValidMove() {
 
-		Game game = new Game(NoTrump.i());
+		Deal game = new Deal(NoTrump.i());
 		game.getPlayer(Direction.WEST).init(new Card[] { Ace.of(Spades.i()), Nine.of(Spades.i()) });
 		game.getPlayer(Direction.NORTH).init(new Card[] { Six.of(Spades.i()), Four.of(Hearts.i()) });
 		game.getPlayer(Direction.EAST).init(new Card[] { Ten.of(Hearts.i()), Three.of(Hearts.i()) });
@@ -694,7 +694,7 @@ public class DoubleDummySolverTest extends TestCase {
 
 	public void testIfAllMovesTheSameChooseLowestValueCard() {
 
-		Game game = new Game(NoTrump.i());
+		Deal game = new Deal(NoTrump.i());
 		game.getPlayer(Direction.WEST).init(new Card[] { Ace.of(Spades.i()), Queen.of(Spades.i()) });
 		game.getPlayer(Direction.NORTH).init(new Card[] { Six.of(Spades.i()), Four.of(Spades.i()) });
 		game.getPlayer(Direction.EAST).init(new Card[] { Ten.of(Hearts.i()), Three.of(Hearts.i()) });
@@ -706,7 +706,7 @@ public class DoubleDummySolverTest extends TestCase {
 		pruned.search();
 		assertEquals(Queen.of(Spades.i()), pruned.getRoot().getBestMove().getCardPlayed());
 
-		Game gameWithCardsFlipped = new Game(NoTrump.i());
+		Deal gameWithCardsFlipped = new Deal(NoTrump.i());
 		gameWithCardsFlipped.getPlayer(Direction.WEST).init(new Card[] { Queen.of(Spades.i()), Ace.of(Spades.i()) });
 		gameWithCardsFlipped.getPlayer(Direction.NORTH).init(new Card[] { Six.of(Spades.i()), Four.of(Spades.i()) });
 		gameWithCardsFlipped.getPlayer(Direction.EAST).init(new Card[] { Ten.of(Hearts.i()), Three.of(Hearts.i()) });
@@ -723,7 +723,7 @@ public class DoubleDummySolverTest extends TestCase {
 
 	public void testIfAllMovesLoseSameChooseLowestValueCard() {
 
-		Game game = new Game(NoTrump.i());
+		Deal game = new Deal(NoTrump.i());
 		game.getPlayer(Direction.WEST).init(new Card[] { Ace.of(Spades.i()), King.of(Spades.i()) });
 		game.getPlayer(Direction.NORTH).init(new Card[] { Six.of(Diamonds.i()), Four.of(Hearts.i()) });
 		game.getPlayer(Direction.EAST).init(new Card[] { Ten.of(Hearts.i()), Three.of(Hearts.i()) });
@@ -734,7 +734,7 @@ public class DoubleDummySolverTest extends TestCase {
 		DoubleDummySolver pruned = new DoubleDummySolver(game.duplicate());
 		pruned.search();
 		assertEquals(Four.of(Hearts.i()), pruned.getRoot().getBestMove().getCardPlayed());
-		Game gameWithCardsFlipped = new Game(NoTrump.i());
+		Deal gameWithCardsFlipped = new Deal(NoTrump.i());
 		gameWithCardsFlipped.getPlayer(Direction.WEST).init(new Card[] { Ace.of(Spades.i()), King.of(Spades.i()) });
 		gameWithCardsFlipped.getPlayer(Direction.NORTH).init(new Card[] { Four.of(Hearts.i()), Six.of(Diamonds.i()) });
 		gameWithCardsFlipped.getPlayer(Direction.EAST).init(new Card[] { Ten.of(Hearts.i()), Three.of(Hearts.i()) });

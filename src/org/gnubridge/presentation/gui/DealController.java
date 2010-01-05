@@ -6,7 +6,7 @@ import java.util.concurrent.TimeoutException;
 
 import org.gnubridge.core.Card;
 import org.gnubridge.core.Direction;
-import org.gnubridge.core.Game;
+import org.gnubridge.core.Deal;
 import org.gnubridge.core.North;
 import org.gnubridge.core.South;
 import org.gnubridge.core.bidding.Bid;
@@ -14,7 +14,7 @@ import org.gnubridge.search.DoubleDummySolver;
 import org.gnubridge.search.ProductionSettings;
 import org.jdesktop.swingworker.SwingWorker;
 
-public class GameController implements CardPlayedListener {
+public class DealController implements CardPlayedListener {
 	private static final int COMPUTER_PLAYER_IS_THINKING = 0;
 	public static int MAX_SECONDS_TO_MOVE = 15;
 	long start = -1;
@@ -124,14 +124,14 @@ public class GameController implements CardPlayedListener {
 		}
 	}
 
-	private final GBController parent;
-	private final Game game;
+	private final MainController parent;
+	private final Deal game;
 	private final Direction human;
 
-	private final PlayView view;
+	private final DealView view;
 
-	public GameController(GBController controller, Bid highBid, Game g, 
-			Direction humanDir, PlayView playView) {
+	public DealController(MainController controller, Bid highBid, Deal g, 
+			Direction humanDir, DealView playView) {
 		parent = controller;
 		game = g;
 		game.printHandsDebug();
@@ -143,7 +143,7 @@ public class GameController implements CardPlayedListener {
 		doAutomatedPlay();
 	}
 
-	public Game getGame() {
+	public Deal getGame() {
 		return game;
 	}
 

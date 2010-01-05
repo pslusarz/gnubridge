@@ -5,17 +5,17 @@ import java.util.List;
 
 import org.gnubridge.core.Card;
 import org.gnubridge.core.Direction;
-import org.gnubridge.core.Game;
+import org.gnubridge.core.Deal;
 import org.gnubridge.core.Player;
 import org.gnubridge.core.deck.Color;
 
 public class GameUtils {
-	public static void initializeSingleColorSuits(Game g) {
+	public static void initializeSingleColorSuits(Deal g) {
 		initializeSingleColorSuits(g, 13);
 
 	}
 
-	public static void initializeSingleColorSuits(Game g, int cardCount) {
+	public static void initializeSingleColorSuits(Deal g, int cardCount) {
 		for (int i = Direction.WEST; i <= Direction.SOUTH; i++) {
 			String[] spades = {};
 			String[] hearts = {};
@@ -45,7 +45,7 @@ public class GameUtils {
 		
 	}
 	
-	public static void initializeRandom(Game g, int cardCount) {
+	public static void initializeRandom(Deal g, int cardCount) {
       initializeRandom(g.getPlayers(), cardCount);
 		
 	}

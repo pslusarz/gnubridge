@@ -7,11 +7,11 @@ import org.gnubridge.core.deck.Color;
 import org.gnubridge.core.deck.Trump;
 import org.gnubridge.presentation.GameUtils;
 
-public class Game {
+public class Deal {
 
 	private static final int NO_FORCED_MOVE = -1;
 
-	private static Game preInitializedGame;
+	private static Deal preInitializedGame;
 
 	private final Player[] players;
 
@@ -30,7 +30,7 @@ public class Game {
 
 	private Player preInitializedHumanPlayer;
 
-	public Game(Trump trump) {
+	public Deal(Trump trump) {
 		players = new Player[4];
 		for (int i = Direction.WEST; i <= Direction.SOUTH; i++) {
 			players[i] = new Player(i);
@@ -127,8 +127,8 @@ public class Game {
 		return players[nextToPlay];
 	}
 
-	public Game duplicate() {
-		Game result = new Game(getTrump());
+	public Deal duplicate() {
+		Deal result = new Deal(getTrump());
 		for (int i = Direction.WEST; i <= Direction.SOUTH; i++) {
 			result.getPlayer(i).init(this.getPlayer(i));
 		}
@@ -246,17 +246,17 @@ public class Game {
 		return result;
 	}
 
-	public static void setPreInitializedGame(Game preInitializedGame) {
-		Game.preInitializedGame = preInitializedGame;
+	public static void setPreInitializedGame(Deal preInitializedGame) {
+		Deal.preInitializedGame = preInitializedGame;
 	}
 
-	public static Game construct() {
-		Game result;
+	public static Deal construct() {
+		Deal result;
 		if (preInitializedGame != null) {
 			result = preInitializedGame;
 			preInitializedGame = null;
 		} else {
-			result = new Game(null);
+			result = new Deal(null);
 			GameUtils.initializeRandom(result.getPlayers(), 13);
 		}
 		return result;

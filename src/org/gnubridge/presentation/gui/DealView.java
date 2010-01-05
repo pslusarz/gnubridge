@@ -1,16 +1,16 @@
 package org.gnubridge.presentation.gui;
 
 import org.gnubridge.core.Direction;
-import org.gnubridge.core.Game;
+import org.gnubridge.core.Deal;
 import org.gnubridge.core.bidding.Bid;
 
-public interface PlayView {
+public interface DealView {
 
 	public static final long DOUBLE_CLICK_DELAY_MS = 750;
 
 	public abstract void setListener(CardPlayedListener c);
 
-	public abstract void setGame(Game g, Direction human);
+	public abstract void setGame(Deal g, Direction human);
 
 	//public abstract void gameStateChanged();
 

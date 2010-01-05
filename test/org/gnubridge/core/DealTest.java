@@ -14,13 +14,13 @@ import org.gnubridge.core.deck.Spades;
 import org.gnubridge.core.deck.Two;
 import org.gnubridge.presentation.GameUtils;
 
-public class GameTest extends TestCase {
+public class DealTest extends TestCase {
 
-	Game game;
+	Deal game;
 
 	@Override
 	protected void setUp() {
-		game = new Game(NoTrump.i());
+		game = new Deal(NoTrump.i());
 	}
 
 	public void testConstructorCreatesPlayers() {
@@ -109,9 +109,9 @@ public class GameTest extends TestCase {
 	}
 
 	public void testDuplicateReproducesHands() {
-		Game original = new Game(NoTrump.i());
+		Deal original = new Deal(NoTrump.i());
 		GameUtils.initializeSingleColorSuits(original);
-		Game clone = original.duplicate();
+		Deal clone = original.duplicate();
 		for (int i = Direction.WEST; i <= Direction.SOUTH; i++) {
 			List<Card> originalHand = original.getPlayer(i).getHand();
 			List<Card> clonedHand = clone.getPlayer(i).getHand();
@@ -120,9 +120,9 @@ public class GameTest extends TestCase {
 	}
 
 	public void testDuplicateClonedDoesNotFollowOriginalsPlay() {
-		Game original = new Game(NoTrump.i());
+		Deal original = new Deal(NoTrump.i());
 		GameUtils.initializeSingleColorSuits(original);
-		Game clone = original.duplicate();
+		Deal clone = original.duplicate();
 		Player originalPlayer = original.getNextToPlay();
 		Player clonedPlayer = clone.getNextToPlay();
 		Card card = originalPlayer.getPossibleMoves(new Trick(NoTrump.i())).get(12);
@@ -133,12 +133,12 @@ public class GameTest extends TestCase {
 	}
 
 	public void testDuplicatePlayedCards() {
-		Game original = new Game(NoTrump.i());
+		Deal original = new Deal(NoTrump.i());
 		GameUtils.initializeSingleColorSuits(original);
 		Player originalPlayer = original.getNextToPlay();
 		Card card = originalPlayer.getPossibleMoves(new Trick(NoTrump.i())).get(12);
 		original.doNextCard();
-		Game clone = original.duplicate();
+		Deal clone = original.duplicate();
 		Player clonedPlayer = clone.getPlayer(originalPlayer.getDirection());
 
 		assertFalse("Precondition - original didn't play the expected card", originalPlayer.hasUnplayedCard(card));
@@ -147,46 +147,46 @@ public class GameTest extends TestCase {
 	}
 
 	public void testDuplicateNextToPlay() {
-		Game original = new Game(NoTrump.i());
+		Deal original = new Deal(NoTrump.i());
 		GameUtils.initializeSingleColorSuits(original);
 		original.doNextCard();
-		Game clone = original.duplicate();
+		Deal clone = original.duplicate();
 		assertEquals(original.nextToPlay, clone.nextToPlay);
 	}
 
 	public void testDuplicateTrump() {
-		Game original = new Game(NoTrump.i());
+		Deal original = new Deal(NoTrump.i());
 		original.setTrump(Spades.i());
-		Game clone = original.duplicate();
+		Deal clone = original.duplicate();
 		assertEquals(Spades.i(), clone.getTrump());
-		Game original2 = new Game(NoTrump.i());
+		Deal original2 = new Deal(NoTrump.i());
 		original2.setTrump(NoTrump.i());
-		Game clone2 = original2.duplicate();
+		Deal clone2 = original2.duplicate();
 		assertEquals(NoTrump.i(), clone2.getTrump());
 	}
 
 	public void testDuplicateCurrentTrick() {
-		Game original = new Game(Clubs.i());
+		Deal original = new Deal(Clubs.i());
 		GameUtils.initializeSingleColorSuits(original);
 		original.doNextCard();
-		Game clone = original.duplicate();
+		Deal clone = original.duplicate();
 		assertNotNull(clone.getCurrentTrick());
 		assertEquals(Ace.of(Spades.i()), clone.getCurrentTrick().getHighestCard());
 		assertEquals(Clubs.i(), clone.getCurrentTrick().getTrump());
 	}
 
 	public void testDuplicatePreviousTrick() {
-		Game original = new Game(Clubs.i());
+		Deal original = new Deal(Clubs.i());
 		GameUtils.initializeSingleColorSuits(original);
 		original.playOneTrick();
-		Game clone = original.duplicate();
+		Deal clone = original.duplicate();
 		assertNotNull(clone.getPreviousTrick());
 		assertEquals(Two.of(Clubs.i()), clone.getPreviousTrick().getHighestCard());
 		assertEquals(Clubs.i(), clone.getPreviousTrick().getTrump());
 	}
 
 	public void testPlayMovesOneByOne() {
-		Game game = new Game(NoTrump.i());
+		Deal game = new Deal(NoTrump.i());
 		GameUtils.initializeSingleColorSuits(game);
 		Player player = game.getNextToPlay();
 		Card card = player.getPossibleMoves(game.getCurrentTrick()).get(3);
@@ -199,7 +199,7 @@ public class GameTest extends TestCase {
 	}
 
 	public void testPlayMovesTricksTaken() {
-		Game game = new Game(NoTrump.i());
+		Deal game = new Deal(NoTrump.i());
 		GameUtils.initializeSingleColorSuits(game);
 		game.playMoves(newList(0, 1, 2, 3));
 		assertEquals(1, game.getPlayer(Direction.WEST).countTricksTaken());
@@ -208,9 +208,9 @@ public class GameTest extends TestCase {
 	}
 
 	public void testPlayMovesOneByOneSameAsList() {
-		Game original = new Game(NoTrump.i());
+		Deal original = new Deal(NoTrump.i());
 		GameUtils.initializeSingleColorSuits(original);
-		Game clone = original.duplicate();
+		Deal clone = original.duplicate();
 
 		List<Integer> moves = new ArrayList<Integer>();
 		List<Card> cards = new ArrayList<Card>();
@@ -229,35 +229,35 @@ public class GameTest extends TestCase {
 	}
 
 	public void testKeyToWeakHashMapNoReferenceRetainedInsideClass() {
-		Game game = new Game(NoTrump.i());
+		Deal game = new Deal(NoTrump.i());
 		GameUtils.initializeSingleColorSuits(game);
 		assertFalse(game.getKeyForWeakHashMap() == game.getKeyForWeakHashMap());
 	}
 
 	public void testKeyToWeakHashMapDoesntChange() {
-		Game game = new Game(NoTrump.i());
+		Deal game = new Deal(NoTrump.i());
 		GameUtils.initializeSingleColorSuits(game);
 		assertTrue(game.getKeyForWeakHashMap().equals(game.getKeyForWeakHashMap()));
 	}
 
 	public void testTwoDifferentGamesWithSameCards() {
-		Game game = new Game(NoTrump.i());
+		Deal game = new Deal(NoTrump.i());
 		GameUtils.initializeSingleColorSuits(game);
-		Game game2 = new Game(NoTrump.i());
+		Deal game2 = new Deal(NoTrump.i());
 		GameUtils.initializeSingleColorSuits(game2);
 		assertTrue(game2.getKeyForWeakHashMap().equals(game.getKeyForWeakHashMap()));
 	}
 
 	public void testTwoDifferentGamesWithSameCardsDifferentMoves() {
-		Game game = new Game(NoTrump.i());
+		Deal game = new Deal(NoTrump.i());
 		GameUtils.initializeSingleColorSuits(game);
-		Game game2 = new Game(NoTrump.i());
+		Deal game2 = new Deal(NoTrump.i());
 		GameUtils.initializeSingleColorSuits(game2);
 		game2.playOneTrick();
 		assertFalse(game2.getKeyForWeakHashMap().equals(game.getKeyForWeakHashMap()));
 	}
 
-	private void playMove(Game game, List<Integer> moves, List<Card> cards, int i) {
+	private void playMove(Deal game, List<Integer> moves, List<Card> cards, int i) {
 		Player player = game.getNextToPlay();
 		Card card = player.getPossibleMoves(game.getCurrentTrick()).get(i);
 		game.playMoves(newList(i));
@@ -273,7 +273,7 @@ public class GameTest extends TestCase {
 		return result;
 	}
 
-	private void playTrick(Game g) {
+	private void playTrick(Deal g) {
 		for (int i = 0; i < 4; i++) {
 			g.doNextCard();
 		}

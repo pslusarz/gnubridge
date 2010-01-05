@@ -1,10 +1,10 @@
 package org.gnubridge.presentation.gui;
 
 import org.gnubridge.core.Direction;
-import org.gnubridge.core.Game;
+import org.gnubridge.core.Deal;
 import org.gnubridge.core.bidding.Bid;
 
-public class MockPlayView implements PlayView {
+public class MockPlayView implements DealView {
 
 	@Override
 	public void display(String message) {
@@ -48,7 +48,7 @@ public class MockPlayView implements PlayView {
 	}
 
 	@Override
-	public void setGame(Game g, Direction human) {
+	public void setGame(Deal g, Direction human) {
 		// TODO Auto-generated method stub
 
 	}

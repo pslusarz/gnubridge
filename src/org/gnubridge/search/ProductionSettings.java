@@ -1,6 +1,6 @@
 package org.gnubridge.search;
 
-import org.gnubridge.core.Game;
+import org.gnubridge.core.Deal;
 
 public class ProductionSettings  {
     public static final int DEFAULT_MILISECONDS_TO_DISPLAY_LAST_TRICK = 4000;
@@ -10,7 +10,7 @@ public class ProductionSettings  {
 		milisecondsToDisplayLastTrick  = value;
 	}
 	
-	public static int getSearchDepthRecommendation(Game game) {
+	public static int getSearchDepthRecommendation(Deal game) {
 		return 13 - game.getTricksPlayed();
 	}
 

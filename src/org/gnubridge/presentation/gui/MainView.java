@@ -12,6 +12,6 @@ public interface MainView {
 
 	public abstract BiddingView getBiddingView();
 
-	public abstract PlayView getPlayView();
+	public abstract DealView getPlayView();
 
 }

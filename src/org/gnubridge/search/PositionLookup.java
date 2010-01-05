@@ -3,12 +3,12 @@ package org.gnubridge.search;
 import java.util.Map;
 import java.util.WeakHashMap;
 
-import org.gnubridge.core.Game;
+import org.gnubridge.core.Deal;
 
 public class PositionLookup {
 
 	Map<String, byte[]> positions;
-	private Game lastGameLookedUp;
+	private Deal lastGameLookedUp;
 	private byte[] lastNode;
 
 	public PositionLookup() {
@@ -19,7 +19,7 @@ public class PositionLookup {
 		}
 	}
 
-	public boolean positionEncountered(Game g, byte[] bs) {
+	public boolean positionEncountered(Deal g, byte[] bs) {
 		if (g.getCurrentTrick().getHighestCard() != null) {
 			return false;
 		}
@@ -31,7 +31,7 @@ public class PositionLookup {
 		return true;
 	}
 
-	public byte[] getNode(Game g) {
+	public byte[] getNode(Deal g) {
 		if (g == lastGameLookedUp) {
 			return lastNode;
 		}
@@ -43,7 +43,7 @@ public class PositionLookup {
 		return result;
 	}
 
-	private void putNode(Game g, byte[] value) {
+	private void putNode(Deal g, byte[] value) {
 		positions.put(g.getKeyForWeakHashMap(), value);
 	}
 

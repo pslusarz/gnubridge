@@ -4,12 +4,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.gnubridge.core.Game;
+import org.gnubridge.core.Deal;
 import org.gnubridge.core.Player;
 import org.gnubridge.core.deck.NoTrump;
 import org.gnubridge.presentation.GameUtils;
 
-class MockGame extends Game {
+class MockGame extends Deal {
 	Map<List<Integer>, int[]> values;
 
 	private int[] tricksTaken;
@@ -55,7 +55,7 @@ class MockGame extends Game {
 		return this.tricksTaken[pair];
 	}
 
-	public Game duplicate() {
+	public Deal duplicate() {
 		MockGame result = new MockGame(values, movesWhenDone);
 		GameUtils.initializeSingleColorSuits(result, 1); //this is so that some garbage value is returned when player is asked for possible moves
 		return result;

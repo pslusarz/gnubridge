@@ -3,7 +3,7 @@ package org.gnubridge.search;
 import junit.framework.TestCase;
 
 import org.gnubridge.core.East;
-import org.gnubridge.core.Game;
+import org.gnubridge.core.Deal;
 import org.gnubridge.core.Hand;
 import org.gnubridge.core.North;
 import org.gnubridge.core.South;
@@ -26,7 +26,7 @@ import org.gnubridge.presentation.GameUtils;
 
 public class TestPositionLookup extends TestCase {
 	public void testSameObjectShownTwice() {
-		Game g = new Game(NoTrump.i());
+		Deal g = new Deal(NoTrump.i());
 		GameUtils.initializeSingleColorSuits(g);
 		g.playOneTrick();
 
@@ -39,7 +39,7 @@ public class TestPositionLookup extends TestCase {
 
 	@SuppressWarnings("unused")
 	public void testOnlyReturnFirstNodeEncountetredForThePosition() {
-		Game g = new Game(NoTrump.i());
+		Deal g = new Deal(NoTrump.i());
 		GameUtils.initializeSingleColorSuits(g);
 		g.playOneTrick();
 
@@ -47,7 +47,7 @@ public class TestPositionLookup extends TestCase {
 		Node node = new Node(null);
 		boolean justPresentThePosition = pl.positionEncountered(g, node.getTricksTaken());
 
-		Game identicalTwin = new Game(NoTrump.i());
+		Deal identicalTwin = new Deal(NoTrump.i());
 		GameUtils.initializeSingleColorSuits(identicalTwin);
 		identicalTwin.playOneTrick();
 
@@ -59,21 +59,21 @@ public class TestPositionLookup extends TestCase {
 
 	@SuppressWarnings("unused")
 	public void testDistinguishDifferentPlays() {
-		Game g = new Game(NoTrump.i());
+		Deal g = new Deal(NoTrump.i());
 		GameUtils.initializeSingleColorSuits(g);
 		g.playOneTrick();
 
 		PositionLookup pl = new PositionLookup();
 		boolean justPresentThePosition = pl.positionEncountered(g, null);
 
-		Game g2 = new Game(NoTrump.i());
+		Deal g2 = new Deal(NoTrump.i());
 		GameUtils.initializeSingleColorSuits(g2);
 		playOneTrickWithSlightTwist(g2);
 
 		assertFalse(pl.positionEncountered(g2, null));
 	}
 
-	private void playOneTrickWithSlightTwist(Game g2) {
+	private void playOneTrickWithSlightTwist(Deal g2) {
 		g2.play(g2.getNextToPlay().getHand().get(1));
 		for (int i = 0; i < 3; i++) {
 			g2.play(g2.getNextToPlay().getHand().get(0));
@@ -83,7 +83,7 @@ public class TestPositionLookup extends TestCase {
 
 	@SuppressWarnings("unused")
 	public void testOneCardPlayedDifferentObjectsSamePosition() {
-		Game g = new Game(NoTrump.i());
+		Deal g = new Deal(NoTrump.i());
 		GameUtils.initializeSingleColorSuits(g);
 		g.playOneTrick();
 
@@ -91,7 +91,7 @@ public class TestPositionLookup extends TestCase {
 		Node node = new Node(null);
 		boolean justPresentThePosition = pl.positionEncountered(g, node.getTricksTaken());
 
-		Game g2 = new Game(NoTrump.i());
+		Deal g2 = new Deal(NoTrump.i());
 		GameUtils.initializeSingleColorSuits(g2);
 		g2.playOneTrick();
 		assertTrue(pl.positionEncountered(g2, null));
@@ -99,7 +99,7 @@ public class TestPositionLookup extends TestCase {
 	}
 
 	public void testOneCardPlayedDifferentCards() {
-		Game g = new Game(NoTrump.i());
+		Deal g = new Deal(NoTrump.i());
 		GameUtils.initializeSingleColorSuits(g);
 		g.play(g.getNextToPlay().getHand().get(0));
 
@@ -107,7 +107,7 @@ public class TestPositionLookup extends TestCase {
 		@SuppressWarnings("unused")
 		boolean justPresentThePosition = pl.positionEncountered(g, null);
 
-		Game gameWithDifferentCardPlayed = new Game(NoTrump.i());
+		Deal gameWithDifferentCardPlayed = new Deal(NoTrump.i());
 		GameUtils.initializeSingleColorSuits(gameWithDifferentCardPlayed);
 		gameWithDifferentCardPlayed.play(gameWithDifferentCardPlayed.getNextToPlay().getHand().get(1));
 		assertFalse(pl.positionEncountered(gameWithDifferentCardPlayed, null));
@@ -115,13 +115,13 @@ public class TestPositionLookup extends TestCase {
 
 	@SuppressWarnings("unused")
 	public void testCanRememberMoreThanOnePosition() {
-		Game g = new Game(NoTrump.i());
+		Deal g = new Deal(NoTrump.i());
 		GameUtils.initializeSingleColorSuits(g);
 		g.playOneTrick();
 
 		PositionLookup pl = new PositionLookup();
 
-		Game gameWithDifferentCardPlayed = new Game(NoTrump.i());
+		Deal gameWithDifferentCardPlayed = new Deal(NoTrump.i());
 		GameUtils.initializeSingleColorSuits(gameWithDifferentCardPlayed);
 		playOneTrickWithSlightTwist(gameWithDifferentCardPlayed);
 
@@ -139,12 +139,12 @@ public class TestPositionLookup extends TestCase {
 
 	@SuppressWarnings("unused")
 	public void testTwoTricksPlayedSameFirstTrick() {
-		Game g = new Game(NoTrump.i());
+		Deal g = new Deal(NoTrump.i());
 		GameUtils.initializeSingleColorSuits(g);
 		g.playOneTrick();
 		g.playOneTrick();
 
-		Game sameFirstTrick = new Game(NoTrump.i());
+		Deal sameFirstTrick = new Deal(NoTrump.i());
 		GameUtils.initializeSingleColorSuits(sameFirstTrick);
 		sameFirstTrick.playOneTrick();
 		playOneTrickWithSlightTwist(sameFirstTrick);
@@ -157,13 +157,13 @@ public class TestPositionLookup extends TestCase {
 	}
 
 	public void testDistinguishNumberOfTricks() {
-		Game g = new Game(Spades.i());
+		Deal g = new Deal(Spades.i());
 		g.getPlayer(West.i()).init(new Hand("", "3,2", "", "").getCardsHighToLow());
 		g.getPlayer(North.i()).init(new Hand("7", "", "8", "").getCardsHighToLow());
 		g.getPlayer(East.i()).init(new Hand("", "", "", "4,5").getCardsHighToLow());
 		g.getPlayer(South.i()).init(new Hand("", "", "", "10,9").getCardsHighToLow());
 
-		Game differentOrder = g.duplicate();
+		Deal differentOrder = g.duplicate();
 
 		g.play(Three.of(Hearts.i()));
 		g.play(Eight.of(Diamonds.i()));
@@ -197,13 +197,13 @@ public class TestPositionLookup extends TestCase {
 	}
 
 	public void testDistinguishPlayerTurn() {
-		Game g = new Game(Spades.i());
+		Deal g = new Deal(Spades.i());
 		g.getPlayer(West.i()).init(new Hand("10", "3", "", "").getCardsHighToLow());
 		g.getPlayer(North.i()).init(new Hand("7", "8", "", "").getCardsHighToLow());
 		g.getPlayer(East.i()).init(new Hand("", "", "", "4,5").getCardsHighToLow());
 		g.getPlayer(South.i()).init(new Hand("", "", "", "10,9").getCardsHighToLow());
 
-		Game differentOrder = g.duplicate();
+		Deal differentOrder = g.duplicate();
 
 		g.play(Three.of(Hearts.i()));
 		g.play(Eight.of(Hearts.i()));
@@ -235,13 +235,13 @@ public class TestPositionLookup extends TestCase {
 	}
 
 	public void testOnlyApplyToCompletedTricks() {
-		Game g = new Game(Spades.i());
+		Deal g = new Deal(Spades.i());
 		g.getPlayer(West.i()).init(new Hand("A,3", "", "", "").getCardsHighToLow());
 		g.getPlayer(North.i()).init(new Hand("7,2", "", "", "").getCardsHighToLow());
 		g.getPlayer(East.i()).init(new Hand("", "", "5,4", "").getCardsHighToLow());
 		g.getPlayer(South.i()).init(new Hand("", "", "", "7,6").getCardsHighToLow());
 
-		Game differentOrder = g.duplicate();
+		Deal differentOrder = g.duplicate();
 
 		g.play(Ace.of(Spades.i()));
 		g.play(Two.of(Spades.i()));

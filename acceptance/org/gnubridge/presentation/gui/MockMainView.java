@@ -13,7 +13,7 @@ public class MockMainView implements MainView {
 	}
 
 	@Override
-	public PlayView getPlayView() {
+	public DealView getPlayView() {
 		return new MockPlayView();
 	}
 

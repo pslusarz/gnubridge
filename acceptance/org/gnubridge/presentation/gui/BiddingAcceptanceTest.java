@@ -2,7 +2,7 @@ package org.gnubridge.presentation.gui;
 
 import junit.framework.TestCase;
 
-import org.gnubridge.core.Game;
+import org.gnubridge.core.Deal;
 import org.gnubridge.core.Hand;
 import org.gnubridge.core.bidding.Auctioneer;
 import org.gnubridge.core.bidding.Bid;
@@ -14,7 +14,7 @@ public class BiddingAcceptanceTest extends TestCase {
 	private static final int TRICKS_PER_DEAL = 6;
 
 	public void testAutomatedBidding() {
-		GBController mainController = makeController();
+		MainController mainController = makeController();
 		Auctioneer auction = mainController.getBiddingController().getAuction();
 		System.out.println(" ***** Automated bidding on a random game *****");
 		mainController.getBiddingController().getCardHolder().printHandsDebug();
@@ -28,7 +28,7 @@ public class BiddingAcceptanceTest extends TestCase {
 
 	public void testBiddingStochastically() {
 		for (int i = 0; i < 100; i++) {
-			GBController mainController = makeController();
+			MainController mainController = makeController();
 			Auctioneer auction = mainController.getBiddingController().getAuction();
 			System.out.println(" ** ( " + i + " )*** Automated bidding on a random game *****");
 			mainController.getBiddingController().getCardHolder().printHandsDebug();
@@ -52,7 +52,7 @@ public class BiddingAcceptanceTest extends TestCase {
 
 	public void testBiddingHighestEndsAuction() {
 		preInitializeGameWithHumanToBidFirst();
-		GBController mainController = makeController();
+		MainController mainController = makeController();
 		Auctioneer auction = mainController.getBiddingController().getAuction();
 		mainController.getBiddingController().placeBid(7, "NT");
 		assertEquals("3 passes should follow 7NT bid", 4, auction.getCalls().size());
@@ -60,15 +60,15 @@ public class BiddingAcceptanceTest extends TestCase {
 	}
 
 	private void preInitializeGameWithHumanToBidFirst() {
-		Game g = new Game(null);
+		Deal g = new Deal(null);
 		GameUtils.initializeRandom(g, TRICKS_PER_DEAL);
 		g.setHumanPlayer(g.getWest());
-		Game.setPreInitializedGame(g);
+		Deal.setPreInitializedGame(g);
 	}
 
-	private GBController makeController() {
+	private MainController makeController() {
 		MainView mw = new MockMainView("gnubridge");
 		ViewFactory.setMockMainView(mw);
-		return new GBController();
+		return new MainController();
 	}
 }

@@ -1,7 +1,7 @@
 package org.gnubridge.presentation.gui;
 
 import org.gnubridge.core.Direction;
-import org.gnubridge.core.Game;
+import org.gnubridge.core.Deal;
 import org.gnubridge.core.Hand;
 import org.gnubridge.core.North;
 import org.gnubridge.core.Player;
@@ -14,17 +14,17 @@ import org.gnubridge.core.bidding.BiddingAgent;
 public class BiddingController {
 
 	private final BiddingView view;
-	private final Game cardHolder;
+	private final Deal cardHolder;
 	private final Auctioneer auction;
 	private final Player human;
-	private final GBController parent;
+	private final MainController parent;
 
-	public BiddingController(BiddingView v, GBController p) {
+	public BiddingController(BiddingView v, MainController p) {
 		view = v;
 		view.setController(this);
 		view.show();
 		parent = p;
-		cardHolder = Game.construct();
+		cardHolder = Deal.construct();
 		auction = new Auctioneer(West.i());
 		view.setAuction(auction);
 		human = cardHolder.selectHumanPlayer();
@@ -37,7 +37,7 @@ public class BiddingController {
 		//        playGame();
 	}
 
-	public Game getCardHolder() {
+	public Deal getCardHolder() {
 		return cardHolder;
 	}
 

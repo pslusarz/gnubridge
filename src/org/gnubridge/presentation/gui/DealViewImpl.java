@@ -15,14 +15,14 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import org.gnubridge.core.Direction;
-import org.gnubridge.core.Game;
+import org.gnubridge.core.Deal;
 import org.gnubridge.core.North;
 import org.gnubridge.core.Player;
 import org.gnubridge.core.bidding.Bid;
 
-public class PlayViewImpl implements PlayView, CardPanelHost, ActionListener {
+public class DealViewImpl implements DealView, CardPanelHost, ActionListener {
 
-	private Game game;
+	private Deal game;
 	final int DHEIGHT = 700;
 	private final int WIDTH = 800;
 
@@ -40,7 +40,7 @@ public class PlayViewImpl implements PlayView, CardPanelHost, ActionListener {
 	private JButton previousTrickButton;
 	private JButton newGameButton;
 
-	public PlayViewImpl(MainView owner) {
+	public DealViewImpl(MainView owner) {
 		this.owner = owner;
 		panel = createDisplayPanel();
 		panel.setLayout(null);
@@ -91,7 +91,7 @@ public class PlayViewImpl implements PlayView, CardPanelHost, ActionListener {
 		controller = c;
 	}
 
-	public void setGame(Game g, Direction human) {
+	public void setGame(Deal g, Direction human) {
 		game = g;
 		table.setHumanDirection(human);
 
@@ -151,10 +151,10 @@ public class PlayViewImpl implements PlayView, CardPanelHost, ActionListener {
 		private CardPanel theCard;
 		private int startX = -1;
 		private int startY = -1;
-		private final Game theGame;
+		private final Deal theGame;
 		long previousClick = -1000;
 
-		public DaListener(CardPanel card, Game g) {
+		public DaListener(CardPanel card, Deal g) {
 			theCard = card;
 			theGame = g;
 		}

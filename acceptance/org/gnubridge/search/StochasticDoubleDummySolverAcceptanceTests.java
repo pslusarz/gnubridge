@@ -6,7 +6,7 @@ import java.util.List;
 import junit.framework.TestCase;
 
 import org.gnubridge.core.Card;
-import org.gnubridge.core.Game;
+import org.gnubridge.core.Deal;
 import org.gnubridge.core.Player;
 import org.gnubridge.core.deck.Clubs;
 import org.gnubridge.core.deck.Diamonds;
@@ -20,14 +20,14 @@ public class StochasticDoubleDummySolverAcceptanceTests extends TestCase {
 	static final int SEARCH_DEPTH_CUTOFF = 13;
 	static final int CARDS_TO_DEAL = 4;
 	private static final int DEALS_TO_TRY = 100;
-	private Game g;
+	private Deal g;
 	List<SearchMonkey> monkeys;
 
 	public void testEquivaltenceVariousPruneStrategies() {
 		for (int cardDeal = 0; cardDeal < DEALS_TO_TRY; cardDeal++) {
 			monkeys = new ArrayList<SearchMonkey>();
 			Trump trump = determineTrump(cardDeal);
-			g = new Game(trump);
+			g = new Deal(trump);
 			GameUtils.initializeRandom(g, CARDS_TO_DEAL);
 			System.out.println("*********** DEAL " + cardDeal + " ***********");
 			g.playOneTrick(); //somewhat randomizes who's to move next
@@ -65,14 +65,14 @@ public class StochasticDoubleDummySolverAcceptanceTests extends TestCase {
 		}
 	}
 
-	private void compareEachOthersBestMoves(SearchMonkey first, SearchMonkey second, Game originalGame) {
+	private void compareEachOthersBestMoves(SearchMonkey first, SearchMonkey second, Deal originalGame) {
 		Card firstMove = first.getBestMove();
 		Card secondMove = second.getBestMove();
 		System.out.println("#####>  Search strategies " + first + " and " + second
 				+ " differ on what is the best move ( " + firstMove + " versus " + secondMove + "). "
 				+ "Now comparing tricks taken if each evaluates the other's best move.");
 
-		Game firstMovePlayed = originalGame.duplicate();
+		Deal firstMovePlayed = originalGame.duplicate();
 		firstMovePlayed.play(firstMove);
 		firstMovePlayed.printHandsDebug();
 		SearchMonkey firstProxy = new SearchMonkey(first.config);
@@ -83,7 +83,7 @@ public class StochasticDoubleDummySolverAcceptanceTests extends TestCase {
 				secondProxy.getNorthSouthTricks());
 		int tricksTakenIfFirstMovePlayed = firstProxy.getNorthSouthTricks();
 
-		Game secondMovePlayed = originalGame.duplicate();
+		Deal secondMovePlayed = originalGame.duplicate();
 		secondMovePlayed.play(secondMove);
 		firstProxy.runSearch(secondMovePlayed);
 		secondProxy.runSearch(secondMovePlayed);
@@ -132,7 +132,7 @@ public class StochasticDoubleDummySolverAcceptanceTests extends TestCase {
 			return config.name();
 		}
 
-		public void runSearch(Game g) {
+		public void runSearch(Deal g) {
 			search = new DoubleDummySolver(g);
 			search.setMaxTricks(SEARCH_DEPTH_CUTOFF);
 			search.setTerminateIfRootOnlyHasOneValidMove(false);

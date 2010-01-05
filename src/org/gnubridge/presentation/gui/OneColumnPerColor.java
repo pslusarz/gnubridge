@@ -5,7 +5,7 @@ import java.awt.Point;
 import org.gnubridge.core.Card;
 import org.gnubridge.core.Direction;
 import org.gnubridge.core.East;
-import org.gnubridge.core.Game;
+import org.gnubridge.core.Deal;
 import org.gnubridge.core.Hand;
 import org.gnubridge.core.North;
 import org.gnubridge.core.South;
@@ -14,7 +14,7 @@ import org.gnubridge.core.deck.Color;
 
 public class OneColumnPerColor extends HandDisplay {
 
-	public OneColumnPerColor(Direction human, Direction player, Game game, CardPanelHost owner) {
+	public OneColumnPerColor(Direction human, Direction player, Deal game, CardPanelHost owner) {
 		super(human, player, game, owner);
 	}
 

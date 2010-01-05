@@ -4,16 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.gnubridge.core.Direction;
-import org.gnubridge.core.Game;
+import org.gnubridge.core.Deal;
 
 public abstract class HandDisplay {
 	protected final Direction human;
 	protected final Direction player;
-	protected final Game game;
+	protected final Deal game;
 	protected final CardPanelHost owner;
 	List<CardPanel> cards;
 
-	public HandDisplay(Direction human, Direction player, Game game, CardPanelHost owner) {
+	public HandDisplay(Direction human, Direction player, Deal game, CardPanelHost owner) {
 		this.human = human;
 		this.player = player;
 		this.game = game;
