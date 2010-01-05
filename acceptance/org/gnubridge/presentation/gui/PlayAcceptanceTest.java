@@ -9,6 +9,7 @@ import org.gnubridge.core.Card;
 import org.gnubridge.core.Direction;
 import org.gnubridge.core.Game;
 import org.gnubridge.core.Player;
+import org.gnubridge.core.bidding.ScoreCalculator;
 import org.gnubridge.presentation.GameUtils;
 import org.gnubridge.search.ProductionSettings;
 
@@ -76,6 +77,47 @@ public class PlayAcceptanceTest extends TestCase {
 		assertEquals(TRICKS_PER_DEAL, mainController.getGameController().getGame().getTricksTaken(Player.NORTH_SOUTH));
 	}
 
+	public void testRunningScoreEndToEnd() throws InterruptedException, InvocationTargetException {
+		preInitializeGame13Tricks();
+		GBController mainController = makeController();
+		mainController.getBiddingController().placeBid(7, "Clubs");
+		mainController.playGame();
+		playGameToTheEnd(mainController);
+		Thread.sleep(300);
+		int score = new ScoreCalculator(
+				mainController.getBiddingController().getAuction().getHighBid(), 
+				mainController.getGameController().getGame().getTricksTaken(Player.NORTH_SOUTH)).getDeclarerScore();
+		System.out.println("Game finished. Declarers took "
+				+ mainController.getGameController().getGame().getTricksTaken(Player.NORTH_SOUTH) + " tricks. Score: " + score);
+
+		assertEquals(1000 + 20 * 7, score);
+		
+		System.out.println("Running Human Score: " + mainController.getRunningHumanScore());
+		System.out.println("Running Computer Score: " + mainController.getRunningComputerScore());
+		assertEquals(1000 + 20 * 7, mainController.getRunningHumanScore());
+		assertEquals(0, mainController.getRunningComputerScore());
+
+		preInitializeGame13Tricks();
+		mainController.getGameController().newGame();
+		mainController.getBiddingController().placeBid(7, "Spades");
+		
+		Thread.sleep(300);
+		
+		mainController.playGame();
+		playGameToTheEnd(mainController);
+		score = new ScoreCalculator(
+				mainController.getBiddingController().getAuction().getHighBid(), 
+				mainController.getGameController().getGame().getTricksTaken(Player.NORTH_SOUTH)).getDefenderScore();
+		
+		System.out.println("Running Human Score: " + mainController.getRunningHumanScore());
+		System.out.println("Running Computer Score: " + mainController.getRunningComputerScore());
+		System.out.println("Game finished. Declarers took "
+				+ mainController.getGameController().getGame().getTricksTaken(Player.NORTH_SOUTH) + " tricks. Score: " + score);
+
+		assertEquals(1000 + 20 * 7, mainController.getRunningHumanScore());
+		assertEquals(50 * 13, mainController.getRunningComputerScore());
+	}
+
 	private void playGameToTheEnd(GBController mainController) throws InterruptedException {
 		Game game = mainController.getGameController().getGame();
 		int cardsPlayed = -1;
@@ -91,7 +133,7 @@ public class PlayAcceptanceTest extends TestCase {
 				continue;
 			} else {
 				boolean cardPlayed = false;
-				for (int i = 0; i < 4000; i++) {
+				for (int i = 0; i < 8000; i++) {
 					Thread.sleep(100);
 					if (i % 10 == 0) {
 						System.out.println("// tick...");
@@ -106,6 +148,14 @@ public class PlayAcceptanceTest extends TestCase {
 			}
 		}
 		System.out.println("");
+	}
+	
+	private void preInitializeGame13Tricks() {
+		Game g = new Game(null);
+		GameUtils.initializeSingleColorSuits(g, 13);
+		g.setHumanPlayer(g.getSouth());
+		System.out.println("Human's hand: " + g.getSouth().getHand());
+		Game.setPreInitializedGame(g);
 	}
 
 	private void preInitializeGameWithSingleColorSuits() {

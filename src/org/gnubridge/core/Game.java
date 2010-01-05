@@ -182,7 +182,7 @@ public class Game {
 		}
 
 	}
-
+	
 	public boolean oneTrickLeft() {
 		return (getCurrentTrick().getHighestCard() == null && getNextToPlay().getHand().size() == 1);
 	}

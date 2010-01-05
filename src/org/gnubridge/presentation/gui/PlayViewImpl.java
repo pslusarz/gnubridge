@@ -36,6 +36,7 @@ public class PlayViewImpl implements PlayView, CardPanelHost, ActionListener {
 	protected JPanel panel;
 	protected final MainView owner;
 	protected String message = "";
+	protected String scoreMessage = "";
 	private JButton previousTrickButton;
 	private JButton newGameButton;
 
@@ -123,7 +124,7 @@ public class PlayViewImpl implements PlayView, CardPanelHost, ActionListener {
 				super.paintComponent(g);
 				table.draw(g);
 				g.drawString("Contract (North/South): " + contract + "            " + message + " ", 20, DHEIGHT - 25);
-
+				g.drawString(scoreMessage, 20, DHEIGHT - 13);
 				table.drawPromptArrow(g, game.getNextToPlay().getDirection2(), cardPlayed);
 			}
 		};
@@ -247,6 +248,12 @@ public class PlayViewImpl implements PlayView, CardPanelHost, ActionListener {
 
 	public void display(String message) {
 		this.message = message;
+		panel.repaint();
+
+	}
+	
+	public void displayScore(String message) {
+		this.scoreMessage = message;
 		panel.repaint();
 
 	}

@@ -20,6 +20,8 @@ public interface PlayView {
 
 	public abstract void display(String message);
 
+	public abstract void displayScore(String message);
+	
 	public abstract int getTableBottom();
 
 	public abstract void setContract(Bid contract);

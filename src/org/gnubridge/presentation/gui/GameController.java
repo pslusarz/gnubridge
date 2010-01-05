@@ -130,7 +130,8 @@ public class GameController implements CardPlayedListener {
 
 	private final PlayView view;
 
-	public GameController(GBController controller, Bid highBid, Game g, Direction humanDir, PlayView playView) {
+	public GameController(GBController controller, Bid highBid, Game g, 
+			Direction humanDir, PlayView playView) {
 		parent = controller;
 		game = g;
 		game.printHandsDebug();
@@ -203,5 +204,4 @@ public class GameController implements CardPlayedListener {
 		view.hide();
 		parent.newGame();
 	}
-
 }

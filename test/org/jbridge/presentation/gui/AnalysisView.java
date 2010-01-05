@@ -41,6 +41,7 @@ public class AnalysisView implements PlayView, CardPanelHost {
 	protected JPanel panel;
 	protected final MainView owner;
 	protected String message = "";
+	protected String messageScore = "";
 	private OneColumnPerColor west;
 	private OneColumnPerColor east;
 
@@ -245,6 +246,12 @@ public class AnalysisView implements PlayView, CardPanelHost {
 		parent.add(panel);
 	}
 
+	public void displayScore(String message) {
+		this.messageScore = message;
+		panel.repaint();
+
+	}
+	
 	public void display(String message) {
 		this.message = message;
 		panel.repaint();

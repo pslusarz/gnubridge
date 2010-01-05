@@ -13,6 +13,11 @@ public class MockPlayView implements PlayView {
 	}
 
 	@Override
+	public void displayScore(String message) {
+		// TODO Auto-generated method stub
+	}
+	
+	@Override
 	public void displayCurrentTrick() {
 		// TODO Auto-generated method stub
 

@@ -1,5 +1,6 @@
 package org.gnubridge.presentation.gui;
 
+import org.gnubridge.core.Direction;
 import org.gnubridge.core.East;
 import org.gnubridge.core.Game;
 import org.gnubridge.core.North;
@@ -7,12 +8,16 @@ import org.gnubridge.core.Player;
 import org.gnubridge.core.South;
 import org.gnubridge.core.West;
 import org.gnubridge.core.bidding.Auctioneer;
+import org.gnubridge.core.bidding.ScoreCalculator;
 
 public class GBController {
 
 	private MainView view;
 	private BiddingController biddingController;
 	private GameController gameController;
+
+	private int runningHumanScore;
+	private int runningComputerScore;
 
 	public GBController() {
 		newGame();
@@ -22,6 +27,7 @@ public class GBController {
 		setGameController(new GameController(this, getBiddingController().getAuction().getHighBid(),
 				repositionHandsSoThatSouthIsDeclarer(getBiddingController().getAuction(), getBiddingController()
 						.getCardHolder()), getBiddingController().allowHumanToPlayIfDummy(), view.getPlayView()));
+		view.getPlayView().displayScore("Human: " + runningHumanScore + ", Computer: " + runningComputerScore);
 	}
 
 	private Game repositionHandsSoThatSouthIsDeclarer(Auctioneer a, Game cardHolder) {
@@ -35,10 +41,28 @@ public class GBController {
 	}
 
 	public void gameFinished() {
+		int declarerTricksTaken = getGameController().getGame().getTricksTaken(Player.NORTH_SOUTH);
+		ScoreCalculator calculator = new ScoreCalculator(
+				getBiddingController().getAuction().getHighBid(), 
+				declarerTricksTaken);
 		view.getPlayView().display(
 				"GAME FINISHED. Contract was: " + getBiddingController().getAuction().getHighBid()
-						+ ", declarers took " + getGameController().getGame().getTricksTaken(Player.NORTH_SOUTH)
-						+ " tricks.");
+						+ ", declarers took " + declarerTricksTaken + " tricks.");
+		if (gameController.getHuman().getValue() == Direction.NORTH ||
+				gameController.getHuman().getValue() == Direction.SOUTH) {
+			runningHumanScore += calculator.getDeclarerScore();
+			runningComputerScore += calculator.getDefenderScore();
+		}
+		else {
+			runningHumanScore += calculator.getDefenderScore();
+			runningComputerScore += calculator.getDeclarerScore();
+		}
+		
+		view.getPlayView().displayScore("North/South: +" + 
+				calculator.getDeclarerScore() +
+				" points, East/West: +" +  
+				calculator.getDefenderScore() + " points (Human: " + runningHumanScore + ", " 
+				+ "Computer: " + runningComputerScore + ")");
 	}
 
 	public void setBiddingController(BiddingController biddingController) {
@@ -55,6 +79,14 @@ public class GBController {
 
 	public GameController getGameController() {
 		return gameController;
+	}
+	
+	public int getRunningHumanScore() {
+		return runningHumanScore;
+	}
+	
+	public int getRunningComputerScore() {
+		return runningComputerScore;
 	}
 
 	public void newGame() {
