@@ -6,10 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.gnubridge.core.Direction;
-import org.gnubridge.core.East;
 import org.gnubridge.core.North;
-import org.gnubridge.core.South;
-import org.gnubridge.core.West;
 
 public class Auctioneer {
 	private Direction nextToBid;
@@ -43,21 +40,17 @@ public class Auctioneer {
 		last = new Call(bid, nextToBid);
 		calls.add(last);
 		bidCount++;
-		if (new Pass().equals(bid)) {
+		if (PASS.equals(bid)) {
 			passCount++;
 		} else {
 			passCount = 0;
 			highBid = bid;
 		}
-		if (West.i().equals(nextToBid)) {
-			nextToBid = North.i();
-		} else if (North.i().equals(nextToBid)) {
-			nextToBid = East.i();
-		} else if (East.i().equals(nextToBid)) {
-			nextToBid = South.i();
-		} else if (South.i().equals(nextToBid)) {
-			nextToBid = West.i();
+		if (DOUBLE.equals(bid)) {
+			getHighCall().makeDoubled();
 		}
+
+		nextToBid = nextToBid.clockwise();
 	}
 
 	public boolean biddingFinished() {
@@ -99,7 +92,7 @@ public class Auctioneer {
 		boolean result = false;
 		if (candidate != null) {
 			if (candidate.equals(DOUBLE)) {
-				if (getHighCall() != null) {
+				if (getHighCall() != null && !getHighCall().pairMatches(nextToBid) && !getHighCall().isDoubled()) {
 					return true;
 				}
 			} else if (candidate.equals(new Pass()) || candidate.greaterThan(getHighBid())) {

@@ -4,8 +4,9 @@ import org.gnubridge.core.Direction;
 import org.gnubridge.core.deck.Trump;
 
 public class Call {
-	private Bid bid;
-	private Direction direction;
+	private final Bid bid;
+	private final Direction direction;
+	private boolean doubled = false;
 
 	public Call(Bid b, Direction d) {
 		bid = b;
@@ -35,11 +36,18 @@ public class Call {
 	}
 
 	public boolean pairMatches(Direction candidate) {
-		if (direction.equals(candidate)
-				|| direction.opposite().equals(candidate)) {
+		if (direction.equals(candidate) || direction.opposite().equals(candidate)) {
 			return true;
 		} else {
 			return false;
 		}
+	}
+
+	public boolean isDoubled() {
+		return doubled;
+	}
+
+	public void makeDoubled() {
+		doubled = true;
 	}
 }

@@ -115,13 +115,27 @@ public class AuctioneerTest extends TestCase {
 		assertTrue(a.isValid(DOUBLE));
 	}
 
-	//  TODO: Next test for doubles 
-	//	public void testIsValidMayNotDoublePartner() {
-	//		Auctioneer a = new Auctioneer(WEST);
-	//		a.bid(ONE_NOTRUMP);
-	//		a.bid(PASS);
-	//		assertFalse(a.isValid(DOUBLE));
-	//	}
+	public void testIsValidDoubleIsNotAValidResponseToAnotherDouble() {
+		Auctioneer a = new Auctioneer(WEST);
+		a.bid(ONE_NOTRUMP);
+		a.bid(DOUBLE);
+		assertFalse(a.isValid(DOUBLE));
+	}
+
+	public void testIsValidMayNotDoubleYourOwnDouble() {
+		Auctioneer a = new Auctioneer(WEST);
+		a.bid(ONE_NOTRUMP);
+		a.bid(DOUBLE);
+		a.bid(PASS);
+		assertFalse(a.isValid(DOUBLE));
+	}
+
+	public void testIsValidMayNotDoublePartner() {
+		Auctioneer a = new Auctioneer(WEST);
+		a.bid(ONE_NOTRUMP);
+		a.bid(PASS);
+		assertFalse(a.isValid(DOUBLE));
+	}
 
 	public void testIsValidNotOkToOpenWithDouble() {
 		Auctioneer a = new Auctioneer(WEST);
@@ -132,6 +146,14 @@ public class AuctioneerTest extends TestCase {
 		assertFalse(a.isValid(DOUBLE));
 		a.bid(PASS);
 		assertFalse(a.isValid(DOUBLE));
+	}
+
+	public void testDoublingAffectsTheHighCall() {
+		Auctioneer a = new Auctioneer(WEST);
+		a.bid(ONE_NOTRUMP);
+		assertFalse(a.getHighCall().isDoubled());
+		a.bid(DOUBLE);
+		assertTrue(a.getHighCall().isDoubled());
 	}
 
 	public void testGetDummyNullIfAuctionNotFinished() {
