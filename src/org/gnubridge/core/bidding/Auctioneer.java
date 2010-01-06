@@ -1,12 +1,12 @@
 package org.gnubridge.core.bidding;
 
+import static org.gnubridge.core.Direction.*;
 import static org.gnubridge.core.bidding.Bid.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.gnubridge.core.Direction;
-import org.gnubridge.core.North;
 
 public class Auctioneer {
 	private Direction nextToBid;
@@ -40,7 +40,7 @@ public class Auctioneer {
 		last = new Call(bid, nextToBid);
 		calls.add(last);
 		bidCount++;
-		if (PASS.equals(bid)) {
+		if (bid.isPass()) {
 			passCount++;
 		} else {
 			passCount = 0;
@@ -64,7 +64,7 @@ public class Auctioneer {
 	public boolean isOpeningBid() {
 		if (bidCount > 3) {
 			return false;
-		} else if (beforeLast == null || beforeLast.getBid().equals(new Pass())) {
+		} else if (beforeLast == null || beforeLast.getBid().isPass()) {
 			return true;
 		} else {
 			return false;
@@ -95,7 +95,7 @@ public class Auctioneer {
 				if (getHighCall() != null && !getHighCall().pairMatches(nextToBid) && !getHighCall().isDoubled()) {
 					return true;
 				}
-			} else if (candidate.equals(new Pass()) || candidate.greaterThan(getHighBid())) {
+			} else if (candidate.isPass() || candidate.greaterThan(getHighBid())) {
 				result = true;
 			}
 		}
@@ -139,7 +139,7 @@ public class Auctioneer {
 		Direction d = getDummy();
 		Direction offset = original;
 		for (int i = 0; i < 4; i++) {
-			if (d.equals(North.i())) {
+			if (d.equals(NORTH)) {
 				break;
 			} else {
 				d = d.clockwise();

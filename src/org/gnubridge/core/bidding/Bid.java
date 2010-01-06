@@ -138,7 +138,7 @@ public class Bid {
 	}
 
 	public boolean isPass() {
-		return new Pass().equals(this);
+		return PASS.equals(this);
 	}
 
 	public boolean isForcing() {

@@ -39,6 +39,20 @@ public class AuctioneerTest extends TestCase {
 		assertEquals(TWO_HEARTS, a.getHighBid());
 	}
 
+	public void testEndBiddingDoubledContract() {
+		Auctioneer a = new Auctioneer(WEST);
+		a.bid(ONE_NOTRUMP);
+		a.bid(PASS);
+		a.bid(PASS);
+		a.bid(DOUBLE);
+		a.bid(PASS);
+		assertFalse(a.biddingFinished());
+		a.bid(PASS);
+		assertFalse(a.biddingFinished());
+		a.bid(PASS);
+		assertTrue(a.biddingFinished());
+	}
+
 	public void testEndBiddingNoContract() {
 		Auctioneer a = new Auctioneer(WEST);
 		a.bid(PASS);
