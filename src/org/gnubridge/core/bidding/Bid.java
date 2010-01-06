@@ -1,10 +1,6 @@
 package org.gnubridge.core.bidding;
 
-import static org.gnubridge.core.deck.Trump.CLUBS;
-import static org.gnubridge.core.deck.Trump.DIAMONDS;
-import static org.gnubridge.core.deck.Trump.HEARTS;
-import static org.gnubridge.core.deck.Trump.NOTRUMP;
-import static org.gnubridge.core.deck.Trump.SPADES;
+import static org.gnubridge.core.deck.Trump.*;
 
 import org.gnubridge.core.deck.Clubs;
 import org.gnubridge.core.deck.Diamonds;
@@ -15,6 +11,8 @@ import org.gnubridge.core.deck.Trump;
 
 public class Bid {
 	public static Bid PASS = new Pass();
+	public static Bid DOUBLE = new Double();
+	public static Bid REDOUBLE = new Redouble();
 
 	public static Bid ONE_NOTRUMP = new Bid(1, NOTRUMP);
 	public static Bid ONE_SPADES = new Bid(1, SPADES);
@@ -39,6 +37,12 @@ public class Bid {
 	public static Bid FOUR_HEARTS = new Bid(4, HEARTS);
 	public static Bid FOUR_DIAMONDS = new Bid(4, DIAMONDS);
 	public static Bid FOUR_CLUBS = new Bid(4, CLUBS);
+
+	public static Bid SEVEN_NOTRUMP = new Bid(7, NOTRUMP);
+	public static Bid SEVEN_SPADES = new Bid(7, SPADES);
+	public static Bid SEVEN_HEARTS = new Bid(7, HEARTS);
+	public static Bid SEVEN_DIAMONDS = new Bid(7, DIAMONDS);
+	public static Bid SEVEN_CLUBS = new Bid(7, CLUBS);
 
 	private final int value;
 	private final Trump trump;

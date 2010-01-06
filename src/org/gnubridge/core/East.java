@@ -15,6 +15,6 @@ public class East extends Direction {
     
 	@Override
 	public int getValue() {
-		return Direction.EAST;
+		return Direction.EAST_DEPRECATED;
 	}
 }

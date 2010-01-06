@@ -20,6 +20,8 @@ public class BiddingDisplay {
 	private final BiddingViewImpl parentView;
 	protected JPanel panel;
 	protected String message = "";
+	protected String scoreMessage = "";
+	protected boolean isVulnerable;
 	private JButton newGameButton;
 
 	public BiddingDisplay(BiddingViewImpl pv) {
@@ -43,7 +45,7 @@ public class BiddingDisplay {
 	}
 
 	private void addNewGameButton() {
-		newGameButton = new JButton("New game...");
+		newGameButton = new JButton("New Game...");
 		newGameButton.setActionCommand("newGame");
 		newGameButton.addActionListener(parentView);
 		panel.add(newGameButton);
@@ -54,7 +56,7 @@ public class BiddingDisplay {
 		newGameButton.setVisible(true);
 
 	}
-
+	
 	public void setCards(Hand h) {
 		int i = 0;
 		for (Card card : h.getCardsHighToLow()) {
@@ -64,6 +66,10 @@ public class BiddingDisplay {
 			panel.setComponentZOrder(cardPanel, 0);
 			i++;
 		}
+	}
+	
+	public void setVulnerability(boolean vulnerable) {
+		isVulnerable = vulnerable;
 	}
 
 	private int getTopOfCards() {
@@ -89,9 +95,21 @@ public class BiddingDisplay {
 
 			@Override
 			public void paintComponent(Graphics g) {
+
+				
 				super.paintComponent(g);
 				int top = 15;
 				int rowHeight = 15;
+
+				if (isVulnerable) {
+					g.drawString("You are vulnerable!", getColumnForDirection(0), top + rowHeight * 18);
+				}
+				else {
+					g.drawString("You are not vulnerable.", getColumnForDirection(0), top + rowHeight * 18);
+				}
+				
+				g.drawString(scoreMessage, getColumnForDirection(0) + 5, top + rowHeight * 19 + 5);
+				
 				g.drawString("Player 1", getColumnForDirection(0), top);
 				g.drawString("Player 2", getColumnForDirection(1), top);
 				g.drawString("Partner 1", getColumnForDirection(2), top);
@@ -99,7 +117,7 @@ public class BiddingDisplay {
 				top += rowHeight;
 				for (Call call : auction.getCalls()) {
 					g.drawString(call.getBid().toString(), getColumnForDirection(call.getDirection().getValue()), top);
-					if (call.getDirection().equals(Direction.instance(Direction.SOUTH))) {
+					if (call.getDirection().equals(Direction.instance(Direction.SOUTH_DEPRECATED))) {
 						top += rowHeight;
 					}
 				}
@@ -114,7 +132,7 @@ public class BiddingDisplay {
 
 			private int getColumnForDirection(int direction) {
 				int result = colWidth * 5 + 55;
-				for (int i = direction; i <= Direction.SOUTH; i++) {
+				for (int i = direction; i <= Direction.SOUTH_DEPRECATED; i++) {
 					result -= colWidth;
 				}
 				return result;
@@ -130,6 +148,11 @@ public class BiddingDisplay {
 		this.message = message;
 		panel.repaint();
 
+	}
+	
+	public void displayScore(String message) {
+		this.scoreMessage = message;
+		panel.repaint();
 	}
 
 }

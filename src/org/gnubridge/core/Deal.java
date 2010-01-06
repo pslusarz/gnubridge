@@ -32,10 +32,10 @@ public class Deal {
 
 	public Deal(Trump trump) {
 		players = new Player[4];
-		for (int i = Direction.WEST; i <= Direction.SOUTH; i++) {
+		for (int i = Direction.WEST_DEPRECATED; i <= Direction.SOUTH_DEPRECATED; i++) {
 			players[i] = new Player(i);
 		}
-		nextToPlay = Direction.WEST;
+		nextToPlay = Direction.WEST_DEPRECATED;
 		this.trump = trump;
 		currentTrick = new Trick(this.getTrump());
 		tricksPlayed = 0;
@@ -49,19 +49,19 @@ public class Deal {
 	}
 
 	public Player getWest() {
-		return players[Direction.WEST];
+		return players[Direction.WEST_DEPRECATED];
 	}
 
 	public Player getNorth() {
-		return players[Direction.NORTH];
+		return players[Direction.NORTH_DEPRECATED];
 	}
 
 	public Player getEast() {
-		return players[Direction.EAST];
+		return players[Direction.EAST_DEPRECATED];
 	}
 
 	public Player getSouth() {
-		return players[Direction.SOUTH];
+		return players[Direction.SOUTH_DEPRECATED];
 	}
 
 	public void setPlayer(int i, Player p) {
@@ -129,7 +129,7 @@ public class Deal {
 
 	public Deal duplicate() {
 		Deal result = new Deal(getTrump());
-		for (int i = Direction.WEST; i <= Direction.SOUTH; i++) {
+		for (int i = Direction.WEST_DEPRECATED; i <= Direction.SOUTH_DEPRECATED; i++) {
 			result.getPlayer(i).init(this.getPlayer(i));
 		}
 		result.nextToPlay = nextToPlay;
@@ -174,9 +174,9 @@ public class Deal {
 	public int getTricksTaken(int pair) {
 		switch (pair) {
 		case Player.WEST_EAST:
-			return getPlayer(Direction.WEST).countTricksTaken() + getPlayer(Direction.EAST).countTricksTaken();
+			return getPlayer(Direction.WEST_DEPRECATED).countTricksTaken() + getPlayer(Direction.EAST_DEPRECATED).countTricksTaken();
 		case Player.NORTH_SOUTH:
-			return getPlayer(Direction.NORTH).countTricksTaken() + getPlayer(Direction.SOUTH).countTricksTaken();
+			return getPlayer(Direction.NORTH_DEPRECATED).countTricksTaken() + getPlayer(Direction.SOUTH_DEPRECATED).countTricksTaken();
 		default:
 			throw new RuntimeException("Unknown pair: " + pair);
 		}

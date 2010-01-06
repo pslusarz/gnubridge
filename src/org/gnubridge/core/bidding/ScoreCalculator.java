@@ -11,11 +11,11 @@ public class ScoreCalculator {
 	private int defenderPoints;
 	private int declarerPoints;
 
-	public ScoreCalculator(Bid highBid, int tricksTakenByDeclarers) {
-		calculateScore(highBid, tricksTakenByDeclarers);
+	public ScoreCalculator(Bid highBid, int tricksTakenByDeclarers, boolean isDeclarerVulnerable) {
+		calculateScore(highBid, tricksTakenByDeclarers, isDeclarerVulnerable);
 	}
 
-	public void calculateScore(Bid highBid, int tricksTakenByDeclarers) {
+	public void calculateScore(Bid highBid, int tricksTakenByDeclarers, boolean isDeclarerVulnerable) {
 		int bidValue = highBid.getValue();
 		int numberTricksNeededByDeclarer = bidValue + 6;
 		
@@ -25,7 +25,7 @@ public class ScoreCalculator {
 		 * This will be more complicated once the game supports doubles, but it
 		 * should be pretty straight forward for now
 		 * 
-		 * TODO: Support doubles and vulnerability, support adding scores up across multiple games
+		 * TODO: Support doubles 
 		 */
 		declarerPoints = 0;
 		defenderPoints = 0;
@@ -59,14 +59,25 @@ public class ScoreCalculator {
 			else if (contractWorth >= 100) {
 				declarerPoints = 300;
 			}
+			
+			/* Here we calculate the value of over-tricks
+			 * 
+			 * Vulnerability only helps the declarer if he scores over-tricks AND 
+			 * was doubled - since we do not yet support doubling, we can ignore
+			 * vulnerability here for now
+			 */
 			declarerPoints += contractWorth + numOverTricks * pointsPerTrick;
 		}
 		else {
 			int underTricks = numberTricksNeededByDeclarer - tricksTakenByDeclarers;
-			/* This will be complicated once doubling is possibile, plus when
-			 * vulnerability is added... for now it is simple
-			 */
-			defenderPoints += underTricks * 50;
+			
+			/* This will be more complicated once doubling is possibile */
+			if (isDeclarerVulnerable) {
+				defenderPoints += underTricks * 100;
+			}
+			else {
+				defenderPoints += underTricks * 50;
+			}
 		}
 	}
 	

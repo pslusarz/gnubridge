@@ -19,14 +19,14 @@ public class DoubleDummySolverAlphaBetaPruningTest extends TestCase {
 	 */
 
 	public void testOneLevelAlphaPrune() {
-		Node root = new Node(null, Direction.WEST);
-		Node node_00 = new Node(root, Direction.WEST);
-		Node node_0 = new Node(node_00, Direction.SOUTH);
+		Node root = new Node(null, Direction.WEST_DEPRECATED);
+		Node node_00 = new Node(root, Direction.WEST_DEPRECATED);
+		Node node_0 = new Node(node_00, Direction.SOUTH_DEPRECATED);
 		node_0.setTricksTaken(Player.WEST_EAST, 1);
-		Node node_1 = new Node(node_00, Direction.SOUTH);
-		Node node_1_0 = new Node(node_1, Direction.EAST);
+		Node node_1 = new Node(node_00, Direction.SOUTH_DEPRECATED);
+		Node node_1_0 = new Node(node_1, Direction.EAST_DEPRECATED);
 		@SuppressWarnings("unused")
-		Node node_1_1 = new Node(node_1, Direction.EAST);
+		Node node_1_1 = new Node(node_1, Direction.EAST_DEPRECATED);
 
 		MockGame g = new MockGame();
 		g.setPositionValue(node_1_0.getMoves(), 0, 2);
@@ -47,13 +47,13 @@ public class DoubleDummySolverAlphaBetaPruningTest extends TestCase {
 	 */
 
 	public void testDoNotAlphaPruneRootsChildrenSoThatHeuristicsMayBeUsed() {
-		Node root = new Node(null, Direction.WEST);
-		Node node_0 = new Node(root, Direction.SOUTH);
+		Node root = new Node(null, Direction.WEST_DEPRECATED);
+		Node node_0 = new Node(root, Direction.SOUTH_DEPRECATED);
 		node_0.setTricksTaken(Player.WEST_EAST, 1);
-		Node node_1 = new Node(root, Direction.SOUTH);
-		Node node_1_0 = new Node(node_1, Direction.EAST);
+		Node node_1 = new Node(root, Direction.SOUTH_DEPRECATED);
+		Node node_1_0 = new Node(node_1, Direction.EAST_DEPRECATED);
 		@SuppressWarnings("unused")
-		Node node_1_1 = new Node(node_1, Direction.EAST);
+		Node node_1_1 = new Node(node_1, Direction.EAST_DEPRECATED);
 
 		MockGame g = new MockGame();
 		g.setPositionValue(node_1_0.getMoves(), 0, 2);
@@ -73,14 +73,14 @@ public class DoubleDummySolverAlphaBetaPruningTest extends TestCase {
 	 */
 
 	public void testAlphaPruneAlphaIsLocal() {
-		Node root = new Node(null, Direction.WEST);
-		Node node_00 = new Node(root, Direction.WEST);
-		Node node_0 = new Node(node_00, Direction.SOUTH);
+		Node root = new Node(null, Direction.WEST_DEPRECATED);
+		Node node_00 = new Node(root, Direction.WEST_DEPRECATED);
+		Node node_0 = new Node(node_00, Direction.SOUTH_DEPRECATED);
 		node_0.setTricksTaken(Player.WEST_EAST, 1);
-		Node node_1 = new Node(node_00, Direction.SOUTH);
-		Node node_1_0 = new Node(node_1, Direction.EAST);
+		Node node_1 = new Node(node_00, Direction.SOUTH_DEPRECATED);
+		Node node_1_0 = new Node(node_1, Direction.EAST_DEPRECATED);
 		@SuppressWarnings("unused")
-		Node node_1_1 = new Node(node_1, Direction.EAST);
+		Node node_1_1 = new Node(node_1, Direction.EAST_DEPRECATED);
 
 		MockGame g = new MockGame();
 		g.setPositionValue(node_1_0.getMoves(), 0, 2);
@@ -103,12 +103,12 @@ public class DoubleDummySolverAlphaBetaPruningTest extends TestCase {
 
 	public void testNoAlphaPruneSubsequentChildren() {
 
-		Node root = new Node(null, Direction.WEST);
-		Node node_00 = new Node(root, Direction.WEST);
-		Node node_0 = new Node(node_00, Direction.NORTH);
-		Node node_0_0 = new Node(node_0, Direction.EAST);
+		Node root = new Node(null, Direction.WEST_DEPRECATED);
+		Node node_00 = new Node(root, Direction.WEST_DEPRECATED);
+		Node node_0 = new Node(node_00, Direction.NORTH_DEPRECATED);
+		Node node_0_0 = new Node(node_0, Direction.EAST_DEPRECATED);
 		node_0_0.setTricksTaken(Player.WEST_EAST, 1);
-		Node node_0_1 = new Node(node_0, Direction.EAST);
+		Node node_0_1 = new Node(node_0, Direction.EAST_DEPRECATED);
 
 		MockGame g = new MockGame();
 		g.setPositionValue(node_0_1.getMoves(), 0, 1);
@@ -130,15 +130,15 @@ public class DoubleDummySolverAlphaBetaPruningTest extends TestCase {
 	 */
 
 	public void testAlphaPruneOnlyMinNodes() {
-		Node root = new Node(null, Direction.WEST);
-		Node node_00 = new Node(root, Direction.WEST);
-		Node node_0 = new Node(node_00, Direction.WEST);
+		Node root = new Node(null, Direction.WEST_DEPRECATED);
+		Node node_00 = new Node(root, Direction.WEST_DEPRECATED);
+		Node node_0 = new Node(node_00, Direction.WEST_DEPRECATED);
 		node_0.setTricksTaken(Player.WEST_EAST, 1);
 		node_0.setTricksTaken(Player.NORTH_SOUTH, 1);
-		Node node_1 = new Node(node_00, Direction.WEST);
-		Node node_1_0 = new Node(node_1, Direction.EAST);
+		Node node_1 = new Node(node_00, Direction.WEST_DEPRECATED);
+		Node node_1_0 = new Node(node_1, Direction.EAST_DEPRECATED);
 		@SuppressWarnings("unused")
-		Node node_1_1 = new Node(node_1, Direction.EAST);
+		Node node_1_1 = new Node(node_1, Direction.EAST_DEPRECATED);
 
 		MockGame g = new MockGame();
 		g.setPositionValue(node_1_0.getMoves(), 0, 2);
@@ -160,18 +160,18 @@ public class DoubleDummySolverAlphaBetaPruningTest extends TestCase {
 	 */
 
 	public void testAlphaPruneWhenTrimming() {
-		Node root = new Node(null, Direction.WEST);
-		Node node_00 = new Node(root, Direction.WEST);
-		Node node_0 = new Node(node_00, Direction.NORTH);
+		Node root = new Node(null, Direction.WEST_DEPRECATED);
+		Node node_00 = new Node(root, Direction.WEST_DEPRECATED);
+		Node node_0 = new Node(node_00, Direction.NORTH_DEPRECATED);
 		node_0.setTricksTaken(Player.WEST_EAST, 1);
-		Node node_1 = new Node(node_00, Direction.NORTH);
+		Node node_1 = new Node(node_00, Direction.NORTH_DEPRECATED);
 		@SuppressWarnings("unused")
-		Node node_1_0 = new Node(node_1, Direction.WEST);
-		Node node_1_1 = new Node(node_1, Direction.WEST);
-		Node node_1_1_0 = new Node(node_1_1, Direction.WEST);
+		Node node_1_0 = new Node(node_1, Direction.WEST_DEPRECATED);
+		Node node_1_1 = new Node(node_1, Direction.WEST_DEPRECATED);
+		Node node_1_1_0 = new Node(node_1_1, Direction.WEST_DEPRECATED);
 		node_1_1_0.setLeaf(true);
 		node_1_1_0.setTricksTaken(Player.WEST_EAST, 0);
-		Node node_1_1_1 = new Node(node_1_1, Direction.WEST);
+		Node node_1_1_1 = new Node(node_1_1, Direction.WEST_DEPRECATED);
 
 		MockGame g = new MockGame();
 		g.setPositionValue(node_1_1_1.getMoves(), 1, 2);
@@ -196,17 +196,17 @@ public class DoubleDummySolverAlphaBetaPruningTest extends TestCase {
 	 */
 
 	public void testAlphaPruneToNearestAlphaAncestor() {
-		Node root = new Node(null, Direction.WEST);
-		Node node_00 = new Node(root, Direction.WEST);
-		Node node_0 = new Node(node_00, Direction.NORTH);
+		Node root = new Node(null, Direction.WEST_DEPRECATED);
+		Node node_00 = new Node(root, Direction.WEST_DEPRECATED);
+		Node node_0 = new Node(node_00, Direction.NORTH_DEPRECATED);
 		node_0.setTricksTaken(Player.WEST_EAST, 1);
 		node_0.setTricksTaken(Player.NORTH_SOUTH, 1);
-		Node node_1 = new Node(node_00, Direction.NORTH);
-		Node node_1_0 = new Node(node_1, Direction.NORTH);
+		Node node_1 = new Node(node_00, Direction.NORTH_DEPRECATED);
+		Node node_1_0 = new Node(node_1, Direction.NORTH_DEPRECATED);
 
-		Node node_1_0_0 = new Node(node_1_0, Direction.EAST);
+		Node node_1_0_0 = new Node(node_1_0, Direction.EAST_DEPRECATED);
 		@SuppressWarnings("unused")
-		Node node_1_0_1 = new Node(node_1_0, Direction.EAST);
+		Node node_1_0_1 = new Node(node_1_0, Direction.EAST_DEPRECATED);
 
 		MockGame g = new MockGame();
 		g.setPositionValue(node_1_0_0.getMoves(), 0, 2);
@@ -219,10 +219,10 @@ public class DoubleDummySolverAlphaBetaPruningTest extends TestCase {
 	}
 
 	public void testLocalAlphaGrows() {
-		Node root = new Node(null, Direction.WEST);
-		Node node_00 = new Node(root, Direction.WEST);
+		Node root = new Node(null, Direction.WEST_DEPRECATED);
+		Node node_00 = new Node(root, Direction.WEST_DEPRECATED);
 		Node node_0 = new Node(node_00);
-		node_0.setPlayerTurn(Direction.NORTH);
+		node_0.setPlayerTurn(Direction.NORTH_DEPRECATED);
 		node_0.setTricksTaken(Player.WEST_EAST, 1);
 		Node node_1 = new Node(node_00);
 		MockGame g = new MockGame();
@@ -245,14 +245,14 @@ public class DoubleDummySolverAlphaBetaPruningTest extends TestCase {
 	 */
 
 	public void testOneLevelBetaPrune() {
-		Node root = new Node(null, Direction.WEST);
-		Node node_0 = new Node(root, Direction.NORTH);
-		Node node_0_0 = new Node(node_0, Direction.EAST);
+		Node root = new Node(null, Direction.WEST_DEPRECATED);
+		Node node_0 = new Node(root, Direction.NORTH_DEPRECATED);
+		Node node_0_0 = new Node(node_0, Direction.EAST_DEPRECATED);
 		node_0_0.setTricksTaken(Player.WEST_EAST, 1);
-		Node node_0_1 = new Node(node_0, Direction.EAST);
-		Node node_0_1_0 = new Node(node_0_1, Direction.EAST);
+		Node node_0_1 = new Node(node_0, Direction.EAST_DEPRECATED);
+		Node node_0_1_0 = new Node(node_0_1, Direction.EAST_DEPRECATED);
 		@SuppressWarnings("unused")
-		Node node_0_1_1 = new Node(node_0_1, Direction.EAST);
+		Node node_0_1_1 = new Node(node_0_1, Direction.EAST_DEPRECATED);
 
 		MockGame g = new MockGame();
 		g.setPositionValue(node_0_1_0.getMoves(), 2, 0);
@@ -264,9 +264,9 @@ public class DoubleDummySolverAlphaBetaPruningTest extends TestCase {
 
 	public void testBetaGetsReduced() {
 		Node root = new Node(null);
-		root.setPlayerTurn(Direction.WEST);
+		root.setPlayerTurn(Direction.WEST_DEPRECATED);
 		Node node_0 = new Node(root);
-		node_0.setPlayerTurn(Direction.NORTH);
+		node_0.setPlayerTurn(Direction.NORTH_DEPRECATED);
 		Node child = new Node(node_0);
 		child.setTricksTaken(Player.WEST_EAST, 4);
 		Node grandchild = new Node(node_0);
@@ -280,9 +280,9 @@ public class DoubleDummySolverAlphaBetaPruningTest extends TestCase {
 
 	public void testUnvisitedNodeIgnoredInLocalBeta() {
 		Node root = new Node(null);
-		root.setPlayerTurn(Direction.WEST);
+		root.setPlayerTurn(Direction.WEST_DEPRECATED);
 		Node node_0 = new Node(root);
-		node_0.setPlayerTurn(Direction.NORTH);
+		node_0.setPlayerTurn(Direction.NORTH_DEPRECATED);
 		Node child = new Node(node_0);
 		child.setTricksTaken(Player.WEST_EAST, -1);
 		Node grandchild = new Node(node_0);
@@ -307,18 +307,18 @@ public class DoubleDummySolverAlphaBetaPruningTest extends TestCase {
 	 */
 
 	public void testBetaPruneWhenTrimming() {
-		Node root = new Node(null, Direction.WEST);
-		Node node_00 = new Node(root, Direction.NORTH);
-		Node node_0 = new Node(node_00, Direction.EAST);
+		Node root = new Node(null, Direction.WEST_DEPRECATED);
+		Node node_00 = new Node(root, Direction.NORTH_DEPRECATED);
+		Node node_0 = new Node(node_00, Direction.EAST_DEPRECATED);
 		node_0.setTricksTaken(Player.WEST_EAST, 0);
-		Node node_1 = new Node(node_00, Direction.EAST);
+		Node node_1 = new Node(node_00, Direction.EAST_DEPRECATED);
 		@SuppressWarnings("unused")
-		Node node_1_0 = new Node(node_1, Direction.SOUTH);
-		Node node_1_1 = new Node(node_1, Direction.SOUTH);
-		Node node_1_1_0 = new Node(node_1_1, Direction.SOUTH);
+		Node node_1_0 = new Node(node_1, Direction.SOUTH_DEPRECATED);
+		Node node_1_1 = new Node(node_1, Direction.SOUTH_DEPRECATED);
+		Node node_1_1_0 = new Node(node_1_1, Direction.SOUTH_DEPRECATED);
 		node_1_1_0.setLeaf(true);
 		node_1_1_0.setTricksTaken(Player.WEST_EAST, 1);
-		Node node_1_1_1 = new Node(node_1_1, Direction.SOUTH);
+		Node node_1_1_1 = new Node(node_1_1, Direction.SOUTH_DEPRECATED);
 
 		MockGame g = new MockGame();
 		g.setPositionValue(node_1_1_1.getMoves(), 2, 1);
@@ -341,19 +341,19 @@ public class DoubleDummySolverAlphaBetaPruningTest extends TestCase {
 	 */
 
 	public void testBetaPruneToNearestBetaAncestor() {
-		Node root = new Node(null, Direction.WEST);
-		Node node_00 = new Node(root, Direction.NORTH);
-		Node node_0 = new Node(node_00, Direction.EAST);
+		Node root = new Node(null, Direction.WEST_DEPRECATED);
+		Node node_00 = new Node(root, Direction.NORTH_DEPRECATED);
+		Node node_0 = new Node(node_00, Direction.EAST_DEPRECATED);
 		node_0.setTricksTaken(Player.WEST_EAST, 0);
 		node_0.setTricksTaken(Player.NORTH_SOUTH, 3);
 		node_0.trimmed = true;
-		Node node_1 = new Node(node_00, Direction.EAST);
+		Node node_1 = new Node(node_00, Direction.EAST_DEPRECATED);
 		@SuppressWarnings("unused")
-		Node node_1_0 = new Node(node_1, Direction.SOUTH);
-		Node node_1_1 = new Node(node_1, Direction.EAST);
-		Node node_1_1_0 = new Node(node_1_1, Direction.SOUTH);
+		Node node_1_0 = new Node(node_1, Direction.SOUTH_DEPRECATED);
+		Node node_1_1 = new Node(node_1, Direction.EAST_DEPRECATED);
+		Node node_1_1_0 = new Node(node_1_1, Direction.SOUTH_DEPRECATED);
 		node_1_1_0.setLeaf(true);
-		Node node_1_1_1 = new Node(node_1_1, Direction.SOUTH);
+		Node node_1_1_1 = new Node(node_1_1, Direction.SOUTH_DEPRECATED);
 
 		MockGame g = new MockGame();
 		g.setPositionValue(node_1_1_1.getMoves(), 2, 1);

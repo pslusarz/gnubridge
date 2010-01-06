@@ -16,7 +16,7 @@ public class GameUtils {
 	}
 
 	public static void initializeSingleColorSuits(Deal g, int cardCount) {
-		for (int i = Direction.WEST; i <= Direction.SOUTH; i++) {
+		for (int i = Direction.WEST_DEPRECATED; i <= Direction.SOUTH_DEPRECATED; i++) {
 			String[] spades = {};
 			String[] hearts = {};
 			String[] diamonds = {};
@@ -26,16 +26,16 @@ public class GameUtils {
 				currentHand[j] = Card.FullSuit[j];
 			}
 			switch (i) {
-			case Direction.WEST:
+			case Direction.WEST_DEPRECATED:
 				spades = currentHand;
 				break;
-			case Direction.NORTH:
+			case Direction.NORTH_DEPRECATED:
 				hearts = currentHand;
 				break;
-			case Direction.EAST:
+			case Direction.EAST_DEPRECATED:
 				diamonds = currentHand;
 				break;
-			case Direction.SOUTH:
+			case Direction.SOUTH_DEPRECATED:
 				clubs = currentHand;
 				break;
 			}

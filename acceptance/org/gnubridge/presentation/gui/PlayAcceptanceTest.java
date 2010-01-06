@@ -86,7 +86,8 @@ public class PlayAcceptanceTest extends TestCase {
 		Thread.sleep(300);
 		int score = new ScoreCalculator(
 				mainController.getBiddingController().getAuction().getHighBid(), 
-				mainController.getGameController().getGame().getTricksTaken(Player.NORTH_SOUTH)).getDeclarerScore();
+				mainController.getGameController().getGame().getTricksTaken(Player.NORTH_SOUTH),
+				false).getDeclarerScore();
 		System.out.println("Game finished. Declarers took "
 				+ mainController.getGameController().getGame().getTricksTaken(Player.NORTH_SOUTH) + " tricks. Score: " + score);
 
@@ -107,7 +108,8 @@ public class PlayAcceptanceTest extends TestCase {
 		playGameToTheEnd(mainController);
 		score = new ScoreCalculator(
 				mainController.getBiddingController().getAuction().getHighBid(), 
-				mainController.getGameController().getGame().getTricksTaken(Player.NORTH_SOUTH)).getDefenderScore();
+				mainController.getGameController().getGame().getTricksTaken(Player.NORTH_SOUTH),
+				false).getDefenderScore();
 		
 		System.out.println("Running Human Score: " + mainController.getRunningHumanScore());
 		System.out.println("Running Computer Score: " + mainController.getRunningComputerScore());

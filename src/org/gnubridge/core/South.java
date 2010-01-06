@@ -15,6 +15,6 @@ public class South extends Direction {
     
 	@Override
 	public int getValue() {
-		return Direction.SOUTH;
+		return Direction.SOUTH_DEPRECATED;
 	}
 }

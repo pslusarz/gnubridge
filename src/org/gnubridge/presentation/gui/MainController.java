@@ -1,14 +1,12 @@
 package org.gnubridge.presentation.gui;
 
-import org.gnubridge.core.Direction;
-import org.gnubridge.core.East;
 import org.gnubridge.core.Deal;
+import org.gnubridge.core.East;
 import org.gnubridge.core.North;
 import org.gnubridge.core.Player;
 import org.gnubridge.core.South;
 import org.gnubridge.core.West;
 import org.gnubridge.core.bidding.Auctioneer;
-import org.gnubridge.core.bidding.ScoreCalculator;
 
 public class MainController {
 
@@ -16,10 +14,10 @@ public class MainController {
 	private BiddingController biddingController;
 	private DealController gameController;
 
-	private int runningHumanScore;
-	private int runningComputerScore;
+	private final ScoringTracker scoringTracker;
 
 	public MainController() {
+		scoringTracker = new ScoringTracker();
 		newGame();
 	}
 
@@ -27,7 +25,9 @@ public class MainController {
 		setGameController(new DealController(this, getBiddingController().getAuction().getHighBid(),
 				repositionHandsSoThatSouthIsDeclarer(getBiddingController().getAuction(), getBiddingController()
 						.getCardHolder()), getBiddingController().allowHumanToPlayIfDummy(), view.getPlayView()));
-		view.getPlayView().displayScore("Human: " + runningHumanScore + ", Computer: " + runningComputerScore);
+		view.getPlayView().displayScore(
+				"Human: " + scoringTracker.getRunningHumanScore() + ", Computer: "
+						+ scoringTracker.getRunningComputerScore());
 	}
 
 	private Deal repositionHandsSoThatSouthIsDeclarer(Auctioneer a, Deal cardHolder) {
@@ -42,27 +42,19 @@ public class MainController {
 
 	public void gameFinished() {
 		int declarerTricksTaken = getGameController().getGame().getTricksTaken(Player.NORTH_SOUTH);
-		ScoreCalculator calculator = new ScoreCalculator(
-				getBiddingController().getAuction().getHighBid(), 
-				declarerTricksTaken);
+
+		scoringTracker.processFinishedGame(gameController.getHuman().getValue(), getBiddingController().getAuction()
+				.getHighBid(), declarerTricksTaken);
+
 		view.getPlayView().display(
 				"GAME FINISHED. Contract was: " + getBiddingController().getAuction().getHighBid()
 						+ ", declarers took " + declarerTricksTaken + " tricks.");
-		if (gameController.getHuman().getValue() == Direction.NORTH ||
-				gameController.getHuman().getValue() == Direction.SOUTH) {
-			runningHumanScore += calculator.getDeclarerScore();
-			runningComputerScore += calculator.getDefenderScore();
-		}
-		else {
-			runningHumanScore += calculator.getDefenderScore();
-			runningComputerScore += calculator.getDeclarerScore();
-		}
-		
-		view.getPlayView().displayScore("North/South: +" + 
-				calculator.getDeclarerScore() +
-				" points, East/West: +" +  
-				calculator.getDefenderScore() + " points (Human: " + runningHumanScore + ", " 
-				+ "Computer: " + runningComputerScore + ")");
+
+		view.getPlayView().displayScore(
+				"North/South: +" + scoringTracker.getLatestDeclarerScoreChange() + " points, East/West: +"
+						+ scoringTracker.getLatestDefenderScoreChange() + " points (Human: "
+						+ scoringTracker.getRunningHumanScore() + ", " + "Computer: "
+						+ scoringTracker.getRunningComputerScore() + ")");
 	}
 
 	public void setBiddingController(BiddingController biddingController) {
@@ -80,13 +72,13 @@ public class MainController {
 	public DealController getGameController() {
 		return gameController;
 	}
-	
+
 	public int getRunningHumanScore() {
-		return runningHumanScore;
+		return scoringTracker.getRunningHumanScore();
 	}
-	
+
 	public int getRunningComputerScore() {
-		return runningComputerScore;
+		return scoringTracker.getRunningComputerScore();
 	}
 
 	public void newGame() {
@@ -94,8 +86,13 @@ public class MainController {
 			view.hide();
 		}
 		this.view = ViewFactory.getMainView();
+
+		view.getBiddingView().setVulnerability(scoringTracker.nextRound());
+
 		setBiddingController(new BiddingController(view.getBiddingView(), this));
 		view.show();
+		view.getBiddingView().displayScore(
+				"Us: " + scoringTracker.getRunningHumanScore() + ", Them: " + scoringTracker.getRunningComputerScore());
 	}
 
 }

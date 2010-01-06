@@ -119,7 +119,7 @@ public class DoubleDummySolverScenarioAcceptanceTest extends TestCase {
 		game.getNorth().init(Four.of(Spades.i()), Five.of(Diamonds.i()), Three.of(Spades.i()));
 		game.getEast().init(Queen.of(Diamonds.i()), Five.of(Spades.i()), King.of(Spades.i()));
 		game.getSouth().init(Queen.of(Spades.i()), Nine.of(Diamonds.i()), Two.of(Spades.i()));
-		game.setNextToPlay(Direction.WEST);
+		game.setNextToPlay(Direction.WEST_DEPRECATED);
 		game.play(Seven.of(Spades.i()));
 		game.play(Four.of(Spades.i()));
 		DoubleDummySolver search = new DoubleDummySolver(game);

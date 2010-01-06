@@ -1,5 +1,7 @@
 package org.gnubridge.core.bidding;
 
+import static org.gnubridge.core.bidding.Bid.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,7 +12,6 @@ import org.gnubridge.core.South;
 import org.gnubridge.core.West;
 
 public class Auctioneer {
-	// Player[] players = { West.i(), North.i(), East.i(), South.i() };
 	private Direction nextToBid;
 	private int passCount;
 	private Bid highBid;
@@ -97,7 +98,11 @@ public class Auctioneer {
 	public boolean isValid(Bid candidate) {
 		boolean result = false;
 		if (candidate != null) {
-			if (candidate.equals(new Pass()) || candidate.greaterThan(getHighBid())) {
+			if (candidate.equals(DOUBLE)) {
+				if (getHighCall() != null) {
+					return true;
+				}
+			} else if (candidate.equals(new Pass()) || candidate.greaterThan(getHighBid())) {
 				result = true;
 			}
 		}

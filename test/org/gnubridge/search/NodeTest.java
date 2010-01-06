@@ -47,17 +47,17 @@ public class NodeTest extends TestCase {
 
 	public void testIsAlpha() {
 		Node root = new Node(null);
-		root.setPlayerTurn(Direction.WEST);
+		root.setPlayerTurn(Direction.WEST_DEPRECATED);
 		Node n_1 = new Node(root);
-		n_1.setPlayerTurn(Direction.NORTH);
+		n_1.setPlayerTurn(Direction.NORTH_DEPRECATED);
 		Node n_1_1 = new Node(n_1);
-		n_1_1.setPlayerTurn(Direction.EAST);
+		n_1_1.setPlayerTurn(Direction.EAST_DEPRECATED);
 		Node n_1_1_1 = new Node(n_1_1);
-		n_1_1_1.setPlayerTurn(Direction.SOUTH);
+		n_1_1_1.setPlayerTurn(Direction.SOUTH_DEPRECATED);
 		Node n_1_1_1_1 = new Node(n_1_1_1);
-		n_1_1_1_1.setPlayerTurn(Direction.SOUTH);
+		n_1_1_1_1.setPlayerTurn(Direction.SOUTH_DEPRECATED);
 		Node n_1_1_1_2 = new Node(n_1_1_1);
-		n_1_1_1_2.setPlayerTurn(Direction.EAST);
+		n_1_1_1_2.setPlayerTurn(Direction.EAST_DEPRECATED);
 		assertTrue(root.isAlpha());
 		assertFalse(n_1.isAlpha());
 		assertTrue(n_1_1.isAlpha());

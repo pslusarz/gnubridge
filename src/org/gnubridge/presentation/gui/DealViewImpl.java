@@ -54,7 +54,7 @@ public class DealViewImpl implements DealView, CardPanelHost, ActionListener {
 	}
 
 	private void addNewGameButton() {
-		newGameButton = new JButton("New game...");
+		newGameButton = new JButton("New Game...");
 		newGameButton.setActionCommand("newGame");
 		newGameButton.addActionListener(this);
 		panel.add(newGameButton);

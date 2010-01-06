@@ -170,12 +170,12 @@ public class Player {
 	public static int matchPair(int player) {
 		int result;
 		switch (player) {
-		case Direction.WEST:
-		case Direction.EAST:
+		case Direction.WEST_DEPRECATED:
+		case Direction.EAST_DEPRECATED:
 			result = Player.WEST_EAST;
 			break;
-		case Direction.NORTH:
-		case Direction.SOUTH:
+		case Direction.NORTH_DEPRECATED:
+		case Direction.SOUTH_DEPRECATED:
 			result = Player.NORTH_SOUTH;
 			break;
 		default:

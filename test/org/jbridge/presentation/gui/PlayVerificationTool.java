@@ -45,7 +45,7 @@ public class PlayVerificationTool {
 		game.getNorth().init(new Hand("3", "", "", ""));
 		game.getEast().init(new Hand("A", "", "", ""));
 		game.getSouth().init(new Hand("", "", "", "3"));
-		game.setNextToPlay(Direction.EAST);
+		game.setNextToPlay(Direction.EAST_DEPRECATED);
 		return game;
 	}
 }

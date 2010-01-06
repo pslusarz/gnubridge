@@ -2,10 +2,15 @@ package org.gnubridge.core;
 
 public abstract class Direction {
 
-	public static final int WEST = 0;
-	public static final int NORTH = 1;
-	public static final int EAST = 2;
-	public static final int SOUTH = 3;
+	public static final int WEST_DEPRECATED = 0;
+	public static final int NORTH_DEPRECATED = 1;
+	public static final int EAST_DEPRECATED = 2;
+	public static final int SOUTH_DEPRECATED = 3;
+
+	public static final Direction WEST = West.i();
+	public static final Direction NORTH = North.i();
+	public static final Direction EAST = East.i();
+	public static final Direction SOUTH = South.i();
 
 	public abstract int getValue();
 
@@ -26,13 +31,13 @@ public abstract class Direction {
 	@Override
 	public String toString() {
 		switch (getValue()) {
-		case WEST:
+		case WEST_DEPRECATED:
 			return "West";
-		case NORTH:
+		case NORTH_DEPRECATED:
 			return "North";
-		case EAST:
+		case EAST_DEPRECATED:
 			return "East";
-		case SOUTH:
+		case SOUTH_DEPRECATED:
 			return "South";
 		default:
 			throw new RuntimeException("Uninitialized direction");
@@ -45,13 +50,13 @@ public abstract class Direction {
 
 	private static Direction clockwise(int value) {
 		switch (value) {
-		case WEST:
+		case WEST_DEPRECATED:
 			return North.i();
-		case NORTH:
+		case NORTH_DEPRECATED:
 			return East.i();
-		case EAST:
+		case EAST_DEPRECATED:
 			return South.i();
-		case SOUTH:
+		case SOUTH_DEPRECATED:
 			return West.i();
 		default:
 			throw new RuntimeException("Uninitialized direction");
