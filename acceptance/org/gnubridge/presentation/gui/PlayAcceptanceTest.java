@@ -77,6 +77,7 @@ public class PlayAcceptanceTest extends TestCase {
 		assertEquals(TRICKS_PER_DEAL, mainController.getGameController().getGame().getTricksTaken(Player.NORTH_SOUTH));
 	}
 
+	//FIXME: this test needs to change into main controller test with mocks
 	public void testRunningScoreEndToEnd() throws InterruptedException, InvocationTargetException {
 		preInitializeGame13Tricks();
 		MainController mainController = makeController();
