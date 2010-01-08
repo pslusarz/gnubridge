@@ -2,8 +2,9 @@ package org.gnubridge.core.deck;
 
 public abstract class Suit extends Trump {
 
-	public static final Suit[] list = { SPADES, HEARTS, DIAMONDS, CLUBS };
-	public static final Suit[] reverseList = { CLUBS, DIAMONDS, HEARTS, SPADES };
+	//note, DO NOT USE statics from Trump here, ie SPADES instead of Spades.i()
+	public static final Suit[] list = { Spades.i(), Hearts.i(), Diamonds.i(), Clubs.i() };
+	public static final Suit[] reverseList = { Clubs.i(), Diamonds.i(), Hearts.i(), Spades.i(), };
 
 	public static int getIndex(Suit denomination) {
 		int result = -1;
