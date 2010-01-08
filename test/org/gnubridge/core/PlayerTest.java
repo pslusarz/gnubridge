@@ -6,7 +6,7 @@ import junit.framework.TestCase;
 
 import org.gnubridge.core.deck.Ace;
 import org.gnubridge.core.deck.Clubs;
-import org.gnubridge.core.deck.Color;
+import org.gnubridge.core.deck.Suit;
 import org.gnubridge.core.deck.Diamonds;
 import org.gnubridge.core.deck.Hearts;
 import org.gnubridge.core.deck.Jack;
@@ -31,9 +31,9 @@ public class PlayerTest extends TestCase {
 			assertTrue(west.hasUnplayedCard(new Card(westSpades[i], Spades.i())));
 		}
 
-		for (int j = 1; j < Color.list.length; j++) {
+		for (int j = 1; j < Suit.list.length; j++) {
 			for (int i = 0; i < Card.FullSuit.length; i++) {
-				assertFalse(west.hasUnplayedCard(new Card(Card.FullSuit[i], Color.list[j])));
+				assertFalse(west.hasUnplayedCard(new Card(Card.FullSuit[i], Suit.list[j])));
 			}
 		}
 

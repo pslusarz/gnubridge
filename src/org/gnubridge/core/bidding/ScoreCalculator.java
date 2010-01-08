@@ -11,11 +11,13 @@ public class ScoreCalculator {
 	private int defenderPoints;
 	private int declarerPoints;
 
-	public ScoreCalculator(Bid highBid, int tricksTakenByDeclarers, boolean isDeclarerVulnerable) {
-		calculateScore(highBid, tricksTakenByDeclarers, isDeclarerVulnerable);
+	public ScoreCalculator(Bid highBid, int tricksTakenByDeclarers, boolean isDeclarerVulnerable, 
+			boolean isDefenderVulnerable) {
+		calculateScore(highBid, tricksTakenByDeclarers, isDeclarerVulnerable, isDefenderVulnerable);
 	}
 
-	public void calculateScore(Bid highBid, int tricksTakenByDeclarers, boolean isDeclarerVulnerable) {
+	public void calculateScore(Bid highBid, int tricksTakenByDeclarers, boolean isDeclarerVulnerable,
+			boolean isDefenderVulnerable) {
 		int bidValue = highBid.getValue();
 		int numberTricksNeededByDeclarer = bidValue + 6;
 		

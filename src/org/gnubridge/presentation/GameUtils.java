@@ -7,7 +7,7 @@ import org.gnubridge.core.Card;
 import org.gnubridge.core.Direction;
 import org.gnubridge.core.Deal;
 import org.gnubridge.core.Player;
-import org.gnubridge.core.deck.Color;
+import org.gnubridge.core.deck.Suit;
 
 public class GameUtils {
 	public static void initializeSingleColorSuits(Deal g) {
@@ -72,7 +72,7 @@ public class GameUtils {
 	public static List<Card> buildDeck() {
 		List<Card> result = new ArrayList<Card>();
 		for (String value : Card.FullSuit) {
-			for(Color denomination : Color.list) {
+			for(Suit denomination : Suit.list) {
 			  result.add(new Card(value, denomination));	
 			}
 		}

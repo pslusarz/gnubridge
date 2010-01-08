@@ -18,7 +18,7 @@ public class Rebid1ColorOriginalSuit extends RebidToLevel1Response {
 
 	@Override
 	protected Bid prepareBid() {
-		if (hand.getColorLength(opening.getTrump().asSuit()) >= 6) {
+		if (hand.getSuitLength(opening.getTrump().asSuit()) >= 6) {
 			int combinedPoints = new PointCalculator(hand).getCombinedPoints();
 			if (combinedPoints <= 15) {
 				return new Bid(2, opening.getTrump());
@@ -27,7 +27,7 @@ public class Rebid1ColorOriginalSuit extends RebidToLevel1Response {
 				return new Bid(3, opening.getTrump());
 
 			}
-			if (combinedPoints >= 19 && hand.getColorLength(opening.getTrump().asSuit()) >= 7) {
+			if (combinedPoints >= 19 && hand.getSuitLength(opening.getTrump().asSuit()) >= 7) {
 				return new Bid(4, opening.getTrump());
 			}
 		}

@@ -9,7 +9,7 @@ import org.gnubridge.core.Card;
  * 
  */
 public class Ace {
-	public static Card of(Color denomination) {
+	public static Card of(Suit denomination) {
 		return new Card("A", denomination);
 	}
 

@@ -103,8 +103,8 @@ public class BiddingViewImpl implements ActionListener, BiddingView {
 
 	}
 	
-	public void setVulnerability (boolean isVulnerable) {
-		biddingDisplay.setVulnerability(isVulnerable);
+	public void setVulnerability (String vulnerabilityMessage) {
+		biddingDisplay.setVulnerability(vulnerabilityMessage);
 	}
 	
 

@@ -3,7 +3,7 @@ package org.gnubridge.core;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.gnubridge.core.deck.Color;
+import org.gnubridge.core.deck.Suit;
 import org.gnubridge.core.deck.Trump;
 
 public class Trick {
@@ -54,7 +54,7 @@ public class Trick {
 		this.trump = trump;
 	}
 
-	public Color getDenomination() {
+	public Suit getDenomination() {
 		if (cards.size() > 0) {
 			return cards.get(0).getDenomination();
 		} else {

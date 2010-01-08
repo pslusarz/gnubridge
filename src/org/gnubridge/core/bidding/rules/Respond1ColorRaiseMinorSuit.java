@@ -20,7 +20,7 @@ public class Respond1ColorRaiseMinorSuit extends Response {
 			calculator = new ResponseCalculator(hand, partnersOpeningBid);
 			if (partnersOpeningBid.getTrump().isMinorSuit() && partnersOpeningBid.getValue() == 1
 					&& calculator.getCombinedPoints() >= 6
-					&& hand.getColorLength(partnersOpeningBid.getTrump().asSuit()) >= 4) {
+					&& hand.getSuitLength(partnersOpeningBid.getTrump().asSuit()) >= 4) {
 				result = true;
 			}
 		}

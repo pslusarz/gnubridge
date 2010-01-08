@@ -1,7 +1,7 @@
 package org.gnubridge.core.deck;
 
 
-public class Hearts extends Color {
+public class Hearts extends Suit {
 
 	private static Hearts instance;
 

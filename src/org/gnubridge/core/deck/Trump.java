@@ -2,11 +2,11 @@ package org.gnubridge.core.deck;
 
 public abstract class Trump {
 
-	public static Trump CLUBS = Clubs.i();
-	public static Trump DIAMONDS = Diamonds.i();
-	public static Trump HEARTS = Hearts.i();
-	public static Trump SPADES = Spades.i();
-	public static Trump NOTRUMP = NoTrump.i();
+	public static final Suit CLUBS = Clubs.i();
+	public static final Suit DIAMONDS = Diamonds.i();
+	public static final Suit HEARTS = Hearts.i();
+	public static final Suit SPADES = Spades.i();
+	public static final Trump NOTRUMP = NoTrump.i();
 
 	@Override
 	public abstract String toString();
@@ -33,9 +33,9 @@ public abstract class Trump {
 		return Spades.i().equals(this) || Hearts.i().equals(this);
 	}
 
-	public Color asSuit() {
-		if (this instanceof Color) {
-			return (Color) this;
+	public Suit asSuit() {
+		if (this instanceof Suit) {
+			return (Suit) this;
 		} else {
 			throw new RuntimeException("Trying to treat " + this + " as suit.");
 		}

@@ -1,7 +1,7 @@
 package org.gnubridge.core.deck;
 
 
-public class Diamonds extends Color {
+public class Diamonds extends Suit {
 
 	private static Diamonds instance;
 

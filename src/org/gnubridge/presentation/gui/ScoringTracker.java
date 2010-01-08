@@ -15,8 +15,9 @@ public class ScoringTracker {
 
 	private int runningHumanScore;
 	private int runningComputerScore;
-	private boolean isVulnerable;
-
+	private boolean isHumanVulnerable;
+	private boolean isComputerVulnerable;
+	
 	private final Random randomSeed;
 
 	public ScoringTracker() {
@@ -29,14 +30,18 @@ public class ScoringTracker {
 	public void processFinishedGame(int directionOfHuman, Bid highBid, int declarerTricksTaken) {
 		boolean humansAreDeclarers = false;
 		boolean declarersAreVulnerable = false;
+		boolean defendersAreVulnerable = false;
 		if (directionOfHuman == Direction.NORTH_DEPRECATED || directionOfHuman == Direction.SOUTH_DEPRECATED) {
 			humansAreDeclarers = true;
-			declarersAreVulnerable = isVulnerable;
+			declarersAreVulnerable = isHumanVulnerable;
+			defendersAreVulnerable = isComputerVulnerable;
 		} else {
-			declarersAreVulnerable = !isVulnerable;
+			declarersAreVulnerable = isComputerVulnerable;
+			defendersAreVulnerable = isHumanVulnerable;
 		}
 
-		ScoreCalculator calculator = new ScoreCalculator(highBid, declarerTricksTaken, declarersAreVulnerable);
+		ScoreCalculator calculator = new ScoreCalculator(highBid, declarerTricksTaken, declarersAreVulnerable, 
+				defendersAreVulnerable);
 
 		latestDeclarerScoreChange = calculator.getDeclarerScore();
 		latestDefenderScoreChange = calculator.getDefenderScore();
@@ -51,13 +56,32 @@ public class ScoringTracker {
 	}
 
 	/* Starts the next, determines the vulnerability and returns it */
-	public boolean nextRound() {
+	public String nextRound() {
 
 		/* Is the human going to be vulnerable? Like in Duplicate Bridge, 
 		 * this is randomly determined.
 		 */
-		isVulnerable = randomSeed.nextBoolean();
-		return isVulnerable;
+		isHumanVulnerable = randomSeed.nextBoolean();
+		isComputerVulnerable = randomSeed.nextBoolean();
+		return toString();
+	}
+	
+	/* toString for vulnerability */
+	public String toString() {
+		String str = "";
+		if (isHumanVulnerable) {
+			str += "Us: Vulnerable, Them: ";
+		}
+		else {
+			str += "Us: Not Vulnerable, Them: ";
+		}
+		if (isComputerVulnerable) {
+			str += "Vulnerable";
+		}
+		else {
+			str += "Not Vulnerable";
+		}
+		return str;
 	}
 
 	public int getLatestDeclarerScoreChange() {
@@ -76,7 +100,11 @@ public class ScoringTracker {
 		return runningComputerScore;
 	}
 
-	public boolean isVulnerable() {
-		return isVulnerable;
+	public boolean isHumanVulnerable() {
+		return isHumanVulnerable;
+	}
+	
+	public boolean isComputerVulnerable() {
+		return isComputerVulnerable;
 	}
 }

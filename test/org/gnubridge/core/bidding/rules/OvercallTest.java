@@ -1,9 +1,6 @@
 package org.gnubridge.core.bidding.rules;
 
-import static org.gnubridge.core.bidding.Bid.ONE_CLUBS;
-import static org.gnubridge.core.bidding.Bid.ONE_DIAMONDS;
-import static org.gnubridge.core.bidding.Bid.ONE_HEARTS;
-import static org.gnubridge.core.bidding.Bid.PASS;
+import static org.gnubridge.core.bidding.Bid.*;
 import junit.framework.TestCase;
 
 import org.gnubridge.core.Hand;
@@ -61,6 +58,7 @@ public class OvercallTest extends TestCase {
 		Overcall rule = new Overcall(a, ONE_DIAMONDS_OVERCALL_HAND);
 		assertEquals(ONE_DIAMONDS, rule.getBid());
 	}
+
 	//  next test to make pass
 	//	public void testPickAMoreViableColor() {
 	//		Auctioneer a = new Auctioneer(West.i());

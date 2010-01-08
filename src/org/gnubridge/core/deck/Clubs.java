@@ -1,7 +1,7 @@
 package org.gnubridge.core.deck;
 
 
-public class Clubs extends Color {
+public class Clubs extends Suit {
 
 	private static Clubs instance; 
 

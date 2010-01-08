@@ -10,7 +10,7 @@ import org.gnubridge.core.Hand;
 import org.gnubridge.core.North;
 import org.gnubridge.core.South;
 import org.gnubridge.core.West;
-import org.gnubridge.core.deck.Color;
+import org.gnubridge.core.deck.Suit;
 
 public class OneColumnPerColor extends HandDisplay {
 
@@ -25,9 +25,9 @@ public class OneColumnPerColor extends HandDisplay {
 		dispose(cards);
 		Hand hand = new Hand(game.getPlayer(player).getHand());
 		Point upperLeft = calculateUpperLeft(human, player);
-		for (Color color : Color.list) {
+		for (Suit color : Suit.list) {
 			int j = 0;
-			for (Card card : hand.getColorHi2Low(color)) {
+			for (Card card : hand.getSuitHi2Low(color)) {
 				CardPanel cardPanel = new CardPanel(card);
 				cards.add(cardPanel);
 				if (human.equals(South.i())) {

@@ -29,7 +29,7 @@ public class Rebid1ColorRaisePartner extends RebidToLevel1Response {
 	}
 
 	private int getTrumpCount() {
-		return hand.getColorLength(response.getTrump().asSuit());
+		return hand.getSuitLength(response.getTrump().asSuit());
 	}
 
 }

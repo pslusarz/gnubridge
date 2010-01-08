@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import org.gnubridge.core.deck.Color;
+import org.gnubridge.core.deck.Suit;
 
 public class Hand {
 	List<Card> cards;
@@ -15,7 +15,7 @@ public class Hand {
 	 * and perhaps others
 	 */
 	List<Card> orderedCards;
-	Color color;
+	Suit color;
 	List<Card> colorInOrder;
 
 	public Hand() {
@@ -38,7 +38,7 @@ public class Hand {
 		this();
 		int i = 0;
 		for (String colorSuit : colorSuits) {
-			cards.addAll(createCards(colorSuit, Color.list[i]));
+			cards.addAll(createCards(colorSuit, Suit.list[i]));
 			i++;
 		}
 
@@ -53,7 +53,7 @@ public class Hand {
 
 	}
 
-	private Collection<? extends Card> createCards(String colorSuit, Color color) {
+	private Collection<? extends Card> createCards(String colorSuit, Suit color) {
 		List<Card> results = new ArrayList<Card>();
 		if (!"".equals(colorSuit.trim())) {
 
@@ -65,18 +65,18 @@ public class Hand {
 		return results;
 	}
 
-	public List<Card> getColorHi2Low(Color color) {
-		if (color.equals(this.color) && colorInOrder != null) {
+	public List<Card> getSuitHi2Low(Suit suit) {
+		if (suit.equals(this.color) && colorInOrder != null) {
 			return colorInOrder;
 		}
 		List<Card> result = new ArrayList<Card>();
 		for (Card card : cards) {
-			if (card.getDenomination().equals(color)) {
+			if (card.getDenomination().equals(suit)) {
 				insertInOrder(result, card);
 
 			}
 		}
-		this.color = color;
+		this.color = suit;
 		colorInOrder = result;
 		return result;
 	}
@@ -102,8 +102,8 @@ public class Hand {
 
 	}
 
-	public int getColorLength(Color color) {
-		return getColorHi2Low(color).size();
+	public int getSuitLength(Suit suit) {
+		return getSuitHi2Low(suit).size();
 	}
 
 	public List<Card> getCardsHighToLow() {
@@ -113,20 +113,20 @@ public class Hand {
 			return copyOfOrderedCards;
 		}
 		List<Card> orderedCards = new ArrayList<Card>();
-		for (Color color : Color.list) {
-			orderedCards.addAll(getColorHi2Low(color));
+		for (Suit color : Suit.list) {
+			orderedCards.addAll(getSuitHi2Low(color));
 		}
 		this.orderedCards = orderedCards;
 		return getCardsHighToLow();
 	}
 
-	public Color getLongestSuit() {
+	public Suit getLongestSuit() {
 		int longest = 0;
-		Color result = null;
-		for (Color color : Color.list) {
-			if (longest < getColorLength(color)) {
-				longest = getColorLength(color);
-				result = color;
+		Suit result = null;
+		for (Suit suit : Suit.list) {
+			if (longest < getSuitLength(suit)) {
+				longest = getSuitLength(suit);
+				result = suit;
 			}
 		}
 		return result;
@@ -134,9 +134,9 @@ public class Hand {
 
 	public int getLongestColorLength() {
 		int result = 0;
-		for (Color color : Color.list) {
-			if (result < getColorLength(color)) {
-				result = getColorLength(color);
+		for (Suit color : Suit.list) {
+			if (result < getSuitLength(color)) {
+				result = getSuitLength(color);
 			}
 		}
 		return result;
@@ -156,8 +156,8 @@ public class Hand {
 
 	public boolean matchesSuitLengthsLongToShort(int suitLength1, int suitLength2, int suitLength3, int suitLength4) {
 		List<Integer> suitLengths = new ArrayList<Integer>();
-		for (Color color : Color.list) {
-			suitLengths.add(getColorLength(color));
+		for (Suit color : Suit.list) {
+			suitLengths.add(getSuitLength(color));
 		}
 		Collections.sort(suitLengths);
 		Collections.reverse(suitLengths);
@@ -167,6 +167,16 @@ public class Hand {
 		} else {
 			return false;
 		}
+	}
+
+	public List<Suit> getSuitsWithAtLeastCards(int minimumSuitLength) {
+		List<Suit> results = new ArrayList<Suit>();
+		for (Suit suit : Suit.list) {
+			if (getSuitLength(suit) >= minimumSuitLength) {
+				results.add(suit);
+			}
+		}
+		return results;
 	}
 
 }

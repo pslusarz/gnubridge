@@ -54,7 +54,7 @@ public class MockBiddingView implements BiddingView {
 	}
 
 	@Override
-	public void setVulnerability (boolean isVulnerable) {
+	public void setVulnerability (String vulnerabilityMessage) {
 		// TODO Auto-generated method stub
 	}
 }

@@ -26,7 +26,7 @@ public class MainController {
 				repositionHandsSoThatSouthIsDeclarer(getBiddingController().getAuction(), getBiddingController()
 						.getCardHolder()), getBiddingController().allowHumanToPlayIfDummy(), view.getPlayView()));
 		view.getPlayView().displayScore(
-				"Human: " + scoringTracker.getRunningHumanScore() + ", Computer: "
+				"Us: " + scoringTracker.getRunningHumanScore() + ", Them: "
 						+ scoringTracker.getRunningComputerScore());
 	}
 

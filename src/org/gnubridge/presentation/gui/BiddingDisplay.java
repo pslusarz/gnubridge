@@ -21,7 +21,7 @@ public class BiddingDisplay {
 	protected JPanel panel;
 	protected String message = "";
 	protected String scoreMessage = "";
-	protected boolean isVulnerable;
+	protected String vulnerabilityMessage;
 	private JButton newGameButton;
 
 	public BiddingDisplay(BiddingViewImpl pv) {
@@ -68,8 +68,8 @@ public class BiddingDisplay {
 		}
 	}
 	
-	public void setVulnerability(boolean vulnerable) {
-		isVulnerable = vulnerable;
+	public void setVulnerability(String vulnerabilityMessage) {
+		this.vulnerabilityMessage = vulnerabilityMessage ;
 	}
 
 	private int getTopOfCards() {
@@ -101,12 +101,7 @@ public class BiddingDisplay {
 				int top = 15;
 				int rowHeight = 15;
 
-				if (isVulnerable) {
-					g.drawString("You are vulnerable!", getColumnForDirection(0), top + rowHeight * 18);
-				}
-				else {
-					g.drawString("You are not vulnerable.", getColumnForDirection(0), top + rowHeight * 18);
-				}
+				g.drawString(vulnerabilityMessage, getColumnForDirection(0), top + rowHeight * 18);
 				
 				g.drawString(scoreMessage, getColumnForDirection(0) + 5, top + rowHeight * 19 + 5);
 				

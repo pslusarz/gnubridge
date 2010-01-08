@@ -1,7 +1,7 @@
 package org.gnubridge.core.deck;
 
 
-public class Spades extends Color {
+public class Spades extends Suit {
 
 	private static Spades instance;
 

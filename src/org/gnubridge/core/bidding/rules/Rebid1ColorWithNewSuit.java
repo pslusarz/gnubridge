@@ -4,11 +4,11 @@ import org.gnubridge.core.Hand;
 import org.gnubridge.core.bidding.Auctioneer;
 import org.gnubridge.core.bidding.Bid;
 import org.gnubridge.core.bidding.PointCalculator;
-import org.gnubridge.core.deck.Color;
+import org.gnubridge.core.deck.Suit;
 
 public class Rebid1ColorWithNewSuit extends RebidToLevel1Response {
 
-	private Color unbidSuit;
+	private Suit unbidSuit;
 
 	public Rebid1ColorWithNewSuit(Auctioneer a, Hand h) {
 		super(a, h);
@@ -47,7 +47,7 @@ public class Rebid1ColorWithNewSuit extends RebidToLevel1Response {
 		return null;
 	}
 
-	private int getMinimumBidInSuit(Color suit) {
+	private int getMinimumBidInSuit(Suit suit) {
 		if (auction.isValid(new Bid(1, suit))) {
 			return 1;
 		} else {
@@ -55,16 +55,16 @@ public class Rebid1ColorWithNewSuit extends RebidToLevel1Response {
 		}
 	}
 
-	private Color getUnbidSuitWithAtLeast4Cards() {
-		for (Color color : Color.list) {
-			if (hand.getColorLength(color) >= 4 && hasNotBeenBid(color)) {
+	private Suit getUnbidSuitWithAtLeast4Cards() {
+		for (Suit color : Suit.list) {
+			if (hand.getSuitLength(color) >= 4 && hasNotBeenBid(color)) {
 				return color;
 			}
 		}
 		return null;
 	}
 
-	private boolean hasNotBeenBid(Color suit) {
+	private boolean hasNotBeenBid(Suit suit) {
 		return !suit.equals(response.getTrump()) && !suit.equals(opening.getTrump());
 	}
 

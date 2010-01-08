@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.gnubridge.core.deck.Color;
+import org.gnubridge.core.deck.Suit;
 
 public class Player {
 
@@ -45,7 +45,7 @@ public class Player {
 		for (int i = 0; i < valueSuits.length; i++) {
 			String[] values = valueSuits[i];
 			for (int j = 0; j < values.length; j++) {
-				hand.add(new Card(values[j], Color.list[i]));
+				hand.add(new Card(values[j], Suit.list[i]));
 
 			}
 		}

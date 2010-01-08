@@ -1,6 +1,6 @@
 package org.gnubridge.core;
 
-import org.gnubridge.core.deck.Color;
+import org.gnubridge.core.deck.Suit;
 import org.gnubridge.core.deck.Trump;
 
 public class Card {
@@ -37,14 +37,14 @@ public class Card {
 
 	private int value;
 
-	private Color denomination;
+	private Suit denomination;
 
-	public Card(int value, Color d) {
+	public Card(int value, Suit d) {
 		this.value = value;
 		this.denomination = d;
 	}
 
-	public Card(String value, Color d) {
+	public Card(String value, Suit d) {
 		this(strToIntValue(value), d);
 	}
 
@@ -127,7 +127,7 @@ public class Card {
 		return null;
 	}
 
-	public Color getDenomination() {
+	public Suit getDenomination() {
 		return denomination;
 	}
 
@@ -148,7 +148,7 @@ public class Card {
 	}
 
 	public int getIndex() {
-		return value + Color.getIndex(denomination)*(ACE+1);
+		return value + Suit.getIndex(denomination)*(ACE+1);
 	}
 
 	public String toDebugString() {

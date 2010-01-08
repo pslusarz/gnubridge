@@ -3,7 +3,7 @@ package org.gnubridge.core;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.gnubridge.core.deck.Color;
+import org.gnubridge.core.deck.Suit;
 import org.gnubridge.core.deck.Trump;
 import org.gnubridge.presentation.GameUtils;
 
@@ -74,8 +74,8 @@ public class Deal {
 	}
 
 	// TODO: test how it interacts with play()
-	public List<Card> getPlayedCardsHiToLow(Color color) {
-		return playedCards.getColorHi2Low(color);
+	public List<Card> getPlayedCardsHiToLow(Suit color) {
+		return playedCards.getSuitHi2Low(color);
 	}
 
 	public void doNextCard(int forcedMoveIndex) {

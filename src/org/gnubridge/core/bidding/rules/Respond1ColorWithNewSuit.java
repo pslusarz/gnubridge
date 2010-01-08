@@ -4,13 +4,13 @@ import org.gnubridge.core.Hand;
 import org.gnubridge.core.bidding.Auctioneer;
 import org.gnubridge.core.bidding.Bid;
 import org.gnubridge.core.bidding.ResponseCalculator;
-import org.gnubridge.core.deck.Color;
+import org.gnubridge.core.deck.Suit;
 import org.gnubridge.core.deck.NoTrump;
 
 public class Respond1ColorWithNewSuit extends Response {
 
 	private ResponseCalculator pc;
-	private Color highestOver3;
+	private Suit highestOver3;
 
 	@Override
 	protected boolean applies() {
@@ -33,7 +33,7 @@ public class Respond1ColorWithNewSuit extends Response {
 	protected Bid prepareBid() {
 		Bid result = null;
 
-		if (pc.getCombinedPoints() >= 17 && hand.getColorLength(highestOver3) >= 5) {
+		if (pc.getCombinedPoints() >= 17 && hand.getSuitLength(highestOver3) >= 5) {
 			int jump = partnersOpeningBid.getValue() + 1;
 			result = new Bid(jump, highestOver3);
 			result.makeGameForcing();
@@ -56,18 +56,18 @@ public class Respond1ColorWithNewSuit extends Response {
 		}
 	}
 
-	private Color findHighestColorWithFourOrMoreCards() {
-		Color highestOver4 = null;
-		for (Color color : Color.reverseList) {
-			if (hand.getColorLength(color) >= 4 && strongerColorHasAtLeastAsMuchHighest(color, highestOver4)) {
+	private Suit findHighestColorWithFourOrMoreCards() {
+		Suit highestOver4 = null;
+		for (Suit color : Suit.reverseList) {
+			if (hand.getSuitLength(color) >= 4 && strongerColorHasAtLeastAsMuchHighest(color, highestOver4)) {
 				highestOver4 = color;
 			}
 		}
 		return highestOver4;
 	}
 
-	private boolean strongerColorHasAtLeastAsMuchHighest(Color color, Color highestOver4) {
-		return (highestOver4 == null || hand.getColorLength(color) >= hand.getColorLength(highestOver4));
+	private boolean strongerColorHasAtLeastAsMuchHighest(Suit color, Suit highestOver4) {
+		return (highestOver4 == null || hand.getSuitLength(color) >= hand.getSuitLength(highestOver4));
 	}
 
 }

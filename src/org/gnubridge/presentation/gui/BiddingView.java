@@ -21,5 +21,5 @@ public interface BiddingView {
 
 	public abstract void setController(BiddingController c);
 	
-	public abstract void setVulnerability (boolean isVulnerable);
+	public abstract void setVulnerability (String vulnerabilityMessage);
 }
