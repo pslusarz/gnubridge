@@ -179,4 +179,48 @@ public class Hand {
 		return results;
 	}
 
+	public List<Suit> getSuitsWithCardCount(int suitLength) {
+		List<Suit> results = new ArrayList<Suit>();
+		for (Suit suit : Suit.list) {
+			if (getSuitLength(suit) == suitLength) {
+				results.add(suit);
+			}
+		}
+		return results;
+	}
+
+	public Collection<Suit> getDecent5LengthSuits() {
+		Collection<Suit> result = new ArrayList<Suit>();
+		List<Suit> suitsOfLength5 = getSuitsWithCardCount(5);
+		for (Suit suit : suitsOfLength5) {
+			List<Card> cardsInSuit = getSuitHi2Low(suit);
+			if (isAtLeastAQJXX(cardsInSuit) || isAtLeastKQTXX(cardsInSuit)) {
+				result.add(suit);
+			}
+		}
+		return result;
+	}
+
+	private boolean isAtLeastKQTXX(List<Card> fiveCards) {
+		if (fiveCards.get(0).getValue() >= Card.KING && // keep Eclipse from formatting
+				fiveCards.get(1).getValue() >= Card.QUEEN && // 
+				fiveCards.get(2).getValue() >= Card.TEN //
+
+		) {
+			return true;
+		}
+		return false;
+	}
+
+	private boolean isAtLeastAQJXX(List<Card> fiveCards) {
+		if (fiveCards.get(0).getValue() >= Card.ACE && //
+				fiveCards.get(1).getValue() >= Card.QUEEN && //
+				fiveCards.get(2).getValue() >= Card.JACK //
+
+		) {
+			return true;
+		}
+		return false;
+	}
+
 }

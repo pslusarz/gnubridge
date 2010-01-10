@@ -128,12 +128,12 @@ public class BiddingAgentTest extends TestCase {
 		assertEquals(new Bid(3, NoTrump.i()), ba.getBid());
 	}
 
-	//	public void testOvercall1ColorWithOwnColor() {
-	//		Auctioneer a = new Auctioneer(West.i());
-	//		a.bid(new Bid(1, Clubs.i()));
-	//		BiddingAgent ba = new BiddingAgent(a, new Hand("7,8", "4,3", "A,K,J,9,3,2", "Q,5,4"));
-	//		assertEquals(new Bid(1, Diamonds.i()), ba.getBid());
-	//	}
+	public void testOvercall1ColorWithOwnColor() {
+		Auctioneer a = new Auctioneer(West.i());
+		a.bid(new Bid(1, Clubs.i()));
+		BiddingAgent ba = new BiddingAgent(a, new Hand("7,8", "4,3", "A,K,J,9,3,2", "Q,5,4"));
+		assertEquals(new Bid(1, Diamonds.i()), ba.getBid());
+	}
 
 	public void testHaveToBidSomething() {
 		Auctioneer a = new Auctioneer(West.i());
