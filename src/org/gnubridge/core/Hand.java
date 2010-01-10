@@ -189,7 +189,9 @@ public class Hand {
 		return results;
 	}
 
-	public Collection<Suit> getDecent5LengthSuits() {
+	//at least AQJXXX or KQTXXX
+	//Pavlicek, lesson 7 online bridge basics
+	public Collection<Suit> getGood5LengthSuits() {
 		Collection<Suit> result = new ArrayList<Suit>();
 		List<Suit> suitsOfLength5 = getSuitsWithCardCount(5);
 		for (Suit suit : suitsOfLength5) {
@@ -201,8 +203,32 @@ public class Hand {
 		return result;
 	}
 
+	//at least QJXXX
+	//Pavlicek, lesson 7 online bridge basics
+	public Collection<Suit> getDecent5LengthSuits() {
+		Collection<Suit> result = new ArrayList<Suit>();
+		List<Suit> suitsOfLength5 = getSuitsWithCardCount(5);
+		for (Suit suit : suitsOfLength5) {
+			List<Card> cardsInSuit = getSuitHi2Low(suit);
+			if (isAtLeastQJXXX(cardsInSuit)) {
+				result.add(suit);
+			}
+		}
+		return result;
+	}
+
+	private boolean isAtLeastQJXXX(List<Card> fiveCards) {
+		if (fiveCards.get(0).getValue() >= Card.QUEEN && // keep Eclipse from formatting
+				fiveCards.get(1).getValue() >= Card.JACK //
+
+		) {
+			return true;
+		}
+		return false;
+	}
+
 	private boolean isAtLeastKQTXX(List<Card> fiveCards) {
-		if (fiveCards.get(0).getValue() >= Card.KING && // keep Eclipse from formatting
+		if (fiveCards.get(0).getValue() >= Card.KING && // 
 				fiveCards.get(1).getValue() >= Card.QUEEN && // 
 				fiveCards.get(2).getValue() >= Card.TEN //
 

@@ -1,6 +1,6 @@
 package org.gnubridge.core.bidding.rules;
 
-import java.util.List;
+import java.util.Collection;
 
 import org.gnubridge.core.Hand;
 import org.gnubridge.core.bidding.Auctioneer;
@@ -26,35 +26,35 @@ public class Overcall extends BiddingRule {
 	protected Bid prepareBid() {
 		Bid result = null;
 		if (calculator.getCombinedPoints() < 13) {
-			result = getValidBidFor6LongSuitOrDecent5(1);
+			return firstValidBid( //
+					bidSuit(1, hand.getSuitsWithAtLeastCards(6)), //
+					bidSuit(1, hand.getDecent5LengthSuits()));
 		} else if (calculator.getCombinedPoints() < 16) {
-			result = getValidBidForSuit5AndLonger(1);
-			if (result == null) {
-				result = getValidBidFor6LongSuitOrDecent5(2);
-			}
+			return firstValidBid( //
+					bidSuit(1, hand.getSuitsWithAtLeastCards(5)), //
+					bidSuit(2, hand.getSuitsWithAtLeastCards(6)), //
+					bidSuit(2, hand.getGood5LengthSuits()));
 		} else if (calculator.getCombinedPoints() < 19) {
-			result = getValidBidForSuit5AndLonger(1);
-			if (result == null) {
-				result = getValidBidForSuit5AndLonger(2);
-			}
+			return firstValidBid( //
+					bidSuit(1, hand.getSuitsWithAtLeastCards(5)), //
+					bidSuit(2, hand.getSuitsWithAtLeastCards(5)));
 		}
 		return result;
 	}
 
-	private Bid getValidBidForSuit5AndLonger(int maxBidLevelAllowed) {
-		List<Suit> suits5AndLonger = hand.getSuitsWithAtLeastCards(5);
-		if (suits5AndLonger.size() > 0 && auction.isValid(new Bid(maxBidLevelAllowed, suits5AndLonger.get(0)))) {
-			return new Bid(maxBidLevelAllowed, suits5AndLonger.get(0));
+	private Bid bidSuit(int bidLevel, Collection<Suit> suits) {
+		for (Suit suit : suits) {
+			if (auction.isValid(new Bid(bidLevel, suit))) {
+				return new Bid(bidLevel, suit);
+			}
 		}
 		return null;
 	}
 
-	private Bid getValidBidFor6LongSuitOrDecent5(int maxBidLevelAllowed) {
-		List<Suit> goodSuits5AndLonger = hand.getSuitsWithAtLeastCards(6);
-		goodSuits5AndLonger.addAll(hand.getDecent5LengthSuits());
-		for (Suit suit : goodSuits5AndLonger) {
-			if (auction.isValid(new Bid(maxBidLevelAllowed, suit))) {
-				return new Bid(maxBidLevelAllowed, suit);
+	private Bid firstValidBid(Bid... bids) {
+		for (Bid bid : bids) {
+			if (bid != null) {
+				return bid;
 			}
 		}
 		return null;

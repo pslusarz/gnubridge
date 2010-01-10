@@ -35,10 +35,10 @@ public class OvercallTest extends TestCase {
 		assertEquals(ONE_DIAMONDS, rule.getBid());
 	}
 
-	public void test1ColorAt10to12GoodSuitOf5() {
+	public void test1ColorAt10to12DecentSuitOf5() {
 		Auctioneer a = new Auctioneer(West.i());
 		a.bid(ONE_CLUBS);
-		Overcall rule = new Overcall(a, new Hand("7,8", "4,3,2", "A,K,J,9,3", "Q,5,4"));
+		Overcall rule = new Overcall(a, new Hand("7,8", "K,3,2", "Q,J,9,3,2", "A,5,4"));
 		assertEquals(ONE_DIAMONDS, rule.getBid());
 	}
 
@@ -52,7 +52,7 @@ public class OvercallTest extends TestCase {
 	public void test1ColorAt10to12PoorSuitOf5() {
 		Auctioneer a = new Auctioneer(West.i());
 		a.bid(ONE_CLUBS);
-		Overcall rule = new Overcall(a, new Hand("7,8", "A,3,2", "K,J,9,3,2", "Q,5,4"));
+		Overcall rule = new Overcall(a, new Hand("7,8", "A,3,2", "K,10,9,3,2", "Q,J,4"));
 		assertEquals(null, rule.getBid());
 	}
 
@@ -108,11 +108,18 @@ public class OvercallTest extends TestCase {
 		assertEquals(TWO_DIAMONDS, rule.getBid());
 	}
 
-	public void test13PointsCanBid2LevelForDecent5() {
+	public void test13PointsCanBid2LevelForGood5() {
 		Auctioneer a = new Auctioneer(West.i());
 		a.bid(ONE_SPADES);
 		Overcall rule = new Overcall(a, new Hand("7,8,2", "A,K", "K,Q,10,4,3", "Q,5,4"));
 		assertEquals(TWO_DIAMONDS, rule.getBid());
+	}
+
+	public void test13PointsCanotBid2LevelForDecent5() {
+		Auctioneer a = new Auctioneer(West.i());
+		a.bid(ONE_SPADES);
+		Overcall rule = new Overcall(a, new Hand("7,8,2", "A,K", "Q,J,10,4,3", "K,5,4"));
+		assertEquals(null, rule.getBid());
 	}
 
 	public void test16PointsCanBid2LevelForAny5LongSuit() {
