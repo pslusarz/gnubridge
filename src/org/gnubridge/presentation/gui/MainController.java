@@ -24,10 +24,9 @@ public class MainController {
 	public void playGame() {
 		setGameController(new DealController(this, getBiddingController().getAuction().getHighBid(),
 				repositionHandsSoThatSouthIsDeclarer(getBiddingController().getAuction(), getBiddingController()
-						.getCardHolder()), getBiddingController().allowHumanToPlayIfDummy(), view.getPlayView()));
-		view.getPlayView().displayScore(
-				"Us: " + scoringTracker.getRunningHumanScore() + ", Them: "
-						+ scoringTracker.getRunningComputerScore());
+						.getCardHolder()), getBiddingController().allowHumanToPlayIfDummy(), view.getDealView()));
+		view.getDealView().displayScore(
+				"Us: " + scoringTracker.getRunningHumanScore() + ", Them: " + scoringTracker.getRunningComputerScore());
 	}
 
 	private Deal repositionHandsSoThatSouthIsDeclarer(Auctioneer a, Deal cardHolder) {
@@ -46,11 +45,11 @@ public class MainController {
 		scoringTracker.processFinishedGame(gameController.getHuman().getValue(), getBiddingController().getAuction()
 				.getHighBid(), declarerTricksTaken);
 
-		view.getPlayView().display(
+		view.getDealView().display(
 				"GAME FINISHED. Contract was: " + getBiddingController().getAuction().getHighBid()
 						+ ", declarers took " + declarerTricksTaken + " tricks.");
 
-		view.getPlayView().displayScore(
+		view.getDealView().displayScore(
 				"North/South: +" + scoringTracker.getLatestDeclarerScoreChange() + " points, East/West: +"
 						+ scoringTracker.getLatestDefenderScoreChange() + " points (Human: "
 						+ scoringTracker.getRunningHumanScore() + ", " + "Computer: "

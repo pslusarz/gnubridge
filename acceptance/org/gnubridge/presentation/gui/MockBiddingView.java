@@ -5,6 +5,8 @@ import org.gnubridge.core.bidding.Auctioneer;
 
 public class MockBiddingView implements BiddingView {
 
+	private boolean vulnerabilitySet;
+
 	@Override
 	public void auctionStateChanged() {
 		// TODO Auto-generated method stub
@@ -16,7 +18,7 @@ public class MockBiddingView implements BiddingView {
 		// TODO Auto-generated method stub
 
 	}
-	
+
 	@Override
 	public void displayScore(String msg) {
 		// TODO Auto-generated method stub
@@ -54,7 +56,11 @@ public class MockBiddingView implements BiddingView {
 	}
 
 	@Override
-	public void setVulnerability (String vulnerabilityMessage) {
-		// TODO Auto-generated method stub
+	public void setVulnerability(String vulnerabilityMessage) {
+		vulnerabilitySet = true;
+	}
+
+	public boolean isVulnerabilitySet() {
+		return vulnerabilitySet;
 	}
 }

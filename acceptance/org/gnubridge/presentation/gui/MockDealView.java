@@ -1,10 +1,12 @@
 package org.gnubridge.presentation.gui;
 
-import org.gnubridge.core.Direction;
 import org.gnubridge.core.Deal;
+import org.gnubridge.core.Direction;
 import org.gnubridge.core.bidding.Bid;
 
-public class MockPlayView implements DealView {
+public class MockDealView implements DealView {
+
+	private boolean scoreSet = false;
 
 	@Override
 	public void display(String message) {
@@ -14,9 +16,9 @@ public class MockPlayView implements DealView {
 
 	@Override
 	public void displayScore(String message) {
-		// TODO Auto-generated method stub
+		scoreSet = true;
 	}
-	
+
 	@Override
 	public void displayCurrentTrick() {
 		// TODO Auto-generated method stub
@@ -63,6 +65,10 @@ public class MockPlayView implements DealView {
 	public void hide() {
 		// TODO Auto-generated method stub
 
+	}
+
+	public boolean isScoreSet() {
+		return scoreSet;
 	}
 
 }

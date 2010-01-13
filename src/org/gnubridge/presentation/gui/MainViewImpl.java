@@ -41,7 +41,7 @@ public class MainViewImpl implements MainView {
 		return biddingView;
 	}
 
-	public DealView getPlayView() {
+	public DealView getDealView() {
 		if (playView == null) {
 			playView = new DealViewImpl(this);
 		}

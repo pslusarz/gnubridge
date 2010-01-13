@@ -4,17 +4,26 @@ import java.awt.Container;
 
 public class MockMainView implements MainView {
 
+	private BiddingView biddingView;
+	private MockDealView dealView;
+
 	public MockMainView(String string) {
 	}
 
 	@Override
 	public BiddingView getBiddingView() {
-		return new MockBiddingView();
+		if (biddingView == null) {
+			biddingView = new MockBiddingView();
+		}
+		return biddingView;
 	}
 
 	@Override
-	public DealView getPlayView() {
-		return new MockPlayView();
+	public DealView getDealView() {
+		if (dealView == null) {
+			dealView = new MockDealView();
+		}
+		return dealView;
 	}
 
 	@Override
@@ -32,6 +41,11 @@ public class MockMainView implements MainView {
 	@Override
 	public void hide() {
 		// TODO Auto-generated method stub
+
+	}
+
+	public void setBiddingView(BiddingView view) {
+		biddingView = view;
 
 	}
 
