@@ -87,6 +87,16 @@ public class ScoreCalculatorTest extends TestCase {
 		assertEquals(0, actualDeclarerScore);
 		assertEquals(550, actualDefenderScore);
 	}
+	
+	public void testUndertricksMinorSuit() {
+		int tricksTakenByDeclarers = 12;
+		ScoreCalculator calculator = new ScoreCalculator(new Bid(7, CLUBS), tricksTakenByDeclarers, false, false);
+		int actualDeclarerScore = calculator.getDeclarerScore();
+		int actualDefenderScore = calculator.getDefenderScore();
+
+		assertEquals(0, actualDeclarerScore);
+		assertEquals(50, actualDefenderScore);
+	}
 
 	public void testVulnerability() {
 		int tricksTakenByDeclarers = 6;
