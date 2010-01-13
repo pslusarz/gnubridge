@@ -1,8 +1,10 @@
-package org.gnubridge.presentation.gui;
+package org.jbridge.presentation.gui;
 
 import org.gnubridge.core.Deal;
 import org.gnubridge.core.Direction;
 import org.gnubridge.core.bidding.Bid;
+import org.gnubridge.presentation.gui.CardPlayedListener;
+import org.gnubridge.presentation.gui.DealView;
 
 public class MockDealView implements DealView {
 
@@ -69,6 +71,12 @@ public class MockDealView implements DealView {
 
 	public boolean isScoreSet() {
 		return scoreSet;
+	}
+
+	@Override
+	public void gameFinished() {
+		// TODO Auto-generated method stub
+
 	}
 
 }

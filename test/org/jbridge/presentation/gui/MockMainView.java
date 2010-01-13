@@ -1,6 +1,10 @@
-package org.gnubridge.presentation.gui;
+package org.jbridge.presentation.gui;
 
 import java.awt.Container;
+
+import org.gnubridge.presentation.gui.BiddingView;
+import org.gnubridge.presentation.gui.DealView;
+import org.gnubridge.presentation.gui.MainView;
 
 public class MockMainView implements MainView {
 

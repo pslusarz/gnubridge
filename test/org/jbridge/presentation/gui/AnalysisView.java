@@ -9,9 +9,9 @@ import java.awt.event.MouseMotionListener;
 
 import javax.swing.JPanel;
 
+import org.gnubridge.core.Deal;
 import org.gnubridge.core.Direction;
 import org.gnubridge.core.East;
-import org.gnubridge.core.Deal;
 import org.gnubridge.core.North;
 import org.gnubridge.core.Player;
 import org.gnubridge.core.West;
@@ -20,9 +20,9 @@ import org.gnubridge.presentation.gui.AllCardsInOneRow;
 import org.gnubridge.presentation.gui.CardPanel;
 import org.gnubridge.presentation.gui.CardPanelHost;
 import org.gnubridge.presentation.gui.CardPlayedListener;
+import org.gnubridge.presentation.gui.DealView;
 import org.gnubridge.presentation.gui.MainView;
 import org.gnubridge.presentation.gui.OneColumnPerColor;
-import org.gnubridge.presentation.gui.DealView;
 import org.gnubridge.presentation.gui.Table;
 
 public class AnalysisView implements DealView, CardPanelHost {
@@ -251,7 +251,7 @@ public class AnalysisView implements DealView, CardPanelHost {
 		panel.repaint();
 
 	}
-	
+
 	public void display(String message) {
 		this.message = message;
 		panel.repaint();
@@ -271,6 +271,12 @@ public class AnalysisView implements DealView, CardPanelHost {
 
 	@Override
 	public void hide() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void gameFinished() {
 		// TODO Auto-generated method stub
 
 	}

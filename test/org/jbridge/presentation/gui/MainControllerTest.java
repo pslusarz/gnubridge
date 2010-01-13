@@ -3,9 +3,6 @@ package org.jbridge.presentation.gui;
 import junit.framework.TestCase;
 
 import org.gnubridge.presentation.gui.MainController;
-import org.gnubridge.presentation.gui.MockBiddingView;
-import org.gnubridge.presentation.gui.MockDealView;
-import org.gnubridge.presentation.gui.MockMainView;
 import org.gnubridge.presentation.gui.ViewFactory;
 
 public class MainControllerTest extends TestCase {

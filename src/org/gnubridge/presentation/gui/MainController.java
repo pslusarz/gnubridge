@@ -45,10 +45,6 @@ public class MainController {
 		scoringTracker.processFinishedGame(gameController.getHuman().getValue(), getBiddingController().getAuction()
 				.getHighBid(), declarerTricksTaken);
 
-		view.getDealView().display(
-				"GAME FINISHED. Contract was: " + getBiddingController().getAuction().getHighBid()
-						+ ", declarers took " + declarerTricksTaken + " tricks.");
-
 		view.getDealView().displayScore(
 				"North/South: +" + scoringTracker.getLatestDeclarerScoreChange() + " points, East/West: +"
 						+ scoringTracker.getLatestDefenderScoreChange() + " points (Human: "

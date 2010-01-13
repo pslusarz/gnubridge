@@ -174,15 +174,17 @@ public class Deal {
 	public int getTricksTaken(int pair) {
 		switch (pair) {
 		case Player.WEST_EAST:
-			return getPlayer(Direction.WEST_DEPRECATED).countTricksTaken() + getPlayer(Direction.EAST_DEPRECATED).countTricksTaken();
+			return getPlayer(Direction.WEST_DEPRECATED).countTricksTaken()
+					+ getPlayer(Direction.EAST_DEPRECATED).countTricksTaken();
 		case Player.NORTH_SOUTH:
-			return getPlayer(Direction.NORTH_DEPRECATED).countTricksTaken() + getPlayer(Direction.SOUTH_DEPRECATED).countTricksTaken();
+			return getPlayer(Direction.NORTH_DEPRECATED).countTricksTaken()
+					+ getPlayer(Direction.SOUTH_DEPRECATED).countTricksTaken();
 		default:
 			throw new RuntimeException("Unknown pair: " + pair);
 		}
 
 	}
-	
+
 	public boolean oneTrickLeft() {
 		return (getCurrentTrick().getHighestCard() == null && getNextToPlay().getHand().size() == 1);
 	}
@@ -306,9 +308,13 @@ public class Deal {
 		for (Card card : getPlayedCards().getCardsHighToLow()) {
 			cardsPlayedRepresentation += card.getIndex() + ",";
 		}
-		String unique = cardsPlayedRepresentation + "*" + getTricksTaken(Player.NORTH_SOUTH) + "*"
+		String unique = cardsPlayedRepresentation + "*" + getDeclarerTricksTaken() + "*"
 				+ getNextToPlay().getDirection();
 		return unique;
+	}
+
+	public int getDeclarerTricksTaken() {
+		return getTricksTaken(Player.NORTH_SOUTH);
 	}
 
 }

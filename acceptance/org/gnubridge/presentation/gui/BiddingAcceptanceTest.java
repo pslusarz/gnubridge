@@ -9,6 +9,7 @@ import org.gnubridge.core.bidding.Bid;
 import org.gnubridge.core.bidding.BiddingAgent;
 import org.gnubridge.core.bidding.Pass;
 import org.gnubridge.presentation.GameUtils;
+import org.jbridge.presentation.gui.MockMainView;
 
 public class BiddingAcceptanceTest extends TestCase {
 	private static final int TRICKS_PER_DEAL = 6;

@@ -1,7 +1,9 @@
-package org.gnubridge.presentation.gui;
+package org.jbridge.presentation.gui;
 
 import org.gnubridge.core.Hand;
 import org.gnubridge.core.bidding.Auctioneer;
+import org.gnubridge.presentation.gui.BiddingController;
+import org.gnubridge.presentation.gui.BiddingView;
 
 public class MockBiddingView implements BiddingView {
 

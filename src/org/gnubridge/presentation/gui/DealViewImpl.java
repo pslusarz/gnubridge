@@ -14,8 +14,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-import org.gnubridge.core.Direction;
 import org.gnubridge.core.Deal;
+import org.gnubridge.core.Direction;
 import org.gnubridge.core.North;
 import org.gnubridge.core.Player;
 import org.gnubridge.core.bidding.Bid;
@@ -241,6 +241,7 @@ public class DealViewImpl implements DealView, CardPanelHost, ActionListener {
 		return (int) (table.getDimensions().getY() + table.getDimensions().getHeight());
 	}
 
+	@Override
 	public void setContract(Bid contract) {
 		this.contract = contract;
 
@@ -251,7 +252,7 @@ public class DealViewImpl implements DealView, CardPanelHost, ActionListener {
 		panel.repaint();
 
 	}
-	
+
 	public void displayScore(String message) {
 		this.scoreMessage = message;
 		panel.repaint();
@@ -302,5 +303,12 @@ public class DealViewImpl implements DealView, CardPanelHost, ActionListener {
 	public void hide() {
 		//panel.removeAll();
 		panel.setVisible(false);
+	}
+
+	@Override
+	public void gameFinished() {
+		display("GAME FINISHED. Contract was: " + contract + ", declarers took " + game.getDeclarerTricksTaken()
+				+ " tricks.");
+
 	}
 }

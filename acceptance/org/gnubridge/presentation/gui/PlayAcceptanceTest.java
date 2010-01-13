@@ -12,6 +12,7 @@ import org.gnubridge.core.Player;
 import org.gnubridge.core.bidding.ScoreCalculator;
 import org.gnubridge.presentation.GameUtils;
 import org.gnubridge.search.ProductionSettings;
+import org.jbridge.presentation.gui.MockMainView;
 
 public class PlayAcceptanceTest extends TestCase {
 

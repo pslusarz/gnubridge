@@ -5,8 +5,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 import org.gnubridge.core.Card;
-import org.gnubridge.core.Direction;
 import org.gnubridge.core.Deal;
+import org.gnubridge.core.Direction;
 import org.gnubridge.core.North;
 import org.gnubridge.core.South;
 import org.gnubridge.core.bidding.Bid;
@@ -130,8 +130,7 @@ public class DealController implements CardPlayedListener {
 
 	private final DealView view;
 
-	public DealController(MainController controller, Bid highBid, Deal g, 
-			Direction humanDir, DealView playView) {
+	public DealController(MainController controller, Bid highBid, Deal g, Direction humanDir, DealView playView) {
 		parent = controller;
 		game = g;
 		game.printHandsDebug();
@@ -169,6 +168,7 @@ public class DealController implements CardPlayedListener {
 			view.displayCurrentTrick();
 		}
 		if (game.isDone()) {
+			view.gameFinished();
 			parent.gameFinished();
 		} else {
 			doAutomatedPlay();
