@@ -178,4 +178,12 @@ public class Auctioneer {
 		return calls.get(0).getBid();
 	}
 
+	public boolean isOvercall(Bid one_spades) {
+		boolean result = true;
+		if (bidCount == 1) {
+			result = false;
+		}
+		return result;
+	}
+
 }

@@ -17,16 +17,16 @@ public class ResponseCalculator extends PointCalculator {
 	}
 
 	@Override
-	protected int distributionalValueForCardsInColor(Suit color) {
+	protected int distributionalValueForCardsInSuit(Suit suit) {
 		if (!partnersBidIsASuit()) {
-			return super.distributionalValueForCardsInColor(color);
+			return super.distributionalValueForCardsInSuit(suit);
 		}
-		if (color.equals(partnersBid.getTrump())) {
+		if (suit.equals(partnersBid.getTrump())) {
 			return 0;
 		}
 		int result = -1;
-		if (4 <= hand.getSuitLength((Suit) partnersBid.getTrump())) {
-			int colorLength = hand.getSuitLength(color);
+		if (4 <= hand.getSuitLength(partnersBid.getTrump().asSuit())) {
+			int colorLength = hand.getSuitLength(suit);
 			if (colorLength == 0) {
 				result = 5;
 			} else if (colorLength == 1) {
@@ -35,7 +35,7 @@ public class ResponseCalculator extends PointCalculator {
 		}
 
 		if (result == -1) {
-			result = super.distributionalValueForCardsInColor(color);
+			result = super.distributionalValueForCardsInSuit(suit);
 		}
 		return result;
 	}

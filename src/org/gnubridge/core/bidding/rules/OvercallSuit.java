@@ -8,11 +8,11 @@ import org.gnubridge.core.bidding.Bid;
 import org.gnubridge.core.bidding.PointCalculator;
 import org.gnubridge.core.deck.Suit;
 
-public class Overcall extends BiddingRule {
+public class OvercallSuit extends BiddingRule {
 
 	private final PointCalculator calculator;
 
-	public Overcall(Auctioneer a, Hand h) {
+	public OvercallSuit(Auctioneer a, Hand h) {
 		super(a, h);
 		calculator = new PointCalculator(hand);
 	}

@@ -19,7 +19,7 @@ import org.gnubridge.presentation.GameUtils;
 public class StochasticDoubleDummySolverAcceptanceTests extends TestCase {
 	static final int SEARCH_DEPTH_CUTOFF = 13;
 	static final int CARDS_TO_DEAL = 4;
-	private static final int DEALS_TO_TRY = 100;
+	private static final int DEALS_TO_TRY = 25;
 	private Deal g;
 	List<SearchMonkey> monkeys;
 

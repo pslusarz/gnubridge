@@ -132,7 +132,7 @@
 	</target>
 
 	<target name="set-version-release" unless="${version}">
-		<property name="version" value="0.1.15" />
+		<property name="version" value="0.1.17" />
 	</target>
 
 	<!--    *************     PUBLISH   *****************            -->

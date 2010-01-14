@@ -5,10 +5,10 @@ import java.util.List;
 import org.gnubridge.core.Card;
 import org.gnubridge.core.Hand;
 import org.gnubridge.core.deck.Ace;
-import org.gnubridge.core.deck.Suit;
 import org.gnubridge.core.deck.Jack;
 import org.gnubridge.core.deck.King;
 import org.gnubridge.core.deck.Queen;
+import org.gnubridge.core.deck.Suit;
 
 public class PointCalculator {
 	protected Hand hand;
@@ -44,14 +44,14 @@ public class PointCalculator {
 
 	public int getDistributionalPoints() {
 		int result = 0;
-		for (Suit color : Suit.list) {
-			result += distributionalValueForCardsInColor(color);
+		for (Suit suit : Suit.list) {
+			result += distributionalValueForCardsInSuit(suit);
 		}
 		return result;
 	}
 
-	protected int distributionalValueForCardsInColor(Suit color) {
-		List<Card> cardsInColor = hand.getSuitHi2Low(color);
+	protected int distributionalValueForCardsInSuit(Suit suit) {
+		List<Card> cardsInColor = hand.getSuitHi2Low(suit);
 		int cardsCount = cardsInColor.size();
 		int result = 0;
 		if (cardsCount == 0) {
@@ -70,7 +70,7 @@ public class PointCalculator {
 			List<Card> cardsInColor = hand.getSuitHi2Low(color);
 			result += getHighCardPoints(cardsInColor);
 			if (!isFlawed(cardsInColor)) {
-				result += distributionalValueForCardsInColor(color);
+				result += distributionalValueForCardsInSuit(color);
 			}
 		}
 		return result;
