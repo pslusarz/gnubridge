@@ -13,7 +13,7 @@ public class ScoreCalculatorTest extends TestCase {
 		ScoreCalculator calculator = new ScoreCalculator(ONE_CLUBS, tricksTakenByDeclarers, false, false);
 		int actualDeclarerScore = calculator.getDeclarerScore();
 		int actualDefenderScore = calculator.getDefenderScore();
-		assertEquals(20, actualDeclarerScore);
+		assertEquals(70, actualDeclarerScore);
 		assertEquals(0, actualDefenderScore);
 	}
 
@@ -22,7 +22,7 @@ public class ScoreCalculatorTest extends TestCase {
 		ScoreCalculator calculator = new ScoreCalculator(ONE_SPADES, tricksTakenByDeclarers, false, false);
 		int actualDeclarerScore = calculator.getDeclarerScore();
 		int actualDefenderScore = calculator.getDefenderScore();
-		assertEquals(90, actualDeclarerScore);
+		assertEquals(140, actualDeclarerScore);
 		assertEquals(0, actualDefenderScore);
 	}
 
@@ -51,9 +51,9 @@ public class ScoreCalculatorTest extends TestCase {
 		int actualDeclarerScore = calculator.getDeclarerScore();
 		int actualDefenderScore = calculator.getDefenderScore();
 		/* 3 * 30 + 10 makes a 100 point game, but the contract was only 70, so it is not a
-		 * 	a "game" - should be 100 points */
+		 * 	a "game" - should be 100 points + 50 for a partscore*/
 
-		assertEquals(100, actualDeclarerScore);
+		assertEquals(150, actualDeclarerScore);
 		assertEquals(0, actualDefenderScore);
 	}
 
@@ -114,8 +114,38 @@ public class ScoreCalculatorTest extends TestCase {
 		int actualDeclarerScore = calculator.getDeclarerScore();
 		int actualDefenderScore = calculator.getDefenderScore();
 
-		assertEquals(30, actualDeclarerScore);
+		assertEquals(80, actualDeclarerScore);
 		assertEquals(0, actualDefenderScore);
+	}
+	
+	public void testDoubledContractMet() {
+		int tricksTakenByDeclarers = 7;
+		ScoreCalculator calculator = new ScoreCalculator(new Double(1, HEARTS), tricksTakenByDeclarers, false, false);
+		int actualDeclarerScore = calculator.getDeclarerScore();
+		int actualDefenderScore = calculator.getDefenderScore();
+
+		assertEquals(110, actualDeclarerScore);
+		assertEquals(0, actualDefenderScore);
+	}
+	
+	public void testDoubledContractOvertricks() {
+		int tricksTakenByDeclarers = 9;
+		ScoreCalculator calculator = new ScoreCalculator(new Double(1, HEARTS), tricksTakenByDeclarers, false, false);
+		int actualDeclarerScore = calculator.getDeclarerScore();
+		int actualDefenderScore = calculator.getDefenderScore();
+
+		assertEquals(110 + 100 * 2, actualDeclarerScore);
+		assertEquals(0, actualDefenderScore);
+	}
+	
+	public void testDoubledContractUndertricks() {
+		int tricksTakenByDeclarers = 5;
+		ScoreCalculator calculator = new ScoreCalculator(new Double(1, HEARTS), tricksTakenByDeclarers, false, false);
+		int actualDeclarerScore = calculator.getDeclarerScore();
+		int actualDefenderScore = calculator.getDefenderScore();
+
+		assertEquals(0, actualDeclarerScore);
+		assertEquals(100 + 200, actualDefenderScore);
 	}
 
 	public void testScoreTracker() {
@@ -143,7 +173,7 @@ public class ScoreCalculatorTest extends TestCase {
 		actualHumanScore = tracker.getRunningHumanScore();
 		int newActualComputerScore = tracker.getRunningComputerScore();
 
-		assertEquals(60, actualHumanScore);
+		assertEquals(110, actualHumanScore);
 		assertEquals(actualComputerScore, newActualComputerScore);
 	}
 }

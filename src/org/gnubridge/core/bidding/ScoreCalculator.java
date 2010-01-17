@@ -5,6 +5,7 @@ import static org.gnubridge.core.deck.Trump.DIAMONDS;
 import static org.gnubridge.core.deck.Trump.HEARTS;
 import static org.gnubridge.core.deck.Trump.NOTRUMP;
 import static org.gnubridge.core.deck.Trump.SPADES;
+import static org.gnubridge.core.bidding.Bid.DOUBLE;
 
 public class ScoreCalculator {
 	
@@ -48,26 +49,58 @@ public class ScoreCalculator {
 			else {
 				throw new RuntimeException("Unknown trump: " + highBid.getTrump());
 			}
+			
+			if (highBid.equals(DOUBLE)) {
+				contractWorth *= 2 + 50; /* +50 for the "insult" */
+				pointsPerTrick *= 2;
+			}
+			
 			contractWorth += bidValue * pointsPerTrick;
 			int numOverTricks = tricksTakenByDeclarers - numberTricksNeededByDeclarer;
 			if (numberTricksNeededByDeclarer == 13) {
 				/* grand slam */
-				declarerPoints = 1000;
+				if (isDeclarerVulnerable) {
+					declarerPoints = 1500;
+				}
+				else {
+					declarerPoints = 1000;
+				}
 			}
 			else if (numberTricksNeededByDeclarer == 12) {
 				/* small slam */
-				declarerPoints = 500;
+				if (isDeclarerVulnerable) {
+					declarerPoints = 750;
+				}
+				else {
+					declarerPoints = 500;
+				}
 			}
 			else if (contractWorth >= 100) {
-				declarerPoints = 300;
+				if (isDeclarerVulnerable) {
+					declarerPoints = 500;
+				}
+				else {
+					declarerPoints = 300;
+				}
+			}
+			else {
+				/* partscore */
+				declarerPoints = 50;
 			}
 			
 			/* Here we calculate the value of over-tricks
 			 * 
 			 * Vulnerability only helps the declarer if he scores over-tricks AND 
-			 * was doubled - since we do not yet support doubling, we can ignore
-			 * vulnerability here for now
+			 * was doubled
 			 */
+			if (highBid.equals(DOUBLE)) {
+				if (isDeclarerVulnerable) {
+					pointsPerTrick = 200;
+				}
+				else {
+					pointsPerTrick = 100;
+				}
+			}
 			declarerPoints += contractWorth + numOverTricks * pointsPerTrick;
 		}
 		else {
@@ -75,10 +108,23 @@ public class ScoreCalculator {
 			
 			/* This will be more complicated once doubling is possibile */
 			if (isDeclarerVulnerable) {
-				defenderPoints += underTricks * 100;
+				if (highBid.equals(DOUBLE)) {
+					defenderPoints += 200 + (underTricks - 1) * 300;
+				}
+				else {
+					defenderPoints += underTricks * 100;
+				}
 			}
 			else {
-				defenderPoints += underTricks * 50;
+				if (highBid.equals(DOUBLE)) {
+					defenderPoints += 100;
+					if (underTricks > 1) {
+						defenderPoints += 200 + (underTricks - 2) * 300;
+					}
+				}
+				else {
+					defenderPoints += underTricks * 50;
+				}
 			}
 		}
 	}

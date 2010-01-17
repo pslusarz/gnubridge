@@ -63,7 +63,19 @@ public class BiddingController {
 				view.display("Not your turn to bid");
 				return;
 			}
-			Bid candidate = Bid.makeBid(bidSize, trump);
+			Bid highBid = auction.getHighBid();
+			Bid candidate = null;
+			if (trump.equals("Double")) {
+				if (highBid == null) {
+					/* Todo: Don't even show the button, preempt these types of errors */
+					view.display("You cannot double before bidding has begun");
+					return;
+				}
+				candidate = Bid.makeBid(highBid.getValue(), highBid.getTrump().toString(), "Double");
+			}
+			else {
+				candidate = Bid.makeBid(bidSize, trump);
+			}
 			if (!auction.isValid(candidate)) {
 				view.display("Invalid bid");
 				return;

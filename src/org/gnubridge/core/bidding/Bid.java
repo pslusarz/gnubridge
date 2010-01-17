@@ -136,6 +136,16 @@ public class Bid {
 			return new Bid(bidSize, tr);
 		}
 	}
+	
+	public static Bid makeBid(int bidSize, String t, String type) {
+		Trump tr = Trump.instance(t);
+		if (type.equals("Double")) {
+			return new Double(bidSize, tr);
+		}
+		else {
+			return new Double();
+		}
+	}
 
 	public boolean isPass() {
 		return PASS.equals(this);

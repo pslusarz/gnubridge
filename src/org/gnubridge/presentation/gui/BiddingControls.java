@@ -22,7 +22,7 @@ public class BiddingControls {
 		listener = view;
 		subpanels = new ArrayList<JPanel>();
 		addSelection("1", "2", "3", "4", "5", "6", "7");
-		addButtons("Pass", "NT", "Spades", "Hearts", "Diamonds", "Clubs");
+		addButtons("Double", "Pass", "NT", "Spades", "Hearts", "Diamonds", "Clubs");
 	}
 
 	protected JPanel createDisplayPanel() {

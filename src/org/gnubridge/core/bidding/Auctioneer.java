@@ -12,6 +12,7 @@ public class Auctioneer {
 	private Direction nextToBid;
 	private int passCount;
 	private Bid highBid;
+	private Bid nextHighestBid;
 	private int bidCount;
 	private Call last;
 	private Call beforeLast;
@@ -44,6 +45,7 @@ public class Auctioneer {
 			passCount++;
 		} else {
 			passCount = 0;
+			nextHighestBid = highBid;
 			highBid = bid;
 		}
 		if (DOUBLE.equals(bid)) {
@@ -117,8 +119,15 @@ public class Auctioneer {
 	}
 
 	public Call getHighCall() {
+		Bid highBid = this.highBid;
+		if (getHighBid().equals(DOUBLE)) {
+			/* If the contract is doubled, then the actual 
+			 * highest call was the previous person to bid
+			 */
+			highBid = nextHighestBid;
+		}
 		for (Call call : calls) {
-			if (call.getBid().equals(getHighBid())) {
+			if (call.getBid().equals(highBid)) {
 				return call;
 			}
 		}
