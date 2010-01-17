@@ -24,9 +24,9 @@ public class MainController {
 	public void playGame() {
 		setGameController(new DealController(this, getBiddingController().getAuction().getHighBid(),
 				repositionHandsSoThatSouthIsDeclarer(getBiddingController().getAuction(), getBiddingController()
-						.getCardHolder()), getBiddingController().allowHumanToPlayIfDummy(), view.getDealView()));
-		view.getDealView().displayScore(
-				"Us: " + scoringTracker.getRunningHumanScore() + ", Them: " + scoringTracker.getRunningComputerScore());
+						.getCardHolder()), getBiddingController().allowHumanToPlayIfDummy(), view.getDealView(),
+				scoringTracker));
+
 	}
 
 	private Deal repositionHandsSoThatSouthIsDeclarer(Auctioneer a, Deal cardHolder) {
@@ -45,11 +45,6 @@ public class MainController {
 		scoringTracker.processFinishedGame(gameController.getHuman().getValue(), getBiddingController().getAuction()
 				.getHighBid(), declarerTricksTaken);
 
-		view.getDealView().displayScore(
-				"North/South: +" + scoringTracker.getLatestDeclarerScoreChange() + " points, East/West: +"
-						+ scoringTracker.getLatestDefenderScoreChange() + " points (Human: "
-						+ scoringTracker.getRunningHumanScore() + ", " + "Computer: "
-						+ scoringTracker.getRunningComputerScore() + ")");
 	}
 
 	public void setBiddingController(BiddingController biddingController) {
@@ -81,13 +76,9 @@ public class MainController {
 			view.hide();
 		}
 		this.view = ViewFactory.getMainView();
-
-		view.getBiddingView().setVulnerability(scoringTracker.nextRound());
-
-		setBiddingController(new BiddingController(view.getBiddingView(), this));
+		setBiddingController(new BiddingController(view.getBiddingView(), this, scoringTracker));
 		view.show();
-		view.getBiddingView().displayScore(
-				"Us: " + scoringTracker.getRunningHumanScore() + ", Them: " + scoringTracker.getRunningComputerScore());
+
 	}
 
 }

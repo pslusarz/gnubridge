@@ -1,7 +1,7 @@
 package org.gnubridge.presentation.gui;
 
-import org.gnubridge.core.Direction;
 import org.gnubridge.core.Deal;
+import org.gnubridge.core.Direction;
 import org.gnubridge.core.Hand;
 import org.gnubridge.core.North;
 import org.gnubridge.core.Player;
@@ -19,7 +19,7 @@ public class BiddingController {
 	private final Player human;
 	private final MainController parent;
 
-	public BiddingController(BiddingView v, MainController p) {
+	public BiddingController(BiddingView v, MainController p, ScoringTracker scoringTracker) {
 		view = v;
 		view.setController(this);
 		view.show();
@@ -30,11 +30,9 @@ public class BiddingController {
 		human = cardHolder.selectHumanPlayer();
 		view.setCards(new Hand(human.getHand()));
 		doAutomatedBidding();
-
-		// fake bidding to get to the other page
-		//		auction.bid(new Bid(7, NoTrump.i()));
-		//		doAutomatedBidding();
-		//        playGame();
+		view.setVulnerability(scoringTracker.nextRound());
+		view.displayScore("Us: " + scoringTracker.getRunningHumanScore() + ", Them: "
+				+ scoringTracker.getRunningComputerScore());
 	}
 
 	public Deal getCardHolder() {

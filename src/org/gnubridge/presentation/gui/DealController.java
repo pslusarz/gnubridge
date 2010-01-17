@@ -129,10 +129,13 @@ public class DealController implements CardPlayedListener {
 	private final Direction human;
 
 	private final DealView view;
+	private final ScoringTracker scoringTracker;
 
-	public DealController(MainController controller, Bid highBid, Deal g, Direction humanDir, DealView playView) {
+	public DealController(MainController controller, Bid highBid, Deal g, Direction humanDir, DealView playView,
+			ScoringTracker tracker) {
 		parent = controller;
 		game = g;
+		this.scoringTracker = tracker;
 		game.printHandsDebug();
 		human = humanDir;
 		view = playView;
@@ -140,6 +143,8 @@ public class DealController implements CardPlayedListener {
 		view.setGame(game, human);
 		view.setContract(highBid);
 		doAutomatedPlay();
+		view.displayScore("Us: " + scoringTracker.getRunningHumanScore() + ", Them: "
+				+ scoringTracker.getRunningComputerScore());
 	}
 
 	public Deal getGame() {
@@ -170,6 +175,10 @@ public class DealController implements CardPlayedListener {
 		if (game.isDone()) {
 			view.gameFinished();
 			parent.gameFinished();
+			view.displayScore("North/South: +" + scoringTracker.getLatestDeclarerScoreChange()
+					+ " points, East/West: +" + scoringTracker.getLatestDefenderScoreChange() + " points (Human: "
+					+ scoringTracker.getRunningHumanScore() + ", " + "Computer: "
+					+ scoringTracker.getRunningComputerScore() + ")");
 		} else {
 			doAutomatedPlay();
 		}
