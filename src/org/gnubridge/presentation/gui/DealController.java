@@ -176,8 +176,8 @@ public class DealController implements CardPlayedListener {
 			view.gameFinished();
 			parent.gameFinished();
 			view.displayScore("North/South: +" + scoringTracker.getLatestDeclarerScoreChange()
-					+ " points, East/West: +" + scoringTracker.getLatestDefenderScoreChange() + " points (Human: "
-					+ scoringTracker.getRunningHumanScore() + ", " + "Computer: "
+					+ " points, East/West: +" + scoringTracker.getLatestDefenderScoreChange() + " points (Us: "
+					+ scoringTracker.getRunningHumanScore() + ", " + "Them: "
 					+ scoringTracker.getRunningComputerScore() + ")");
 		} else {
 			doAutomatedPlay();
