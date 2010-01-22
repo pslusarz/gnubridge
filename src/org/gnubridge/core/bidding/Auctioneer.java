@@ -120,7 +120,7 @@ public class Auctioneer {
 
 	public Call getHighCall() {
 		Bid highBid = this.highBid;
-		if (getHighBid().equals(DOUBLE)) {
+		if (DOUBLE.equals(getHighBid())) {
 			/* If the contract is doubled, then the actual 
 			 * highest call was the previous person to bid
 			 */

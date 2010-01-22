@@ -96,8 +96,6 @@ public class PlayAcceptanceTest extends TestCase {
 
 		System.out.println("Running Human Score: " + mainController.getRunningHumanScore());
 		System.out.println("Running Computer Score: " + mainController.getRunningComputerScore());
-		assertTrue(1000 + 20 * 7 == mainController.getRunningHumanScore()
-				|| 1000 + 20 * 7 == mainController.getRunningHumanScore());
 		assertEquals(0, mainController.getRunningComputerScore());
 
 		preInitializeGame13Tricks();
