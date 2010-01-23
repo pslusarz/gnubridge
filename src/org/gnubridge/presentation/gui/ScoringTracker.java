@@ -5,6 +5,7 @@ import java.util.Random;
 import org.gnubridge.core.Direction;
 import org.gnubridge.core.bidding.Bid;
 import org.gnubridge.core.bidding.ScoreCalculator;
+import org.gnubridge.core.bidding.Vulnerability;
 
 /* This class tracks the score of the human and the computer.
  * It also keeps track of whether or not the human is vulnerable.
@@ -17,7 +18,7 @@ public class ScoringTracker {
 	private int runningComputerScore;
 	private boolean isHumanVulnerable;
 	private boolean isComputerVulnerable;
-	
+
 	private final Random randomSeed;
 
 	public ScoringTracker() {
@@ -29,19 +30,15 @@ public class ScoringTracker {
 
 	public void processFinishedGame(int directionOfHuman, Bid highBid, int declarerTricksTaken) {
 		boolean humansAreDeclarers = false;
-		boolean declarersAreVulnerable = false;
-		boolean defendersAreVulnerable = false;
+		Vulnerability vulnerability;
 		if (directionOfHuman == Direction.NORTH_DEPRECATED || directionOfHuman == Direction.SOUTH_DEPRECATED) {
 			humansAreDeclarers = true;
-			declarersAreVulnerable = isHumanVulnerable;
-			defendersAreVulnerable = isComputerVulnerable;
+			vulnerability = new Vulnerability(isHumanVulnerable, isComputerVulnerable);
 		} else {
-			declarersAreVulnerable = isComputerVulnerable;
-			defendersAreVulnerable = isHumanVulnerable;
+			vulnerability = new Vulnerability(isComputerVulnerable, isHumanVulnerable);
 		}
 
-		ScoreCalculator calculator = new ScoreCalculator(highBid, declarerTricksTaken, declarersAreVulnerable, 
-				defendersAreVulnerable);
+		ScoreCalculator calculator = new ScoreCalculator(highBid, declarerTricksTaken, vulnerability);
 
 		latestDeclarerScoreChange = calculator.getDeclarerScore();
 		latestDefenderScoreChange = calculator.getDefenderScore();
@@ -65,20 +62,19 @@ public class ScoringTracker {
 		isComputerVulnerable = randomSeed.nextBoolean();
 		return toString();
 	}
-	
+
 	/* toString for vulnerability */
+	@Override
 	public String toString() {
 		String str = "";
 		if (isHumanVulnerable) {
 			str += "Us: Vulnerable, Them: ";
-		}
-		else {
+		} else {
 			str += "Us: Not Vulnerable, Them: ";
 		}
 		if (isComputerVulnerable) {
 			str += "Vulnerable";
-		}
-		else {
+		} else {
 			str += "Not Vulnerable";
 		}
 		return str;
@@ -103,7 +99,7 @@ public class ScoringTracker {
 	public boolean isHumanVulnerable() {
 		return isHumanVulnerable;
 	}
-	
+
 	public boolean isComputerVulnerable() {
 		return isComputerVulnerable;
 	}

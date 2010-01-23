@@ -10,6 +10,7 @@ import org.gnubridge.core.Deal;
 import org.gnubridge.core.Direction;
 import org.gnubridge.core.Player;
 import org.gnubridge.core.bidding.ScoreCalculator;
+import org.gnubridge.core.bidding.Vulnerability;
 import org.gnubridge.presentation.GameUtils;
 import org.gnubridge.search.ProductionSettings;
 import org.jbridge.presentation.gui.MockMainView;
@@ -87,7 +88,8 @@ public class PlayAcceptanceTest extends TestCase {
 		playGameToTheEnd(mainController);
 		Thread.sleep(300);
 		int score = new ScoreCalculator(mainController.getBiddingController().getAuction().getHighBid(), mainController
-				.getGameController().getGame().getTricksTaken(Player.NORTH_SOUTH), false, false).getDeclarerScore();
+				.getGameController().getGame().getTricksTaken(Player.NORTH_SOUTH), new Vulnerability(false, false))
+				.getDeclarerScore();
 		System.out.println("Game finished. Declarers took "
 				+ mainController.getGameController().getGame().getTricksTaken(Player.NORTH_SOUTH) + " tricks. Score: "
 				+ score);
@@ -107,7 +109,8 @@ public class PlayAcceptanceTest extends TestCase {
 		mainController.playGame();
 		playGameToTheEnd(mainController);
 		score = new ScoreCalculator(mainController.getBiddingController().getAuction().getHighBid(), mainController
-				.getGameController().getGame().getTricksTaken(Player.NORTH_SOUTH), false, false).getDefenderScore();
+				.getGameController().getGame().getTricksTaken(Player.NORTH_SOUTH), new Vulnerability(false, false))
+				.getDefenderScore();
 
 		System.out.println("Running Human Score: " + mainController.getRunningHumanScore());
 		System.out.println("Running Computer Score: " + mainController.getRunningComputerScore());

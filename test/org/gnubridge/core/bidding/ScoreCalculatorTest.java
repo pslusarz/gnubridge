@@ -4,13 +4,11 @@ import static org.gnubridge.core.bidding.Bid.*;
 import static org.gnubridge.core.deck.Trump.*;
 import junit.framework.TestCase;
 
-import org.gnubridge.core.Direction;
-import org.gnubridge.presentation.gui.ScoringTracker;
-
 public class ScoreCalculatorTest extends TestCase {
 	public void testOneMinorSuitContractMadeWithNoOvertricks() {
 		int tricksTakenByDeclarers = 7;
-		ScoreCalculator calculator = new ScoreCalculator(ONE_CLUBS, tricksTakenByDeclarers, false, false);
+		ScoreCalculator calculator = new ScoreCalculator(ONE_CLUBS, tricksTakenByDeclarers, new Vulnerability(false,
+				false));
 		int actualDeclarerScore = calculator.getDeclarerScore();
 		int actualDefenderScore = calculator.getDefenderScore();
 		assertEquals(70, actualDeclarerScore);
@@ -19,7 +17,8 @@ public class ScoreCalculatorTest extends TestCase {
 
 	public void testOneMajorSuitContractWithTwoOvertricks() {
 		int tricksTakenByDeclarers = 9;
-		ScoreCalculator calculator = new ScoreCalculator(ONE_SPADES, tricksTakenByDeclarers, false, false);
+		ScoreCalculator calculator = new ScoreCalculator(ONE_SPADES, tricksTakenByDeclarers, new Vulnerability(false,
+				false));
 		int actualDeclarerScore = calculator.getDeclarerScore();
 		int actualDefenderScore = calculator.getDefenderScore();
 		assertEquals(140, actualDeclarerScore);
@@ -28,7 +27,8 @@ public class ScoreCalculatorTest extends TestCase {
 
 	public void testGrandSlam() {
 		int tricksTakenByDeclarers = 13;
-		ScoreCalculator calculator = new ScoreCalculator(new Bid(7, CLUBS), tricksTakenByDeclarers, false, false);
+		ScoreCalculator calculator = new ScoreCalculator(new Bid(7, CLUBS), tricksTakenByDeclarers, new Vulnerability(
+				false, false));
 		int actualDeclarerScore = calculator.getDeclarerScore();
 		int actualDefenderScore = calculator.getDefenderScore();
 		assertEquals(1000 + 7 * 20, actualDeclarerScore);
@@ -37,7 +37,8 @@ public class ScoreCalculatorTest extends TestCase {
 
 	public void testSmallSlam() {
 		int tricksTakenByDeclarers = 12;
-		ScoreCalculator calculator = new ScoreCalculator(new Bid(6, SPADES), tricksTakenByDeclarers, false, false);
+		ScoreCalculator calculator = new ScoreCalculator(new Bid(6, SPADES), tricksTakenByDeclarers, new Vulnerability(
+				false, false));
 		int actualDeclarerScore = calculator.getDeclarerScore();
 		int actualDefenderScore = calculator.getDefenderScore();
 		assertEquals(500 + 6 * 30, actualDeclarerScore);
@@ -47,7 +48,8 @@ public class ScoreCalculatorTest extends TestCase {
 
 	public void testNTWithOverTricks() {
 		int tricksTakenByDeclarers = 9;
-		ScoreCalculator calculator = new ScoreCalculator(new Bid(2, NOTRUMP), tricksTakenByDeclarers, false, false);
+		ScoreCalculator calculator = new ScoreCalculator(new Bid(2, NOTRUMP), tricksTakenByDeclarers,
+				new Vulnerability(false, false));
 		int actualDeclarerScore = calculator.getDeclarerScore();
 		int actualDefenderScore = calculator.getDefenderScore();
 		/* 3 * 30 + 10 makes a 100 point game, but the contract was only 70, so it is not a
@@ -59,7 +61,8 @@ public class ScoreCalculatorTest extends TestCase {
 
 	public void testNTWithoutOverTricks() {
 		int tricksTakenByDeclarers = 9;
-		ScoreCalculator calculator = new ScoreCalculator(new Bid(3, NOTRUMP), tricksTakenByDeclarers, false, false);
+		ScoreCalculator calculator = new ScoreCalculator(new Bid(3, NOTRUMP), tricksTakenByDeclarers,
+				new Vulnerability(false, false));
 		int actualDeclarerScore = calculator.getDeclarerScore();
 		int actualDefenderScore = calculator.getDefenderScore();
 
@@ -70,7 +73,8 @@ public class ScoreCalculatorTest extends TestCase {
 
 	public void testUndertricksNT() {
 		int tricksTakenByDeclarers = 6;
-		ScoreCalculator calculator = new ScoreCalculator(new Bid(3, NOTRUMP), tricksTakenByDeclarers, false, false);
+		ScoreCalculator calculator = new ScoreCalculator(new Bid(3, NOTRUMP), tricksTakenByDeclarers,
+				new Vulnerability(false, false));
 		int actualDeclarerScore = calculator.getDeclarerScore();
 		int actualDefenderScore = calculator.getDefenderScore();
 
@@ -80,17 +84,19 @@ public class ScoreCalculatorTest extends TestCase {
 
 	public void testUndertricksMajorSuit() {
 		int tricksTakenByDeclarers = 2;
-		ScoreCalculator calculator = new ScoreCalculator(new Bid(7, HEARTS), tricksTakenByDeclarers, false, false);
+		ScoreCalculator calculator = new ScoreCalculator(new Bid(7, HEARTS), tricksTakenByDeclarers, new Vulnerability(
+				false, false));
 		int actualDeclarerScore = calculator.getDeclarerScore();
 		int actualDefenderScore = calculator.getDefenderScore();
 
 		assertEquals(0, actualDeclarerScore);
 		assertEquals(550, actualDefenderScore);
 	}
-	
+
 	public void testUndertricksMinorSuit() {
 		int tricksTakenByDeclarers = 12;
-		ScoreCalculator calculator = new ScoreCalculator(new Bid(7, CLUBS), tricksTakenByDeclarers, false, false);
+		ScoreCalculator calculator = new ScoreCalculator(new Bid(7, CLUBS), tricksTakenByDeclarers, new Vulnerability(
+				false, false));
 		int actualDeclarerScore = calculator.getDeclarerScore();
 		int actualDefenderScore = calculator.getDefenderScore();
 
@@ -100,7 +106,8 @@ public class ScoreCalculatorTest extends TestCase {
 
 	public void testVulnerability() {
 		int tricksTakenByDeclarers = 6;
-		ScoreCalculator calculator = new ScoreCalculator(new Bid(2, HEARTS), tricksTakenByDeclarers, true, false);
+		ScoreCalculator calculator = new ScoreCalculator(new Bid(2, HEARTS), tricksTakenByDeclarers, new Vulnerability(
+				true, false));
 		int actualDeclarerScore = calculator.getDeclarerScore();
 		int actualDefenderScore = calculator.getDefenderScore();
 
@@ -110,37 +117,41 @@ public class ScoreCalculatorTest extends TestCase {
 
 	public void testVulnerabilityWinContract() {
 		int tricksTakenByDeclarers = 7;
-		ScoreCalculator calculator = new ScoreCalculator(new Bid(1, HEARTS), tricksTakenByDeclarers, true, false);
+		ScoreCalculator calculator = new ScoreCalculator(new Bid(1, HEARTS), tricksTakenByDeclarers, new Vulnerability(
+				true, false));
 		int actualDeclarerScore = calculator.getDeclarerScore();
 		int actualDefenderScore = calculator.getDefenderScore();
 
 		assertEquals(80, actualDeclarerScore);
 		assertEquals(0, actualDefenderScore);
 	}
-	
+
 	public void testDoubledContractMet() {
 		int tricksTakenByDeclarers = 7;
-		ScoreCalculator calculator = new ScoreCalculator(new Double(1, HEARTS), tricksTakenByDeclarers, false, false);
+		ScoreCalculator calculator = new ScoreCalculator(new Double(1, HEARTS), tricksTakenByDeclarers,
+				new Vulnerability(false, false));
 		int actualDeclarerScore = calculator.getDeclarerScore();
 		int actualDefenderScore = calculator.getDefenderScore();
 
 		assertEquals(110, actualDeclarerScore);
 		assertEquals(0, actualDefenderScore);
 	}
-	
+
 	public void testDoubledContractOvertricks() {
 		int tricksTakenByDeclarers = 9;
-		ScoreCalculator calculator = new ScoreCalculator(new Double(1, HEARTS), tricksTakenByDeclarers, false, false);
+		ScoreCalculator calculator = new ScoreCalculator(new Double(1, HEARTS), tricksTakenByDeclarers,
+				new Vulnerability(false, false));
 		int actualDeclarerScore = calculator.getDeclarerScore();
 		int actualDefenderScore = calculator.getDefenderScore();
 
 		assertEquals(110 + 100 * 2, actualDeclarerScore);
 		assertEquals(0, actualDefenderScore);
 	}
-	
+
 	public void testDoubledContractUndertricks() {
 		int tricksTakenByDeclarers = 5;
-		ScoreCalculator calculator = new ScoreCalculator(new Double(1, HEARTS), tricksTakenByDeclarers, false, false);
+		ScoreCalculator calculator = new ScoreCalculator(new Double(1, HEARTS), tricksTakenByDeclarers,
+				new Vulnerability(false, false));
 		int actualDeclarerScore = calculator.getDeclarerScore();
 		int actualDefenderScore = calculator.getDefenderScore();
 
@@ -148,32 +159,4 @@ public class ScoreCalculatorTest extends TestCase {
 		assertEquals(100 + 200, actualDefenderScore);
 	}
 
-	public void testScoreTracker() {
-		ScoringTracker tracker = new ScoringTracker();
-
-		int tricksTakenByDeclarers = 6;
-		tracker.processFinishedGame(Direction.NORTH_DEPRECATED, (new Bid(2, HEARTS)), tricksTakenByDeclarers);
-
-		int actualHumanScore = tracker.getRunningHumanScore();
-		int actualComputerScore = tracker.getRunningComputerScore();
-
-		if (tracker.isHumanVulnerable()) {
-			assertEquals(0, actualHumanScore);
-			assertEquals(200, actualComputerScore);
-		} else {
-			assertEquals(0, actualHumanScore);
-			assertEquals(100, actualComputerScore);
-		}
-
-		tracker.nextRound();
-
-		tricksTakenByDeclarers = 8;
-		tracker.processFinishedGame(Direction.NORTH_DEPRECATED, (new Bid(2, SPADES)), tricksTakenByDeclarers);
-
-		actualHumanScore = tracker.getRunningHumanScore();
-		int newActualComputerScore = tracker.getRunningComputerScore();
-
-		assertEquals(110, actualHumanScore);
-		assertEquals(actualComputerScore, newActualComputerScore);
-	}
 }
