@@ -3,22 +3,24 @@ package org.gnubridge.presentation.gui;
 import org.gnubridge.core.Direction;
 import org.gnubridge.core.bidding.Bid;
 import org.gnubridge.core.bidding.ScoreCalculator;
-import org.gnubridge.core.bidding.Vulnerability;
+import org.gnubridge.core.bidding.UsThemVulnerability;
+import org.jbridge.presentation.gui.MockScoringTracker;
 
 /* This class tracks the score of the human and the computer.
  * It also keeps track of whether or not the human is vulnerable.
  */
 public class ScoringTracker {
+	private static MockScoringTracker instance;
 	private int latestDeclarerScoreChange;
 	private int latestDefenderScoreChange;
 
 	private int runningHumanScore;
 	private int runningComputerScore;
 
-	private Vulnerability vulnerability;
 	private int directionOfHuman;
+	protected UsThemVulnerability usThemVulnerability;
 
-	public ScoringTracker() {
+	protected ScoringTracker() {
 		runningHumanScore = 0;
 		runningComputerScore = 0;
 	}
@@ -26,7 +28,8 @@ public class ScoringTracker {
 	public void processFinishedGame(int directionOfHuman, Bid highBid, int declarerTricksTaken) {
 		this.directionOfHuman = directionOfHuman;
 
-		ScoreCalculator calculator = new ScoreCalculator(highBid, declarerTricksTaken, vulnerability);
+		ScoreCalculator calculator = new ScoreCalculator(highBid, declarerTricksTaken, usThemVulnerability
+				.asDeclarerDefender(directionOfHuman));
 
 		latestDeclarerScoreChange = calculator.getDeclarerScore();
 		latestDefenderScoreChange = calculator.getDefenderScore();
@@ -40,20 +43,20 @@ public class ScoringTracker {
 		}
 	}
 
-	public void setVulnerability(Vulnerability v) {
-		vulnerability = v;
+	public void setUsThemVulnerability(UsThemVulnerability v) {
+		usThemVulnerability = v;
 	}
 
 	/* toString for vulnerability */
 	@Override
 	public String toString() {
 		String str = "";
-		if (isHumanVulnerable()) {
+		if (usThemVulnerability.areWeVulnerable()) {
 			str += "Us: Vulnerable, Them: ";
 		} else {
 			str += "Us: Not Vulnerable, Them: ";
 		}
-		if (isComputerVulnerable()) {
+		if (usThemVulnerability.areTheyVulnerable()) {
 			str += "Vulnerable";
 		} else {
 			str += "Not Vulnerable";
@@ -77,15 +80,6 @@ public class ScoringTracker {
 		return runningComputerScore;
 	}
 
-	public boolean isHumanVulnerable() {
-		if (isHumanDeclarer()) {
-			return vulnerability.isDeclarerVulnerable();
-		} else {
-
-			return vulnerability.isDeclarerVulnerable();
-		}
-	}
-
 	private boolean isHumanDeclarer() {
 		if (directionOfHuman == Direction.NORTH_DEPRECATED || directionOfHuman == Direction.SOUTH_DEPRECATED) {
 			return true;
@@ -94,15 +88,19 @@ public class ScoringTracker {
 		}
 	}
 
-	public boolean isComputerVulnerable() {
-		if (isComputerDeclarer()) {
-			return vulnerability.isDeclarerVulnerable();
-		} else {
-			return vulnerability.isDeclarerVulnerable();
-		}
+	public static void setInstance(MockScoringTracker mock) {
+		instance = mock;
 	}
 
-	private boolean isComputerDeclarer() {
-		return !isHumanVulnerable();
+	public static ScoringTracker getInstance() {
+		ScoringTracker result = null;
+		if (instance != null) {
+			result = instance;
+			instance = null;
+		} else {
+			result = new ScoringTracker();
+		}
+		return result;
+
 	}
 }

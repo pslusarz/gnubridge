@@ -1,7 +1,5 @@
 package org.gnubridge.presentation.gui;
 
-import java.util.Random;
-
 import org.gnubridge.core.Deal;
 import org.gnubridge.core.Direction;
 import org.gnubridge.core.Hand;
@@ -12,7 +10,6 @@ import org.gnubridge.core.West;
 import org.gnubridge.core.bidding.Auctioneer;
 import org.gnubridge.core.bidding.Bid;
 import org.gnubridge.core.bidding.BiddingAgent;
-import org.gnubridge.core.bidding.Vulnerability;
 
 public class BiddingController {
 
@@ -33,7 +30,7 @@ public class BiddingController {
 		human = cardHolder.selectHumanPlayer();
 		view.setCards(new Hand(human.getHand()));
 		doAutomatedBidding();
-		scoringTracker.setVulnerability(new Vulnerability(new Random().nextBoolean(), new Random().nextBoolean()));
+
 		view.setVulnerability(scoringTracker.toString());
 		view.displayScore("Us: " + scoringTracker.getRunningHumanScore() + ", Them: "
 				+ scoringTracker.getRunningComputerScore());

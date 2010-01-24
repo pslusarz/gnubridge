@@ -1,5 +1,7 @@
 package org.gnubridge.presentation.gui;
 
+import java.util.Random;
+
 import org.gnubridge.core.Deal;
 import org.gnubridge.core.East;
 import org.gnubridge.core.North;
@@ -7,6 +9,7 @@ import org.gnubridge.core.Player;
 import org.gnubridge.core.South;
 import org.gnubridge.core.West;
 import org.gnubridge.core.bidding.Auctioneer;
+import org.gnubridge.core.bidding.UsThemVulnerability;
 
 public class MainController {
 
@@ -17,7 +20,7 @@ public class MainController {
 	private final ScoringTracker scoringTracker;
 
 	public MainController() {
-		scoringTracker = new ScoringTracker();
+		scoringTracker = ScoringTracker.getInstance();
 		newGame();
 	}
 
@@ -76,6 +79,8 @@ public class MainController {
 			view.hide();
 		}
 		this.view = ViewFactory.getMainView();
+		scoringTracker.setUsThemVulnerability(new UsThemVulnerability(new Random().nextBoolean(), new Random()
+				.nextBoolean()));
 		setBiddingController(new BiddingController(view.getBiddingView(), this, scoringTracker));
 		view.show();
 
