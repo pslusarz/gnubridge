@@ -4,13 +4,12 @@ import org.gnubridge.core.Direction;
 import org.gnubridge.core.bidding.Bid;
 import org.gnubridge.core.bidding.ScoreCalculator;
 import org.gnubridge.core.bidding.UsThemVulnerability;
-import org.jbridge.presentation.gui.MockScoringTracker;
 
 /* This class tracks the score of the human and the computer.
  * It also keeps track of whether or not the human is vulnerable.
  */
 public class ScoringTracker {
-	private static MockScoringTracker instance;
+	private static ScoringTracker instance;
 	private int latestDeclarerScoreChange;
 	private int latestDefenderScoreChange;
 
@@ -88,7 +87,7 @@ public class ScoringTracker {
 		}
 	}
 
-	public static void setInstance(MockScoringTracker mock) {
+	public static void setInstance(ScoringTracker mock) {
 		instance = mock;
 	}
 
