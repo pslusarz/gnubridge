@@ -1,7 +1,5 @@
 package org.gnubridge.presentation.gui;
 
-import java.util.Random;
-
 import org.gnubridge.core.Direction;
 import org.gnubridge.core.bidding.Bid;
 import org.gnubridge.core.bidding.ScoreCalculator;
@@ -17,15 +15,12 @@ public class ScoringTracker {
 	private int runningHumanScore;
 	private int runningComputerScore;
 
-	private final Random randomSeed;
 	private Vulnerability vulnerability;
 	private int directionOfHuman;
 
 	public ScoringTracker() {
 		runningHumanScore = 0;
 		runningComputerScore = 0;
-		randomSeed = new Random();
-		nextRound();
 	}
 
 	public void processFinishedGame(int directionOfHuman, Bid highBid, int declarerTricksTaken) {
@@ -45,11 +40,8 @@ public class ScoringTracker {
 		}
 	}
 
-	/* Starts the next, determines the vulnerability and returns it */
-	public String nextRound() {
-
-		vulnerability = new Vulnerability(randomSeed.nextBoolean(), randomSeed.nextBoolean());
-		return toString();
+	public void setVulnerability(Vulnerability v) {
+		vulnerability = v;
 	}
 
 	/* toString for vulnerability */
