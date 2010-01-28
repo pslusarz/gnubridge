@@ -12,15 +12,11 @@ public interface DealView {
 
 	public abstract void setGame(Deal g, Direction human);
 
-	//public abstract void gameStateChanged();
-
 	public abstract void displayPreviousTrick();
 
 	public abstract void displayCurrentTrick();
 
 	public abstract void display(String message);
-
-	public abstract void displayScore(String message);
 
 	public abstract int getTableBottom();
 
@@ -30,6 +26,8 @@ public interface DealView {
 
 	public abstract void hide();
 
-	public abstract void gameFinished();
+	public abstract void displayStartingScore(ScoringTracker scoringTracker);
+
+	public abstract void displayFinalScore(ScoringTracker scoringTracker);
 
 }

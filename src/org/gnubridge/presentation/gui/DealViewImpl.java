@@ -130,11 +130,6 @@ public class DealViewImpl implements DealView, CardPanelHost, ActionListener {
 		};
 	}
 
-	//	public void gameStateChanged() {
-	//		displayCurrentTrick();
-	//
-	//	}
-
 	public void displayCurrentTrick() {
 		message = " Tricks played: " + game.getTricksPlayed() + "    North/South: "
 				+ game.getTricksTaken(Player.NORTH_SOUTH) + " East/West: " + game.getTricksTaken(Player.WEST_EAST);
@@ -253,12 +248,6 @@ public class DealViewImpl implements DealView, CardPanelHost, ActionListener {
 
 	}
 
-	public void displayScore(String message) {
-		this.scoreMessage = message;
-		panel.repaint();
-
-	}
-
 	@Override
 	public int getTotalHeight() {
 		return DHEIGHT;
@@ -306,9 +295,22 @@ public class DealViewImpl implements DealView, CardPanelHost, ActionListener {
 	}
 
 	@Override
-	public void gameFinished() {
+	public void displayStartingScore(ScoringTracker scoringTracker) {
+		this.scoreMessage = "Us: " + scoringTracker.getRunningHumanScore() + ", Them: "
+				+ scoringTracker.getRunningComputerScore();
+		panel.repaint();
+	}
+
+	@Override
+	public void displayFinalScore(ScoringTracker scoringTracker) {
 		display("GAME FINISHED. Contract was: " + contract + ", declarers took " + game.getDeclarerTricksTaken()
 				+ " tricks.");
+		this.scoreMessage = "North/South: +" + scoringTracker.getLatestDeclarerScoreChange() + " points, East/West: +"
+				+ scoringTracker.getLatestDefenderScoreChange() + " points (Us: "
+				+ scoringTracker.getRunningHumanScore() + ", " + "Them: " + scoringTracker.getRunningComputerScore()
+				+ ")";
+		panel.repaint();
 
 	}
+
 }

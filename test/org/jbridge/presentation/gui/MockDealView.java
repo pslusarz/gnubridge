@@ -5,20 +5,19 @@ import org.gnubridge.core.Direction;
 import org.gnubridge.core.bidding.Bid;
 import org.gnubridge.presentation.gui.CardPlayedListener;
 import org.gnubridge.presentation.gui.DealView;
+import org.gnubridge.presentation.gui.ScoringTracker;
 
 public class MockDealView implements DealView {
 
-	private boolean scoreSet = false;
+	private final boolean scoreSet = false;
+	private ScoringTracker scoringTracker;
+	private boolean startingScoreSet;
+	private boolean finalScoreSet;
 
 	@Override
 	public void display(String message) {
 		// TODO Auto-generated method stub
 
-	}
-
-	@Override
-	public void displayScore(String message) {
-		scoreSet = true;
 	}
 
 	@Override
@@ -69,14 +68,28 @@ public class MockDealView implements DealView {
 
 	}
 
-	public boolean isScoreSet() {
-		return scoreSet;
+	public boolean isStartingScoreSet() {
+		return startingScoreSet;
+	}
+
+	public boolean isFinalScoreSet() {
+		return finalScoreSet;
 	}
 
 	@Override
-	public void gameFinished() {
-		// TODO Auto-generated method stub
+	public void displayStartingScore(ScoringTracker scoringTracker) {
+		this.scoringTracker = scoringTracker;
+		this.startingScoreSet = true;
+	}
 
+	@Override
+	public void displayFinalScore(ScoringTracker scoringTracker) {
+		this.scoringTracker = scoringTracker;
+		this.finalScoreSet = true;
+	}
+
+	public ScoringTracker getScoringTracker() {
+		return scoringTracker;
 	}
 
 }

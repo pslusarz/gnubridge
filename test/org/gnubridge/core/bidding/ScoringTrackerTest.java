@@ -5,6 +5,7 @@ import junit.framework.TestCase;
 
 import org.gnubridge.core.Direction;
 import org.gnubridge.presentation.gui.ScoringTracker;
+import org.jbridge.presentation.gui.MockScoringTracker;
 
 public class ScoringTrackerTest extends TestCase {
 	int tricksToMakeLevel1Contract = 7;
@@ -51,6 +52,33 @@ public class ScoringTrackerTest extends TestCase {
 		tracker.processFinishedGame(Direction.EAST_DEPRECATED, ONE_HEARTS, tricksToMakeLevel1Contract);
 		assertEquals(80, tracker.getRunningHumanScore());
 		assertEquals(80, tracker.getRunningComputerScore());
+	}
+
+	public void testGetInstanceConstructsNewByDefault() {
+		ScoringTracker instance = ScoringTracker.getInstance();
+		assertEquals(ScoringTracker.class, instance.getClass());
+	}
+
+	public void testGetInstanceConstructsNewEachTime() {
+		ScoringTracker instance1 = ScoringTracker.getInstance();
+		ScoringTracker instance2 = ScoringTracker.getInstance();
+		assertFalse(instance1 == instance2);
+	}
+
+	public void testGetInstanceReturnsMockIfSet() {
+		MockScoringTracker mock = new MockScoringTracker();
+		ScoringTracker.setInstance(mock);
+		ScoringTracker actual = ScoringTracker.getInstance();
+		assertEquals(mock, actual);
+	}
+
+	public void testGetInstanceReturnsMockOnlyOnce() {
+		MockScoringTracker mock = new MockScoringTracker();
+		ScoringTracker.setInstance(mock);
+		ScoringTracker.getInstance();
+		ScoringTracker actual = ScoringTracker.getInstance();
+		assertFalse(mock == actual);
+		assertEquals(ScoringTracker.class, actual.getClass());
 	}
 
 }

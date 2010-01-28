@@ -30,10 +30,7 @@ public class BiddingController {
 		human = cardHolder.selectHumanPlayer();
 		view.setCards(new Hand(human.getHand()));
 		doAutomatedBidding();
-
-		view.setVulnerability(scoringTracker.toString());
-		view.displayScore("Us: " + scoringTracker.getRunningHumanScore() + ", Them: "
-				+ scoringTracker.getRunningComputerScore());
+		view.displayScore(scoringTracker);
 	}
 
 	public Deal getCardHolder() {

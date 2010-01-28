@@ -46,9 +46,6 @@ public class BiddingViewImpl implements ActionListener, BiddingView {
 
 	}
 
-	/* (non-Javadoc)
-	 * @see org.gnubridge.presentation.gui.BiddingView#display(java.lang.String)
-	 */
 	public void display(String msg) {
 		biddingDisplay.display(msg);
 
@@ -102,13 +99,12 @@ public class BiddingViewImpl implements ActionListener, BiddingView {
 		}
 
 	}
-	
-	public void setVulnerability (String vulnerabilityMessage) {
-		biddingDisplay.setVulnerability(vulnerabilityMessage);
-	}
-	
 
-	public void displayScore(String message) {
-		biddingDisplay.displayScore(message);
+	@Override
+	public void displayScore(ScoringTracker scoringTracker) {
+		biddingDisplay.setVulnerability(scoringTracker.toString());
+		biddingDisplay.displayScore("Us: " + scoringTracker.getRunningHumanScore() + ", Them: "
+				+ scoringTracker.getRunningComputerScore());
+
 	}
 }

@@ -23,6 +23,7 @@ import org.gnubridge.presentation.gui.CardPlayedListener;
 import org.gnubridge.presentation.gui.DealView;
 import org.gnubridge.presentation.gui.MainView;
 import org.gnubridge.presentation.gui.OneColumnPerColor;
+import org.gnubridge.presentation.gui.ScoringTracker;
 import org.gnubridge.presentation.gui.Table;
 
 public class AnalysisView implements DealView, CardPanelHost {
@@ -246,12 +247,6 @@ public class AnalysisView implements DealView, CardPanelHost {
 		parent.add(panel);
 	}
 
-	public void displayScore(String message) {
-		this.messageScore = message;
-		panel.repaint();
-
-	}
-
 	public void display(String message) {
 		this.message = message;
 		panel.repaint();
@@ -276,7 +271,13 @@ public class AnalysisView implements DealView, CardPanelHost {
 	}
 
 	@Override
-	public void gameFinished() {
+	public void displayStartingScore(ScoringTracker scoringTracker) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void displayFinalScore(ScoringTracker scoringTracker) {
 		// TODO Auto-generated method stub
 
 	}

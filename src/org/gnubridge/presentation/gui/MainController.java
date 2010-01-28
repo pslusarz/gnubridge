@@ -5,7 +5,6 @@ import java.util.Random;
 import org.gnubridge.core.Deal;
 import org.gnubridge.core.East;
 import org.gnubridge.core.North;
-import org.gnubridge.core.Player;
 import org.gnubridge.core.South;
 import org.gnubridge.core.West;
 import org.gnubridge.core.bidding.Auctioneer;
@@ -15,7 +14,7 @@ public class MainController {
 
 	private MainView view;
 	private BiddingController biddingController;
-	private DealController gameController;
+	private DealController dealController;
 
 	private final ScoringTracker scoringTracker;
 
@@ -25,10 +24,10 @@ public class MainController {
 	}
 
 	public void playGame() {
-		setGameController(new DealController(this, getBiddingController().getAuction().getHighBid(),
+		this.dealController = new DealController(this, getBiddingController().getAuction().getHighBid(),
 				repositionHandsSoThatSouthIsDeclarer(getBiddingController().getAuction(), getBiddingController()
 						.getCardHolder()), getBiddingController().allowHumanToPlayIfDummy(), view.getDealView(),
-				scoringTracker));
+				scoringTracker);
 
 	}
 
@@ -42,28 +41,12 @@ public class MainController {
 		return result;
 	}
 
-	public void gameFinished() {
-		int declarerTricksTaken = getGameController().getGame().getTricksTaken(Player.NORTH_SOUTH);
-
-		scoringTracker.processFinishedGame(gameController.getHuman().getValue(), getBiddingController().getAuction()
-				.getHighBid(), declarerTricksTaken);
-
-	}
-
-	public void setBiddingController(BiddingController biddingController) {
-		this.biddingController = biddingController;
-	}
-
 	public BiddingController getBiddingController() {
 		return biddingController;
 	}
 
-	public void setGameController(DealController gameController) {
-		this.gameController = gameController;
-	}
-
 	public DealController getGameController() {
-		return gameController;
+		return dealController;
 	}
 
 	public int getRunningHumanScore() {
@@ -81,7 +64,7 @@ public class MainController {
 		this.view = ViewFactory.getMainView();
 		scoringTracker.setUsThemVulnerability(new UsThemVulnerability(new Random().nextBoolean(), new Random()
 				.nextBoolean()));
-		setBiddingController(new BiddingController(view.getBiddingView(), this, scoringTracker));
+		this.biddingController = new BiddingController(view.getBiddingView(), this, scoringTracker);
 		view.show();
 
 	}
