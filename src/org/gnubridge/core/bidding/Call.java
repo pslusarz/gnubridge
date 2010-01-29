@@ -6,7 +6,6 @@ import org.gnubridge.core.deck.Trump;
 public class Call {
 	private final Bid bid;
 	private final Direction direction;
-	private boolean doubled = false;
 
 	public Call(Bid b, Direction d) {
 		bid = b;
@@ -43,11 +42,4 @@ public class Call {
 		}
 	}
 
-	public boolean isDoubled() {
-		return doubled;
-	}
-
-	public void makeDoubled() {
-		doubled = true;
-	}
 }

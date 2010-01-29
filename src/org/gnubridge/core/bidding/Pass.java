@@ -7,6 +7,10 @@ public class Pass extends Bid {
 
 	@Override
 	public String toString() {
+		return stringValue();
+	}
+
+	public static String stringValue() {
 		return "PASS";
 	}
 }

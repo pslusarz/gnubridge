@@ -1,10 +1,10 @@
 package org.gnubridge.core.bidding;
 
-import static org.gnubridge.core.bidding.Bid.*;
 import static org.gnubridge.core.deck.Trump.*;
 
 public class ScoreCalculator {
 
+	private static final int INSULT_BONUS = 50;
 	private int defenderPoints;
 	private int declarerPoints;
 	private final Bid highBid;
@@ -21,15 +21,6 @@ public class ScoreCalculator {
 	private void calculateScore() {
 		int bidValue = highBid.getValue();
 		int numberTricksNeededByDeclarer = bidValue + 6;
-
-		/* We calculate how many points the declarer won, or alternatively
-		 * 	how much the defenders won if the declarer did not meet his contract
-		 * 
-		 * This will be more complicated once the game supports doubles, but it
-		 * should be pretty straight forward for now
-		 * 
-		 * TODO: Support doubles 
-		 */
 		declarerPoints = 0;
 		defenderPoints = 0;
 		if (tricksTakenByDeclarers >= numberTricksNeededByDeclarer) {
@@ -47,8 +38,8 @@ public class ScoreCalculator {
 				throw new RuntimeException("Unknown trump: " + highBid.getTrump());
 			}
 
-			if (highBid.equals(DOUBLE)) {
-				contractWorth *= 2 + 50; /* +50 for the "insult" */
+			if (highBid.isDoubled()) {
+				contractWorth *= 2 + INSULT_BONUS;
 				pointsPerTrick *= 2;
 			}
 
@@ -84,7 +75,7 @@ public class ScoreCalculator {
 			 * Vulnerability only helps the declarer if he scores over-tricks AND 
 			 * was doubled
 			 */
-			if (highBid.equals(DOUBLE)) {
+			if (highBid.isDoubled()) {
 				if (vulnerability.isDeclarerVulnerable()) {
 					pointsPerTrick = 200;
 				} else {
@@ -95,15 +86,14 @@ public class ScoreCalculator {
 		} else {
 			int underTricks = numberTricksNeededByDeclarer - tricksTakenByDeclarers;
 
-			/* This will be more complicated once doubling is possibile */
 			if (vulnerability.isDeclarerVulnerable()) {
-				if (highBid.equals(DOUBLE)) {
+				if (highBid.isDoubled()) {
 					defenderPoints += 200 + (underTricks - 1) * 300;
 				} else {
 					defenderPoints += underTricks * 100;
 				}
 			} else {
-				if (highBid.equals(DOUBLE)) {
+				if (highBid.isDoubled()) {
 					defenderPoints += 100;
 					if (underTricks > 1) {
 						defenderPoints += 200 + (underTricks - 2) * 300;

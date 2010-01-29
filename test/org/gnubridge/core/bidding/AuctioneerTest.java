@@ -162,12 +162,26 @@ public class AuctioneerTest extends TestCase {
 		assertFalse(a.isValid(DOUBLE));
 	}
 
-	public void testDoublingAffectsTheHighCall() {
+	public void testDoublingAffectsTheHighBid() {
 		Auctioneer a = new Auctioneer(WEST);
 		a.bid(ONE_NOTRUMP);
-		assertFalse(a.getHighCall().isDoubled());
+		assertFalse(a.getHighBid().isDoubled());
 		a.bid(DOUBLE);
-		assertTrue(a.getHighCall().isDoubled());
+		assertTrue(a.getHighBid().isDoubled());
+	}
+
+	public void testDoublingDoesNotChangeTheHighBidValue() {
+		Auctioneer a = new Auctioneer(WEST);
+		a.bid(ONE_NOTRUMP);
+		a.bid(DOUBLE);
+		assertEquals(ONE_NOTRUMP, a.getHighBid());
+	}
+
+	public void testDoublingDoesNotChangeTheHighCallPlayer() {
+		Auctioneer a = new Auctioneer(WEST);
+		a.bid(ONE_NOTRUMP);
+		a.bid(DOUBLE);
+		assertEquals(WEST, a.getHighCall().getDirection());
 	}
 
 	public void testGetDummyNullIfAuctionNotFinished() {
@@ -196,6 +210,17 @@ public class AuctioneerTest extends TestCase {
 		assertEquals(SOUTH, a.getDummy());
 	}
 
+	public void testGetDummySimpleDoubledContract() {
+		Auctioneer a = new Auctioneer(WEST);
+		a.bid(PASS);
+		a.bid(ONE_NOTRUMP);
+		a.bid(DOUBLE);
+		a.bid(PASS);
+		a.bid(PASS);
+		a.bid(PASS);
+		assertEquals(SOUTH, a.getDummy());
+	}
+
 	public void testGetDummyOverbidContract() {
 		Auctioneer a = new Auctioneer(WEST);
 		a.bid(ONE_NOTRUMP);
@@ -215,6 +240,17 @@ public class AuctioneerTest extends TestCase {
 		a.bid(PASS);
 		a.bid(PASS);
 		assertEquals(EAST, a.getDummy());
+	}
+
+	public void testGetDummyDoubledInitialBid() {
+		Auctioneer a = new Auctioneer(WEST);
+		a.bid(ONE_NOTRUMP);
+		a.bid(DOUBLE);
+		a.bid(TWO_DIAMONDS);
+		a.bid(PASS);
+		a.bid(PASS);
+		a.bid(PASS);
+		assertEquals(WEST, a.getDummy());
 	}
 
 	public void testGetDummyTwoRoundContract() {

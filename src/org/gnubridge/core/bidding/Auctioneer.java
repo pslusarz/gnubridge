@@ -12,7 +12,6 @@ public class Auctioneer {
 	private Direction nextToBid;
 	private int passCount;
 	private Bid highBid;
-	private Bid nextHighestBid;
 	private int bidCount;
 	private Call last;
 	private Call beforeLast;
@@ -36,7 +35,8 @@ public class Auctioneer {
 		return result;
 	}
 
-	public void bid(Bid bid) {
+	public void bid(Bid b) {
+		Bid bid = Bid.cloneBid(b);
 		beforeLast = last;
 		last = new Call(bid, nextToBid);
 		calls.add(last);
@@ -45,11 +45,11 @@ public class Auctioneer {
 			passCount++;
 		} else {
 			passCount = 0;
-			nextHighestBid = highBid;
-			highBid = bid;
-		}
-		if (DOUBLE.equals(bid)) {
-			getHighCall().makeDoubled();
+			if (DOUBLE.equals(bid)) {
+				getHighBid().makeDoubled();
+			} else {
+				highBid = bid;
+			}
 		}
 
 		nextToBid = nextToBid.clockwise();
@@ -94,7 +94,7 @@ public class Auctioneer {
 		boolean result = false;
 		if (candidate != null) {
 			if (candidate.equals(DOUBLE)) {
-				if (getHighCall() != null && !getHighCall().pairMatches(nextToBid) && !getHighCall().isDoubled()) {
+				if (getHighCall() != null && !getHighCall().pairMatches(nextToBid) && !getHighBid().isDoubled()) {
 					return true;
 				}
 			} else if (candidate.isPass() || candidate.greaterThan(getHighBid())) {
@@ -108,7 +108,7 @@ public class Auctioneer {
 		Direction result = null;
 		if (biddingFinished() && getHighCall() != null) {
 			for (Call call : calls) {
-				if (!call.isPass() && call.getTrump().equals(getHighCall().getTrump())
+				if (call.getBid().hasTrump() && call.getTrump().equals(getHighCall().getTrump())
 						&& call.pairMatches(getHighCall().getDirection())) {
 					result = call.getDirection().opposite();
 					break;
@@ -120,12 +120,6 @@ public class Auctioneer {
 
 	public Call getHighCall() {
 		Bid highBid = this.highBid;
-		if (DOUBLE.equals(getHighBid())) {
-			/* If the contract is doubled, then the actual 
-			 * highest call was the previous person to bid
-			 */
-			highBid = nextHighestBid;
-		}
 		for (Call call : calls) {
 			if (call.getBid().equals(highBid)) {
 				return call;

@@ -18,8 +18,8 @@ public class Respond1ColorRaiseMajorSuit extends Response {
 		boolean result = false;
 		if (super.applies()) {
 			calculator = new ResponseCalculator(hand, partnersOpeningBid);
-			if (partnersOpeningBid.getTrump().isMajorSuit() && partnersOpeningBid.getValue() == 1
-					&& calculator.getCombinedPoints() >= 6
+			if (partnersOpeningBid.hasTrump() && partnersOpeningBid.getTrump().isMajorSuit()
+					&& partnersOpeningBid.getValue() == 1 && calculator.getCombinedPoints() >= 6
 					&& hand.getSuitLength(partnersOpeningBid.getTrump().asSuit()) >= 3) {
 				result = true;
 			}

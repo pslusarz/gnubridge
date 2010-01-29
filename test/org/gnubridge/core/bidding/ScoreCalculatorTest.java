@@ -128,7 +128,7 @@ public class ScoreCalculatorTest extends TestCase {
 
 	public void testDoubledContractMet() {
 		int tricksTakenByDeclarers = 7;
-		ScoreCalculator calculator = new ScoreCalculator(new Double(1, HEARTS), tricksTakenByDeclarers,
+		ScoreCalculator calculator = new ScoreCalculator(new Bid(1, HEARTS).makeDoubled(), tricksTakenByDeclarers,
 				new Vulnerability(false, false));
 		int actualDeclarerScore = calculator.getDeclarerScore();
 		int actualDefenderScore = calculator.getDefenderScore();
@@ -139,7 +139,7 @@ public class ScoreCalculatorTest extends TestCase {
 
 	public void testDoubledContractOvertricks() {
 		int tricksTakenByDeclarers = 9;
-		ScoreCalculator calculator = new ScoreCalculator(new Double(1, HEARTS), tricksTakenByDeclarers,
+		ScoreCalculator calculator = new ScoreCalculator(new Bid(1, HEARTS).makeDoubled(), tricksTakenByDeclarers,
 				new Vulnerability(false, false));
 		int actualDeclarerScore = calculator.getDeclarerScore();
 		int actualDefenderScore = calculator.getDefenderScore();
@@ -150,7 +150,7 @@ public class ScoreCalculatorTest extends TestCase {
 
 	public void testDoubledContractUndertricks() {
 		int tricksTakenByDeclarers = 5;
-		ScoreCalculator calculator = new ScoreCalculator(new Double(1, HEARTS), tricksTakenByDeclarers,
+		ScoreCalculator calculator = new ScoreCalculator(new Bid(1, HEARTS).makeDoubled(), tricksTakenByDeclarers,
 				new Vulnerability(false, false));
 		int actualDeclarerScore = calculator.getDeclarerScore();
 		int actualDefenderScore = calculator.getDefenderScore();

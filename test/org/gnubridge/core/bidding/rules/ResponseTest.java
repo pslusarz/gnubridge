@@ -1,5 +1,6 @@
 package org.gnubridge.core.bidding.rules;
 
+import static org.gnubridge.core.bidding.Bid.*;
 import junit.framework.TestCase;
 
 import org.gnubridge.core.Hand;
@@ -28,6 +29,21 @@ public class ResponseTest extends TestCase {
 		Auctioneer a = new Auctioneer(West.i());
 		a.bid(new Pass());
 		a.bid(new Pass());
+		Response rule = new Response(a, new Hand("3,2", "K,Q,J,2", "9,8", "A,K,5,4,3")) {
+			@Override
+			protected Bid prepareBid() {
+				throw new RuntimeException("should not try to prepare bid when it's not a response situation");
+			}
+
+		};
+		assertEquals(null, rule.getBid());
+	}
+
+	public void testPartnersDoubleIsNotAResponses() {
+		Auctioneer a = new Auctioneer(West.i());
+		a.bid(ONE_CLUBS);
+		a.bid(DOUBLE);
+		a.bid(PASS);
 		Response rule = new Response(a, new Hand("3,2", "K,Q,J,2", "9,8", "A,K,5,4,3")) {
 			@Override
 			protected Bid prepareBid() {

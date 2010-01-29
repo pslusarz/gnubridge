@@ -48,6 +48,7 @@ public class Bid {
 	private final Trump trump;
 	private boolean forcing = false;
 	private boolean gameForcing = false;
+	private boolean doubled = false;
 
 	public Bid(int v, Trump c) {
 		value = v;
@@ -129,22 +130,13 @@ public class Bid {
 	}
 
 	public static Bid makeBid(int bidSize, String t) {
-		Trump tr = Trump.instance(t);
-		if (tr == null) {
+		if (Pass.stringValue().equals(t.toUpperCase())) {
 			return new Pass();
-		} else {
-			return new Bid(bidSize, tr);
-		}
-	}
-	
-	public static Bid makeBid(int bidSize, String t, String type) {
-		Trump tr = Trump.instance(t);
-		if (type.equals("Double")) {
-			return new Double(bidSize, tr);
-		}
-		else {
+
+		} else if (Double.stringValue().equals(t.toUpperCase())) {
 			return new Double();
 		}
+		return new Bid(bidSize, Trump.instance(t));
 	}
 
 	public boolean isPass() {
@@ -176,5 +168,44 @@ public class Bid {
 		} else {
 			return false;
 		}
+	}
+
+	public Bid makeDoubled() {
+		doubled = true;
+		return this;
+	}
+
+	public boolean isDoubled() {
+		return doubled;
+	}
+
+	/**
+	 * Useful to distinguish Pass, Double, and Redouble
+	 */
+	public boolean hasTrump() {
+		return getTrump() != null;
+	}
+
+	public static Bid cloneBid(Bid b) {
+		if (b.hasTrump()) {
+			return new Bid(b.getValue(), b.getTrump());
+		} else if (b.isPass()) {
+			return new Pass();
+		} else if (b.isDouble()) {
+			return new Double();
+		}
+		return null;
+	}
+
+	private boolean isDouble() {
+		return DOUBLE.equals(this);
+	}
+
+	public String longDescription() {
+		String result = toString();
+		if (isDoubled()) {
+			result += " (Doubled)";
+		}
+		return result;
 	}
 }

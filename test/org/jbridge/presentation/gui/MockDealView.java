@@ -9,7 +9,6 @@ import org.gnubridge.presentation.gui.ScoringTracker;
 
 public class MockDealView implements DealView {
 
-	private final boolean scoreSet = false;
 	private ScoringTracker scoringTracker;
 	private boolean startingScoreSet;
 	private boolean finalScoreSet;

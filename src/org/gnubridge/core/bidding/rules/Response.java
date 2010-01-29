@@ -16,7 +16,7 @@ public abstract class Response extends BiddingRule {
 	@Override
 	protected boolean applies() {
 		Call partnersCall = auction.getPartnersLastCall();
-		if (partnersCall != null && !partnersCall.isPass()) {
+		if (partnersCall != null && partnersCall.getBid().hasTrump()) {
 			partnersOpeningBid = partnersCall.getBid();
 			Call myOpeningCall = auction.getPartnersCall(partnersCall);
 			if (myOpeningCall == null || myOpeningCall.isPass()) {

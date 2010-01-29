@@ -123,7 +123,8 @@ public class DealViewImpl implements DealView, CardPanelHost, ActionListener {
 			public void paintComponent(Graphics g) {
 				super.paintComponent(g);
 				table.draw(g);
-				g.drawString("Contract (North/South): " + contract + "            " + message + " ", 20, DHEIGHT - 25);
+				g.drawString("Contract (North/South): " + contract.longDescription() + "            " + message + " ",
+						20, DHEIGHT - 25);
 				g.drawString(scoreMessage, 20, DHEIGHT - 13);
 				table.drawPromptArrow(g, game.getNextToPlay().getDirection2(), cardPlayed);
 			}

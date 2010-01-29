@@ -61,35 +61,16 @@ public class BiddingController {
 				view.display("Not your turn to bid");
 				return;
 			}
-			Bid highBid = auction.getHighBid();
 			Bid candidate = null;
-			if (trump.equals("Double")) {
-				if (highBid == null) {
-					/* Todo: Don't even show the button, preempt these types of errors */
-					view.display("You cannot double before bidding has begun");
-					return;
-				}
-				candidate = Bid.makeBid(highBid.getValue(), highBid.getTrump().toString(), "Double");
-			} else {
-				candidate = Bid.makeBid(bidSize, trump);
-			}
+			candidate = Bid.makeBid(bidSize, trump);
 			if (!auction.isValid(candidate)) {
-				view.display("Invalid bid");
+				view.display("Invalid bid: " + candidate);
 				return;
 			}
 			auction.bid(candidate);
 			view.display("Bid placed:" + candidate);
 			view.auctionStateChanged();
 			doAutomatedBidding();
-		}
-		if (auction.biddingFinished()) {
-			String message = "BIDDING COMPLETE.";
-			if (auction.getHighBid() != null) {
-				message += " High bid: " + auction.getHighBid();
-			} else {
-				message += " No contract reached. Cannot play game.";
-			}
-			view.display(message);
 		}
 	}
 

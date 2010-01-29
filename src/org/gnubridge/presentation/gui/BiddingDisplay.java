@@ -1,5 +1,6 @@
 package org.gnubridge.presentation.gui;
 
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -56,7 +57,7 @@ public class BiddingDisplay {
 		newGameButton.setVisible(true);
 
 	}
-	
+
 	public void setCards(Hand h) {
 		int i = 0;
 		for (Card card : h.getCardsHighToLow()) {
@@ -67,9 +68,9 @@ public class BiddingDisplay {
 			i++;
 		}
 	}
-	
+
 	public void setVulnerability(String vulnerabilityMessage) {
-		this.vulnerabilityMessage = vulnerabilityMessage ;
+		this.vulnerabilityMessage = vulnerabilityMessage;
 	}
 
 	private int getTopOfCards() {
@@ -84,6 +85,15 @@ public class BiddingDisplay {
 	public void auctionStateChanged() {
 		if (auction.biddingFinished() && auction.getHighBid() != null) {
 			playGameButton.setVisible(true);
+			if (auction.biddingFinished()) {
+				String message = "BIDDING COMPLETE.";
+				if (auction.getHighBid() != null) {
+					message += " High bid: " + auction.getHighBid().longDescription();
+				} else {
+					message += " No contract reached. Cannot play game.";
+				}
+				display(message);
+			}
 		}
 		panel.repaint();
 	}
@@ -96,19 +106,26 @@ public class BiddingDisplay {
 			@Override
 			public void paintComponent(Graphics g) {
 
-				
 				super.paintComponent(g);
 				int top = 15;
 				int rowHeight = 15;
 
 				g.drawString(vulnerabilityMessage, getColumnForDirection(0), top + rowHeight * 18);
-				
+
 				g.drawString(scoreMessage, getColumnForDirection(0) + 5, top + rowHeight * 19 + 5);
-				
-				g.drawString("Player 1", getColumnForDirection(0), top);
-				g.drawString("Player 2", getColumnForDirection(1), top);
-				g.drawString("Partner 1", getColumnForDirection(2), top);
-				g.drawString("Partner 2", getColumnForDirection(3), top);
+				Color defaultColor = g.getColor();
+				try {
+					g.setColor(Color.BLUE);
+					g.drawString("Player 1", getColumnForDirection(0), top);
+					g.setColor(Color.RED);
+					g.drawString("Player 2", getColumnForDirection(1), top);
+					g.setColor(Color.BLUE);
+					g.drawString("Partner 1", getColumnForDirection(2), top);
+					g.setColor(Color.RED);
+					g.drawString("Partner 2", getColumnForDirection(3), top);
+				} finally {
+					g.setColor(defaultColor);
+				}
 				top += rowHeight;
 				for (Call call : auction.getCalls()) {
 					g.drawString(call.getBid().toString(), getColumnForDirection(call.getDirection().getValue()), top);
@@ -144,7 +161,7 @@ public class BiddingDisplay {
 		panel.repaint();
 
 	}
-	
+
 	public void displayScore(String message) {
 		this.scoreMessage = message;
 		panel.repaint();
