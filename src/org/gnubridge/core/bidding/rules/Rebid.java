@@ -24,7 +24,7 @@ public abstract class Rebid extends BiddingRule {
 
 	private boolean validOpeningAndResponse() {
 		Call responderCall = auction.getPartnersLastCall();
-		if (responderCall != null && !responderCall.isPass()) {
+		if (responderCall != null && responderCall.getBid().hasTrump()) {
 			Call myOpeningBid = auction.getPartnersCall(responderCall);
 			if (myOpeningBid != null && !myOpeningBid.isPass()) {
 				return true;

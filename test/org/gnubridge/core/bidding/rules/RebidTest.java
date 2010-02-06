@@ -1,5 +1,6 @@
 package org.gnubridge.core.bidding.rules;
 
+import static org.gnubridge.core.bidding.Bid.*;
 import junit.framework.TestCase;
 
 import org.gnubridge.core.Hand;
@@ -65,6 +66,22 @@ public class RebidTest extends TestCase {
 			@Override
 			protected Bid prepareBid() {
 				return null;
+			}
+
+		};
+		assertEquals(null, rule.getBid());
+	}
+
+	public void testDoNotApplyWhenPartnerDoubled() {
+		Auctioneer a = new Auctioneer(West.i());
+		a.bid(ONE_CLUBS);
+		a.bid(PASS);
+		a.bid(DOUBLE);
+		a.bid(PASS);
+		Rebid rule = new Rebid(a, new Hand("3,2", "K,Q,J,2", "9,8", "A,K,5,4,3")) {
+			@Override
+			protected Bid prepareBid() {
+				throw new RuntimeException("should not try to prepare bid when it's not a rebid situation");
 			}
 
 		};

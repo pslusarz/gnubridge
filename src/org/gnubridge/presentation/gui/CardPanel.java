@@ -16,7 +16,7 @@ public class CardPanel extends JPanel {
 	public static final int IMAGE_WIDTH = 70;
 	public static final int IMAGE_HEIGHT = 120;
 	private static CardPanel selectedCard;
-	private Card card;
+	private final Card card;
 	private boolean selected;
 	private boolean played;
 	private int originalX;
@@ -30,8 +30,8 @@ public class CardPanel extends JPanel {
 	public CardPanel(Card card) {
 		this.card = card;
 		setSize(IMAGE_WIDTH, IMAGE_HEIGHT);
-		URL imageURL = CardPanel.class.getResource("/"+card.toString().replaceAll(" ", "-") + ".png");
-        image = new ImageIcon(imageURL).getImage();
+		URL imageURL = CardPanel.class.getResource("/" + card.toString().replaceAll(" ", "-") + ".png");
+		image = new ImageIcon(imageURL).getImage();
 	}
 
 	@Override
@@ -45,7 +45,10 @@ public class CardPanel extends JPanel {
 			g.setColor(Color.BLUE);
 		}
 		if (selected || played || high) {
-			g.drawRect(0, 0, IMAGE_WIDTH - 1, IMAGE_HEIGHT - 1);
+
+			g.draw3DRect(0, 0, IMAGE_WIDTH - 1, IMAGE_HEIGHT - 1, true);
+			g.drawRect(1, 1, IMAGE_WIDTH - 3, IMAGE_HEIGHT - 3);
+			g.drawRect(2, 2, IMAGE_WIDTH - 5, IMAGE_HEIGHT - 5);
 		}
 	}
 
@@ -56,7 +59,7 @@ public class CardPanel extends JPanel {
 	public void setSelected(boolean b) {
 		if (b && !selected) {
 			selectedCard = this;
-			
+
 			getParent().repaint();
 		} else if (!b && selected) {
 			selectedCard = null;
@@ -81,7 +84,7 @@ public class CardPanel extends JPanel {
 	}
 
 	public static boolean canSelect(CardPanel theCard) {
-		if ( selectedCard == null || selectedCard.equals(theCard)) {
+		if (selectedCard == null || selectedCard.equals(theCard)) {
 			return true;
 		} else {
 			return false;
@@ -104,13 +107,13 @@ public class CardPanel extends JPanel {
 
 	public void setHighestInTrick() {
 		high = true;
-		
+
 	}
 
 	public boolean isPlayable() {
 		return playable;
 	}
-	
+
 	public void setPlayable(boolean newVal) {
 		playable = newVal;
 	}
@@ -118,10 +121,11 @@ public class CardPanel extends JPanel {
 	public boolean isDragged() {
 		return dragging;
 	}
-	
+
 	public void startDragging() {
 		dragging = true;
 	}
+
 	public void stopDragging() {
 		dragging = false;
 	}
