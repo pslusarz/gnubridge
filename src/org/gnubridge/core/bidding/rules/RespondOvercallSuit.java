@@ -14,7 +14,7 @@ public class RespondOvercallSuit extends Response {
 
 	@Override
 	protected boolean applies() {
-		return super.applies();// && partnersOpeningBid.getTrump().isSuit();
+		return super.applies() && auction.isOvercall(partnersOpeningBid) && partnersOpeningBid.getTrump().isSuit();
 	}
 
 	@Override

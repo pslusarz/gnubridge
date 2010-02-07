@@ -287,6 +287,7 @@ public class AuctioneerTest extends TestCase {
 		a.bid(ONE_DIAMONDS);
 		a.bid(ONE_SPADES);
 		assertTrue(a.isOvercall(ONE_SPADES));
+		assertFalse(a.isOvercall(ONE_DIAMONDS));
 	}
 
 	public void testIsOvercall2() {
@@ -294,6 +295,15 @@ public class AuctioneerTest extends TestCase {
 		a.bid(ONE_DIAMONDS);
 		a.bid(ONE_SPADES);
 		a.bid(TWO_DIAMONDS);
+		assertTrue(a.isOvercall(ONE_SPADES));
+		assertFalse(a.isOvercall(TWO_DIAMONDS));
+	}
+
+	public void testIsOvercall3() {
+		Auctioneer a = new Auctioneer(WEST);
+		a.bid(ONE_DIAMONDS);
+		a.bid(ONE_SPADES);
+		a.bid(PASS);
 		assertTrue(a.isOvercall(ONE_SPADES));
 	}
 
@@ -303,12 +313,18 @@ public class AuctioneerTest extends TestCase {
 		assertFalse(a.isOvercall(ONE_SPADES));
 	}
 
-	//TODO: PAUL - CONTINUE HERE	
-	//	public void testIsNotAnOvercall2() {
-	//		Auctioneer a = new Auctioneer(WEST);
-	//		a.bid(PASS);
-	//		a.bid(ONE_SPADES);
-	//		assertFalse(a.isOvercall(ONE_SPADES));
-	//	}
+	public void testIsNotAnOvercall2() {
+		Auctioneer a = new Auctioneer(WEST);
+		a.bid(PASS);
+		a.bid(ONE_SPADES);
+		assertFalse(a.isOvercall(ONE_SPADES));
+	}
+
+	public void testPassIsNotAnOvercall() {
+		Auctioneer a = new Auctioneer(WEST);
+		a.bid(ONE_SPADES);
+		a.bid(PASS);
+		assertFalse(a.isOvercall(PASS));
+	}
 
 }

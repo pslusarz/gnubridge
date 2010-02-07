@@ -44,14 +44,22 @@ public class RespondOvercallSuitTest extends TestCase {
 		assertEquals(TWO_DIAMONDS, rule.getBid());
 	}
 
-	//TODO: PAUL - next test to pass, but first fix auctioneer test	
-	//	public void testOnlyApplyToOvercallResponses() {
-	//		Auctioneer a = new Auctioneer(West.i());
-	//		a.bid(ONE_DIAMONDS);
-	//		a.bid(PASS);
-	//		RespondOvercallSuit rule = new RespondOvercallSuit(a, new Hand("10,9,8,7,6", "", "K,10,9,2", "10,9,5,4"));
-	//		assertEquals(null, rule.getBid());
-	//	}
+	public void testOnlyApplyToOvercallResponses() {
+		Auctioneer a = new Auctioneer(West.i());
+		a.bid(ONE_DIAMONDS);
+		a.bid(PASS);
+		RespondOvercallSuit rule = new RespondOvercallSuit(a, new Hand("10,9,8,7,6", "", "K,10,9,2", "10,9,5,4"));
+		assertEquals(null, rule.getBid());
+	}
+
+	public void testOnlyApplyToSuitOvercalls() {
+		Auctioneer a = new Auctioneer(West.i());
+		a.bid(ONE_CLUBS);
+		a.bid(ONE_NOTRUMP);
+		a.bid(PASS);
+		RespondOvercallSuit rule = new RespondOvercallSuit(a, new Hand("10,9,8,7", "K,3,2", "A,J,9", "9,5,4"));
+		assertEquals(null, rule.getBid());
+	}
 
 	// interference from opponents - 3rd bid is not a pass
 

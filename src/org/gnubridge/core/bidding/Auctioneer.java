@@ -181,10 +181,25 @@ public class Auctioneer {
 		return calls.get(0).getBid();
 	}
 
-	public boolean isOvercall(Bid one_spades) {
-		boolean result = true;
-		if (bidCount == 1) {
-			result = false;
+	private int getCallOrderZeroBased(Bid bid) {
+		int result = -1;
+		for (Call call : calls) {
+			result++;
+			if (bid.equals(call.getBid())) {
+				return result;
+			}
+		}
+		return -1;
+	}
+
+	public boolean isOvercall(Bid bid) {
+		if (PASS.equals(bid)) {
+			return false;
+		}
+		boolean result = false;
+		int callOrder = getCallOrderZeroBased(bid);
+		if (callOrder == 1 && !PASS.equals(calls.get(0).getBid())) {
+			return true;
 		}
 		return result;
 	}
