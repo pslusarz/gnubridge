@@ -46,7 +46,7 @@ public class DealViewImpl implements DealView, CardPanelHost, ActionListener {
 		panel.setLayout(null);
 		panel.setPreferredSize(new Dimension(WIDTH, DHEIGHT));
 		panel.setSize(new Dimension(WIDTH, DHEIGHT));
-		MyMouseListener listener = new MyMouseListener();
+		ArrowPromptMouseListener listener = new ArrowPromptMouseListener();
 		panel.addMouseListener(listener);
 		panel.addMouseMotionListener(listener);
 		table = new Table(DHEIGHT);
@@ -151,19 +151,16 @@ public class DealViewImpl implements DealView, CardPanelHost, ActionListener {
 		private int startX = -1;
 		private int startY = -1;
 		private final Deal theGame;
-		long previousClick = -1000;
 
 		public CardOnTheTableMouseListener(CardPanel card, Deal g) {
 			theCard = card;
 			theGame = g;
 		}
 
-		public void mouseClicked(MouseEvent arg0) {
-			long now = System.currentTimeMillis();
-			if (now - previousClick < DOUBLE_CLICK_DELAY_MS && theCard.isSelected()) {
+		public void mouseClicked(MouseEvent e) {
+			if (e.getClickCount() > 1 && theCard.isSelected()) {
 				play();
 			}
-			previousClick = now;
 		}
 
 		public void mouseEntered(MouseEvent arg0) {
@@ -317,7 +314,7 @@ public class DealViewImpl implements DealView, CardPanelHost, ActionListener {
 
 	}
 
-	class MyMouseListener implements MouseListener, MouseMotionListener {
+	class ArrowPromptMouseListener implements MouseListener, MouseMotionListener {
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
