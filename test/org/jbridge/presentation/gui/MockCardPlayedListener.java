@@ -23,4 +23,8 @@ public class MockCardPlayedListener implements CardPlayedListener {
 
 	}
 
+	@Override
+	public void forceMove() {
+	}
+
 }

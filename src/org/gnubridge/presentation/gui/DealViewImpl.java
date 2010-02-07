@@ -46,6 +46,9 @@ public class DealViewImpl implements DealView, CardPanelHost, ActionListener {
 		panel.setLayout(null);
 		panel.setPreferredSize(new Dimension(WIDTH, DHEIGHT));
 		panel.setSize(new Dimension(WIDTH, DHEIGHT));
+		MyMouseListener listener = new MyMouseListener();
+		panel.addMouseListener(listener);
+		panel.addMouseMotionListener(listener);
 		table = new Table(DHEIGHT);
 		createPreviousTrickButton();
 		owner.setContent(panel);
@@ -142,7 +145,7 @@ public class DealViewImpl implements DealView, CardPanelHost, ActionListener {
 
 	}
 
-	class DaListener implements MouseListener, MouseMotionListener {
+	class CardOnTheTableMouseListener implements MouseListener, MouseMotionListener {
 
 		private CardPanel theCard;
 		private int startX = -1;
@@ -150,7 +153,7 @@ public class DealViewImpl implements DealView, CardPanelHost, ActionListener {
 		private final Deal theGame;
 		long previousClick = -1000;
 
-		public DaListener(CardPanel card, Deal g) {
+		public CardOnTheTableMouseListener(CardPanel card, Deal g) {
 			theCard = card;
 			theGame = g;
 		}
@@ -257,7 +260,7 @@ public class DealViewImpl implements DealView, CardPanelHost, ActionListener {
 	@Override
 	public void addCard(CardPanel card) {
 		if (card.isPlayable()) {
-			DaListener listener = new DaListener(card, game);
+			CardOnTheTableMouseListener listener = new CardOnTheTableMouseListener(card, game);
 			card.addMouseListener(listener);
 			card.addMouseMotionListener(listener);
 		}
@@ -314,4 +317,56 @@ public class DealViewImpl implements DealView, CardPanelHost, ActionListener {
 
 	}
 
+	class MyMouseListener implements MouseListener, MouseMotionListener {
+
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			if (table.isPromptArrowHighlighted()) {
+				controller.forceMove();
+			}
+
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent e) {
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		public void mouseExited(MouseEvent e) {
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		public void mousePressed(MouseEvent e) {
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent e) {
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		public void mouseDragged(MouseEvent e) {
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		public void mouseMoved(MouseEvent e) {
+			if (table.isWithinPromptArrow(e.getPoint()) && !table.isPromptArrowHighlighted()) {
+				table.setHighlightPromptArrow(true);
+				panel.repaint();
+			} else if (table.isPromptArrowHighlighted() && !table.isWithinPromptArrow(e.getPoint())) {
+				table.setHighlightPromptArrow(false);
+				panel.repaint();
+			}
+
+		}
+	}
 }

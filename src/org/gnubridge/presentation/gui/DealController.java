@@ -131,6 +131,8 @@ public class DealController implements CardPlayedListener {
 	private final DealView view;
 	private final ScoringTracker scoringTracker;
 	private final Bid highBid;
+	private SearchController searchThread;
+	private Clock clockThread;
 
 	public DealController(MainController controller, Bid highBid, Deal g, Direction humanDir, DealView playView,
 			ScoringTracker tracker) {
@@ -198,10 +200,11 @@ public class DealController implements CardPlayedListener {
 		if (humanHasMove()) {
 			return;
 		}
-
-		new SearchController().execute();
+		searchThread = new SearchController();
+		searchThread.execute();
 		start = COMPUTER_PLAYER_IS_THINKING;
-		new Clock().start();
+		clockThread = new Clock();
+		clockThread.start();
 
 	}
 
@@ -209,5 +212,24 @@ public class DealController implements CardPlayedListener {
 	public void newGame() {
 		view.hide();
 		parent.newGame();
+	}
+
+	@Override
+	public synchronized void forceMove() {
+		if (searchThread == null || searchThread.isDone()) {
+			return;
+		}
+		while (searchThread.bestMove == null) {
+			try {
+				Thread.sleep(500);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+				throw new RuntimeException(e);
+			}
+		}
+		searchThread.cancel(true);
+		view.displayTimeRemaining(-1);
+		start = COMPUTER_PLAYER_IS_THINKING;
+
 	}
 }
