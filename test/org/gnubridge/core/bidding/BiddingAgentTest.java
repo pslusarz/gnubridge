@@ -1,5 +1,6 @@
 package org.gnubridge.core.bidding;
 
+import static org.gnubridge.core.bidding.Bid.*;
 import junit.framework.TestCase;
 
 import org.gnubridge.core.Hand;
@@ -133,6 +134,15 @@ public class BiddingAgentTest extends TestCase {
 		a.bid(new Bid(1, Clubs.i()));
 		BiddingAgent ba = new BiddingAgent(a, new Hand("7,8", "4,3", "A,K,J,9,3,2", "Q,5,4"));
 		assertEquals(new Bid(1, Diamonds.i()), ba.getBid());
+	}
+
+	public void testRespondToOvercall() {
+		Auctioneer a = new Auctioneer(West.i());
+		a.bid(ONE_CLUBS);
+		a.bid(TWO_DIAMONDS);
+		a.bid(PASS);
+		BiddingAgent ba = new BiddingAgent(a, new Hand("10,9,8,7", "K,3,2", "A,J,9", "9,5,4"));
+		assertEquals(THREE_DIAMONDS, ba.getBid());
 	}
 
 	public void testHaveToBidSomething() {

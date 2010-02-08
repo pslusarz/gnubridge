@@ -249,4 +249,21 @@ public class Hand {
 		return false;
 	}
 
+	public boolean haveStopper(Suit suit) {
+		List<Card> cardsInSuit = getSuitHi2Low(suit);
+		if (cardsInSuit.size() > 0 && cardsInSuit.get(0).getValue() == Card.ACE) {
+			return true;
+		}
+		if (cardsInSuit.size() > 1 && cardsInSuit.get(0).getValue() == Card.KING) {
+			return true;
+		}
+		if (cardsInSuit.size() > 2 && cardsInSuit.get(0).getValue() == Card.QUEEN) {
+			return true;
+		}
+		if (cardsInSuit.size() > 3 && cardsInSuit.get(0).getValue() == Card.JACK) {
+			return true;
+		}
+		return false;
+	}
+
 }

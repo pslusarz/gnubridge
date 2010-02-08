@@ -19,6 +19,7 @@ import org.gnubridge.core.bidding.rules.Respond1ColorRaiseMinorSuit;
 import org.gnubridge.core.bidding.rules.Respond1ColorWithNT;
 import org.gnubridge.core.bidding.rules.Respond1ColorWithNewSuit;
 import org.gnubridge.core.bidding.rules.Respond1NT;
+import org.gnubridge.core.bidding.rules.RespondOvercallSuit;
 
 public class BiddingAgent {
 
@@ -39,6 +40,7 @@ public class BiddingAgent {
 		rules.add(new Rebid1ColorOriginalSuit(a, h));
 		rules.add(new Rebid1ColorWithNT(a, h));
 		rules.add(new OvercallSuit(a, h));
+		rules.add(new RespondOvercallSuit(a, h));
 		rules.add(new AlwaysPass());
 	}
 

@@ -4,9 +4,13 @@ import static org.gnubridge.core.Direction.*;
 import static org.gnubridge.core.bidding.Bid.*;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.gnubridge.core.Direction;
+import org.gnubridge.core.deck.Trump;
 
 public class Auctioneer {
 	private Direction nextToBid;
@@ -201,6 +205,21 @@ public class Auctioneer {
 		if (callOrder == 1 && !PASS.equals(calls.get(0).getBid())) {
 			return true;
 		}
+		return result;
+	}
+
+	public Set<Trump> getEnemyTrumps() {
+		Set<Trump> result = new HashSet<Trump>();
+		List<Call> reversedCalls = getCalls();
+		Collections.reverse(reversedCalls);
+		boolean enemyBid = true;
+		for (Call call : reversedCalls) {
+			if (call.getBid().hasTrump() && enemyBid) {
+				result.add(call.getTrump());
+			}
+			enemyBid = !enemyBid;
+		}
+
 		return result;
 	}
 
