@@ -69,12 +69,33 @@ public class AuctioneerTest extends TestCase {
 		assertTrue(a.isOpeningBid());
 		a.bid(PASS);
 		assertTrue(a.isOpeningBid());
-		a.bid(ONE_NOTRUMP);
+		a.bid(PASS);
 		assertTrue(a.isOpeningBid());
 		a.bid(PASS);
-		assertFalse("South responding to partners 1NT is not an opening bid", a.isOpeningBid());
+		assertTrue(a.isOpeningBid());
 		a.bid(TWO_CLUBS);
 		assertFalse("West already passed on 1st round, so it is not an opening bid", a.isOpeningBid());
+	}
+
+	public void testNoOpeningBidIfBid1() {
+		Auctioneer a = new Auctioneer(WEST);
+		a.bid(ONE_SPADES);
+		assertFalse(a.isOpeningBid());
+	}
+
+	public void testNoOpeningBidIfBid2() {
+		Auctioneer a = new Auctioneer(WEST);
+		a.bid(PASS);
+		a.bid(ONE_SPADES);
+		assertFalse(a.isOpeningBid());
+	}
+
+	public void testNoOpeningBidIfBid3() {
+		Auctioneer a = new Auctioneer(WEST);
+		a.bid(PASS);
+		a.bid(PASS);
+		a.bid(ONE_SPADES);
+		assertFalse(a.isOpeningBid());
 	}
 
 	public void testCanTraversePairsHistoryWithGetPartnersBid() {

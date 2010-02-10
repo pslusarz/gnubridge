@@ -68,13 +68,12 @@ public class Auctioneer {
 	}
 
 	public boolean isOpeningBid() {
-		if (bidCount > 3) {
-			return false;
-		} else if (beforeLast == null || beforeLast.getBid().isPass()) {
-			return true;
-		} else {
-			return false;
+		for (Call call : calls) {
+			if (!call.isPass()) {
+				return false;
+			}
 		}
+		return true;
 	}
 
 	public Call getPartnersLastCall() {

@@ -3,7 +3,6 @@ package org.gnubridge.core.bidding.rules;
 import static org.gnubridge.core.deck.Trump.*;
 
 import java.util.List;
-import java.util.Set;
 
 import org.gnubridge.core.Hand;
 import org.gnubridge.core.bidding.Auctioneer;
@@ -70,20 +69,6 @@ public class RespondOvercallSuit extends Response {
 			}
 		}
 		return null;
-	}
-
-	private boolean haveStopperInEnemySuit() {
-		Set<Trump> enemyTrumps = auction.getEnemyTrumps();
-		for (Trump trump : enemyTrumps) {
-			if (trump.isNoTrump()) {
-				return false;
-			}
-			if (!hand.haveStopper(trump.asSuit())) {
-				return false;
-			}
-
-		}
-		return true;
 	}
 
 	private Bid makeCheapestBid(Trump trump) {

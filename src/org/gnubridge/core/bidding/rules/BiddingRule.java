@@ -1,8 +1,11 @@
 package org.gnubridge.core.bidding.rules;
 
+import java.util.Set;
+
 import org.gnubridge.core.Hand;
 import org.gnubridge.core.bidding.Auctioneer;
 import org.gnubridge.core.bidding.Bid;
+import org.gnubridge.core.deck.Trump;
 
 public abstract class BiddingRule {
 	protected Auctioneer auction;
@@ -12,9 +15,9 @@ public abstract class BiddingRule {
 		auction = a;
 		hand = h;
 	}
-	
+
 	protected abstract Bid prepareBid();
-	
+
 	public Bid getBid() {
 		if (!applies()) {
 			return null;
@@ -27,6 +30,20 @@ public abstract class BiddingRule {
 		}
 	}
 
+	protected boolean haveStopperInEnemySuit() {
+		Set<Trump> enemyTrumps = auction.getEnemyTrumps();
+		for (Trump trump : enemyTrumps) {
+			if (trump.isNoTrump()) {
+				return false;
+			}
+			if (!hand.haveStopper(trump.asSuit())) {
+				return false;
+			}
+
+		}
+		return true;
+	}
+
 	protected abstract boolean applies();
-	
+
 }
