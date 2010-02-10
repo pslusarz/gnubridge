@@ -16,7 +16,7 @@ import org.gnubridge.core.deck.Spades;
 import org.gnubridge.core.deck.Trump;
 import org.gnubridge.presentation.GameUtils;
 
-public class StochasticDoubleDummySolverAcceptanceTests extends TestCase {
+public class StochasticDoubleDummySolverAcceptanceTest extends TestCase {
 	static final int SEARCH_DEPTH_CUTOFF = 13;
 	static final int CARDS_TO_DEAL = 4;
 	private static final int DEALS_TO_TRY = 25;

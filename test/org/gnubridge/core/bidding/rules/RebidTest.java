@@ -7,17 +7,13 @@ import org.gnubridge.core.Hand;
 import org.gnubridge.core.West;
 import org.gnubridge.core.bidding.Auctioneer;
 import org.gnubridge.core.bidding.Bid;
-import org.gnubridge.core.bidding.Pass;
-import org.gnubridge.core.deck.Clubs;
-import org.gnubridge.core.deck.Diamonds;
-import org.gnubridge.core.deck.Hearts;
 import org.gnubridge.core.deck.NoTrump;
 
 public class RebidTest extends TestCase {
 	public void testOnlyApplyToRebids() {
 		Auctioneer a = new Auctioneer(West.i());
-		a.bid(new Bid(1, Hearts.i()));
-		a.bid(new Pass());
+		a.bid(ONE_HEARTS);
+		a.bid(PASS);
 		Rebid rule = new Rebid(a, new Hand("3,2", "K,Q,J,2", "9,8", "A,K,5,4,3")) {
 			@Override
 			protected Bid prepareBid() {
@@ -30,10 +26,101 @@ public class RebidTest extends TestCase {
 
 	public void testPrepareBidInRebidSituation() {
 		Auctioneer a = new Auctioneer(West.i());
-		a.bid(new Bid(1, Clubs.i()));
-		a.bid(new Pass());
-		a.bid(new Bid(1, Diamonds.i()));
-		a.bid(new Pass());
+		a.bid(ONE_CLUBS);
+		a.bid(PASS);
+		a.bid(ONE_DIAMONDS);
+		a.bid(PASS);
+
+		Rebid rule = new Rebid(a, new Hand("3,2", "K,Q,J,2", "9,8", "A,K,5,4,3")) {
+			@Override
+			protected Bid prepareBid() {
+				return new Bid(7, NoTrump.i());
+			}
+
+		};
+		assertEquals(new Bid(7, NoTrump.i()), rule.getBid());
+	}
+
+	public void testPrepareBidInRebidSituationOpponent1Doubles() {
+		Auctioneer a = new Auctioneer(West.i());
+		a.bid(ONE_CLUBS);
+		a.bid(DOUBLE);
+		a.bid(ONE_DIAMONDS);
+		a.bid(PASS);
+
+		Rebid rule = new Rebid(a, new Hand("3,2", "K,Q,J,2", "9,8", "A,K,5,4,3")) {
+			@Override
+			protected Bid prepareBid() {
+				return new Bid(7, NoTrump.i());
+			}
+
+		};
+		assertEquals(new Bid(7, NoTrump.i()), rule.getBid());
+	}
+
+	public void testPrepareBidInRebidSituationOpponent2Doubles() {
+		Auctioneer a = new Auctioneer(West.i());
+		a.bid(ONE_CLUBS);
+		a.bid(PASS);
+		a.bid(ONE_DIAMONDS);
+		a.bid(DOUBLE);
+
+		Rebid rule = new Rebid(a, new Hand("3,2", "K,Q,J,2", "9,8", "A,K,5,4,3")) {
+			@Override
+			protected Bid prepareBid() {
+				return new Bid(7, NoTrump.i());
+			}
+
+		};
+		assertEquals(new Bid(7, NoTrump.i()), rule.getBid());
+	}
+
+	public void testPrepareBidInRebidSituation2() {
+		Auctioneer a = new Auctioneer(West.i());
+		a.bid(PASS);
+		a.bid(ONE_CLUBS);
+		a.bid(PASS);
+		a.bid(ONE_DIAMONDS);
+		a.bid(PASS);
+
+		Rebid rule = new Rebid(a, new Hand("3,2", "K,Q,J,2", "9,8", "A,K,5,4,3")) {
+			@Override
+			protected Bid prepareBid() {
+				return new Bid(7, NoTrump.i());
+			}
+
+		};
+		assertEquals(new Bid(7, NoTrump.i()), rule.getBid());
+	}
+
+	public void testPrepareBidInRebidSituation3() {
+		Auctioneer a = new Auctioneer(West.i());
+		a.bid(PASS);
+		a.bid(PASS);
+		a.bid(ONE_CLUBS);
+		a.bid(PASS);
+		a.bid(ONE_DIAMONDS);
+		a.bid(PASS);
+
+		Rebid rule = new Rebid(a, new Hand("3,2", "K,Q,J,2", "9,8", "A,K,5,4,3")) {
+			@Override
+			protected Bid prepareBid() {
+				return new Bid(7, NoTrump.i());
+			}
+
+		};
+		assertEquals(new Bid(7, NoTrump.i()), rule.getBid());
+	}
+
+	public void testPrepareBidInRebidSituation4() {
+		Auctioneer a = new Auctioneer(West.i());
+		a.bid(PASS);
+		a.bid(PASS);
+		a.bid(PASS);
+		a.bid(ONE_CLUBS);
+		a.bid(PASS);
+		a.bid(ONE_DIAMONDS);
+		a.bid(PASS);
 
 		Rebid rule = new Rebid(a, new Hand("3,2", "K,Q,J,2", "9,8", "A,K,5,4,3")) {
 			@Override
@@ -47,8 +134,8 @@ public class RebidTest extends TestCase {
 
 	public void testDoNotThrowNPEPartnerPass() {
 		Auctioneer a = new Auctioneer(West.i());
-		a.bid(new Pass());
-		a.bid(new Pass());
+		a.bid(PASS);
+		a.bid(PASS);
 		Rebid rule = new Rebid(a, new Hand("3,2", "K,Q,J,2", "9,8", "A,K,5,4,3")) {
 			@Override
 			protected Bid prepareBid() {
@@ -61,7 +148,7 @@ public class RebidTest extends TestCase {
 
 	public void testDoNotThrowNPEPartnerDidNotBid() {
 		Auctioneer a = new Auctioneer(West.i());
-		a.bid(new Pass());
+		a.bid(PASS);
 		Rebid rule = new Rebid(a, new Hand("3,2", "K,Q,J,2", "9,8", "A,K,5,4,3")) {
 			@Override
 			protected Bid prepareBid() {
@@ -77,6 +164,40 @@ public class RebidTest extends TestCase {
 		a.bid(ONE_CLUBS);
 		a.bid(PASS);
 		a.bid(DOUBLE);
+		a.bid(PASS);
+		Rebid rule = new Rebid(a, new Hand("3,2", "K,Q,J,2", "9,8", "A,K,5,4,3")) {
+			@Override
+			protected Bid prepareBid() {
+				throw new RuntimeException("should not try to prepare bid when it's not a rebid situation");
+			}
+
+		};
+		assertEquals(null, rule.getBid());
+	}
+
+	public void testDoNotApplyWhenIDoubled() {
+		Auctioneer a = new Auctioneer(West.i());
+		a.bid(ONE_CLUBS);
+		a.bid(DOUBLE);
+		a.bid(PASS);
+		a.bid(ONE_DIAMONDS);
+		a.bid(PASS);
+		Rebid rule = new Rebid(a, new Hand("3,2", "K,Q,J,2", "9,8", "A,K,5,4,3")) {
+			@Override
+			protected Bid prepareBid() {
+				throw new RuntimeException("should not try to prepare bid when it's not a rebid situation");
+			}
+
+		};
+		assertEquals(null, rule.getBid());
+	}
+
+	public void testDoNotApplyWhenIOvercalled() {
+		Auctioneer a = new Auctioneer(West.i());
+		a.bid(ONE_CLUBS);
+		a.bid(ONE_DIAMONDS);
+		a.bid(PASS);
+		a.bid(ONE_HEARTS);
 		a.bid(PASS);
 		Rebid rule = new Rebid(a, new Hand("3,2", "K,Q,J,2", "9,8", "A,K,5,4,3")) {
 			@Override

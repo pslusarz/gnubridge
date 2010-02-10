@@ -222,4 +222,21 @@ public class Auctioneer {
 		return result;
 	}
 
+	public boolean isOpening(Call callWithTrump) {
+		int index = getCallOrderZeroBased(callWithTrump.getBid());
+		if (index == 0) {
+			return true;
+		}
+		if (index == 1 && calls.get(0).isPass()) {
+			return true;
+		}
+		if (index == 2 && calls.get(0).isPass() && calls.get(1).isPass()) {
+			return true;
+		}
+		if (index == 3 && calls.get(0).isPass() && calls.get(1).isPass() && calls.get(2).isPass()) {
+			return true;
+		}
+		return false;
+	}
+
 }

@@ -38,6 +38,18 @@ public class Bid {
 	public static Bid FOUR_DIAMONDS = new Bid(4, DIAMONDS);
 	public static Bid FOUR_CLUBS = new Bid(4, CLUBS);
 
+	public static Bid FIVE_NOTRUMP = new Bid(5, NOTRUMP);
+	public static Bid FIVE_SPADES = new Bid(5, SPADES);
+	public static Bid FIVE_HEARTS = new Bid(5, HEARTS);
+	public static Bid FIVE_DIAMONDS = new Bid(5, DIAMONDS);
+	public static Bid FIVE_CLUBS = new Bid(5, CLUBS);
+
+	public static Bid SIX_NOTRUMP = new Bid(6, NOTRUMP);
+	public static Bid SIX_SPADES = new Bid(6, SPADES);
+	public static Bid SIX_HEARTS = new Bid(6, HEARTS);
+	public static Bid SIX_DIAMONDS = new Bid(6, DIAMONDS);
+	public static Bid SIX_CLUBS = new Bid(6, CLUBS);
+
 	public static Bid SEVEN_NOTRUMP = new Bid(7, NOTRUMP);
 	public static Bid SEVEN_SPADES = new Bid(7, SPADES);
 	public static Bid SEVEN_HEARTS = new Bid(7, HEARTS);
