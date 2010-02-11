@@ -31,8 +31,8 @@ public class BiddingAgent {
 		rules.add(new Open1NT(a, h));
 		rules.add(new Open1Color(a, h));
 		rules.add(new Respond1NT(a, h));
-		rules.add(new Respond1ColorWithNewSuit(a, h));
 		rules.add(new Respond1ColorRaiseMajorSuit(a, h));
+		rules.add(new Respond1ColorWithNewSuit(a, h));
 		rules.add(new Respond1ColorRaiseMinorSuit(a, h));
 		rules.add(new Respond1ColorWithNT(a, h));
 		rules.add(new Rebid1NT(a, h));

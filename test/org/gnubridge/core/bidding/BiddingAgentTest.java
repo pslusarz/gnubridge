@@ -67,6 +67,14 @@ public class BiddingAgentTest extends TestCase {
 		assertEquals(TWO_SPADES, ba.getBid());
 	}
 
+	public void testRespond1ColorRaisesMajorSuitSupercedesNewSuit() {
+		Auctioneer a = new Auctioneer(West.i());
+		a.bid(ONE_HEARTS);
+		a.bid(PASS);
+		BiddingAgent ba = new BiddingAgent(a, new Hand("K,10,7,6", "A,9,8,3", "A,8,6,4,2", ""));
+		assertEquals(THREE_HEARTS, ba.getBid());
+	}
+
 	public void testRespond1ColorRaisesMinorSuit() {
 		Auctioneer a = new Auctioneer(West.i());
 		a.bid(ONE_CLUBS);
