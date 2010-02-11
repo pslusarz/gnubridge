@@ -1,5 +1,6 @@
 package org.gnubridge.core.bidding;
 
+import static org.gnubridge.core.Direction.*;
 import static org.gnubridge.core.bidding.Bid.*;
 import junit.framework.TestCase;
 
@@ -7,29 +8,48 @@ import org.gnubridge.core.Hand;
 import org.gnubridge.core.West;
 
 public class BiddingAgentTest extends TestCase {
+	Auctioneer auctioneer;
+	BiddingAgent agent;
+
+	private void expectPlayerToBid(Bid bid) {
+		assertEquals(bid, agent.getBid());
+
+	}
+
+	private void andPlayersCards(String... cardsBySuits) {
+		agent = new BiddingAgent(auctioneer, new Hand(cardsBySuits));
+
+	}
+
+	private void givenNoPriorBids() {
+		auctioneer = new Auctioneer(WEST);
+
+	}
+
+	private void givenBidding(Bid... bids) {
+		givenNoPriorBids();
+		for (Bid bid : bids) {
+			auctioneer.bid(bid);
+		}
+
+	}
 
 	public void testOpeningOneNT() {
-		Auctioneer a = new Auctioneer(West.i());
-		BiddingAgent ba = new BiddingAgent(a, new Hand("K,2", "A,Q,3", "A,8,6,5,3", "K,J,3"));
-		assertEquals(ONE_NOTRUMP, ba.getBid());
+		givenNoPriorBids();
+		andPlayersCards("K,2", "A,Q,3", "A,8,6,5,3", "K,J,3");
+		expectPlayerToBid(ONE_NOTRUMP);
 	}
 
 	public void testMajorSuit1NTResponse() {
-		Auctioneer a = new Auctioneer(West.i());
-		a.bid(ONE_NOTRUMP);
-		a.bid(PASS);
-		BiddingAgent ba = new BiddingAgent(a, new Hand("9,8,7,6,2", "A,3", "6,5,3", "5,4,3"));
-		assertEquals(TWO_SPADES, ba.getBid());
+		givenBidding(ONE_NOTRUMP, PASS);
+		andPlayersCards("9,8,7,6,2", "A,3", "6,5,3", "5,4,3");
+		expectPlayerToBid(TWO_SPADES);
 	}
 
 	public void testOpenersResponseToMajorSuitResponseTo1NT() {
-		Auctioneer a = new Auctioneer(West.i());
-		a.bid(ONE_NOTRUMP);
-		a.bid(PASS);
-		a.bid(THREE_HEARTS);
-		a.bid(PASS);
-		BiddingAgent ba = new BiddingAgent(a, new Hand("K,2", "A,Q,3", "A,8,6,5,3", "K,J,3"));
-		assertEquals(FOUR_HEARTS, ba.getBid());
+		givenBidding(ONE_NOTRUMP, PASS, THREE_HEARTS, PASS);
+		andPlayersCards("K,2", "A,Q,3", "A,8,6,5,3", "K,J,3");
+		expectPlayerToBid(FOUR_HEARTS);
 	}
 
 	public void testOpeningOneNTSequence() {
@@ -46,128 +66,93 @@ public class BiddingAgentTest extends TestCase {
 	}
 
 	public void testOpenOneColor5ColorSuit() {
-		Auctioneer a = new Auctioneer(West.i());
-		BiddingAgent ba = new BiddingAgent(a, new Hand("K,2", "A,3", "A,8,6,5,3", "5,4,3"));
-		assertEquals(ONE_DIAMONDS, ba.getBid());
+		givenNoPriorBids();
+		andPlayersCards("K,2", "A,3", "A,8,6,5,3", "5,4,3");
+		expectPlayerToBid(ONE_DIAMONDS);
 	}
 
 	public void testRespond1ColorWithNewSuit() {
-		Auctioneer a = new Auctioneer(West.i());
-		a.bid(ONE_DIAMONDS);
-		a.bid(PASS);
-		BiddingAgent ba = new BiddingAgent(a, new Hand("K,3", "K,5,4,3,2", "9,8", "5,4,3,2"));
-		assertEquals(ONE_HEARTS, ba.getBid());
+		givenBidding(ONE_DIAMONDS, PASS);
+		andPlayersCards("K,3", "K,5,4,3,2", "9,8", "5,4,3,2");
+		expectPlayerToBid(ONE_HEARTS);
 	}
 
 	public void testRespond1ColorRaisesMajorSuit() {
-		Auctioneer a = new Auctioneer(West.i());
-		a.bid(ONE_SPADES);
-		a.bid(PASS);
-		BiddingAgent ba = new BiddingAgent(a, new Hand("K,3,2", "K,5,4,3", "9,8,6", "5,4,3"));
-		assertEquals(TWO_SPADES, ba.getBid());
+		givenBidding(ONE_SPADES, PASS);
+		andPlayersCards("K,3,2", "K,5,4,3", "9,8,6", "5,4,3");
+		expectPlayerToBid(TWO_SPADES);
 	}
 
 	public void testRespond1ColorRaisesMajorSuitSupercedesNewSuit() {
-		Auctioneer a = new Auctioneer(West.i());
-		a.bid(ONE_HEARTS);
-		a.bid(PASS);
-		BiddingAgent ba = new BiddingAgent(a, new Hand("K,10,7,6", "A,9,8,3", "A,8,6,4,2", ""));
-		assertEquals(THREE_HEARTS, ba.getBid());
+		givenBidding(ONE_HEARTS, PASS);
+		andPlayersCards("K,10,7,6", "A,9,8,3", "A,8,6,4,2", "");
+		expectPlayerToBid(THREE_HEARTS);
 	}
 
 	public void testRespond1ColorRaisesMinorSuit() {
-		Auctioneer a = new Auctioneer(West.i());
-		a.bid(ONE_CLUBS);
-		a.bid(PASS);
-		BiddingAgent ba = new BiddingAgent(a, new Hand("K,3,2", "5,4,3", "9,8,6", "K,5,4,3"));
-		assertEquals(TWO_CLUBS, ba.getBid());
+		givenBidding(ONE_CLUBS, PASS);
+		andPlayersCards("K,3,2", "5,4,3", "9,8,6", "K,5,4,3");
+		expectPlayerToBid(TWO_CLUBS);
 	}
 
 	public void testRespond1ColorBidsNT() {
-		Auctioneer a = new Auctioneer(West.i());
-		a.bid(ONE_CLUBS);
-		a.bid(ONE_DIAMONDS); //only way to keep form bidding new suit or raising partner was to have opponents bid
-		BiddingAgent ba = new BiddingAgent(a, new Hand("K,3,2", "A,J,4", "K,8,6,3", "K,5,4"));
-		assertEquals(TWO_NOTRUMP, ba.getBid());
+		//only way to keep form bidding new suit or raising partner was to have opponents bid
+		givenBidding(ONE_CLUBS, ONE_DIAMONDS);
+		andPlayersCards("K,3,2", "A,J,4", "K,8,6,3", "K,5,4");
+		expectPlayerToBid(TWO_NOTRUMP);
 	}
 
 	public void testRebidRespondersColor() {
-		Auctioneer a = new Auctioneer(West.i());
-		a.bid(ONE_CLUBS);
-		a.bid(PASS);
-		a.bid(ONE_DIAMONDS);
-		a.bid(TWO_CLUBS);
-		BiddingAgent ba = new BiddingAgent(a, new Hand("J,8,6", "", "K,7,5,2", "A,K,J,10,9,2"));
-
-		assertEquals(THREE_DIAMONDS, ba.getBid());
+		givenBidding(ONE_CLUBS, PASS, ONE_DIAMONDS, TWO_CLUBS);
+		andPlayersCards("J,8,6", "", "K,7,5,2", "A,K,J,10,9,2");
+		expectPlayerToBid(THREE_DIAMONDS);
 	}
 
 	public void testRebidNewSuit() {
-		Auctioneer a = new Auctioneer(West.i());
-		a.bid(ONE_CLUBS);
-		a.bid(PASS);
-		a.bid(ONE_DIAMONDS);
-		a.bid(PASS);
-		BiddingAgent ba = new BiddingAgent(a, new Hand("J,5,4,2", "8,4", "A,K,9", "K,5,4,3"));
-		assertEquals("add rebid new suit rule to make this pass", ONE_SPADES, ba.getBid());
+		givenBidding(ONE_CLUBS, PASS, ONE_DIAMONDS, PASS);
+		andPlayersCards("J,5,4,2", "8,4", "A,K,9", "K,5,4,3");
+		expectPlayerToBid(ONE_SPADES);
 	}
 
 	public void testRebidOriginalSuit() {
-		Auctioneer a = new Auctioneer(West.i());
-		a.bid(ONE_HEARTS);
-		a.bid(PASS);
-		a.bid(ONE_SPADES);
-		a.bid(PASS);
-		BiddingAgent ba = new BiddingAgent(a, new Hand("3,2", "A,K,5,4,3,2", "K,Q,J", "K,8"));
-		assertEquals(THREE_HEARTS, ba.getBid());
+		givenBidding(ONE_HEARTS, PASS, ONE_SPADES, PASS);
+		andPlayersCards("3,2", "A,K,5,4,3,2", "K,Q,J", "K,8");
+		expectPlayerToBid(THREE_HEARTS);
 	}
 
 	public void testRebid1ColorWithNT() {
-		Auctioneer a = new Auctioneer(West.i());
-		a.bid(ONE_SPADES);
-		a.bid(PASS);
-		a.bid(ONE_NOTRUMP);
-		a.bid(PASS);
-		BiddingAgent ba = new BiddingAgent(a, new Hand("A,Q,4,3", "K,Q,J", "9,3,2", "A,K,5"));
-		assertEquals(THREE_NOTRUMP, ba.getBid());
+		givenBidding(ONE_SPADES, PASS, ONE_NOTRUMP, PASS);
+		andPlayersCards("A,Q,4,3", "K,Q,J", "9,3,2", "A,K,5");
+		expectPlayerToBid(THREE_NOTRUMP);
 	}
 
 	public void testOvercall1ColorWithOwnColor() {
-		Auctioneer a = new Auctioneer(West.i());
-		a.bid(ONE_CLUBS);
-		BiddingAgent ba = new BiddingAgent(a, new Hand("7,8", "4,3", "A,K,J,9,3,2", "Q,5,4"));
-		assertEquals(ONE_DIAMONDS, ba.getBid());
+		givenBidding(ONE_CLUBS);
+		andPlayersCards("7,8", "4,3", "A,K,J,9,3,2", "Q,5,4");
 	}
 
 	public void testRespondToOvercall() {
-		Auctioneer a = new Auctioneer(West.i());
-		a.bid(ONE_CLUBS);
-		a.bid(TWO_DIAMONDS);
-		a.bid(PASS);
-		BiddingAgent ba = new BiddingAgent(a, new Hand("10,9,8,7", "K,3,2", "A,J,9", "9,5,4"));
-		assertEquals(THREE_DIAMONDS, ba.getBid());
+		givenBidding(ONE_CLUBS, TWO_DIAMONDS, PASS);
+		andPlayersCards("10,9,8,7", "K,3,2", "A,J,9", "9,5,4");
+		expectPlayerToBid(THREE_DIAMONDS);
 	}
 
 	public void testOvercall1NT() {
-		Auctioneer a = new Auctioneer(West.i());
-		a.bid(ONE_CLUBS);
-		BiddingAgent ba = new BiddingAgent(a, new Hand("A,K,2", "A,Q,3", "8,6,5,3", "K,J,3"));
-		assertEquals(ONE_NOTRUMP, ba.getBid());
+		givenBidding(ONE_CLUBS);
+		andPlayersCards("A,K,2", "A,Q,3", "8,6,5,3", "K,J,3");
+		expectPlayerToBid(ONE_NOTRUMP);
 	}
 
 	public void testRespondOvercall1NT() {
-		Auctioneer a = new Auctioneer(West.i());
-		a.bid(ONE_CLUBS);
-		a.bid(ONE_NOTRUMP);
-		a.bid(PASS);
-		BiddingAgent ba = new BiddingAgent(a, new Hand("9,8,7,6,2", "A,3", "6,5,3", "Q,4,3"));
-		assertEquals(TWO_SPADES, ba.getBid());
+		givenBidding(ONE_CLUBS, ONE_NOTRUMP, PASS);
+		andPlayersCards("9,8,7,6,2", "A,3", "6,5,3", "Q,4,3");
+		expectPlayerToBid(TWO_SPADES);
 	}
 
 	public void testHaveToBidSomething() {
-		Auctioneer a = new Auctioneer(West.i());
-		BiddingAgent ba = new BiddingAgent(a, new Hand("5,4,3,2", "5,4,3", "6,5,3", "5,4,3"));
-		assertEquals(PASS, ba.getBid());
+		givenNoPriorBids();
+		andPlayersCards("5,4,3,2", "5,4,3", "6,5,3", "5,4,3");
+		expectPlayerToBid(PASS);
 	}
 
 	public void testRP2() {
