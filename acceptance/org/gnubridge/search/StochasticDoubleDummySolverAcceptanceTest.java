@@ -47,6 +47,34 @@ public class StochasticDoubleDummySolverAcceptanceTest extends TestCase {
 
 	}
 
+	public void testGaugeImprovements() {
+		int CARDS_TO_DEAL = 4;
+		int DEALS_TO_TRY = 25;
+		for (int cardDeal = 0; cardDeal < DEALS_TO_TRY; cardDeal++) {
+			monkeys = new ArrayList<SearchMonkey>();
+			Trump trump = determineTrump(cardDeal);
+			g = new Deal(trump);
+			GameUtils.initializeRandom(g, CARDS_TO_DEAL);
+			System.out.println("*********** DEAL " + cardDeal + " ***********");
+			g.playOneTrick(); //somewhat randomizes who's to move next
+			g.printHands();
+			g.printHandsDebug();
+			SearchConfiguration[] configs = new SearchConfiguration[] { SearchConfiguration.MiniMax,
+					SearchConfiguration.AllPruning };
+			System.out.println("*********** SEARCHES ***********");
+			for (SearchConfiguration config : configs) {
+				SearchMonkey monkey = new SearchMonkey(config);
+				monkeys.add(monkey);
+				System.out.println("-----" + config + "---------");
+				monkey.runSearch(g.duplicate());
+				System.out.println("-----------------------");
+			}
+			System.out.println("*********** END SEARCHES ***********");
+			assertAllSearchesFindSameNumberOfTricksTaken();
+		}
+
+	}
+
 	private void assertAllSearchesFindSameNumberOfTricksTaken() {
 		SearchMonkey previousMonkey = null;
 		for (SearchMonkey currentMonkey : monkeys) {
@@ -111,7 +139,7 @@ public class StochasticDoubleDummySolverAcceptanceTest extends TestCase {
 	}
 
 	public enum SearchConfiguration {
-		MiniMax, NoDuplicatePruning, NoAlphaBetaPruning, DuplicatePruning, DuplicateWithLowestPruning, NoSequencePruning, NoPlayedSequencePruning;
+		MiniMax, NoDuplicatePruning, NoAlphaBetaPruning, DuplicatePruning, DuplicateWithLowestPruning, NoSequencePruning, NoPlayedSequencePruning, NoDeepAlphaBeta, AllPruning;
 	}
 
 	class SearchMonkey {
@@ -159,8 +187,20 @@ public class StochasticDoubleDummySolverAcceptanceTest extends TestCase {
 			if (config == SearchConfiguration.NoPlayedSequencePruning) {
 				search.setShouldPruneCardsInPlayedSequence(false);
 			}
+			if (config == SearchConfiguration.NoDeepAlphaBeta) {
+				search.useAlphaBetaPruning(true);
+				//search.setShouldPruneDeepAlphaBeta(false);
+			}
+			if (config == SearchConfiguration.AllPruning) {
+				search.setUseDuplicateRemoval(true);
+				search.useAlphaBetaPruning(true);
+				search.setShouldPruneCardsInSequence(true);
+				search.setShouldPruneCardsInPlayedSequence(true);
+				//search.setShouldPruneDeepAlphaBeta(true);
+			}
 			search.search();
 			//search.printStats();
+			//search.printOptimalPath();
 
 			this.card = search.getRoot().getBestMove().getCardPlayed();
 			this.northSouthTricks = search.getRoot().getTricksTaken(Player.NORTH_SOUTH);
