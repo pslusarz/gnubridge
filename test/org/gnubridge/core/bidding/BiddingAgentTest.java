@@ -1,38 +1,11 @@
 package org.gnubridge.core.bidding;
 
-import static org.gnubridge.core.Direction.*;
 import static org.gnubridge.core.bidding.Bid.*;
-import junit.framework.TestCase;
 
 import org.gnubridge.core.Hand;
 import org.gnubridge.core.West;
 
-public class BiddingAgentTest extends TestCase {
-	Auctioneer auctioneer;
-	BiddingAgent agent;
-
-	private void expectPlayerToBid(Bid bid) {
-		assertEquals(bid, agent.getBid());
-
-	}
-
-	private void andPlayersCards(String... cardsBySuits) {
-		agent = new BiddingAgent(auctioneer, new Hand(cardsBySuits));
-
-	}
-
-	private void givenNoPriorBids() {
-		auctioneer = new Auctioneer(WEST);
-
-	}
-
-	private void givenBidding(Bid... bids) {
-		givenNoPriorBids();
-		for (Bid bid : bids) {
-			auctioneer.bid(bid);
-		}
-
-	}
+public class BiddingAgentTest extends BiddingAgentTestCase {
 
 	public void testOpeningOneNT() {
 		givenNoPriorBids();
