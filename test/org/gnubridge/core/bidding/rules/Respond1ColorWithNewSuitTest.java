@@ -1,5 +1,6 @@
 package org.gnubridge.core.bidding.rules;
 
+import static org.gnubridge.core.bidding.Bid.*;
 import junit.framework.TestCase;
 
 import org.gnubridge.core.Hand;
@@ -55,10 +56,10 @@ public class Respond1ColorWithNewSuitTest extends TestCase {
 
 	public void testRespond2Color11Points() {
 		Auctioneer a = new Auctioneer(West.i());
-		a.bid(new Bid(1, Spades.i()));
-		a.bid(new Pass());
+		a.bid(ONE_SPADES);
+		a.bid(PASS);
 		Respond1ColorWithNewSuit rule = new Respond1ColorWithNewSuit(a, new Hand("K,3,2", "K,5,4,3", "A,8,6,3", "5,4"));
-		assertEquals(new Bid(2, Hearts.i()), rule.getBid());
+		assertEquals(TWO_HEARTS, rule.getBid());
 	}
 
 	public void testJumpSuit17Points5Suit() {
@@ -68,6 +69,15 @@ public class Respond1ColorWithNewSuitTest extends TestCase {
 		Respond1ColorWithNewSuit rule = new Respond1ColorWithNewSuit(a,
 				new Hand("K,3,2", "A,K,5,4,3", "A,Q,6,3", "5,4"));
 		assertEquals(new Bid(2, Hearts.i()), rule.getBid());
+		assertTrue(rule.getBid().isGameForcing());
+	}
+
+	public void testJumpHigherSuit() {
+		Auctioneer a = new Auctioneer(West.i());
+		a.bid(ONE_HEARTS);
+		a.bid(PASS);
+		Respond1ColorWithNewSuit rule = new Respond1ColorWithNewSuit(a, new Hand("7,2", "A,8,2", "A,K,J,5,4", "A,J,5"));
+		assertEquals(THREE_DIAMONDS, rule.getBid());
 		assertTrue(rule.getBid().isGameForcing());
 	}
 
@@ -87,5 +97,21 @@ public class Respond1ColorWithNewSuitTest extends TestCase {
 		Respond1ColorWithNewSuit rule = new Respond1ColorWithNewSuit(a,
 				new Hand("K,3,2", "A,K,5,4,3", "A,Q,6,3", "5,4"));
 		assertEquals(null, rule.getBid());
+	}
+
+	public void testDoNotBidPartnersColor() {
+		Auctioneer a = new Auctioneer(West.i());
+		a.bid(ONE_DIAMONDS);
+		a.bid(new Pass());
+		Respond1ColorWithNewSuit rule = new Respond1ColorWithNewSuit(a, new Hand("Q,J,3,2", "9,6", "K,J,9,7,5", "A,2"));
+		assertEquals(ONE_SPADES, rule.getBid());
+	}
+
+	public void testOKToBidColorLowerThanPartnersColor() {
+		Auctioneer a = new Auctioneer(West.i());
+		a.bid(ONE_DIAMONDS);
+		a.bid(new Pass());
+		Respond1ColorWithNewSuit rule = new Respond1ColorWithNewSuit(a, new Hand("A,J,9", "K,10,7", "K,Q,5", "A,9,6,2"));
+		assertEquals(TWO_CLUBS, rule.getBid());
 	}
 }

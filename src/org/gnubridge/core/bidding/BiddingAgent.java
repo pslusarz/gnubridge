@@ -51,6 +51,7 @@ public class BiddingAgent {
 		for (BiddingRule rule : rules) {
 			result = rule.getBid();
 			if (result != null) {
+				//System.out.println("rule: " + rule.getClass() + " recommends: " + result);
 				break;
 			}
 		}

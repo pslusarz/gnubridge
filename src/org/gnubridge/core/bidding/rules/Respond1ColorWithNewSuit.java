@@ -4,8 +4,8 @@ import org.gnubridge.core.Hand;
 import org.gnubridge.core.bidding.Auctioneer;
 import org.gnubridge.core.bidding.Bid;
 import org.gnubridge.core.bidding.ResponseCalculator;
-import org.gnubridge.core.deck.Suit;
 import org.gnubridge.core.deck.NoTrump;
+import org.gnubridge.core.deck.Suit;
 
 public class Respond1ColorWithNewSuit extends Response {
 
@@ -32,10 +32,8 @@ public class Respond1ColorWithNewSuit extends Response {
 	@Override
 	protected Bid prepareBid() {
 		Bid result = null;
-
 		if (pc.getCombinedPoints() >= 17 && hand.getSuitLength(highestOver3) >= 5) {
-			int jump = partnersOpeningBid.getValue() + 1;
-			result = new Bid(jump, highestOver3);
+			result = new Bid(jumpPartnersBid(), highestOver3);
 			result.makeGameForcing();
 		} else {
 			result = new Bid(1, highestOver3);
@@ -46,6 +44,14 @@ public class Respond1ColorWithNewSuit extends Response {
 		}
 
 		return result;
+	}
+
+	private int jumpPartnersBid() {
+		if (partnersOpeningBid.greaterThan(new Bid(partnersOpeningBid.getValue(), highestOver3))) {
+			return partnersOpeningBid.getValue() + 2;
+		} else {
+			return partnersOpeningBid.getValue() + 1;
+		}
 	}
 
 	private boolean partnerBid1Color() {
@@ -59,7 +65,8 @@ public class Respond1ColorWithNewSuit extends Response {
 	private Suit findHighestColorWithFourOrMoreCards() {
 		Suit highestOver4 = null;
 		for (Suit color : Suit.reverseList) {
-			if (hand.getSuitLength(color) >= 4 && strongerColorHasAtLeastAsMuchHighest(color, highestOver4)) {
+			if (hand.getSuitLength(color) >= 4 && strongerColorHasAtLeastAsMuchHighest(color, highestOver4)
+					&& !color.equals(partnersOpeningBid.getTrump())) {
 				highestOver4 = color;
 			}
 		}
