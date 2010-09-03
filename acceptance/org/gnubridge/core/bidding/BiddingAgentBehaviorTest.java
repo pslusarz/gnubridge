@@ -5,6 +5,8 @@ import static org.gnubridge.core.bidding.Bid.*;
 /**
  * 
  * contributed by Jonathan Campbell, based on Pavlicek's Online Bridge Basics
+ * Lesson 4
+ * http://www.rpbridge.net/1t41.htm
  *
  */
 public class BiddingAgentBehaviorTest extends BiddingAgentTestCase {
@@ -151,6 +153,80 @@ public class BiddingAgentBehaviorTest extends BiddingAgentTestCase {
 		givenBidding(ONE_NOTRUMP, PASS);
 		andPlayersCards("A,J,8,7,3", "A,J,8,7,3", "10,2", "9");
 		expectPlayerToBid(THREE_SPADES);
+	}
+
+	public void testQuiz4Question1() {
+		givenBidding(ONE_DIAMONDS, PASS);
+		andPlayersCards("9", "K,7,5", "Q,9,7,3", "10,8,6,5,4");
+		expectPlayerToBid(TWO_DIAMONDS);
+	}
+
+	public void testQuiz4Question2() {
+		givenBidding(ONE_DIAMONDS, PASS);
+		andPlayersCards("K,9,8,4,3", "A,Q,9,7", "2", "8,7,4");
+		expectPlayerToBid(ONE_SPADES);
+	}
+
+	public void testQuiz4Question3() {
+		givenBidding(ONE_DIAMONDS, PASS);
+		andPlayersCards("A,9,7", "A,J,8,4", "8,4,3", "K,Q,10");
+		expectPlayerToBid(ONE_HEARTS);
+	}
+
+	public void testQuiz4Question4() {
+		givenBidding(ONE_DIAMONDS, PASS);
+		andPlayersCards("Q,J,3,2", "9,6", "K,J,9,7,5", "A,2");
+		expectPlayerToBid(ONE_SPADES);
+	}
+
+	//  not sure why this is 3nt and not 2c
+	//	public void testQuiz4Question5() {
+	//		givenBidding(ONE_DIAMONDS, PASS);
+	//		andPlayersCards("A,J,9", "K,10,7", "K,Q,5", "A,9,6,2");
+	//		expectPlayerToBid(THREE_NOTRUMP);
+	//	}
+
+	public void testQuiz4Question6() {
+		givenBidding(ONE_DIAMONDS, PASS);
+		andPlayersCards("Q,J", "A,J,3", "9,8,7", "Q,10,7,5,2");
+		expectPlayerToBid(ONE_NOTRUMP);
+	}
+
+	public void testQuiz4Question7() {
+		givenBidding(ONE_HEARTS, PASS);
+		andPlayersCards("K,10,7,6", "A,9,8,3", "A,8,6,4,2", "");
+		expectPlayerToBid(THREE_HEARTS);
+	}
+
+	public void testQuiz4Question8() {
+		givenBidding(ONE_HEARTS, PASS);
+		andPlayersCards("A,6,4", "6,3", "Q,J,8,6,3", "10,7,4");
+		expectPlayerToBid(ONE_NOTRUMP);
+	}
+
+	public void testQuiz4Question9() {
+		givenBidding(ONE_HEARTS, PASS);
+		andPlayersCards("5,3,2", "10,7,2", "A,Q,10,6", "Q,6,4");
+		expectPlayerToBid(TWO_HEARTS);
+	}
+
+	public void testQuiz4Question10() {
+		givenBidding(ONE_HEARTS, PASS);
+		andPlayersCards("A,Q,9,6", "7", "A,9,6", "K,J,9,3,2");
+		expectPlayerToBid(TWO_CLUBS);
+	}
+
+	//  not sure why this is 2nt and not 2d
+	//	public void testQuiz4Question11() {
+	//		givenBidding(ONE_HEARTS, PASS);
+	//		andPlayersCards("A,Q,5", "10,9", "A,9,5,4", "K,Q,8,7");
+	//		expectPlayerToBid(TWO_NOTRUMP);
+	//	}
+
+	public void testQuiz4Question12() {
+		givenBidding(ONE_HEARTS, PASS);
+		andPlayersCards("7,2", "A,8,2", "A,K,J,5,4", "A,J,5");
+		expectPlayerToBid(THREE_DIAMONDS);
 	}
 
 }
