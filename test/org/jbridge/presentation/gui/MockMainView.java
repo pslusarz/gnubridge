@@ -14,7 +14,6 @@ public class MockMainView implements MainView {
 	public MockMainView(String string) {
 	}
 
-	@Override
 	public BiddingView getBiddingView() {
 		if (biddingView == null) {
 			biddingView = new MockBiddingView();
@@ -22,7 +21,6 @@ public class MockMainView implements MainView {
 		return biddingView;
 	}
 
-	@Override
 	public DealView getDealView() {
 		if (dealView == null) {
 			dealView = new MockDealView();
@@ -30,19 +28,16 @@ public class MockMainView implements MainView {
 		return dealView;
 	}
 
-	@Override
 	public void setContent(Container pane) {
 		// TODO Auto-generated method stub
 
 	}
 
-	@Override
 	public void show() {
 		// TODO Auto-generated method stub
 
 	}
 
-	@Override
 	public void hide() {
 		// TODO Auto-generated method stub
 

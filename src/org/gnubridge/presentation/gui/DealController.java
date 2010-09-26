@@ -208,13 +208,11 @@ public class DealController implements CardPlayedListener {
 
 	}
 
-	@Override
 	public void newGame() {
 		view.hide();
 		parent.newGame();
 	}
 
-	@Override
 	public synchronized void forceMove() {
 		if (searchThread == null || searchThread.isDone()) {
 			return;

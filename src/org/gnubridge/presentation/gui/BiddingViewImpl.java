@@ -100,7 +100,6 @@ public class BiddingViewImpl implements ActionListener, BiddingView {
 
 	}
 
-	@Override
 	public void displayScore(ScoringTracker scoringTracker) {
 		biddingDisplay.setVulnerability(scoringTracker.toString());
 		biddingDisplay.displayScore("Us: " + scoringTracker.getRunningHumanScore() + ", Them: "

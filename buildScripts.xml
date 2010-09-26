@@ -3,6 +3,7 @@
 	<property name="build.dir" value="../temp/publish/gnubridge/" />
 	<property name="jar.publish.dir" value="${build.dir}/publish/" />
 	<property name="jar.candidate.dir" value="${build.dir}/candidate/" />
+	<property name="lib.dir" location="lib" />
     
 
 	<!--    *************     INTEGRATE   *****************            -->
@@ -27,7 +28,7 @@
 		<javac srcdir="${build.dir}/test/" destdir="${build.dir}/classes/test/" debug="on">
 			<classpath>
 				<pathelement location="${jar.candidate.dir}gnubridge-${version}.jar" />
-				<pathelement location="/Applications/eclipse/plugins/org.junit_3.8.2.v20080602-1318/junit.jar" />
+				<pathelement location="${lib.dir}/junit-3.8.2.jar" />
 				<pathelement path="${java.class.path}" />
 			</classpath>
 		</javac>
@@ -45,7 +46,7 @@
 		<javac srcdir="${build.dir}/acceptance/" destdir="${build.dir}/classes/acceptance/" debug="on">
 			<classpath>
 				<pathelement location="${jar.candidate.dir}gnubridge-${version}.jar" />
-				<pathelement location="/Applications/eclipse/plugins/org.junit_3.8.2.v20080602-1318/junit.jar" />
+				<pathelement location="${lib.dir}/junit-3.8.2.jar" />
 				<pathelement location="${build.dir}/classes/test/" />
 				<pathelement path="${java.class.path}" />
 			</classpath>
@@ -61,7 +62,7 @@
 				<pathelement location="${jar.candidate.dir}gnubridge-${version}.jar" />
 				<pathelement location="${build.dir}/classes/test/" />
 				<pathelement location="${build.dir}/classes/acceptance/" />
-				<pathelement path="/Applications/eclipse/plugins/org.junit_3.8.2.v20080602-1318/junit.jar" />
+				<pathelement location="${lib.dir}/junit-3.8.2.jar" />
 				<pathelement path="${java.class.path}" />
 			</classpath>
 			<formatter type="xml" />

@@ -10,43 +10,36 @@ public class MockBiddingView implements BiddingView {
 
 	private boolean vulnerabilitySet;
 
-	@Override
 	public void auctionStateChanged() {
 		// TODO Auto-generated method stub
 
 	}
 
-	@Override
 	public void display(String msg) {
 		// TODO Auto-generated method stub
 
 	}
 
-	@Override
 	public void hide() {
 		// TODO Auto-generated method stub
 
 	}
 
-	@Override
 	public void setAuction(Auctioneer auction) {
 		// TODO Auto-generated method stub
 
 	}
 
-	@Override
 	public void setCards(Hand hand) {
 		// TODO Auto-generated method stub
 
 	}
 
-	@Override
 	public void setController(BiddingController c) {
 		// TODO Auto-generated method stub
 
 	}
 
-	@Override
 	public void show() {
 		// TODO Auto-generated method stub
 
@@ -56,7 +49,6 @@ public class MockBiddingView implements BiddingView {
 		return vulnerabilitySet;
 	}
 
-	@Override
 	public void displayScore(ScoringTracker scoringTracker) {
 		vulnerabilitySet = true;
 

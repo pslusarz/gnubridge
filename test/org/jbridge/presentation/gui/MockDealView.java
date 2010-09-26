@@ -13,55 +13,46 @@ public class MockDealView implements DealView {
 	private boolean startingScoreSet;
 	private boolean finalScoreSet;
 
-	@Override
 	public void display(String message) {
 		// TODO Auto-generated method stub
 
 	}
 
-	@Override
 	public void displayCurrentTrick() {
 		// TODO Auto-generated method stub
 
 	}
 
-	@Override
 	public void displayPreviousTrick() {
 		// TODO Auto-generated method stub
 
 	}
 
-	@Override
 	public int getTableBottom() {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
-	@Override
 	public void setContract(Bid contract) {
 		// TODO Auto-generated method stub
 
 	}
 
-	@Override
 	public void setListener(CardPlayedListener c) {
 		// TODO Auto-generated method stub
 
 	}
 
-	@Override
 	public void setGame(Deal g, Direction human) {
 		// TODO Auto-generated method stub
 
 	}
 
-	@Override
 	public void displayTimeRemaining(int i) {
 		// TODO Auto-generated method stub
 
 	}
 
-	@Override
 	public void hide() {
 		// TODO Auto-generated method stub
 
@@ -75,13 +66,11 @@ public class MockDealView implements DealView {
 		return finalScoreSet;
 	}
 
-	@Override
 	public void displayStartingScore(ScoringTracker scoringTracker) {
 		this.scoringTracker = scoringTracker;
 		this.startingScoreSet = true;
 	}
 
-	@Override
 	public void displayFinalScore(ScoringTracker scoringTracker) {
 		this.scoringTracker = scoringTracker;
 		this.finalScoreSet = true;

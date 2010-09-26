@@ -48,7 +48,6 @@ public class MainViewImpl implements MainView {
 		return playView;
 	}
 
-	@Override
 	public void hide() {
 		theWindow.setVisible(false);
 

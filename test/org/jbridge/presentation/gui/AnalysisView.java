@@ -253,30 +253,25 @@ public class AnalysisView implements DealView, CardPanelHost {
 
 	}
 
-	@Override
 	public int getTotalHeight() {
 		return DHEIGHT;
 	}
 
-	@Override
 	public void displayTimeRemaining(int i) {
 		// TODO Auto-generated method stub
 
 	}
 
-	@Override
 	public void hide() {
 		// TODO Auto-generated method stub
 
 	}
 
-	@Override
 	public void displayStartingScore(ScoringTracker scoringTracker) {
 		// TODO Auto-generated method stub
 
 	}
 
-	@Override
 	public void displayFinalScore(ScoringTracker scoringTracker) {
 		// TODO Auto-generated method stub
 

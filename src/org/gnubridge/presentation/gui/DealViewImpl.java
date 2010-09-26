@@ -232,12 +232,10 @@ public class DealViewImpl implements DealView, CardPanelHost, ActionListener {
 		humanHandDisplay.display();
 	}
 
-	@Override
 	public int getTableBottom() {
 		return (int) (table.getDimensions().getY() + table.getDimensions().getHeight());
 	}
 
-	@Override
 	public void setContract(Bid contract) {
 		this.contract = contract;
 
@@ -249,12 +247,10 @@ public class DealViewImpl implements DealView, CardPanelHost, ActionListener {
 
 	}
 
-	@Override
 	public int getTotalHeight() {
 		return DHEIGHT;
 	}
 
-	@Override
 	public void addCard(CardPanel card) {
 		if (card.isPlayable()) {
 			CardOnTheTableMouseListener listener = new CardOnTheTableMouseListener(card, game);
@@ -266,7 +262,6 @@ public class DealViewImpl implements DealView, CardPanelHost, ActionListener {
 
 	}
 
-	@Override
 	public void actionPerformed(ActionEvent e) {
 		if ("displayPreviousTrick".equals(e.getActionCommand())) {
 			if (game.getPreviousTrick() != null) {
@@ -282,27 +277,23 @@ public class DealViewImpl implements DealView, CardPanelHost, ActionListener {
 
 	}
 
-	@Override
 	public void displayTimeRemaining(int i) {
 		table.setTimeRemaining(i);
 		panel.repaint();
 
 	}
 
-	@Override
 	public void hide() {
 		//panel.removeAll();
 		panel.setVisible(false);
 	}
 
-	@Override
 	public void displayStartingScore(ScoringTracker scoringTracker) {
 		this.scoreMessage = "Us: " + scoringTracker.getRunningHumanScore() + ", Them: "
 				+ scoringTracker.getRunningComputerScore();
 		panel.repaint();
 	}
 
-	@Override
 	public void displayFinalScore(ScoringTracker scoringTracker) {
 		display("GAME FINISHED. Contract was: " + contract + ", declarers took " + game.getDeclarerTricksTaken()
 				+ " tricks.");
@@ -316,7 +307,6 @@ public class DealViewImpl implements DealView, CardPanelHost, ActionListener {
 
 	class ArrowPromptMouseListener implements MouseListener, MouseMotionListener {
 
-		@Override
 		public void mouseClicked(MouseEvent e) {
 			if (table.isPromptArrowHighlighted()) {
 				controller.forceMove();
@@ -324,37 +314,31 @@ public class DealViewImpl implements DealView, CardPanelHost, ActionListener {
 
 		}
 
-		@Override
 		public void mouseEntered(MouseEvent e) {
 			// TODO Auto-generated method stub
 
 		}
 
-		@Override
 		public void mouseExited(MouseEvent e) {
 			// TODO Auto-generated method stub
 
 		}
 
-		@Override
 		public void mousePressed(MouseEvent e) {
 			// TODO Auto-generated method stub
 
 		}
 
-		@Override
 		public void mouseReleased(MouseEvent e) {
 			// TODO Auto-generated method stub
 
 		}
 
-		@Override
 		public void mouseDragged(MouseEvent e) {
 			// TODO Auto-generated method stub
 
 		}
 
-		@Override
 		public void mouseMoved(MouseEvent e) {
 			if (table.isWithinPromptArrow(e.getPoint()) && !table.isPromptArrowHighlighted()) {
 				table.setHighlightPromptArrow(true);

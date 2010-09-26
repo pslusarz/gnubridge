@@ -8,23 +8,18 @@ import org.gnubridge.presentation.gui.CardPlayedListener;
 
 public class MockCardPlayedListener implements CardPlayedListener {
 
-	@Override
 	public void playCard(Card c) {
 
 	}
 
-	@Override
 	public void displayPreviousTrick() {
 
 	}
 
-	@Override
 	public void newGame() {
 
 	}
 
-	@Override
 	public void forceMove() {
 	}
-
 }
