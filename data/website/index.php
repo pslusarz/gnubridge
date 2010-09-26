@@ -30,7 +30,8 @@ echo "Latest version: $version published on $date_modified<br>";
 
 
 <p>GNUBridge is a Contract Bridge program written in Java and available under 
-<a href="http://www.gnu.org/licenses/gpl-3.0.html">GNU public license v. 3</a>. 
+<a href="http://www.gnu.org/licenses/gpl-3.0.html">GNU public license v. 3</a>.
+<p>Please comment on <a href="http://gnubridge.blogspot.com/2010/02/gnubridge-vision-statement-draft.html">Gnubridge's vision statement</a> if you want to have input into the program's future.</p>
 <hr>
 <table border="0" cellspacing="10">
 <tr>
@@ -40,7 +41,7 @@ echo "Latest version: $version published on $date_modified<br>";
 <tr>
   <td>
     <?php print "You can download the jar <a href=\"gnubridge-$version.jar\">gnubridge-$version.jar</a>, and run it with <i>% 
-java -jar gnubridge-$version.jar</i>, or by double-clicking if you're in Windows (but beware of Internet Explorer - it will try to force a .zip extension on the file). You will need JRE 1.6 or later." ?>
+java -jar gnubridge-$version.jar</i>, or by double-clicking if you're in Windows (but beware of Internet Explorer - it will try to force a .zip extension on the file). You will need JRE 1.5 or later." ?>
   </td>
   <td>
     <a href="http://gnubridge.blogspot.com/">Developer blog</a>
@@ -67,6 +68,21 @@ at http://gnubridge.org/subversion/gnubridge or by <a href="./subversion/gnubrid
 </tr>
 </table>
 <hr>
+<p><b>September 25, 2010</b><br>
+Version 0.1.19. This release contains a few bugfixes in bidding detected thanks to Jonathan Campbell's testing contributions, and some minor code tweaks that accumulated over the past several months. After a long break, Gnubridge development is restarting, so this release is to provide a clean start before new features will start coming in.
+</p>
+<p><b>February 10, 2010</b><br>
+Version 0.1.18. Sasha added support for doubling in scoring. Also: Suit and No Trump overcall responses from Pavlicek's Bridge Basics lesson 7 (no takeout doubles). Can force the computer to move early by clicking on the countdown area. Improved responsiveness when doubleclicking to play a card. Color partners during bidding. Several stabilizing bugfixes to bidding, and automated tests to prevent this from happening in the future. 
+</p>
+<p><b>January 12, 2010</b><br>
+Version 0.1.17. Sasha added support for vulnerability in scoring. Paul added basic suit overcalls from Pavlicek's Bridge Basics lesson 7 (the computer will make an overcall in a suit if conditions apply). 
+</p>
+<p><b>January 4, 2010</b><br>
+Version 0.1.16. Sasha Slutsker implemented scoring. Score is maintained across multiple deals. Support for vulnerability and doubles/redoubles will be added in the future.
+</p>
+<p><b>December 17, 2009</b><br>
+Version 0.1.15. Two new features: Player can restart a game, and Gnubridge now runs on JRE 1.5. Happy Holidays!
+</p>
 <p><b>November 25, 2009</b><br>
 Version 0.1.14. Two new features: player can review most recent trick (click on the card icon in upper left corner of the table), and there's visual feedback on the time remaining for computer to make a move (countdown timer). Time per move was reduced to 15 seconds. A questionable pruning strategy was disabled (play lowest card to lost trick).
 </p>

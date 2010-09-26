@@ -134,7 +134,7 @@
 	</target>
 
 	<target name="set-version-release" unless="${version}">
-		<property name="version" value="0.1.18" />
+		<property name="version" value="0.1.19" />
 	</target>
 
 	<!--    *************     PUBLISH   *****************            -->
