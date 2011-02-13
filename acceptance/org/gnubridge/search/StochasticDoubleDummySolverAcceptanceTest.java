@@ -162,11 +162,12 @@ public class StochasticDoubleDummySolverAcceptanceTest extends TestCase {
 
 		public void runSearch(Deal g) {
 			search = new DoubleDummySolver(g);
-			search.setMaxTricks(SEARCH_DEPTH_CUTOFF);
-			search.setTerminateIfRootOnlyHasOneValidMove(false);
+
 			if (config == SearchConfiguration.MiniMax) {
+				SolverConfigurator configurator = new SolverConfigurator();
+				configurator.setUseAlphaBetaPruning(false);
+				search = new DoubleDummySolver(g, configurator);
 				search.setUseDuplicateRemoval(false);
-				search.useAlphaBetaPruning(false);
 				search.setShouldPruneCardsInSequence(false);
 				search.setShouldPruneCardsInPlayedSequence(false);
 
@@ -175,7 +176,9 @@ public class StochasticDoubleDummySolverAcceptanceTest extends TestCase {
 				search.setUseDuplicateRemoval(false);
 			}
 			if (config == SearchConfiguration.NoAlphaBetaPruning) {
-				search.useAlphaBetaPruning(false);
+				SolverConfigurator configurator = new SolverConfigurator();
+				configurator.setUseAlphaBetaPruning(false);
+				search = new DoubleDummySolver(g, configurator);
 			}
 			if (config == SearchConfiguration.DuplicatePruning) {
 				search.setUseDuplicateRemoval(true);
@@ -188,16 +191,18 @@ public class StochasticDoubleDummySolverAcceptanceTest extends TestCase {
 				search.setShouldPruneCardsInPlayedSequence(false);
 			}
 			if (config == SearchConfiguration.NoDeepAlphaBeta) {
-				search.useAlphaBetaPruning(true);
+				assertTrue(search.getConfigurator().isUseAlphaBetaPruning());
 				//search.setShouldPruneDeepAlphaBeta(false);
 			}
 			if (config == SearchConfiguration.AllPruning) {
 				search.setUseDuplicateRemoval(true);
-				search.useAlphaBetaPruning(true);
+				assertTrue(search.getConfigurator().isUseAlphaBetaPruning());
 				search.setShouldPruneCardsInSequence(true);
 				search.setShouldPruneCardsInPlayedSequence(true);
 				//search.setShouldPruneDeepAlphaBeta(true);
 			}
+			search.setMaxTricks(SEARCH_DEPTH_CUTOFF);
+			search.setTerminateIfRootOnlyHasOneValidMove(false);
 			search.search();
 			//search.printStats();
 			//search.printOptimalPath();

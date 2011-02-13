@@ -5,8 +5,8 @@ import java.util.List;
 import junit.framework.TestCase;
 
 import org.gnubridge.core.Card;
-import org.gnubridge.core.Direction;
 import org.gnubridge.core.Deal;
+import org.gnubridge.core.Direction;
 import org.gnubridge.core.Hand;
 import org.gnubridge.core.Player;
 import org.gnubridge.core.deck.Ace;
@@ -227,11 +227,10 @@ public class DoubleDummySolverTest extends TestCase {
 		game.getEast().init(new Hand("", "3,2", "", ""));
 		game.getSouth().init(new Hand("2", "4", "", ""));
 		game.setNextToPlay(Direction.WEST_DEPRECATED);
-		DoubleDummySolver search = new DoubleDummySolver(game);
+		SolverConfigurator configurator = new SolverConfigurator();
+		configurator.setUseAlphaBetaPruning(false);
+		DoubleDummySolver search = new DoubleDummySolver(game, configurator);
 		search.setUseDuplicateRemoval(false);
-		search.useAlphaBetaPruning(false);
-		search.useAlphaBetaPruning(false);
-		//search.setShouldPruneCardsInPlayedSequence(false);
 		search.search();
 		assertEquals(1, search.getRoot().getTricksTaken(Player.WEST_EAST));
 		assertEquals(Ace.of(Hearts.i()), search.getRoot().getBestMove().getCardPlayed());
@@ -341,7 +340,7 @@ public class DoubleDummySolverTest extends TestCase {
 				new Card[] { Six.of(Hearts.i()), Two.of(Hearts.i()), Queen.of(Spades.i()), King.of(Clubs.i()) });
 
 		DoubleDummySolver pruned = new DoubleDummySolver(game.duplicate());
-		pruned.useAlphaBetaPruning(true);
+		assertTrue(pruned.getConfigurator().isUseAlphaBetaPruning());
 		pruned.search();
 		assertEquals(2, pruned.getRoot().getTricksTaken(Player.WEST_EAST));
 	}
@@ -356,7 +355,7 @@ public class DoubleDummySolverTest extends TestCase {
 
 		game.setNextToPlay(Direction.SOUTH_DEPRECATED);
 		DoubleDummySolver pruned = new DoubleDummySolver(game.duplicate());
-		pruned.useAlphaBetaPruning(true);
+		assertTrue(pruned.getConfigurator().isUseAlphaBetaPruning());
 		pruned.search();
 		assertEquals(2, pruned.getRoot().getTricksTaken(Player.WEST_EAST));
 
@@ -707,10 +706,14 @@ public class DoubleDummySolverTest extends TestCase {
 		assertEquals(Queen.of(Spades.i()), pruned.getRoot().getBestMove().getCardPlayed());
 
 		Deal gameWithCardsFlipped = new Deal(NoTrump.i());
-		gameWithCardsFlipped.getPlayer(Direction.WEST_DEPRECATED).init(new Card[] { Queen.of(Spades.i()), Ace.of(Spades.i()) });
-		gameWithCardsFlipped.getPlayer(Direction.NORTH_DEPRECATED).init(new Card[] { Six.of(Spades.i()), Four.of(Spades.i()) });
-		gameWithCardsFlipped.getPlayer(Direction.EAST_DEPRECATED).init(new Card[] { Ten.of(Hearts.i()), Three.of(Hearts.i()) });
-		gameWithCardsFlipped.getPlayer(Direction.SOUTH_DEPRECATED).init(new Card[] { Six.of(Hearts.i()), Two.of(Hearts.i()) });
+		gameWithCardsFlipped.getPlayer(Direction.WEST_DEPRECATED).init(
+				new Card[] { Queen.of(Spades.i()), Ace.of(Spades.i()) });
+		gameWithCardsFlipped.getPlayer(Direction.NORTH_DEPRECATED).init(
+				new Card[] { Six.of(Spades.i()), Four.of(Spades.i()) });
+		gameWithCardsFlipped.getPlayer(Direction.EAST_DEPRECATED).init(
+				new Card[] { Ten.of(Hearts.i()), Three.of(Hearts.i()) });
+		gameWithCardsFlipped.getPlayer(Direction.SOUTH_DEPRECATED).init(
+				new Card[] { Six.of(Hearts.i()), Two.of(Hearts.i()) });
 
 		gameWithCardsFlipped.setNextToPlay(Direction.WEST_DEPRECATED);
 		DoubleDummySolver triangulate = new DoubleDummySolver(gameWithCardsFlipped.duplicate());
@@ -735,10 +738,14 @@ public class DoubleDummySolverTest extends TestCase {
 		pruned.search();
 		assertEquals(Four.of(Hearts.i()), pruned.getRoot().getBestMove().getCardPlayed());
 		Deal gameWithCardsFlipped = new Deal(NoTrump.i());
-		gameWithCardsFlipped.getPlayer(Direction.WEST_DEPRECATED).init(new Card[] { Ace.of(Spades.i()), King.of(Spades.i()) });
-		gameWithCardsFlipped.getPlayer(Direction.NORTH_DEPRECATED).init(new Card[] { Four.of(Hearts.i()), Six.of(Diamonds.i()) });
-		gameWithCardsFlipped.getPlayer(Direction.EAST_DEPRECATED).init(new Card[] { Ten.of(Hearts.i()), Three.of(Hearts.i()) });
-		gameWithCardsFlipped.getPlayer(Direction.SOUTH_DEPRECATED).init(new Card[] { Six.of(Hearts.i()), Two.of(Hearts.i()) });
+		gameWithCardsFlipped.getPlayer(Direction.WEST_DEPRECATED).init(
+				new Card[] { Ace.of(Spades.i()), King.of(Spades.i()) });
+		gameWithCardsFlipped.getPlayer(Direction.NORTH_DEPRECATED).init(
+				new Card[] { Four.of(Hearts.i()), Six.of(Diamonds.i()) });
+		gameWithCardsFlipped.getPlayer(Direction.EAST_DEPRECATED).init(
+				new Card[] { Ten.of(Hearts.i()), Three.of(Hearts.i()) });
+		gameWithCardsFlipped.getPlayer(Direction.SOUTH_DEPRECATED).init(
+				new Card[] { Six.of(Hearts.i()), Two.of(Hearts.i()) });
 
 		gameWithCardsFlipped.setNextToPlay(Direction.WEST_DEPRECATED);
 		gameWithCardsFlipped.play(Ace.of(Spades.i()));

@@ -176,7 +176,7 @@ public class DoubleDummySolverAlphaBetaPruningTest extends TestCase {
 		MockGame g = new MockGame();
 		g.setPositionValue(node_1_1_1.getMoves(), 1, 2);
 		DoubleDummySolver s = new DoubleDummySolver(g);
-		s.useAlphaBetaPruning(true);
+		assertTrue(s.getConfigurator().isUseAlphaBetaPruning());
 		s.examinePosition(node_1_1_1);
 		assertTrue(node_1.isPruned());
 	}
@@ -323,7 +323,7 @@ public class DoubleDummySolverAlphaBetaPruningTest extends TestCase {
 		MockGame g = new MockGame();
 		g.setPositionValue(node_1_1_1.getMoves(), 2, 1);
 		DoubleDummySolver s = new DoubleDummySolver(g);
-		s.useAlphaBetaPruning(true);
+		assertTrue(s.getConfigurator().isUseAlphaBetaPruning());
 		s.examinePosition(node_1_1_1);
 		assertTrue(node_1.isPruned());
 	}
@@ -358,7 +358,7 @@ public class DoubleDummySolverAlphaBetaPruningTest extends TestCase {
 		MockGame g = new MockGame();
 		g.setPositionValue(node_1_1_1.getMoves(), 2, 1);
 		DoubleDummySolver s = new DoubleDummySolver(g);
-		s.useAlphaBetaPruning(true);
+		assertTrue(s.getConfigurator().isUseAlphaBetaPruning());
 		s.examinePosition(node_1_1_1);
 		assertTrue(node_1.isBetaPruned());
 		assertTrue(node_00.trimmed());

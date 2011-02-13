@@ -2,9 +2,9 @@ package org.gnubridge.search;
 
 import junit.framework.TestCase;
 
+import org.gnubridge.core.Deal;
 import org.gnubridge.core.Direction;
 import org.gnubridge.core.East;
-import org.gnubridge.core.Deal;
 import org.gnubridge.core.North;
 import org.gnubridge.core.Player;
 import org.gnubridge.core.South;
@@ -127,7 +127,7 @@ public class DoubleDummySolverScenarioAcceptanceTest extends TestCase {
 		search.setUseDuplicateRemoval(false);
 		search.setShouldPruneCardsInSequence(false);
 
-		search.useAlphaBetaPruning(true);
+		assertTrue(search.getConfigurator().isUseAlphaBetaPruning());
 
 		search.setMaxTricks(3);
 		search.search();

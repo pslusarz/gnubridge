@@ -7,6 +7,7 @@ import java.util.Stack;
 import org.gnubridge.core.Card;
 import org.gnubridge.core.Deal;
 import org.gnubridge.core.Player;
+import org.gnubridge.search.pruning.PruningStrategy;
 
 public class DoubleDummySolver {
 
@@ -32,7 +33,7 @@ public class DoubleDummySolver {
 
 	private int prunedPlayedSequence;
 
-	private boolean useAlphaBetaPruning = true;
+	//private boolean useAlphaBetaPruning = true;
 	private boolean useDuplicateRemoval = true;
 	private boolean shouldPruneCardsInSequence = true;
 	private boolean shouldPruneCardsInPlayedSequence = true;
@@ -41,6 +42,10 @@ public class DoubleDummySolver {
 	PositionLookup lookup;
 
 	private boolean terminateIfRootOnlyHasOneValidMove = true;
+
+	private final List<PruningStrategy> postEvaluationPruningStrategies = new ArrayList<PruningStrategy>();
+
+	private SolverConfigurator configurator = null;
 
 	public void setTerminateIfRootOnlyHasOneValidMove(boolean terminateIfRootOnlyHasOneValidMove) {
 		this.terminateIfRootOnlyHasOneValidMove = terminateIfRootOnlyHasOneValidMove;
@@ -51,7 +56,13 @@ public class DoubleDummySolver {
 	}
 
 	public DoubleDummySolver(Deal game) {
+		this(game, SolverConfigurator.Default);
+
+	}
+
+	public DoubleDummySolver(Deal game, SolverConfigurator configurator) {
 		this.game = game;
+		this.configurator = configurator;
 		stack = new Stack<Node>();
 		finalMoves = new ArrayList<Integer>();
 		finalMoves.add(0);
@@ -59,6 +70,12 @@ public class DoubleDummySolver {
 		finalMoves.add(0);
 		finalMoves.add(0);
 		lookup = new PositionLookup();
+		configurator.configure(this);
+
+	}
+
+	public void addPostEvaluationPruningStrategy(PruningStrategy strategy) {
+		postEvaluationPruningStrategies.add(strategy);
 	}
 
 	public void search() {
@@ -148,7 +165,7 @@ public class DoubleDummySolver {
 		} else {
 			for (Node move : node.children) {
 				if (shouldPruneCardsInSequence) {
-					removeSiblingsInSequence(move, position);
+					removeSiblingsInSequence(move);
 				}
 				if (shouldPruneCardsInPlayedSequence) {
 					//removeSiblingsInSequenceWithPlayedCards(move, position);
@@ -188,55 +205,7 @@ public class DoubleDummySolver {
 		move.setPlayerCardPlayed(player);
 	}
 
-	/**
-	 * TODO: broken trimming strategy removeSiblingsInSequenceWithPlayedCards
-	 */
-	//	private void removeSiblingsInSequenceWithPlayedCards(Node move, Game position) {
-	//		List<Card> orderedPlayedCardsInSuit = position.getPlayedCardsHiToLow(move.getCardPlayed().getDenomination());
-	//		if (orderedPlayedCardsInSuit.isEmpty()) {
-	//			return;
-	//		}
-	//		boolean shouldTrim = false;
-	//
-	//		List<Card> siblingsInSuit = move.getSiblingsInColor();
-	//		for (Card sibling : siblingsInSuit) {
-	//			Card higherCard = getHigher(move.getCardPlayed(), sibling);
-	//			Card lowerCard = getLower(move.getCardPlayed(), sibling);
-	//			boolean isSequence = cardsInSuitContainSequence(lowerCard.getValue(), higherCard.getValue(),
-	//					orderedPlayedCardsInSuit);
-	//
-	//			if (isSequence && higherCard.equals(move.getCardPlayed())) {
-	//				shouldTrim = true;
-	//				break;
-	//			}
-	//		}
-	//		if (shouldTrim) {
-	//			move.pruneAsSequenceSiblingPlayed();
-	//		}
-	//
-	//	}
-	//	private boolean cardsInSuitContainSequence(int low, int high, List<Card> othersInSuitHighToLow) {
-	//		List<Card> inBetween = discardCardsOutsideLimits(low, high, othersInSuitHighToLow);
-	//		return high - low == inBetween.size() + 1;
-	//	}
-	//	private List<Card> discardCardsOutsideLimits(int low, int high, List<Card> orderedPlayedCardsInSuit) {
-	//		List<Card> result = new ArrayList<Card>();
-	//		for (Card card : orderedPlayedCardsInSuit) {
-	//			if (card.getValue() > low && card.getValue() < high) {
-	//				result.add(card);
-	//			}
-	//		}
-	//		return result;
-	//	}
-	//	private Card getLower(Card c1, Card c2) {
-	//		if (c1.getValue() < c2.getValue()) {
-	//			return c1;
-	//		} else {
-	//			return c2;
-	//		}
-	//	}
-
-	private void removeSiblingsInSequence(Node move, Deal position) {
+	private void removeSiblingsInSequence(Node move) {
 		boolean shouldTrim = false;
 		List<Card> cardsInSuit = move.getSiblingsInColor();
 		for (Card sibling : cardsInSuit) {
@@ -267,23 +236,15 @@ public class DoubleDummySolver {
 			node.nullAllChildrenExceptOne();
 		}
 		node.calculateValue();
-		if (useAlphaBetaPruning) {
-			pruneAlphaBeta(node);
+
+		for (PruningStrategy pruningStrategy : postEvaluationPruningStrategies) {
+			pruningStrategy.prune(node);
 		}
+
 		if (node.canTrim()) {
 			trim(node.parent);
 		}
 		node.trimmed = true;
-
-	}
-
-	private void pruneAlphaBeta(Node node) {
-		if (node.shouldBeAlphaPruned()) {
-			node.alphaPrune();
-		}
-		if (node.shouldBeBetaPruned()) {
-			node.betaPrune();
-		}
 
 	}
 
@@ -300,11 +261,6 @@ public class DoubleDummySolver {
 	public void printOptimalPath() {
 		System.out.println("Optimal path in this search: ");
 		root.printOptimalPath(game);
-	}
-
-	public void useAlphaBetaPruning(boolean b) {
-		useAlphaBetaPruning = b;
-
 	}
 
 	public long getRunningTime() {
@@ -325,12 +281,12 @@ public class DoubleDummySolver {
 
 	public void printStats() {
 		String pruneType = "Unpruned";
-		if (useAlphaBetaPruning) {
+		if (postEvaluationPruningStrategies.size() > 0) {
 			pruneType = "Pruned";
 		}
 		System.out.println(pruneType + " search took (msec): " + getRunningTime());
 		System.out.println("  Positions examined: " + getPositionsExamined());
-		if (useAlphaBetaPruning) {
+		if (postEvaluationPruningStrategies.size() > 0) {
 			System.out.println("  Alpha prunes: " + getPrunedAlpha());
 			System.out.println("  Beta prunes: " + getPrunedBeta());
 			System.out.println("  Sequence prunes: " + getPrunedSequence());
@@ -344,16 +300,16 @@ public class DoubleDummySolver {
 
 	}
 
+	public SolverConfigurator getConfigurator() {
+		return configurator;
+	}
+
 	private int getPrunedPlayedSequence() {
 		return prunedPlayedSequence;
 	}
 
 	private int getPrunedSequence() {
 		return prunedSequence;
-	}
-
-	public boolean isAlphaBetaPruning() {
-		return useAlphaBetaPruning;
 	}
 
 	public void setMaxTricks(int i) {

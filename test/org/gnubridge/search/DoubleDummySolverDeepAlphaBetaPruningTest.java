@@ -38,7 +38,7 @@ public class DoubleDummySolverDeepAlphaBetaPruningTest extends TestCase {
 		MockGame g = new MockGame();
 		g.setPositionValue(node_1_1_0.getMoves(), 1, 0); //zero tricks for Max (W)
 		DoubleDummySolver s = new DoubleDummySolver(g);
-		s.useAlphaBetaPruning(true);
+		assertTrue(s.getConfigurator().isUseAlphaBetaPruning());
 		//s.setShouldPruneDeepAlphaBeta(true);
 		s.examinePosition(node_1_1_0);
 		assertTrue(node_1_1.isPruned());
@@ -72,8 +72,7 @@ public class DoubleDummySolverDeepAlphaBetaPruningTest extends TestCase {
 		MockGame g = new MockGame();
 		g.setPositionValue(node_1_1_0.getMoves(), 1, 0); //Max (W) gets 0
 		DoubleDummySolver s = new DoubleDummySolver(g);
-		s.useAlphaBetaPruning(true);
-		//s.setShouldPruneDeepAlphaBeta(true);
+		assertTrue(s.getConfigurator().isUseAlphaBetaPruning());
 		s.examinePosition(node_1_1_0);
 		assertTrue(node_1.isPruned());
 	}
