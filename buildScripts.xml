@@ -1,6 +1,6 @@
 <project name="gnubridge" default="integrate">
 
-	<property name="build.dir" value="../temp/gnubridge/" />
+	<property name="build.dir" value="./temp/gnubridge/" />
 	<property name="jar.publish.dir" value="${build.dir}/publish/" />
 	<property name="jar.candidate.dir" value="${build.dir}/candidate/" />
 	<property name="lib.dir" location="lib" />
@@ -155,11 +155,11 @@
 	</target>
 
 	<target name="publish-test-results">
-		<copy todir="${jar.publish.dir}">
+		<!-- copy todir="${jar.publish.dir}/test/">
 			<fileset dir="${build.dir}/test/">
 				<include name="*.*" />
 			</fileset>
-		</copy>
+		</copy  -->
 	</target>
 		
 </project>
