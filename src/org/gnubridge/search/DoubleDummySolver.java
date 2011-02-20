@@ -130,9 +130,6 @@ public class DoubleDummySolver {
 				if (shouldPruneCardsInSequence) {
 					removeSiblingsInSequence(move);
 				}
-				if (shouldPruneCardsInPlayedSequence) {
-					//removeSiblingsInSequenceWithPlayedCards(move, position);
-				}
 			}
 			if (!rootOnlyHasOneValidMove(node) || !terminateIfRootOnlyHasOneValidMove) {
 				for (Node move : node.children) {
