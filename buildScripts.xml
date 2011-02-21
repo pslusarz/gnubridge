@@ -1,8 +1,8 @@
 <project name="gnubridge" default="integrate">
 
-	<property name="build.dir" value="temp/gnubridge/" />
-	<property name="jar.publish.dir" value="${build.dir}/publish/" />
-	<property name="jar.candidate.dir" value="${build.dir}/candidate/" />
+	<property name="build.dir" value="temp" />
+	<property name="jar.publish.dir" value="${build.dir}/publish" />
+	<property name="jar.candidate.dir" value="${build.dir}/candidate" />
 	<property name="lib.dir" location="lib" />
     
 
@@ -27,7 +27,7 @@
 		<mkdir dir="${build.dir}/classes/test/" />
 		<javac srcdir="${build.dir}/test/" destdir="${build.dir}/classes/test/" debug="on">
 			<classpath>
-				<pathelement location="${jar.candidate.dir}gnubridge-${version}.jar" />
+				<pathelement location="${jar.candidate.dir}/gnubridge-${version}.jar" />
 				<pathelement location="${lib.dir}/junit-3.8.2.jar" />
 				<pathelement path="${java.class.path}" />
 			</classpath>
@@ -45,7 +45,7 @@
 
 		<javac srcdir="${build.dir}/acceptance/" destdir="${build.dir}/classes/acceptance/" debug="on">
 			<classpath>
-				<pathelement location="${jar.candidate.dir}gnubridge-${version}.jar" />
+				<pathelement location="${jar.candidate.dir}/gnubridge-${version}.jar" />
 				<pathelement location="${lib.dir}/junit-3.8.2.jar" />
 				<pathelement location="${build.dir}/classes/test/" />
 				<pathelement path="${java.class.path}" />
@@ -59,7 +59,7 @@
 		<mkdir dir="${build.dir}/test/temp/" />
 		<junit failureproperty="junit.failure" showoutput="true" printsummary="on" tempdir="${build.dir}/test/temp/">
 			<classpath>
-				<pathelement location="${jar.candidate.dir}gnubridge-${version}.jar" />
+				<pathelement location="${jar.candidate.dir}/gnubridge-${version}.jar" />
 				<pathelement location="${build.dir}/classes/test/" />
 				<pathelement location="${build.dir}/classes/acceptance/" />
 				<pathelement location="${lib.dir}/junit-3.8.2.jar" />
@@ -110,7 +110,7 @@
 
 		<mkdir dir="${jar.candidate.dir}" />
 
-		<jar destfile="${jar.candidate.dir}gnubridge-${version}.jar">
+		<jar destfile="${jar.candidate.dir}/gnubridge-${version}.jar">
 			<fileset dir="${build.dir}/classes/" />
 			<fileset dir="${build.dir}/resources/" />
 			<manifest>
