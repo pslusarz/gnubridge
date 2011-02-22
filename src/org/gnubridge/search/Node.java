@@ -121,7 +121,7 @@ public class Node {
 		return Player.matchPair(getPlayerTurn());
 	}
 
-	int getPlayerTurn() {
+	public int getPlayerTurn() {
 		return this.playerTurn;
 	}
 
@@ -559,6 +559,10 @@ public class Node {
 
 	public void pruneAsBeta() {
 		setPruned(true, Node.PRUNE_BETA);
+	}
+
+	public Node getParent() {
+		return parent;
 	}
 
 }

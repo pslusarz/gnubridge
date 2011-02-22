@@ -6,35 +6,6 @@ import org.gnubridge.core.Direction;
 import org.gnubridge.core.Player;
 
 public class DoubleDummySolverAlphaBetaPruningTest extends TestCase {
-	/**
-	 *
-	 *        root         W
-	 *           \
-	 *           00        W
-	 *           / \
-	 *   (1,1)  0   1      S
-	 *             / \
-	 *    (0,2) 1_0   1_1  E
-	 *        
-	 */
-
-	public void testOneLevelAlphaPrune() {
-		Node root = new Node(null, Direction.WEST_DEPRECATED);
-		Node node_00 = new Node(root, Direction.WEST_DEPRECATED);
-		Node node_0 = new Node(node_00, Direction.SOUTH_DEPRECATED);
-		node_0.setTricksTaken(Player.WEST_EAST, 1);
-		Node node_1 = new Node(node_00, Direction.SOUTH_DEPRECATED);
-		Node node_1_0 = new Node(node_1, Direction.EAST_DEPRECATED);
-		@SuppressWarnings("unused")
-		Node node_1_1 = new Node(node_1, Direction.EAST_DEPRECATED);
-
-		MockGame g = new MockGame();
-		g.setPositionValue(node_1_0.getMoves(), 0, 2);
-		DoubleDummySolver s = new DoubleDummySolver(g);
-		s.examinePosition(node_1_0);
-		assertTrue(node_1.isPruned());
-		assertTrue(node_1.trimmed());
-	}
 
 	/**
 	 *
