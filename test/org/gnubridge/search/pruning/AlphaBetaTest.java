@@ -2,6 +2,7 @@ package org.gnubridge.search.pruning;
 
 import static org.gnubridge.core.Direction.*;
 
+import java.util.Arrays;
 import java.util.HashMap;
 
 import junit.framework.TestCase;
@@ -11,104 +12,73 @@ import org.gnubridge.core.Player;
 import org.gnubridge.search.Node;
 
 public class AlphaBetaTest extends TestCase {
-	private static final String ACTING_ROOT_NODE = "*";
-	private static final int NO_PLAYER_SELECTED = -1;
+
+	private NodeWrapper protoRoot;
+	private NodeWrapper root;
+	private HashMap<String, NodeWrapper> nodes;
+
 	/**
 	 *
-	 *        root         W
+	 *      protoRoot      W
 	 *           \
-	 *           00        W
+	 *          root       W
 	 *           / \
-	 *   (1,1)  0   1      S
+	 *  (max:1) 0   1      S
 	 *             / \
-	 *    (0,2) 1_0   1_1  E
-	 *        
+	 *   (max:0) 1_0  1_1  E        
 	 */
-
-	Node root;
-	private Node currentNode;
-	String currentNodeMnemonic;
-
-	private HashMap<String, Node> nodes;
-
-	AlphaBetaTest givenMaxPlayer(Direction maxPlayer) {
-		currentNodeMnemonic = "";
-		if (root == null) {
-			root = new Node(null, maxPlayer.getValue());
-			currentNode = new Node(root, maxPlayer.getValue());
-			nodes = new HashMap<String, Node>();
-			nodes.put(ACTING_ROOT_NODE, currentNode);
-		} else {
-			currentNode = nodes.get(ACTING_ROOT_NODE);
-			assertEquals("may not switch the max player for a scenario", currentNode.getPlayerTurn(),
-					maxPlayer.getValue());
-		}
-		return this;
-	}
-
-	AlphaBetaTest makingMove(String mnemonic) {
-		assertNotNull("start building scenario with givenMaxPlayer()", root);
-		String candidateMnemonic = currentNodeMnemonic + "_" + mnemonic;
-		Node candidateNode = nodes.get(candidateMnemonic);
-		if (candidateNode == null) {
-			candidateNode = new Node(currentNode, NO_PLAYER_SELECTED);
-			nodes.put(candidateMnemonic, candidateNode);
-		}
-		currentNodeMnemonic = candidateMnemonic;
-		currentNode = candidateNode;
-
-		return this;
-	}
-
-	AlphaBetaTest nextTurn(Direction playersTurn) {
-		assertNotNull("initialize node with makingMove()", currentNode);
-		assertTrue(
-				"may not change players turn on existing node " + currentNodeMnemonic + " from "
-						+ currentNode.getPlayerTurn() + " to " + playersTurn.getValue(),
-				(currentNode.getPlayerTurn() == NO_PLAYER_SELECTED)
-						|| (currentNode.getPlayerTurn() == playersTurn.getValue()));
-		currentNode.setPlayerTurn(playersTurn.getValue());
-		return this;
-	}
-
-	AlphaBetaTest maxCanCaptureTricks(int numOfTricks) {
-		assertNotNull("initialize node with makingMove()", currentNode);
-		currentNode.setTricksTaken(root.getCurrentPair(), numOfTricks);
-		return this;
-	}
-
-	Node asNode() {
-		return currentNode;
-	}
 
 	public void testOneLevelAlphaPrune1() {
-		givenMaxPlayer(WEST).makingMove("1").maxCanCaptureTricks(1).nextTurn(SOUTH);
-		givenMaxPlayer(WEST).makingMove("2").nextTurn(SOUTH).makingMove("1").maxCanCaptureTricks(0).nextTurn(EAST);
-		givenMaxPlayer(WEST).makingMove("2").makingMove("2").nextTurn(EAST);
+		givenMax(WEST);
+		nodeWithPath("0").withTricksForMax(1).withNextTurn(SOUTH);
+		nodeWithPath("1").withNextTurn(SOUTH);
+		nodeWithPath("1", "0").withNextTurn(EAST).withTricksForMax(0);
+		nodeWithPath("1", "1").withNextTurn(EAST);
 
-		whenPruning(givenMaxPlayer(WEST).makingMove("2").makingMove("1").asNode());
+		whenPruning(nodeWithPath("1", "0"));
 
-		assertTrue(givenMaxPlayer(WEST).makingMove("2").makingMove("1").asNode().isAlphaPruned());
-		assertTrue(givenMaxPlayer(WEST).makingMove("2").asNode().isAlphaPruned());
+		assertTrue(nodeWithPath("1", "0").isAlphaPruned());
+		assertTrue(nodeWithPath("1").isAlphaPruned());
+	}
+
+	private void whenPruning(NodeWrapper node) {
+		AlphaBeta ab = new AlphaBeta();
+		ab.prune(node.delegate);
 
 	}
 
-	/**
-	 * 
-	 * givenMax(West);
-	 * select("1").maxCanCaptureTricks(1).nextTurn(SOUTH);
-	 * select("2").nextTurn(SOUTH);
-	 * select("2","1").nextTurn(EAST).maxCanCaptureTricks(0);
-	 * select("2","2").nextTurn(EAST);
-	 * 
-	 * whenPruning(select("2","1"));
-	 * assertTrue(select("2","1").isAlphaPruned());
-	 * assertTrue(select("2").isAlphaPruned());
-	 */
+	private NodeWrapper nodeWithPath(String... moveSelectionsFromRoot) {
+		if (moveSelectionsFromRoot.length == 1) {
+			NodeWrapper node = nodes.get(moveSelectionsFromRoot[0]);
+			if (node == null) {
+				node = new NodeWrapper(root, NodeWrapper.NO_PLAYER_SELECTED);
+				node.setKey(moveSelectionsFromRoot[0]);
+				nodes.put(node.getKey(), node);
+			}
+			return node;
+		} else {
+			NodeWrapper parent = nodeWithPath(truncateLast(moveSelectionsFromRoot));
+			String childKey = parent.getKey() + "_" + moveSelectionsFromRoot[moveSelectionsFromRoot.length - 1];
+			NodeWrapper child = nodes.get(childKey);
+			if (child == null) {
+				child = new NodeWrapper(parent, NodeWrapper.NO_PLAYER_SELECTED);
+				child.setKey(childKey);
+				nodes.put(child.getKey(), child);
+			}
+			return child;
+		}
 
-	private void whenPruning(Node node) {
-		AlphaBeta ab = new AlphaBeta();
-		ab.prune(node);
+	}
+
+	private String[] truncateLast(String[] toBeTruncated) {
+		return Arrays.copyOf(toBeTruncated, toBeTruncated.length - 1);
+	}
+
+	private void givenMax(Direction maxPlayer) {
+		protoRoot = new NodeWrapper(null, maxPlayer.getValue());
+		root = new NodeWrapper(protoRoot, maxPlayer.getValue());
+		nodes = new HashMap<String, NodeWrapper>();
+
 	}
 
 	public void testOneLevelAlphaPrune() {
@@ -120,11 +90,11 @@ public class AlphaBetaTest extends TestCase {
 		Node node_1_0 = new Node(node_1, EAST.getValue());
 		@SuppressWarnings("unused")
 		Node node_1_1 = new Node(node_1, EAST.getValue());
-
-		//node_1_0.setTricksTaken(Player.NORTH_SOUTH, 2);
 		node_1_0.setTricksTaken(Player.WEST_EAST, 0);
+
 		AlphaBeta ab = new AlphaBeta();
 		ab.prune(node_1_0);
+
 		assertTrue(node_1_0.isAlphaPruned());
 		assertTrue(node_1.isAlphaPruned());
 	}
@@ -156,5 +126,45 @@ public class AlphaBetaTest extends TestCase {
 		AlphaBeta ab = new AlphaBeta();
 		ab.prune(node_1_0);
 		assertFalse(node_1.isPruned());
+	}
+
+	private class NodeWrapper {
+		private static final int NO_PLAYER_SELECTED = -1;
+		private Node delegate;
+		private String key = "";
+
+		public NodeWrapper(NodeWrapper parent, int nextToPlay) {
+			if (parent != null) {
+				this.delegate = new Node(parent.delegate, nextToPlay);
+			} else {
+				this.delegate = new Node(null, nextToPlay);
+			}
+		}
+
+		public void setKey(String key) {
+			this.key = key;
+
+		}
+
+		public String getKey() {
+			return key;
+		}
+
+		public NodeWrapper withTricksForMax(int numOfTricks) {
+			delegate.setTricksTaken(protoRoot.delegate.getCurrentPair(), numOfTricks);
+			return this;
+
+		}
+
+		public NodeWrapper withNextTurn(Direction playersTurn) {
+			delegate.setPlayerTurn(playersTurn.getValue());
+			return this;
+
+		}
+
+		public boolean isAlphaPruned() {
+			return delegate.isAlphaPruned();
+		}
+
 	}
 }
