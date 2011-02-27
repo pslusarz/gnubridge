@@ -2,20 +2,11 @@ package org.gnubridge.search.pruning;
 
 import static org.gnubridge.core.Direction.*;
 
-import java.util.Arrays;
-import java.util.HashMap;
-
-import junit.framework.TestCase;
-
 import org.gnubridge.core.Direction;
 import org.gnubridge.core.Player;
 import org.gnubridge.search.Node;
 
-public class AlphaBetaTest extends TestCase {
-
-	private NodeWrapper protoRoot;
-	private NodeWrapper root;
-	private HashMap<String, NodeWrapper> nodes;
+public class AlphaBetaTest extends PruningTestCase {
 
 	/**
 	 *
@@ -41,62 +32,202 @@ public class AlphaBetaTest extends TestCase {
 		assertTrue(nodeWithPath("1").isAlphaPruned());
 	}
 
-	private void whenPruning(NodeWrapper node) {
-		AlphaBeta ab = new AlphaBeta();
-		ab.prune(node.delegate);
+	/**      
+	 *        protoRoot            W
+	 *           \
+	 *          root               W
+	 *             \
+	 *              0              N
+	 *             / \
+	 *   (max:1) 0_0   0_1 (max:0) E
+	 *        
+	 */
 
+	public void testNoAlphaPruneSubsequentChildren() {
+		givenMax(WEST);
+		nodeWithPath("0").withNextTurn(NORTH);
+		nodeWithPath("0", "0").withNextTurn(EAST).withTricksForMax(1);
+		nodeWithPath("0", "1").withNextTurn(EAST).withTricksForMax(0);
+		whenPruning(nodeWithPath("0", "1"));
+		assertFalse(nodeWithPath("0").isAlphaPruned());
 	}
 
-	private NodeWrapper nodeWithPath(String... moveSelectionsFromRoot) {
-		if (moveSelectionsFromRoot.length == 1) {
-			NodeWrapper node = nodes.get(moveSelectionsFromRoot[0]);
-			if (node == null) {
-				node = new NodeWrapper(root, NodeWrapper.NO_PLAYER_SELECTED);
-				node.setKey(moveSelectionsFromRoot[0]);
-				nodes.put(node.getKey(), node);
-			}
-			return node;
-		} else {
-			NodeWrapper parent = nodeWithPath(truncateLast(moveSelectionsFromRoot));
-			String childKey = parent.getKey() + "_" + moveSelectionsFromRoot[moveSelectionsFromRoot.length - 1];
-			NodeWrapper child = nodes.get(childKey);
-			if (child == null) {
-				child = new NodeWrapper(parent, NodeWrapper.NO_PLAYER_SELECTED);
-				child.setKey(childKey);
-				nodes.put(child.getKey(), child);
-			}
-			return child;
-		}
+	/**
+	 *       protoRoot          W   not realistic to have one player move 3 times, 
+	 *                              but we can allow any number of nodes between  
+	 *           \                  protoroot and root to include min moves
+	 *          root            W
+	 *           / \
+	 * (max:1) 0    1           W
+	 *             / \
+	 *  (max:0)  1_0  1_1       E 
+	 *        
+	 */
 
+	public void testAlphaPruneOnlyMinNodes() {
+		givenMax(WEST);
+		nodeWithPath("0").withNextTurn(WEST).withTricksForMax(1);
+		nodeWithPath("1").withNextTurn(WEST);
+		nodeWithPath("1", "0").withNextTurn(EAST).withTricksForMax(0);
+		nodeWithPath("1", "1").withNextTurn(EAST);
+		whenPruning(nodeWithPath("1", "0"));
+		assertFalse(nodeWithPath("1").isAlphaPruned());
 	}
 
-	private String[] truncateLast(String[] toBeTruncated) {
-		return Arrays.copyOf(toBeTruncated, toBeTruncated.length - 1);
+	/**
+	 *       protoRoot                  W
+	 *           \
+	 *           root                   W
+	 *           / \
+	 * (max:2)  0   1                   N
+	 *             / \
+	 *          1_0   1_1     (max:1)   E
+	 *               /   \
+	 *   (max:0)  1_1_0  1_1_1 (max:1)  E  
+	 */
+
+	public void testAlphaPruneUpstream() {
+		givenMax(WEST);
+		nodeWithPath("0").withNextTurn(NORTH).withTricksForMax(2);
+		nodeWithPath("1").withNextTurn(NORTH);
+		nodeWithPath("1", "0").withNextTurn(EAST);
+		nodeWithPath("1", "1").withNextTurn(EAST).withTricksForMax(1);
+		nodeWithPath("1", "1", "0").withNextTurn(EAST).withTricksForMax(0);
+		nodeWithPath("1", "1", "1").withNextTurn(EAST).withTricksForMax(1);
+		whenPruning(nodeWithPath("1", "1", "1"));
+		assertTrue(nodeWithPath("1").isAlphaPruned());
 	}
 
-	private void givenMax(Direction maxPlayer) {
-		protoRoot = new NodeWrapper(null, maxPlayer.getValue());
-		root = new NodeWrapper(protoRoot, maxPlayer.getValue());
-		nodes = new HashMap<String, NodeWrapper>();
+	/**
+	 *       protoRoot         W
+	 *           \
+	 *           root          W
+	 *           / \
+	 * (max:1)  0   1          N
+	 *              |
+	 *             1_0         N
+	 *            /   \
+	 * (max:0) 1_0_0  1_0_1    E
+	 *    
+	 *        
+	 */
 
+	public void testAlphaPruneToNearestAlphaAncestor() {
+		givenMax(WEST);
+		nodeWithPath("0").withNextTurn(NORTH).withTricksForMax(2);
+		nodeWithPath("1").withNextTurn(NORTH);
+		nodeWithPath("1", "0").withNextTurn(NORTH);
+		nodeWithPath("1", "0", "0").withNextTurn(EAST).withTricksForMax(0);
+		nodeWithPath("1", "0", "1").withNextTurn(EAST);
+		whenPruning(nodeWithPath("1", "0", "0"));
+		assertTrue(nodeWithPath("1", "0").isAlphaPruned());
+		assertTrue(nodeWithPath("1").isAlphaPruned());
 	}
 
-	public void testOneLevelAlphaPrune() {
-		Node root = new Node(null, WEST.getValue());
-		Node node_00 = new Node(root, WEST.getValue());
-		Node node_0 = new Node(node_00, SOUTH.getValue());
-		node_0.setTricksTaken(Player.WEST_EAST, 1);
-		Node node_1 = new Node(node_00, SOUTH.getValue());
-		Node node_1_0 = new Node(node_1, EAST.getValue());
-		@SuppressWarnings("unused")
-		Node node_1_1 = new Node(node_1, EAST.getValue());
-		node_1_0.setTricksTaken(Player.WEST_EAST, 0);
+	//TODO: this test seems to belong to NodeTest
+	public void testLocalAlphaGrows() {
+		givenMax(WEST);
+		nodeWithPath("0").withNextTurn(NORTH).withTricksForMax(1);
+		assertEquals(1, root.getLocalAlpha());
+		nodeWithPath("1").withTricksForMax(3);
+		assertEquals(3, root.getLocalAlpha());
+	}
 
-		AlphaBeta ab = new AlphaBeta();
-		ab.prune(node_1_0);
+	//TODO: this test seems to belong to NodeTest
+	public void testBetaGetsReduced() {
+		givenMax(WEST);
+		nodeWithPath("0").withNextTurn(NORTH);
+		nodeWithPath("0", "0").withTricksForMax(4);
+		assertEquals(4, nodeWithPath("0").getLocalBeta());
+		nodeWithPath("0", "1").withTricksForMax(3);
+		assertEquals(3, nodeWithPath("0").getLocalBeta());
+	}
 
-		assertTrue(node_1_0.isAlphaPruned());
-		assertTrue(node_1.isAlphaPruned());
+	//TODO: this test seems to belong to NodeTest
+	public void testUnvisitedNodeIgnoredInLocalBeta() {
+		givenMax(WEST);
+		nodeWithPath("0").withNextTurn(NORTH);
+		nodeWithPath("0", "0").withTricksForMax(Node.BETA_UNINIT);
+		assertEquals(Node.BETA_UNINIT, nodeWithPath("0").getLocalBeta());
+		nodeWithPath("0", "1").withTricksForMax(3);
+		assertEquals(3, nodeWithPath("0").getLocalBeta());
+	}
+
+	/**                  
+	 *              protoRoot            W
+	 *                   |
+	 *                 root              W
+	 *                 /
+	 *                0                  N
+	 *              /  \ 
+	 *     (1,1)  0_0   0_1              E
+	 *                  /  \           
+	 *        (2,0)  0_1_0  0_1_1        E       
+	 */
+
+	public void testOneLevelBetaPrune() {
+		givenMax(WEST);
+		nodeWithPath("0").withNextTurn(NORTH);
+		nodeWithPath("0", "0").withNextTurn(EAST).withTricksForMax(1);
+		nodeWithPath("0", "1").withNextTurn(EAST);
+		nodeWithPath("0", "1", "0").withNextTurn(EAST).withTricksForMax(2);
+		nodeWithPath("0", "1", "1").withNextTurn(EAST);
+		whenPruning(nodeWithPath("0", "1", "0"));
+		assertTrue(nodeWithPath("0", "1", "0").isBetaPruned());
+	}
+
+	/**      
+	 *         protoRoot                 W
+	 *             |
+	 *           root                    W
+	 *             |
+	 *            0                      N
+	 *           / \
+	 * (max:0) 0_0 0_1                   E
+	 *             / \
+	 *        0_1_0  0_1_1               S
+	 *               /   \
+	 *  (max:1) 0_1_1_0  0_1_1_1 (max:2) S  
+	 */
+
+	public void testBetaPruneUpstream() {
+		givenMax(WEST);
+		nodeWithPath("0").withNextTurn(NORTH);
+		nodeWithPath("0", "0").withNextTurn(EAST).withTricksForMax(0);
+		nodeWithPath("0", "1").withNextTurn(EAST);
+		nodeWithPath("0", "1", "0").withNextTurn(SOUTH);
+		nodeWithPath("0", "1", "1").withNextTurn(SOUTH).withTricksForMax(2);
+		nodeWithPath("0", "1", "1", "0").withNextTurn(SOUTH).withTricksForMax(1);
+		nodeWithPath("0", "1", "1", "1").withNextTurn(SOUTH).withTricksForMax(2);
+		whenPruning(nodeWithPath("0", "1", "1", "1"));
+		assertTrue(nodeWithPath("0", "1").isBetaPruned());
+	}
+
+	/** 
+	 *          protoRoot               W
+	 *             |
+	 *           root                   W
+	 *             |
+	 *            0                     N
+	 *           / \
+	 * (max:0) 0_0  0_1                 E
+	 *             / \
+	 *         0_1_0  0_1_1             E
+	 *               /   \
+	 *         0_1_1_0  0_1_1_1 (max:2) S  
+	 */
+
+	public void testBetaPruneToNearestBetaAncestor() {
+		givenMax(WEST);
+		nodeWithPath("0").withNextTurn(NORTH);
+		nodeWithPath("0", "0").withNextTurn(EAST).withTricksForMax(0);
+		nodeWithPath("0", "1").withNextTurn(EAST);
+		nodeWithPath("0", "1", "0").withNextTurn(EAST);
+		nodeWithPath("0", "1", "1").withNextTurn(EAST);
+		nodeWithPath("0", "1", "1", "0").withNextTurn(SOUTH);
+		nodeWithPath("0", "1", "1", "1").withNextTurn(SOUTH).withTricksForMax(2);
+		whenPruning(nodeWithPath("0", "1", "1", "1"));
+		assertTrue(nodeWithPath("0", "1").isBetaPruned());
 	}
 
 	/**
@@ -107,9 +238,6 @@ public class AlphaBetaTest extends TestCase {
 	 *             / \
 	 *    (0,2) 1_0   1_1  E
 	 *        
-	 */
-	/**
-	 * given(West)
 	 */
 
 	public void testDoNotAlphaPruneRootsChildrenSoThatHeuristicsMayBeUsed() {
@@ -128,43 +256,11 @@ public class AlphaBetaTest extends TestCase {
 		assertFalse(node_1.isPruned());
 	}
 
-	private class NodeWrapper {
-		private static final int NO_PLAYER_SELECTED = -1;
-		private Node delegate;
-		private String key = "";
-
-		public NodeWrapper(NodeWrapper parent, int nextToPlay) {
-			if (parent != null) {
-				this.delegate = new Node(parent.delegate, nextToPlay);
-			} else {
-				this.delegate = new Node(null, nextToPlay);
-			}
-		}
-
-		public void setKey(String key) {
-			this.key = key;
-
-		}
-
-		public String getKey() {
-			return key;
-		}
-
-		public NodeWrapper withTricksForMax(int numOfTricks) {
-			delegate.setTricksTaken(protoRoot.delegate.getCurrentPair(), numOfTricks);
-			return this;
-
-		}
-
-		public NodeWrapper withNextTurn(Direction playersTurn) {
-			delegate.setPlayerTurn(playersTurn.getValue());
-			return this;
-
-		}
-
-		public boolean isAlphaPruned() {
-			return delegate.isAlphaPruned();
-		}
+	@Override
+	protected void whenPruning(NodeWrapper node) {
+		AlphaBeta ab = new AlphaBeta();
+		ab.prune(node.delegate);
 
 	}
+
 }

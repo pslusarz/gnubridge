@@ -13,7 +13,7 @@ public class Node {
 
 	private static final byte ALPHA_UNINIT = -1;
 
-	static final byte BETA_UNINIT = 14;
+	public static final byte BETA_UNINIT = 14;
 
 	public static final byte PRUNE_ALPHA = 0;
 
