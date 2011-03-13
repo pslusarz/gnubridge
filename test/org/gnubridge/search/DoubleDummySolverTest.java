@@ -406,8 +406,9 @@ public class DoubleDummySolverTest extends TestCase {
 		child2.setTricksTaken(Player.NORTH_SOUTH, 1);
 		DoubleDummySolver s = new DoubleDummySolver(root);
 		s.trim(root);
-		assertEquals("Poor move not trimmed", null, root.children.get(0));
-		assertEquals("Good move trimmed", child2, root.children.get(1));
+		//		assertEquals("Poor move not trimmed", null, root.children.get(0));
+		//		assertEquals("Good move trimmed", child2, root.children.get(1));
+		assertEquals(child2, root.getBestMove());
 		assertEquals(maxWestTricks, root.getTricksTaken(Player.WEST_EAST));
 	}
 
@@ -492,7 +493,8 @@ public class DoubleDummySolverTest extends TestCase {
 		DoubleDummySolver s = new DoubleDummySolver(root);
 		s.trim(child2);
 		assertEquals(child1.getTricksTaken(root.getCurrentPair()), root.getTricksTaken(root.getCurrentPair()));
-		assertNull(root.children.get(1));
+		assertEquals(child1, root.getBestMove());
+		//assertNull(root.children.get(1));
 	}
 
 	public void testMinMaxTrimmingNorthLesserEvil() {
@@ -520,7 +522,8 @@ public class DoubleDummySolverTest extends TestCase {
 
 		DoubleDummySolver s = new DoubleDummySolver(root);
 		s.trim(child2);
-		assertNull(root.children.get(0));
+		//assertNull(root.children.get(0));
+		assertEquals(child2, root.getBestMove());
 		assertEquals(grandChild1.getTricksTaken(root.getCurrentPair()), root.getTricksTaken(root.getCurrentPair()));
 
 	}
@@ -549,7 +552,7 @@ public class DoubleDummySolverTest extends TestCase {
 
 	}
 
-	public void testTrimPruned() {
+	public void testChildrenOfPrunedNodeInheritStatus() {
 		Node root = new Node(null);
 		root.setPlayerTurn(Direction.WEST_DEPRECATED);
 		root.pruneAsAlpha();
@@ -559,8 +562,8 @@ public class DoubleDummySolverTest extends TestCase {
 		Node child2 = new Node(root);
 		DoubleDummySolver s = new DoubleDummySolver(root);
 		s.trim(root);
-		assertEquals(null, root.children.get(0));
-		assertEquals(null, root.children.get(1));
+		assertTrue(root.children.get(0).isAlphaPruned());
+		assertTrue(root.children.get(1).isAlphaPruned());
 	}
 
 	public void testBestMoveWhenRootDoesNotStartTrick() {

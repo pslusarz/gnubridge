@@ -51,7 +51,7 @@ public class DoubleDummySolverScenarioAcceptanceTest extends TestCase {
 
 		DoubleDummySolver pruned = new DoubleDummySolver(game);
 		pruned.setUseDuplicateRemoval(true);
-		pruned.setMaxTricks(3);
+		pruned.setMaxTricks(2);
 		pruned.search();
 		assertEquals(0, pruned.getRoot().getTricksTaken(Player.WEST_EAST));
 	}
@@ -131,8 +131,8 @@ public class DoubleDummySolverScenarioAcceptanceTest extends TestCase {
 
 		search.setMaxTricks(3);
 		search.search();
-		search.printOptimalPath();
-		System.out.println(search.getBestMoves());
+		//search.printOptimalPath();
+		System.out.println(search.getRoot().printAsTree());
 		assertEquals(King.of(Spades.i()), search.getBestMoves().get(0));
 	}
 

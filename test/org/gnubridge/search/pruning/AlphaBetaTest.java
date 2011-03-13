@@ -231,6 +231,62 @@ public class AlphaBetaTest extends PruningTestCase {
 	}
 
 	/**
+	 *        protoRoot          W
+	 *          |
+	 *         root              W
+	 *           \
+	 *            0              W
+	 *           / \
+	 *  (max:2) 0_0 0_1          W
+	 *             / \
+	 *         0_1_0 0_1_1       N  <- prune alpha
+	 *               /   \
+	 *  (max:0) 0_1_1_0  0_1_1_1 W  
+	 */
+
+	//TODO: make this test pass
+	public void zzztestDeepAlphaPrune1() {
+		givenMax(WEST);
+		nodeWithPath("0").withNextTurn(WEST);
+		nodeWithPath("0", "0").withNextTurn(WEST).withTricksForMax(2);
+		nodeWithPath("0", "1").withNextTurn(WEST);
+		nodeWithPath("0", "1", "0").withNextTurn(NORTH);
+		nodeWithPath("0", "1", "1").withNextTurn(NORTH);
+		nodeWithPath("0", "1", "1", "0").withNextTurn(WEST).withTricksForMax(0);
+		nodeWithPath("0", "1", "1", "1").withNextTurn(WEST);
+		whenPruning(nodeWithPath("0", "1", "1", "0"));
+		assertTrue(nodeWithPath("0", "1", "1").isAlphaPruned());
+	}
+
+	/**
+	 *        protoRoot          W
+	 *          |
+	 *         root              W
+	 *           \
+	 *            0              W
+	 *           / \
+	 *  (max:2) 0_0 0_1          N <- do not prune alpha: 0_1_0 may be 4, and 0_1_1_1 may be 4
+	 *             / \
+	 *         0_1_0 0_1_1       W  
+	 *               /   \
+	 *  (max:0) 0_1_1_0  0_1_1_1 W  
+	 */
+
+	//TODO: make this test pass
+	public void testDeepAlphaPruneInappropriate() {
+		givenMax(WEST);
+		nodeWithPath("0").withNextTurn(WEST);
+		nodeWithPath("0", "0").withNextTurn(WEST).withTricksForMax(2);
+		nodeWithPath("0", "1").withNextTurn(NORTH);
+		nodeWithPath("0", "1", "0").withNextTurn(WEST);
+		nodeWithPath("0", "1", "1").withNextTurn(WEST);
+		nodeWithPath("0", "1", "1", "0").withNextTurn(WEST).withTricksForMax(0);
+		nodeWithPath("0", "1", "1", "1").withNextTurn(WEST);
+		whenPruning(nodeWithPath("0", "1", "1", "0"));
+		assertFalse(nodeWithPath("0", "1").isAlphaPruned());
+	}
+
+	/**
 	 *
 	 *          root       W
 	 *           / \

@@ -53,6 +53,8 @@ public class Node {
 
 	private byte[] identicalTwin;
 
+	private Node alphaAtPruneTime;
+
 	public Node(Node parent) {
 		this.parent = parent;
 		children = new ArrayList<Node>();
@@ -143,9 +145,13 @@ public class Node {
 	}
 
 	public Node getBestMove() {
+		if (children.size() == 0) {
+			return this;
+		}
+		int max = getTricksTaken(getCurrentPair());
 		List<Node> childrenWithSameTricksTaken = new ArrayList<Node>();
 		for (Node move : children) {
-			if (move != null && !move.isPruned()) {
+			if (move != null && !move.isPruned() && move.getTricksTaken(getCurrentPair()) == max) {
 				childrenWithSameTricksTaken.add(move);
 			}
 		}
@@ -164,7 +170,7 @@ public class Node {
 
 	public void printOptimalPath(Deal g) {
 		Node move = getBestMove();
-		if (move == null) {
+		if (move == this) {
 			for (int moveIdx : getMoves()) {
 				Trick currentTrick = g.getCurrentTrick();
 				System.out.println(g.getNextToPlay() + ": "
@@ -313,6 +319,7 @@ public class Node {
 			parent.setTricksTaken(Player.WEST_EAST, getTricksTaken(Player.WEST_EAST));
 			parent.setTricksTaken(Player.NORTH_SOUTH, getTricksTaken(Player.NORTH_SOUTH));
 			parent.setPruned(true, Node.PRUNE_ALPHA);
+			alphaAtPruneTime = parent.getLocalAlphaNode();
 			parent.alphaPrune();
 		}
 
@@ -337,18 +344,66 @@ public class Node {
 		}
 	}
 
+	//	public int getLocalAlpha() {
+	//		if (isAlpha()) {
+	//			int localMax = ALPHA_UNINIT;
+	//			for (Node child : children) {
+	//				if (child.getTricksTaken(getMaxPlayer()) > localMax) {
+	//					localMax = child.getTricksTaken(getMaxPlayer());
+	//				}
+	//			}
+	//			int ancestorMax = ALPHA_UNINIT;
+	//			if (hasAlphaAncestor()) {
+	//				ancestorMax = parent.getLocalAlpha();
+	//			}
+	//			return Math.max(localMax, ancestorMax);
+	//		} else {
+	//			return parent.getLocalAlpha();
+	//		}
+	//	}
+
 	public int getLocalAlpha() {
+		Node localAlpha = getLocalAlphaNode();
+		if (localAlpha != null) {
+			return getLocalAlphaNode().getTricksTaken(getMaxPlayer());
+		} else {
+			return ALPHA_UNINIT;
+		}
+		//		if (isAlpha()) {
+		//			int max = ALPHA_UNINIT;
+		//			for (Node child : children) {
+		//				if (child.getTricksTaken(getMaxPlayer()) > max) {
+		//					max = child.getTricksTaken(getMaxPlayer());
+		//				}
+		//			}
+		//			return max;
+		//		} else {
+		//			return parent.getLocalAlpha();
+		//		}
+	}
+
+	private Node getLocalAlphaNode() {
 		if (isAlpha()) {
 			int max = ALPHA_UNINIT;
+			Node result = null;
 			for (Node child : children) {
 				if (child.getTricksTaken(getMaxPlayer()) > max) {
 					max = child.getTricksTaken(getMaxPlayer());
+					result = child;
 				}
 			}
-			return max;
+			return result;
 		} else {
-			return parent.getLocalAlpha();
+			return parent.getLocalAlphaNode();
 		}
+	}
+
+	private String getUniqueId() {
+		int myIndex = 0;
+		if (parent != null) {
+			myIndex = parent.getMyIndex(this);
+		}
+		return getDepth() + "-" + myIndex;
 	}
 
 	public int getLocalBeta() {
@@ -439,14 +494,58 @@ public class Node {
 		return result;
 	}
 
-	public void nullAllChildrenExceptOne() {
-		Node exception = getUnprunedChildWithMostTricksForCurrentPair();
-		for (int i = 0; i < children.size(); i++) {
-			if (exception == null || !exception.equals(children.get(i))) {
-				children.get(i).trimmed = true;
-				children.set(i, null);
+	public String printAsTree() {
+		String result = "";
+		result = padSpaces(getDepth()) + getUniqueId() + " " + getPlayerCardPlayed() + ": " + cardPlayed + ", max: "
+				+ getTricksTaken(getMaxPlayer()) + getPruned();
+		for (Node child : children) {
+			if (child != null) {
+				result += "\n" + child.printAsTree();
+			} else {
+				result += "\n NULL";
 			}
 		}
+		return result;
+	}
+
+	private String getPruned() {
+		if (isAlphaPruned()) {
+			String betterMove = "no better move available";
+			if (alphaAtPruneTime != null) {
+				betterMove = alphaAtPruneTime.getUniqueId() + ": " + alphaAtPruneTime.getCardPlayed() + " with max "
+						+ alphaAtPruneTime.getTricksTaken(getMaxPlayer());
+			}
+			return ", alpha pruned (" + betterMove + ")";
+		} else if (isBetaPruned()) {
+			return ", beta pruned";
+		}
+		return "";
+	}
+
+	private String padSpaces(int depth) {
+		String result = "";
+		for (int i = 0; i < depth; i++) {
+			result += "   ";
+		}
+		return result;
+	}
+
+	private int getDepth() {
+		if (parent == null) {
+			return 0;
+		} else {
+			return 1 + parent.getDepth();
+		}
+	}
+
+	public void nullAllChildrenExceptOne() {
+		//		Node exception = getUnprunedChildWithMostTricksForCurrentPair();
+		//		for (int i = 0; i < children.size(); i++) {
+		//			if (exception == null || !exception.equals(children.get(i))) {
+		//				children.get(i).trimmed = true;
+		//				children.set(i, null);
+		//			}
+		//		}
 
 	}
 
@@ -536,13 +635,13 @@ public class Node {
 	}
 
 	public void nullAllSubstandardChildren() {
-		Node best = getUnprunedChildWithMostTricksForCurrentPair();
-		for (Node child : children) {
-			if (child.isPruned() || child.getTricksTaken(getCurrentPair()) < best.getTricksTaken(getCurrentPair())) {
-				children.set(children.indexOf(child), null);
-				child.trimmed = true;
-			}
-		}
+		//		Node best = getUnprunedChildWithMostTricksForCurrentPair();
+		//		for (Node child : children) {
+		//			if (child.isPruned() || child.getTricksTaken(getCurrentPair()) < best.getTricksTaken(getCurrentPair())) {
+		//				children.set(children.indexOf(child), null);
+		//				child.trimmed = true;
+		//			}
+		//		}
 	}
 
 	public void pruneAsSequenceSibling() {

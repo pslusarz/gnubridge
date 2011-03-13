@@ -114,13 +114,14 @@ public class DoubleDummySolver {
 		Player player = position.getNextToPlay();
 		node.setPlayerTurn(player.getDirection());
 		node.setPosition(position);
+		if (position.oneTrickLeft()) {
+			node.setCardPlayed(player.getPossibleMoves(position.getCurrentTrick()).get(0));
+			position.playMoves(finalMoves);
+		}
 		for (Card card : player.getPossibleMoves(position.getCurrentTrick())) {
 			makeChildNodeForCardPlayed(node, player, card);
 		}
 
-		if (position.oneTrickLeft()) {
-			position.playMoves(finalMoves);
-		}
 		checkDuplicatePositions(node, position);
 		if (position.getTricksPlayed() >= maxTricks || position.isDone() || node.hasIdenticalTwin()) {
 			node.setLeaf(true);
@@ -196,7 +197,6 @@ public class DoubleDummySolver {
 			node.nullAllChildrenExceptOne();
 		}
 		node.calculateValue();
-
 		for (PruningStrategy pruningStrategy : postEvaluationPruningStrategies) {
 			pruningStrategy.prune(node);
 		}
