@@ -56,8 +56,8 @@ public class AlphaBetaTest extends PruningTestCase {
 	 *       protoRoot          W   not realistic to have one player move 3 times, 
 	 *                              but we can allow any number of nodes between  
 	 *           \                  protoroot and root to include min moves
-	 *          root            W
-	 *           / \
+	 *          root            W   also, if other players have no choice, the nodes may 
+	 *           / \                be collapsed, so one player can appear to move 3 or more times
 	 * (max:1) 0    1           W
 	 *             / \
 	 *  (max:0)  1_0  1_1       E 

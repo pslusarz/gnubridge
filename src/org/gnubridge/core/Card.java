@@ -1,7 +1,20 @@
 package org.gnubridge.core;
 
+import org.gnubridge.core.deck.Ace;
+import org.gnubridge.core.deck.Eight;
+import org.gnubridge.core.deck.Five;
+import org.gnubridge.core.deck.Four;
+import org.gnubridge.core.deck.Jack;
+import org.gnubridge.core.deck.King;
+import org.gnubridge.core.deck.Nine;
+import org.gnubridge.core.deck.Queen;
+import org.gnubridge.core.deck.Seven;
+import org.gnubridge.core.deck.Six;
 import org.gnubridge.core.deck.Suit;
+import org.gnubridge.core.deck.Ten;
+import org.gnubridge.core.deck.Three;
 import org.gnubridge.core.deck.Trump;
+import org.gnubridge.core.deck.Two;
 
 public class Card {
 	public static final int TWO = 0;
@@ -30,14 +43,13 @@ public class Card {
 
 	public static final int ACE = 12;
 
-	public static final String[] FullSuit = { "2", "3", "4", "5", "6", "7",
-			"8", "9", "10", "J", "Q", "K", "A" };
+	public static final String[] FullSuit = { "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A" };
 
 	public static final int COUNT = 52;
 
-	private int value;
+	private final int value;
 
-	private Suit denomination;
+	private final Suit denomination;
 
 	public Card(int value, Suit d) {
 		this.value = value;
@@ -76,21 +88,21 @@ public class Card {
 		} else if ("A".equals(value.toUpperCase())) {
 			return ACE;
 		} else {
-			throw new RuntimeException("'" + value
-					+ "' is not a valid card value");
+			throw new RuntimeException("'" + value + "' is not a valid card value");
 		}
 
 	}
 
+	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof Card) {
-			return ((Card) obj).getDenomination() == denomination
-					&& ((Card) obj).getValue() == value;
+			return ((Card) obj).getDenomination() == denomination && ((Card) obj).getValue() == value;
 		} else {
 			return false;
 		}
 	}
 
+	@Override
 	public String toString() {
 		return valueToString(value) + " of " + denomination;
 	}
@@ -148,54 +160,89 @@ public class Card {
 	}
 
 	public int getIndex() {
-		return value + Suit.getIndex(denomination)*(ACE+1);
+		return value + Suit.getIndex(denomination) * (ACE + 1);
 	}
 
 	public String toDebugString() {
 		String result = "";
 		switch (value) {
 		case TWO:
-			result =  "Two";
+			result = "Two";
 			break;
 		case THREE:
-			result =  "Three";
+			result = "Three";
 			break;
 		case FOUR:
-			result =  "Four";
+			result = "Four";
 			break;
 		case FIVE:
-			result =  "Five";
+			result = "Five";
 			break;
 		case SIX:
-			result =  "Six";
+			result = "Six";
 			break;
 		case SEVEN:
-			result =  "Seven";
+			result = "Seven";
 			break;
 		case EIGHT:
-			result =  "Eight";
+			result = "Eight";
 			break;
 		case NINE:
-			result =  "Nine";
+			result = "Nine";
 			break;
 		case TEN:
-			result =  "Ten";
+			result = "Ten";
 			break;
 		case JACK:
-			result =  "Jack";
+			result = "Jack";
 			break;
 		case QUEEN:
-			result =  "Queen";
+			result = "Queen";
 			break;
 		case KING:
-			result =  "King";
+			result = "King";
 			break;
 		case ACE:
-			result =  "Ace";
+			result = "Ace";
 			break;
 		}
-		result += ".of("+denomination.toDebugString()+")";
+		result += ".of(" + denomination.toDebugString() + ")";
 		return result;
+	}
+
+	public static Card get(String card) {
+		Suit suit = Suit.get(card.toUpperCase().substring(1, 2));
+		String nomination = card.toUpperCase().substring(0, 1);
+		if ("2".equals(nomination)) {
+			return Two.of(suit);
+		} else if ("3".equals(nomination)) {
+			return Three.of(suit);
+		} else if ("4".equals(nomination)) {
+			return Four.of(suit);
+		} else if ("5".equals(nomination)) {
+			return Five.of(suit);
+		} else if ("6".equals(nomination)) {
+			return Six.of(suit);
+		} else if ("7".equals(nomination)) {
+			return Seven.of(suit);
+		} else if ("8".equals(nomination)) {
+			return Eight.of(suit);
+		} else if ("9".equals(nomination)) {
+			return Nine.of(suit);
+		} else if ("T".equals(nomination)) {
+			return Ten.of(suit);
+		} else if ("J".equals(nomination)) {
+			return Jack.of(suit);
+		} else if ("Q".equals(nomination)) {
+			return Queen.of(suit);
+		} else if ("K".equals(nomination)) {
+			return King.of(suit);
+		} else if ("A".equals(nomination)) {
+			return Ace.of(suit);
+		} else {
+			throw new RuntimeException("do not know how to make card of denomination: '" + nomination
+					+ "' (needs to be one of: 2,3,....9,T,J,Q,K,A)");
+		}
 	}
 
 }

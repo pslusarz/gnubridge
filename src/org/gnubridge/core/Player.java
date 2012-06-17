@@ -19,10 +19,6 @@ public class Player {
 
 	private final List<Trick> tricks;
 
-	//	private Direction direction2;
-	//
-	//	private Hand openingHand;
-
 	public Player(int i) {
 		hand = new ArrayList<Card>();
 		played = new ArrayList<Card>();
@@ -34,12 +30,6 @@ public class Player {
 		this(d.getValue());
 	}
 
-	//	public Player (Direction d, Hand h) {
-	//		this(d.getValue());
-	//		direction2 = d;
-	//		hand.addAll(h.toList());
-	//		openingHand = h;
-	//	}
 
 	public void init(String[]... valueSuits) {
 		for (int i = 0; i < valueSuits.length; i++) {
@@ -125,17 +115,13 @@ public class Player {
 
 	public List<Card> getPossibleMoves(Trick trick) {
 		List<Card> matching = new ArrayList<Card>();
-		List<Card> nonMatching = new ArrayList<Card>();
 		for (Card card : hand) {
 			if (card.getDenomination().equals(trick.getDenomination())) {
 				matching.add(card);
-			} else {
-				nonMatching.add(card);
 			}
 		}
 		if (matching.size() == 0) {
-
-			return orderLowToHigh(nonMatching);
+			return orderLowToHigh(hand);
 		} else {
 			return orderLowToHigh(matching);
 		}

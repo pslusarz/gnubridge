@@ -221,6 +221,10 @@ public class Deal {
 		return getNextToPlay().getPossibleMoves(currentTrick).contains(card);
 	}
 
+	public void play(String card) {
+		play(Card.get(card));
+	}
+
 	public void play(Card c) {
 		List<Card> possibleMoves = getNextToPlay().getPossibleMoves(currentTrick);
 		doNextCard(possibleMoves.indexOf(c));

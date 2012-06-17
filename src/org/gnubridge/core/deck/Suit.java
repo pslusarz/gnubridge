@@ -26,4 +26,19 @@ public abstract class Suit extends Trump {
 		}
 		return getIndex(this) < getIndex(other.asSuit());
 	}
+
+	public static Suit get(String s) {
+		if ("S".equals(s)) {
+			return Spades.i();
+		} else if ("H".equals(s)) {
+			return Hearts.i();
+		} else if ("D".equals(s)) {
+			return Diamonds.i();
+		} else if ("C".equals(s)) {
+			return Clubs.i();
+		} else {
+			throw new RuntimeException("do not know how to translate string '" + s
+					+ "' to a suit (need one of: S,H,D,C)");
+		}
+	}
 }

@@ -107,6 +107,8 @@ public class StochasticDoubleDummySolverAcceptanceTest extends TestCase {
 		SearchMonkey secondProxy = new SearchMonkey(second.config);
 		firstProxy.runSearch(firstMovePlayed.duplicate());
 		secondProxy.runSearch(firstMovePlayed.duplicate());
+		firstProxy.printAsTree();
+		secondProxy.printAsTree();
 		assertEquals("played " + firstMove + " as recommended by " + firstProxy, firstProxy.getNorthSouthTricks(),
 				secondProxy.getNorthSouthTricks());
 		int tricksTakenIfFirstMovePlayed = firstProxy.getNorthSouthTricks();
@@ -158,6 +160,11 @@ public class StochasticDoubleDummySolverAcceptanceTest extends TestCase {
 		@Override
 		public String toString() {
 			return config.name();
+		}
+
+		public void printAsTree() {
+			System.out.println("======" + this.toString() + "=========");
+			System.out.println(search.getRoot().printAsTree());
 		}
 
 		public void runSearch(Deal g) {
