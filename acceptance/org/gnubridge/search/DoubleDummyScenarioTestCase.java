@@ -3,6 +3,7 @@ package org.gnubridge.search;
 import static org.gnubridge.core.deck.Trump.*;
 import junit.framework.TestCase;
 
+import org.gnubridge.core.Card;
 import org.gnubridge.core.Deal;
 import org.gnubridge.core.Direction;
 import org.gnubridge.core.Hand;
@@ -21,8 +22,17 @@ public abstract class DoubleDummyScenarioTestCase extends TestCase {
 	private void givenDeal() {
 		if (deal == null) {
 			deal = new Deal(NOTRUMP);
+			solver = null;
 		}
 
+	}
+
+	private void solve() {
+		givenDeal();
+		if (solver == null) {
+			solver = new DoubleDummySolver(deal);
+			solver.search();
+		}
 	}
 
 	public void whenLeadBy(Direction player) {
@@ -35,11 +45,26 @@ public abstract class DoubleDummyScenarioTestCase extends TestCase {
 		deal.setTrump(trump);
 	}
 
-	public void thenTricksWon(int expectedMaxPlayerTricks) {
-		solver = new DoubleDummySolver(deal);
-		solver.search();
+	protected void shouldWinTricks(int expectedMaxPlayerTricks) {
+		solve();
 		assertEquals("tricks won by leading pair", expectedMaxPlayerTricks,
 				solver.getRoot().getTricksTaken(solver.getRoot().getCurrentPair()));
+
+	}
+
+	protected void shouldPlay(Direction player, Card card) {
+		solve();
+		assertEquals(card, solver.getBestMoves().get(0));
+	}
+
+	protected void followedBy(Direction player, Card card) {
+		deal.play(card);
+	}
+
+	protected void whenLeadBy(Direction player, Card card) {
+		whenLeadBy(player);
+		deal.play(card);
+
 	}
 
 }

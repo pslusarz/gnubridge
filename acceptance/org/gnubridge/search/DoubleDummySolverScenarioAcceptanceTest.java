@@ -3,7 +3,6 @@ package org.gnubridge.search;
 import junit.framework.TestCase;
 
 import org.gnubridge.core.Deal;
-import org.gnubridge.core.Direction;
 import org.gnubridge.core.East;
 import org.gnubridge.core.North;
 import org.gnubridge.core.Player;
@@ -84,56 +83,5 @@ public class DoubleDummySolverScenarioAcceptanceTest extends TestCase {
 	//		pruned2.printStats();
 	//		assertEquals(2, pruned2.getRoot().getTricksTaken(Player.WEST_EAST));
 	//	}
-
-	//	public void testBugAlphaBetaGivingUpTrick() {
-	//		Game game = new Game(Clubs.i());
-	//		game.getWest().init(Seven.of(Spades.i()), Three.of(Clubs.i()), King.of(Hearts.i()), Two.of(Clubs.i()),
-	//				Jack.of(Hearts.i()), Ace.of(Spades.i()), Nine.of(Spades.i()), Three.of(Hearts.i()), Six.of(Clubs.i()),
-	//				Jack.of(Spades.i()), Ten.of(Spades.i()), Six.of(Hearts.i()), Nine.of(Clubs.i()));
-	//		game.getNorth().init(Seven.of(Diamonds.i()), Three.of(Spades.i()), King.of(Diamonds.i()), Two.of(Hearts.i()),
-	//				Ace.of(Diamonds.i()), Queen.of(Hearts.i()), King.of(Clubs.i()), Eight.of(Diamonds.i()),
-	//				Four.of(Spades.i()), Five.of(Diamonds.i()), Nine.of(Hearts.i()), Jack.of(Clubs.i()),
-	//				Four.of(Diamonds.i()));
-	//		game.getEast().init(Queen.of(Diamonds.i()), Two.of(Diamonds.i()), Six.of(Diamonds.i()), King.of(Spades.i()),
-	//				Jack.of(Diamonds.i()), Seven.of(Hearts.i()), Queen.of(Clubs.i()), Five.of(Hearts.i()),
-	//				Four.of(Hearts.i()), Three.of(Diamonds.i()), Ten.of(Diamonds.i()), Five.of(Spades.i()),
-	//				Eight.of(Spades.i()));
-	//		game.getSouth().init(Four.of(Clubs.i()), Queen.of(Spades.i()), Eight.of(Clubs.i()), Ace.of(Clubs.i()),
-	//				Ten.of(Hearts.i()), Seven.of(Clubs.i()), Ace.of(Hearts.i()), Six.of(Spades.i()), Nine.of(Diamonds.i()),
-	//				Ten.of(Clubs.i()), Two.of(Spades.i()), Five.of(Clubs.i()), Eight.of(Hearts.i()));
-	//		game.setNextToPlay(Direction.WEST);
-	//		game.play(Seven.of(Spades.i()));
-	//		game.play(Four.of(Spades.i()));
-	//		DoubleDummySolver search = new DoubleDummySolver(game);
-	//		//search.pruneAlphaBeta = false;
-	//		search.setMaxTricks(3);
-	//		search.search();
-	//		search.printOptimalPath();
-	//		System.out.println(search.getBestMoves());
-	//		assertEquals(King.of(Spades.i()), search.getBestMoves().get(0));
-	//	}
-
-	public void testBugAlphaBetaGivingUpTrickShort() {
-		Deal game = new Deal(Clubs.i());
-		game.getWest().init(Seven.of(Spades.i()), Three.of(Clubs.i()), Jack.of(Spades.i()));
-		game.getNorth().init(Four.of(Spades.i()), Five.of(Diamonds.i()), Three.of(Spades.i()));
-		game.getEast().init(Queen.of(Diamonds.i()), Five.of(Spades.i()), King.of(Spades.i()));
-		game.getSouth().init(Queen.of(Spades.i()), Nine.of(Diamonds.i()), Two.of(Spades.i()));
-		game.setNextToPlay(Direction.WEST_DEPRECATED);
-		game.play(Seven.of(Spades.i()));
-		game.play(Four.of(Spades.i()));
-		DoubleDummySolver search = new DoubleDummySolver(game);
-
-		search.setUseDuplicateRemoval(false);
-		search.setShouldPruneCardsInSequence(false);
-
-		assertTrue(search.getConfigurator().isUseAlphaBetaPruning());
-
-		search.setMaxTricks(3);
-		search.search();
-		//search.printOptimalPath();
-		System.out.println(search.getRoot().printAsTree());
-		assertEquals(King.of(Spades.i()), search.getBestMoves().get(0));
-	}
 
 }
