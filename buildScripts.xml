@@ -77,12 +77,12 @@
 
 		</junit>
 		<mkdir dir="${jar.publish.dir}tests/" />
-		<junitreport todir="${jar.publish.dir}tests/">
+		<!--junitreport todir="${jar.publish.dir}tests/">
 		  <fileset dir="${build.dir}/test/">
 		    <include name="TEST-*.xml"/>
 		  </fileset>
 		  <report format="frames" todir="${jar.publish.dir}tests/"/>
-		</junitreport>
+		</junitreport-->
 
 		<fail message="Test(s) failed." if="junit.failure" />
 	</target>
