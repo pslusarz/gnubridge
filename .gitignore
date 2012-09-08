@@ -1,2 +1,4 @@
 /temp
 .svn/
+/bin
+.DS_Store
