@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/subversion/!svn/ver/155/gnubridge/test/org/gnubridge/core
+END
+DealTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/subversion/!svn/ver/117/gnubridge/test/org/gnubridge/core/DealTest.java
+END
+HandTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/subversion/!svn/ver/120/gnubridge/test/org/gnubridge/core/HandTest.java
+END
+TrickTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/subversion/!svn/ver/36/gnubridge/test/org/gnubridge/core/TrickTest.java
+END
+PlayerTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/subversion/!svn/ver/120/gnubridge/test/org/gnubridge/core/PlayerTest.java
+END

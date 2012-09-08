@@ -1,0 +1,125 @@
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/subversion/!svn/ver/155/gnubridge/test/org/gnubridge/core/bidding/rules
+END
+Rebid1ColorWithNTTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/subversion/!svn/ver/94/gnubridge/test/org/gnubridge/core/bidding/rules/Rebid1ColorWithNTTest.java
+END
+Respond1ColorWithNewSuitTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/subversion/!svn/ver/155/gnubridge/test/org/gnubridge/core/bidding/rules/Respond1ColorWithNewSuitTest.java
+END
+RespondOvercallSuitTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/subversion/!svn/ver/146/gnubridge/test/org/gnubridge/core/bidding/rules/RespondOvercallSuitTest.java
+END
+TakeoutDoubleTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/subversion/!svn/ver/151/gnubridge/test/org/gnubridge/core/bidding/rules/TakeoutDoubleTest.java
+END
+Rebid1NTTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/subversion/!svn/ver/81/gnubridge/test/org/gnubridge/core/bidding/rules/Rebid1NTTest.java
+END
+Respond1ColorRaiseMajorSuitTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/subversion/!svn/ver/141/gnubridge/test/org/gnubridge/core/bidding/rules/Respond1ColorRaiseMajorSuitTest.java
+END
+OvercallSuitTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/subversion/!svn/ver/128/gnubridge/test/org/gnubridge/core/bidding/rules/OvercallSuitTest.java
+END
+RebidOriginalSuitTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/subversion/!svn/ver/94/gnubridge/test/org/gnubridge/core/bidding/rules/RebidOriginalSuitTest.java
+END
+Rebid1ColorWithNewSuitTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/subversion/!svn/ver/95/gnubridge/test/org/gnubridge/core/bidding/rules/Rebid1ColorWithNewSuitTest.java
+END
+Open1ColorTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/subversion/!svn/ver/5/gnubridge/test/org/gnubridge/core/bidding/rules/Open1ColorTest.java
+END
+Open1NTTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/subversion/!svn/ver/147/gnubridge/test/org/gnubridge/core/bidding/rules/Open1NTTest.java
+END
+RebidTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/subversion/!svn/ver/148/gnubridge/test/org/gnubridge/core/bidding/rules/RebidTest.java
+END
+Rebid1ColorRaisePartnerTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/subversion/!svn/ver/95/gnubridge/test/org/gnubridge/core/bidding/rules/Rebid1ColorRaisePartnerTest.java
+END
+RebidTo1ResponseTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/subversion/!svn/ver/95/gnubridge/test/org/gnubridge/core/bidding/rules/RebidTo1ResponseTest.java
+END
+Respond1ColorWithNTTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/subversion/!svn/ver/77/gnubridge/test/org/gnubridge/core/bidding/rules/Respond1ColorWithNTTest.java
+END
+BiddingRuleTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/subversion/!svn/ver/66/gnubridge/test/org/gnubridge/core/bidding/rules/BiddingRuleTest.java
+END
+Respond1ColorRaiseMinorSuitTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/subversion/!svn/ver/75/gnubridge/test/org/gnubridge/core/bidding/rules/Respond1ColorRaiseMinorSuitTest.java
+END
+Overcall1NTTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/subversion/!svn/ver/147/gnubridge/test/org/gnubridge/core/bidding/rules/Overcall1NTTest.java
+END
+Respond1NTTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/subversion/!svn/ver/147/gnubridge/test/org/gnubridge/core/bidding/rules/Respond1NTTest.java
+END
+ResponseTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/subversion/!svn/ver/141/gnubridge/test/org/gnubridge/core/bidding/rules/ResponseTest.java
+END

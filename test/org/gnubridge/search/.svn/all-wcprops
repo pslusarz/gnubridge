@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/subversion/!svn/ver/168/gnubridge/test/org/gnubridge/search
+END
+DoubleDummySolverTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/subversion/!svn/ver/170/gnubridge/test/org/gnubridge/search/DoubleDummySolverTest.java
+END
+MockGame.java
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/subversion/!svn/ver/116/gnubridge/test/org/gnubridge/search/MockGame.java
+END
+DoubleDummySolverDeepAlphaBetaPruningTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/subversion/!svn/ver/160/gnubridge/test/org/gnubridge/search/DoubleDummySolverDeepAlphaBetaPruningTest.java
+END
+NodeTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/subversion/!svn/ver/117/gnubridge/test/org/gnubridge/search/NodeTest.java
+END
+TestPositionLookup.java
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/subversion/!svn/ver/116/gnubridge/test/org/gnubridge/search/TestPositionLookup.java
+END

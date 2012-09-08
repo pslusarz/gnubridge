@@ -1,0 +1,77 @@
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/subversion/!svn/ver/155/gnubridge/src/org/gnubridge/core/bidding
+END
+BiddingAgent.java
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/subversion/!svn/ver/155/gnubridge/src/org/gnubridge/core/bidding/BiddingAgent.java
+END
+UsThemVulnerability.java
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/subversion/!svn/ver/137/gnubridge/src/org/gnubridge/core/bidding/UsThemVulnerability.java
+END
+Redouble.java
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/subversion/!svn/ver/117/gnubridge/src/org/gnubridge/core/bidding/Redouble.java
+END
+PointCalculator.java
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/subversion/!svn/ver/128/gnubridge/src/org/gnubridge/core/bidding/PointCalculator.java
+END
+ScoreCalculator.java
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/subversion/!svn/ver/141/gnubridge/src/org/gnubridge/core/bidding/ScoreCalculator.java
+END
+Pass.java
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/subversion/!svn/ver/141/gnubridge/src/org/gnubridge/core/bidding/Pass.java
+END
+ResponseCalculator.java
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/subversion/!svn/ver/128/gnubridge/src/org/gnubridge/core/bidding/ResponseCalculator.java
+END
+Vulnerability.java
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/subversion/!svn/ver/133/gnubridge/src/org/gnubridge/core/bidding/Vulnerability.java
+END
+Double.java
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/subversion/!svn/ver/141/gnubridge/src/org/gnubridge/core/bidding/Double.java
+END
+Call.java
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/subversion/!svn/ver/141/gnubridge/src/org/gnubridge/core/bidding/Call.java
+END
+Auctioneer.java
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/subversion/!svn/ver/148/gnubridge/src/org/gnubridge/core/bidding/Auctioneer.java
+END
+Bid.java
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/subversion/!svn/ver/148/gnubridge/src/org/gnubridge/core/bidding/Bid.java
+END

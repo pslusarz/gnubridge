@@ -1,0 +1,17 @@
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/subversion/!svn/ver/154/gnubridge/acceptance/org/gnubridge/core/bidding
+END
+BiddingAgentBehaviorTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/subversion/!svn/ver/154/gnubridge/acceptance/org/gnubridge/core/bidding/BiddingAgentBehaviorTest.java
+END
+BiddingAgentStochasticTest.java
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/subversion/!svn/ver/148/gnubridge/acceptance/org/gnubridge/core/bidding/BiddingAgentStochasticTest.java
+END
