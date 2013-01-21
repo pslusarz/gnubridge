@@ -141,7 +141,15 @@ public class StochasticDoubleDummySolverAcceptanceTest extends TestCase {
 	}
 
 	public enum SearchConfiguration {
-		MiniMax, NoDuplicatePruning, NoAlphaBetaPruning, DuplicatePruning, DuplicateWithLowestPruning, NoSequencePruning, NoPlayedSequencePruning, NoDeepAlphaBeta, AllPruning;
+		MiniMax, 
+//		NoDuplicatePruning, 
+//		NoAlphaBetaPruning, 
+//		DuplicatePruning, 
+//		DuplicateWithLowestPruning, 
+//		NoSequencePruning, 
+//		NoPlayedSequencePruning, 
+//		NoDeepAlphaBeta, 
+		AllPruning;
 	}
 
 	class SearchMonkey {
@@ -176,43 +184,16 @@ public class StochasticDoubleDummySolverAcceptanceTest extends TestCase {
 				search = new DoubleDummySolver(g, configurator);
 				search.setUseDuplicateRemoval(false);
 				search.setShouldPruneCardsInSequence(false);
-				search.setShouldPruneCardsInPlayedSequence(false);
 
-			}
-			if (config == SearchConfiguration.NoDuplicatePruning) {
-				search.setUseDuplicateRemoval(false);
-			}
-			if (config == SearchConfiguration.NoAlphaBetaPruning) {
-				SolverConfigurator configurator = new SolverConfigurator();
-				configurator.setUseAlphaBetaPruning(false);
-				search = new DoubleDummySolver(g, configurator);
-			}
-			if (config == SearchConfiguration.DuplicatePruning) {
-				search.setUseDuplicateRemoval(true);
-
-			}
-			if (config == SearchConfiguration.NoSequencePruning) {
-				search.setShouldPruneCardsInSequence(false);
-			}
-			if (config == SearchConfiguration.NoPlayedSequencePruning) {
-				search.setShouldPruneCardsInPlayedSequence(false);
-			}
-			if (config == SearchConfiguration.NoDeepAlphaBeta) {
-				assertTrue(search.getConfigurator().isUseAlphaBetaPruning());
-				//search.setShouldPruneDeepAlphaBeta(false);
 			}
 			if (config == SearchConfiguration.AllPruning) {
 				search.setUseDuplicateRemoval(true);
 				assertTrue(search.getConfigurator().isUseAlphaBetaPruning());
 				search.setShouldPruneCardsInSequence(true);
-				search.setShouldPruneCardsInPlayedSequence(true);
-				//search.setShouldPruneDeepAlphaBeta(true);
 			}
 			search.setMaxTricks(SEARCH_DEPTH_CUTOFF);
 			search.setTerminateIfRootOnlyHasOneValidMove(false);
 			search.search();
-			//search.printStats();
-			//search.printOptimalPath();
 
 			this.card = search.getRoot().getBestMove().getCardPlayed();
 			this.northSouthTricks = search.getRoot().getTricksTaken(Player.NORTH_SOUTH);

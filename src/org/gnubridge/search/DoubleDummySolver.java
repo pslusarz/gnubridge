@@ -27,7 +27,6 @@ public class DoubleDummySolver {
 
 	private boolean useDuplicateRemoval = true;
 	private boolean shouldPruneCardsInSequence = true;
-	private boolean shouldPruneCardsInPlayedSequence = true;
 
 	PositionLookup lookup;
 
@@ -92,13 +91,6 @@ public class DoubleDummySolver {
 		shouldPruneCardsInSequence = b;
 	}
 
-	@Deprecated
-	/**
-	 *  @deprecated "feature currently disabled"
-	 */
-	public void setShouldPruneCardsInPlayedSequence(boolean b) {
-		shouldPruneCardsInPlayedSequence = b;
-	}
 
 	public int getPositionsExamined() {
 		return positionsCount;
