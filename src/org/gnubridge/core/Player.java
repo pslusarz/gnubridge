@@ -30,6 +30,11 @@ public class Player {
 		this(d.getValue());
 	}
 
+	
+	public void hand(String... suits) {
+		init(new Hand(suits).getCardsHighToLow());
+
+	}
 
 	public void init(String[]... valueSuits) {
 		for (int i = 0; i < valueSuits.length; i++) {
