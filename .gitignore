@@ -1,4 +1,8 @@
 /temp
 .svn/
 /bin
+/build/
+.idea/
+.gradle/
 .DS_Store
+*.iml

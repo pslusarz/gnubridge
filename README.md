@@ -6,4 +6,4 @@ Note, there haven't been any updates to this project for awhile.
 Download from homepage: gnubridge.org
 
 ##Developers
-You can use command-line git and ant to build the project, or Eclipse with EGit. 
+Need a minimum of Java 1.5. Builds with Gradle wrapper (ie: %./gradlew build).
