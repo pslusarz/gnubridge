@@ -3,6 +3,7 @@ package org.gnubridge.core.bidding;
 import static org.gnubridge.core.bidding.Bid.*;
 import static org.gnubridge.core.deck.Trump.*;
 import junit.framework.TestCase;
+import org.gnubridge.core.deck.Clubs;
 
 public class ScoreCalculatorTest extends TestCase {
 	public void testOneMinorSuitContractMadeWithNoOvertricks() {
@@ -27,7 +28,7 @@ public class ScoreCalculatorTest extends TestCase {
 
 	public void testGrandSlam() {
 		int tricksTakenByDeclarers = 13;
-		ScoreCalculator calculator = new ScoreCalculator(new Bid(7, CLUBS), tricksTakenByDeclarers, new Vulnerability(
+		ScoreCalculator calculator = new ScoreCalculator(new Bid(7, Clubs.i()), tricksTakenByDeclarers, new Vulnerability(
 				false, false));
 		int actualDeclarerScore = calculator.getDeclarerScore();
 		int actualDefenderScore = calculator.getDefenderScore();

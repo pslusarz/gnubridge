@@ -1,12 +1,14 @@
 package org.gnubridge.core.bidding;
 
 import static org.gnubridge.core.Direction.*;
+import static org.gnubridge.core.bidding.Bid.ONE_NOTRUMP;
 import static org.gnubridge.core.bidding.Bid.*;
 import junit.framework.TestCase;
 
 import org.gnubridge.core.Direction;
 
 public class AuctioneerTest extends TestCase {
+
 	public void testFirstToBid() {
 		Auctioneer a = new Auctioneer(WEST);
 		assertEquals(WEST, a.getNextToBid());

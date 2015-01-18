@@ -1,6 +1,6 @@
 package org.gnubridge.core.bidding;
 
-import static org.gnubridge.core.deck.Trump.*;
+//import static org.gnubridge.core.deck.Trump.*;
 
 import org.gnubridge.core.deck.Clubs;
 import org.gnubridge.core.deck.Diamonds;
@@ -14,47 +14,47 @@ public class Bid {
 	public static Bid DOUBLE = new Double();
 	public static Bid REDOUBLE = new Redouble();
 
-	public static Bid ONE_NOTRUMP = new Bid(1, NOTRUMP);
-	public static Bid ONE_SPADES = new Bid(1, SPADES);
-	public static Bid ONE_HEARTS = new Bid(1, HEARTS);
-	public static Bid ONE_DIAMONDS = new Bid(1, DIAMONDS);
-	public static Bid ONE_CLUBS = new Bid(1, CLUBS);
+	public static Bid ONE_NOTRUMP = new Bid(1, NoTrump.i());
+	public static Bid ONE_SPADES = new Bid(1, Spades.i());
+	public static Bid ONE_HEARTS = new Bid(1 , Hearts.i());
+	public static Bid ONE_DIAMONDS = new Bid(1, Diamonds.i());
+	public static Bid ONE_CLUBS = new Bid(1, Clubs.i());
 
-	public static Bid TWO_NOTRUMP = new Bid(2, NOTRUMP);
-	public static Bid TWO_SPADES = new Bid(2, SPADES);
-	public static Bid TWO_HEARTS = new Bid(2, HEARTS);
-	public static Bid TWO_DIAMONDS = new Bid(2, DIAMONDS);
-	public static Bid TWO_CLUBS = new Bid(2, CLUBS);
+	public static Bid TWO_NOTRUMP = new Bid(2, NoTrump.i());
+	public static Bid TWO_SPADES = new Bid(2, Spades.i());
+	public static Bid TWO_HEARTS = new Bid(2 , Hearts.i());
+	public static Bid TWO_DIAMONDS = new Bid(2, Diamonds.i());
+	public static Bid TWO_CLUBS = new Bid(2, Clubs.i());
 
-	public static Bid THREE_NOTRUMP = new Bid(3, NOTRUMP);
-	public static Bid THREE_SPADES = new Bid(3, SPADES);
-	public static Bid THREE_HEARTS = new Bid(3, HEARTS);
-	public static Bid THREE_DIAMONDS = new Bid(3, DIAMONDS);
-	public static Bid THREE_CLUBS = new Bid(3, CLUBS);
+	public static Bid THREE_NOTRUMP = new Bid(3, NoTrump.i());
+	public static Bid THREE_SPADES = new Bid(3, Spades.i());
+	public static Bid THREE_HEARTS = new Bid(3 , Hearts.i());
+	public static Bid THREE_DIAMONDS = new Bid(3, Diamonds.i());
+	public static Bid THREE_CLUBS = new Bid(3, Clubs.i());
 
-	public static Bid FOUR_NOTRUMP = new Bid(4, NOTRUMP);
-	public static Bid FOUR_SPADES = new Bid(4, SPADES);
-	public static Bid FOUR_HEARTS = new Bid(4, HEARTS);
-	public static Bid FOUR_DIAMONDS = new Bid(4, DIAMONDS);
-	public static Bid FOUR_CLUBS = new Bid(4, CLUBS);
+	public static Bid FOUR_NOTRUMP = new Bid(4, NoTrump.i());
+	public static Bid FOUR_SPADES = new Bid(4, Spades.i());
+	public static Bid FOUR_HEARTS = new Bid(4 , Hearts.i());
+	public static Bid FOUR_DIAMONDS = new Bid(4, Diamonds.i());
+	public static Bid FOUR_CLUBS = new Bid(4, Clubs.i());
 
-	public static Bid FIVE_NOTRUMP = new Bid(5, NOTRUMP);
-	public static Bid FIVE_SPADES = new Bid(5, SPADES);
-	public static Bid FIVE_HEARTS = new Bid(5, HEARTS);
-	public static Bid FIVE_DIAMONDS = new Bid(5, DIAMONDS);
-	public static Bid FIVE_CLUBS = new Bid(5, CLUBS);
+	public static Bid FIVE_NOTRUMP = new Bid(5, NoTrump.i());
+	public static Bid FIVE_SPADES = new Bid(5, Spades.i());
+	public static Bid FIVE_HEARTS = new Bid(5 , Hearts.i());
+	public static Bid FIVE_DIAMONDS = new Bid(5, Diamonds.i());
+	public static Bid FIVE_CLUBS = new Bid(5, Clubs.i());
 
-	public static Bid SIX_NOTRUMP = new Bid(6, NOTRUMP);
-	public static Bid SIX_SPADES = new Bid(6, SPADES);
-	public static Bid SIX_HEARTS = new Bid(6, HEARTS);
-	public static Bid SIX_DIAMONDS = new Bid(6, DIAMONDS);
-	public static Bid SIX_CLUBS = new Bid(6, CLUBS);
+	public static Bid SIX_NOTRUMP = new Bid(6, NoTrump.i());
+	public static Bid SIX_SPADES = new Bid(6, Spades.i());
+	public static Bid SIX_HEARTS = new Bid(6 , Hearts.i());
+	public static Bid SIX_DIAMONDS = new Bid(6, Diamonds.i());
+	public static Bid SIX_CLUBS = new Bid(6, Clubs.i());
 
-	public static Bid SEVEN_NOTRUMP = new Bid(7, NOTRUMP);
-	public static Bid SEVEN_SPADES = new Bid(7, SPADES);
-	public static Bid SEVEN_HEARTS = new Bid(7, HEARTS);
-	public static Bid SEVEN_DIAMONDS = new Bid(7, DIAMONDS);
-	public static Bid SEVEN_CLUBS = new Bid(7, CLUBS);
+	public static Bid SEVEN_NOTRUMP = new Bid(7, NoTrump.i());
+	public static Bid SEVEN_SPADES = new Bid(7, Spades.i());
+	public static Bid SEVEN_HEARTS = new Bid(7 , Hearts.i());
+	public static Bid SEVEN_DIAMONDS = new Bid(7, Diamonds.i());
+	public static Bid SEVEN_CLUBS = new Bid(7, Clubs.i());
 
 	private final int value;
 	private final Trump trump;
