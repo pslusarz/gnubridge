@@ -1,0 +1,20 @@
+apply plugin: 'java'
+apply plugin: 'application'
+
+def minimumStartMemoryMb=1024
+
+mainClassName='org.gnubridge.presentation.gui.Main'
+applicationDefaultJvmArgs = ["-Xms${minimumStartMemoryMb}m"]
+
+test {
+  minHeapSize="${minimumStartMemoryMb}m"
+}
+
+repositories {
+  mavenCentral()
+}
+
+dependencies {
+  testCompile 'junit:junit:3.8.2'
+}
+

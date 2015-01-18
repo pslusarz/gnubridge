@@ -1,0 +1,10 @@
+images retrieved from: http://www.jfitz.com/cards/
+
+These images were created using GIFCon, XnView and Paint Shop Pro.
+Feel free to use for personal or professional purposes, subject to the following:
+Additional Copyright information:
+Larry Ewing <lewing@isc.tamu.edu> created Tux using GIMP.
+Marshall Kirk McKusick <mckusick@mckusick.com> is the copyright holder and creator of the BSD Daemon image.
+The "Windows" cards were originally designed by Susan Kare for Microsoft.
+To the best of my knowledge, the images used in any "standard" French/British 52 card deck are public domain.
+The top Jokers are derived from an image I found of a John Waddington design.
