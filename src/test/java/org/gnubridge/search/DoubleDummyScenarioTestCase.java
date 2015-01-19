@@ -1,12 +1,12 @@
 package org.gnubridge.search;
 
-import static org.gnubridge.core.deck.Trump.*;
 import junit.framework.TestCase;
 
 import org.gnubridge.core.Card;
 import org.gnubridge.core.Deal;
 import org.gnubridge.core.Direction;
 import org.gnubridge.core.Hand;
+import org.gnubridge.core.deck.NoTrump;
 import org.gnubridge.core.deck.Trump;
 
 public abstract class DoubleDummyScenarioTestCase extends TestCase {
@@ -21,7 +21,7 @@ public abstract class DoubleDummyScenarioTestCase extends TestCase {
 
 	private void givenDeal() {
 		if (deal == null) {
-			deal = new Deal(NOTRUMP);
+			deal = new Deal(NoTrump.i());
 			solver = null;
 		}
 

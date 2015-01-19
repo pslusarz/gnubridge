@@ -16,6 +16,9 @@ import org.gnubridge.core.deck.Spades;
 import org.gnubridge.core.deck.Trump;
 import org.gnubridge.presentation.GameUtils;
 
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertTrue;
+
 public class StochasticDoubleDummySolverAcceptanceTest extends TestCase {
 	static final int SEARCH_DEPTH_CUTOFF = 13;
 	static final int CARDS_TO_DEAL = 4;

@@ -7,7 +7,7 @@ mainClassName='org.gnubridge.presentation.gui.Main'
 applicationDefaultJvmArgs = ["-Xms${minimumStartMemoryMb}m"]
 
 test {
-  minHeapSize="${minimumStartMemoryMb}m"
+  minHeapSize="${minimumStartMemoryMb}M"
 }
 
 repositories {

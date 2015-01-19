@@ -1,6 +1,6 @@
 package org.gnubridge.core.bidding;
 
-import static org.gnubridge.core.deck.Trump.*;
+import org.gnubridge.core.deck.*;
 
 public class ScoreCalculator {
 
@@ -26,11 +26,11 @@ public class ScoreCalculator {
 		if (tricksTakenByDeclarers >= numberTricksNeededByDeclarer) {
 			int pointsPerTrick = 30;
 			int contractWorth = 0;
-			if (highBid.getTrump().equals(HEARTS) || highBid.getTrump().equals(SPADES)) {
+			if (highBid.getTrump().equals(Hearts.i()) || highBid.getTrump().equals(Spades.i())) {
 				pointsPerTrick = 30;
-			} else if (highBid.getTrump().equals(CLUBS) || highBid.getTrump().equals(DIAMONDS)) {
+			} else if (highBid.getTrump().equals(Clubs.i()) || highBid.getTrump().equals(Diamonds.i())) {
 				pointsPerTrick = 20;
-			} else if (highBid.getTrump().equals(NOTRUMP)) {
+			} else if (highBid.getTrump().equals(NoTrump.i())) {
 				pointsPerTrick = 30;
 				/* First trick is worth 30 for no trump */
 				contractWorth = 10;

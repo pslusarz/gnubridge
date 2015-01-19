@@ -1,7 +1,5 @@
 package org.gnubridge.core.bidding.rules;
 
-import static org.gnubridge.core.deck.Trump.*;
-
 import java.util.List;
 
 import org.gnubridge.core.Hand;
@@ -9,6 +7,7 @@ import org.gnubridge.core.bidding.Auctioneer;
 import org.gnubridge.core.bidding.Bid;
 import org.gnubridge.core.bidding.PointCalculator;
 import org.gnubridge.core.bidding.ResponseCalculator;
+import org.gnubridge.core.deck.NoTrump;
 import org.gnubridge.core.deck.Suit;
 import org.gnubridge.core.deck.Trump;
 
@@ -58,14 +57,14 @@ public class RespondOvercallSuit extends Response {
 
 		if (haveStopperInEnemySuit()) {
 			if (calculator.getCombinedPoints() >= 8 && calculator.getCombinedPoints() <= 11) {
-				return makeCheapestBid(NOTRUMP);
+				return makeCheapestBid(NoTrump.i());
 			}
 			if (calculator.getCombinedPoints() >= 12 && calculator.getCombinedPoints() <= 14) {
-				Bid bid = makeCheapestBid(NOTRUMP);
-				return new Bid(bid.getValue() + 1, NOTRUMP);
+				Bid bid = makeCheapestBid(NoTrump.i());
+				return new Bid(bid.getValue() + 1, NoTrump.i());
 			}
 			if (calculator.getCombinedPoints() >= 15) {
-				return new Bid(NOTRUMP_GAME, NOTRUMP);
+				return new Bid(NOTRUMP_GAME, NoTrump.i());
 			}
 		}
 		return null;

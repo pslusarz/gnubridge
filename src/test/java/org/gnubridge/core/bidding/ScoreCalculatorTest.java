@@ -1,9 +1,12 @@
 package org.gnubridge.core.bidding;
 
 import static org.gnubridge.core.bidding.Bid.*;
-import static org.gnubridge.core.deck.Trump.*;
+
 import junit.framework.TestCase;
 import org.gnubridge.core.deck.Clubs;
+import org.gnubridge.core.deck.Hearts;
+import org.gnubridge.core.deck.NoTrump;
+import org.gnubridge.core.deck.Spades;
 
 public class ScoreCalculatorTest extends TestCase {
 	public void testOneMinorSuitContractMadeWithNoOvertricks() {
@@ -38,7 +41,7 @@ public class ScoreCalculatorTest extends TestCase {
 
 	public void testSmallSlam() {
 		int tricksTakenByDeclarers = 12;
-		ScoreCalculator calculator = new ScoreCalculator(new Bid(6, SPADES), tricksTakenByDeclarers, new Vulnerability(
+		ScoreCalculator calculator = new ScoreCalculator(new Bid(6, Spades.i()), tricksTakenByDeclarers, new Vulnerability(
 				false, false));
 		int actualDeclarerScore = calculator.getDeclarerScore();
 		int actualDefenderScore = calculator.getDefenderScore();
@@ -49,7 +52,7 @@ public class ScoreCalculatorTest extends TestCase {
 
 	public void testNTWithOverTricks() {
 		int tricksTakenByDeclarers = 9;
-		ScoreCalculator calculator = new ScoreCalculator(new Bid(2, NOTRUMP), tricksTakenByDeclarers,
+		ScoreCalculator calculator = new ScoreCalculator(new Bid(2, NoTrump.i()), tricksTakenByDeclarers,
 				new Vulnerability(false, false));
 		int actualDeclarerScore = calculator.getDeclarerScore();
 		int actualDefenderScore = calculator.getDefenderScore();
@@ -62,7 +65,7 @@ public class ScoreCalculatorTest extends TestCase {
 
 	public void testNTWithoutOverTricks() {
 		int tricksTakenByDeclarers = 9;
-		ScoreCalculator calculator = new ScoreCalculator(new Bid(3, NOTRUMP), tricksTakenByDeclarers,
+		ScoreCalculator calculator = new ScoreCalculator(new Bid(3, NoTrump.i()), tricksTakenByDeclarers,
 				new Vulnerability(false, false));
 		int actualDeclarerScore = calculator.getDeclarerScore();
 		int actualDefenderScore = calculator.getDefenderScore();
@@ -74,7 +77,7 @@ public class ScoreCalculatorTest extends TestCase {
 
 	public void testUndertricksNT() {
 		int tricksTakenByDeclarers = 6;
-		ScoreCalculator calculator = new ScoreCalculator(new Bid(3, NOTRUMP), tricksTakenByDeclarers,
+		ScoreCalculator calculator = new ScoreCalculator(new Bid(3, NoTrump.i()), tricksTakenByDeclarers,
 				new Vulnerability(false, false));
 		int actualDeclarerScore = calculator.getDeclarerScore();
 		int actualDefenderScore = calculator.getDefenderScore();
@@ -85,7 +88,7 @@ public class ScoreCalculatorTest extends TestCase {
 
 	public void testUndertricksMajorSuit() {
 		int tricksTakenByDeclarers = 2;
-		ScoreCalculator calculator = new ScoreCalculator(new Bid(7, HEARTS), tricksTakenByDeclarers, new Vulnerability(
+		ScoreCalculator calculator = new ScoreCalculator(new Bid(7, Hearts.i()), tricksTakenByDeclarers, new Vulnerability(
 				false, false));
 		int actualDeclarerScore = calculator.getDeclarerScore();
 		int actualDefenderScore = calculator.getDefenderScore();
@@ -96,7 +99,7 @@ public class ScoreCalculatorTest extends TestCase {
 
 	public void testUndertricksMinorSuit() {
 		int tricksTakenByDeclarers = 12;
-		ScoreCalculator calculator = new ScoreCalculator(new Bid(7, CLUBS), tricksTakenByDeclarers, new Vulnerability(
+		ScoreCalculator calculator = new ScoreCalculator(new Bid(7, Clubs.i()), tricksTakenByDeclarers, new Vulnerability(
 				false, false));
 		int actualDeclarerScore = calculator.getDeclarerScore();
 		int actualDefenderScore = calculator.getDefenderScore();
@@ -107,7 +110,7 @@ public class ScoreCalculatorTest extends TestCase {
 
 	public void testVulnerability() {
 		int tricksTakenByDeclarers = 6;
-		ScoreCalculator calculator = new ScoreCalculator(new Bid(2, HEARTS), tricksTakenByDeclarers, new Vulnerability(
+		ScoreCalculator calculator = new ScoreCalculator(new Bid(2, Hearts.i()), tricksTakenByDeclarers, new Vulnerability(
 				true, false));
 		int actualDeclarerScore = calculator.getDeclarerScore();
 		int actualDefenderScore = calculator.getDefenderScore();
@@ -118,7 +121,7 @@ public class ScoreCalculatorTest extends TestCase {
 
 	public void testVulnerabilityWinContract() {
 		int tricksTakenByDeclarers = 7;
-		ScoreCalculator calculator = new ScoreCalculator(new Bid(1, HEARTS), tricksTakenByDeclarers, new Vulnerability(
+		ScoreCalculator calculator = new ScoreCalculator(new Bid(1, Hearts.i()), tricksTakenByDeclarers, new Vulnerability(
 				true, false));
 		int actualDeclarerScore = calculator.getDeclarerScore();
 		int actualDefenderScore = calculator.getDefenderScore();
@@ -129,7 +132,7 @@ public class ScoreCalculatorTest extends TestCase {
 
 	public void testDoubledContractMet() {
 		int tricksTakenByDeclarers = 7;
-		ScoreCalculator calculator = new ScoreCalculator(new Bid(1, HEARTS).makeDoubled(), tricksTakenByDeclarers,
+		ScoreCalculator calculator = new ScoreCalculator(new Bid(1, Hearts.i()).makeDoubled(), tricksTakenByDeclarers,
 				new Vulnerability(false, false));
 		int actualDeclarerScore = calculator.getDeclarerScore();
 		int actualDefenderScore = calculator.getDefenderScore();
@@ -140,7 +143,7 @@ public class ScoreCalculatorTest extends TestCase {
 
 	public void testDoubledContractOvertricks() {
 		int tricksTakenByDeclarers = 9;
-		ScoreCalculator calculator = new ScoreCalculator(new Bid(1, HEARTS).makeDoubled(), tricksTakenByDeclarers,
+		ScoreCalculator calculator = new ScoreCalculator(new Bid(1, Hearts.i()).makeDoubled(), tricksTakenByDeclarers,
 				new Vulnerability(false, false));
 		int actualDeclarerScore = calculator.getDeclarerScore();
 		int actualDefenderScore = calculator.getDefenderScore();
@@ -151,7 +154,7 @@ public class ScoreCalculatorTest extends TestCase {
 
 	public void testDoubledContractUndertricks() {
 		int tricksTakenByDeclarers = 5;
-		ScoreCalculator calculator = new ScoreCalculator(new Bid(1, HEARTS).makeDoubled(), tricksTakenByDeclarers,
+		ScoreCalculator calculator = new ScoreCalculator(new Bid(1, Hearts.i()).makeDoubled(), tricksTakenByDeclarers,
 				new Vulnerability(false, false));
 		int actualDeclarerScore = calculator.getDeclarerScore();
 		int actualDefenderScore = calculator.getDefenderScore();
