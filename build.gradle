@@ -10,6 +10,7 @@ applicationDefaultJvmArgs = ["-Xms${minimumStartMemoryMb}m"]
 test {
   minHeapSize="${minimumStartMemoryMb}m"
   maxHeapSize="${maximumMemoryMb}m"
+  jvmArgs "-XX:MaxPermSize=${minimumStartMemoryMb}m"
 }
 
 repositories {
