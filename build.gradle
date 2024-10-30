@@ -10,7 +10,6 @@ applicationDefaultJvmArgs = ["-Xms${minimumStartMemoryMb}m"]
 test {
   minHeapSize="${minimumStartMemoryMb}m"
   maxHeapSize="${maximumMemoryMb}m"
-  jvmArgs "-XX:MaxPermSize=${minimumStartMemoryMb}m"
 }
 
 repositories {
@@ -18,6 +17,6 @@ repositories {
 }
 
 dependencies {
-  testCompile 'junit:junit:3.8.2'
+  testImplementation 'junit:junit:3.8.2'
 }
 
