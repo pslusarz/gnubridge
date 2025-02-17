@@ -1,6 +1,6 @@
 GNUBridge is a Contract Bridge program written in Java and available under GNU public license v. 3.
 
-If you would like to give your thanks or support further development of this project, ![please consider making a donation](https://www.paypal.com/donate?campaign_id=9GACWA5V45JQC) [![donate via Paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif)](https://www.paypal.com/donate?campaign_id=9GACWA5V45JQC)
+If you would like to give your thanks or support further development of this project, [please consider making a donation](https://www.paypal.com/donate?campaign_id=9GACWA5V45JQC) [![donate via Paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif)](https://www.paypal.com/donate?campaign_id=9GACWA5V45JQC)
 
 Note, there haven't been any updates to this project for awhile.
 
