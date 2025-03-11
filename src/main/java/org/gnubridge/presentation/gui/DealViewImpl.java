@@ -184,7 +184,7 @@ public class DealViewImpl implements DealView, CardPanelHost, ActionListener {
 		}
 
 		public void mouseExited(MouseEvent arg0) {
-			if (theCard.isSelected()) {
+			if (theCard.isSelected() && (arg0.getClickCount() == 0)) {
 				theCard.setSelected(false);
 			}
 		}
@@ -214,7 +214,7 @@ public class DealViewImpl implements DealView, CardPanelHost, ActionListener {
 		}
 
 		public void mouseDragged(MouseEvent arg0) {
-			if (!theCard.isSelected()) {
+			if (!theCard.isSelected() || (arg0.getClickCount() > 1)) {
 				return;
 			}
 			if (!theCard.isDragged()) {

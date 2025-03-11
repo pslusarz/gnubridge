@@ -64,6 +64,9 @@ public class MainController {
 		this.view = ViewFactory.getMainView();
 		scoringTracker.setUsThemVulnerability(new UsThemVulnerability(new Random().nextBoolean(), new Random()
 				.nextBoolean()));
+		if (this.dealController != null) {
+			this.dealController.forceMove(); // stop the search thread if it is running
+		}
 		this.biddingController = new BiddingController(view.getBiddingView(), this, scoringTracker);
 		view.show();
 
