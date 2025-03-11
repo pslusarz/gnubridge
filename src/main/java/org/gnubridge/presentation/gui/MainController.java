@@ -69,4 +69,13 @@ public class MainController {
 
 	}
 
+	public void donate() {
+		String donationUrl = "https://www.paypal.com/donate?campaign_id=9GACWA5V45JQC";
+		try {
+			java.awt.Desktop.getDesktop().browse(java.net.URI.create(donationUrl));
+		} catch (java.io.IOException e) {
+			System.err.println("Failed to open browser: " + e.getMessage());
+		}
+	}
+
 }

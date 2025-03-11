@@ -20,6 +20,10 @@ public class MockCardPlayedListener implements CardPlayedListener {
 
 	}
 
+	public void donate() {
+
+	}
+
 	public void forceMove() {
 	}
 }

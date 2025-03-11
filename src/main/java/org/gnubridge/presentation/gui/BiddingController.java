@@ -93,4 +93,8 @@ public class BiddingController {
 		parent.newGame();
 
 	}
+
+	public void donate() {
+		parent.donate();
+	}
 }

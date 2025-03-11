@@ -24,6 +24,7 @@ public class BiddingDisplay {
 	protected String scoreMessage = "";
 	protected String vulnerabilityMessage;
 	private JButton newGameButton;
+	private JButton donateButton;
 
 	public BiddingDisplay(BiddingViewImpl pv) {
 		panel = createDisplayPanel();
@@ -32,6 +33,7 @@ public class BiddingDisplay {
 		panel.setPreferredSize(new Dimension(500, 500));
 		addPlayGameButton();
 		addNewGameButton();
+		addDonateButton();
 	}
 
 	private void addPlayGameButton() {
@@ -56,6 +58,18 @@ public class BiddingDisplay {
 		newGameButton.setSize(width, height);
 		newGameButton.setVisible(true);
 
+	}
+
+	private void addDonateButton() {
+		donateButton = new JButton("Donate");
+		donateButton.setActionCommand("donate");
+		donateButton.addActionListener(parentView);
+		panel.add(donateButton);
+		int height = 25;
+		int width = 125;
+		donateButton.setLocation(4, 10 + height + 2);
+		donateButton.setSize(width, height);
+		donateButton.setVisible(true);
 	}
 
 	public void setCards(Hand h) {

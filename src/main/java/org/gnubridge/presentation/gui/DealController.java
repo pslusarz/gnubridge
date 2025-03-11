@@ -12,7 +12,8 @@ import org.gnubridge.core.South;
 import org.gnubridge.core.bidding.Bid;
 import org.gnubridge.search.DoubleDummySolver;
 import org.gnubridge.search.ProductionSettings;
-import org.jdesktop.swingworker.SwingWorker;
+
+import javax.swing.*;
 
 public class DealController implements CardPlayedListener {
 	private static final int COMPUTER_PLAYER_IS_THINKING = 0;
@@ -211,6 +212,10 @@ public class DealController implements CardPlayedListener {
 	public void newGame() {
 		view.hide();
 		parent.newGame();
+	}
+
+	public void donate() {
+		parent.donate();
 	}
 
 	public synchronized void forceMove() {

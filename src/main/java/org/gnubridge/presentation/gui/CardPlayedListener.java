@@ -10,4 +10,6 @@ public interface CardPlayedListener {
 	public void displayPreviousTrick();
 
 	public void newGame();
+
+	public void donate();
 }

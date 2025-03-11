@@ -39,6 +39,7 @@ public class DealViewImpl implements DealView, CardPanelHost, ActionListener {
 	protected String scoreMessage = "";
 	private JButton previousTrickButton;
 	private JButton newGameButton;
+	private JButton donateButton;
 
 	public DealViewImpl(MainView owner) {
 		this.owner = owner;
@@ -53,6 +54,7 @@ public class DealViewImpl implements DealView, CardPanelHost, ActionListener {
 		createPreviousTrickButton();
 		owner.setContent(panel);
 		addNewGameButton();
+		addDonateButton();
 
 	}
 
@@ -66,6 +68,18 @@ public class DealViewImpl implements DealView, CardPanelHost, ActionListener {
 		newGameButton.setLocation(4, 10);
 		newGameButton.setSize(width, height);
 		newGameButton.setVisible(true);
+	}
+
+	private void addDonateButton() {
+		int height = 25;
+		int width = 125;
+		donateButton = new JButton("Donate");
+		donateButton.setActionCommand("donate");
+		donateButton.addActionListener(this);
+		panel.add(donateButton);
+		donateButton.setLocation(4, 10 + height + 2);
+		donateButton.setSize(width, height);
+		donateButton.setVisible(true);
 
 	}
 
@@ -273,6 +287,8 @@ public class DealViewImpl implements DealView, CardPanelHost, ActionListener {
 		} else if ("newGame".equals(e.getActionCommand())) {
 			newGameButton.setEnabled(false);
 			controller.newGame();
+		} else if ("donate".equals(e.getActionCommand())) {
+			controller.donate();
 		}
 
 	}

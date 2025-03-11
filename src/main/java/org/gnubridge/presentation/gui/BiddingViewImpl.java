@@ -94,6 +94,8 @@ public class BiddingViewImpl implements ActionListener, BiddingView {
 			controller.playGame();
 		} else if ("newGame".equals(e.getActionCommand())) {
 			controller.newGame();
+		} else if ("donate".equals(e.getActionCommand())) {
+			controller.donate();
 		} else {
 			controller.placeBid(bidSize, e.getActionCommand());
 		}
