@@ -321,49 +321,49 @@ public class DealViewImpl implements DealView, CardPanelHost, ActionListener {
 
 	}
 
-	class ArrowPromptMouseListener implements MouseListener, MouseMotionListener {
+class ArrowPromptMouseListener implements MouseListener, MouseMotionListener {
+	  private static final String FORCE_MOVE_TOOLTIP = "Double-click to force move";
 
-		public void mouseClicked(MouseEvent e) {
-			if (table.isPromptArrowHighlighted()) {
-				controller.forceMove();
-			}
+	  public void mouseClicked(MouseEvent e) {
+	    if (table.isPromptArrowHighlighted()) {
+	      controller.forceMove();
+	    }
+	  }
 
-		}
+	  public void mouseEntered(MouseEvent e) {
+	    // Not needed
+	  }
 
-		public void mouseEntered(MouseEvent e) {
-			// TODO Auto-generated method stub
+	  public void mouseExited(MouseEvent e) {
+	    // Not needed
+	  }
 
-		}
+	  public void mousePressed(MouseEvent e) {
+	    // Not needed
+	  }
 
-		public void mouseExited(MouseEvent e) {
-			// TODO Auto-generated method stub
+	  public void mouseReleased(MouseEvent e) {
+	    // Not needed
+	  }
 
-		}
+	  public void mouseDragged(MouseEvent e) {
+	    // Not needed
+	  }
 
-		public void mousePressed(MouseEvent e) {
-			// TODO Auto-generated method stub
-
-		}
-
-		public void mouseReleased(MouseEvent e) {
-			// TODO Auto-generated method stub
-
-		}
-
-		public void mouseDragged(MouseEvent e) {
-			// TODO Auto-generated method stub
-
-		}
-
-		public void mouseMoved(MouseEvent e) {
-			if (table.isWithinPromptArrow(e.getPoint()) && !table.isPromptArrowHighlighted()) {
-				table.setHighlightPromptArrow(true);
-				panel.repaint();
-			} else if (table.isPromptArrowHighlighted() && !table.isWithinPromptArrow(e.getPoint())) {
-				table.setHighlightPromptArrow(false);
-				panel.repaint();
-			}
-
-		}
+	  public void mouseMoved(MouseEvent e) {
+	    if (table.isWithinPromptArrow(e.getPoint())) {
+	      if (!table.isPromptArrowHighlighted()) {
+	        table.setHighlightPromptArrow(true);
+	        panel.repaint();
+	      }
+	      panel.setToolTipText(FORCE_MOVE_TOOLTIP);
+	    } else {
+	      if (table.isPromptArrowHighlighted()) {
+	        table.setHighlightPromptArrow(false);
+	        panel.repaint();
+	      }
+	      panel.setToolTipText(null);
+	    }
+	  }
 	}
 }
