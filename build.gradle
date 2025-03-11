@@ -1,11 +1,17 @@
-apply plugin: 'java'
-apply plugin: 'application'
+plugins {
+  id 'java'
+  id 'application'
+}
 
 def minimumStartMemoryMb=1024
 def maximumMemoryMb=8094
 
-mainClassName='org.gnubridge.presentation.gui.Main'
-applicationDefaultJvmArgs = ["-Xms${minimumStartMemoryMb}m"]
+
+
+application {
+  mainClass = 'org.gnubridge.presentation.gui.Main'
+  applicationDefaultJvmArgs = ["-Xms${minimumStartMemoryMb}m"]
+}
 
 test {
   minHeapSize="${minimumStartMemoryMb}m"
