@@ -2,6 +2,8 @@ package org.gnubridge.core.bidding;
 
 import org.gnubridge.core.deck.*;
 
+import static org.gnubridge.core.bidding.Bid.PASS;
+
 public class ScoreCalculator {
 
 	private static final int INSULT_BONUS = 50;
@@ -10,6 +12,25 @@ public class ScoreCalculator {
 	private final Bid highBid;
 	private final int tricksTakenByDeclarers;
 	private final Vulnerability vulnerability;
+
+	public static int calculateRawScore(Bid bid) {
+		int pointsPerTrick = 0;
+		int contractWorth = 0;
+		if (PASS.equals(bid)) {
+			return 0;
+		}
+		if (bid.getTrump().equals(Hearts.i()) || bid.getTrump().equals(Spades.i())) {
+			pointsPerTrick = 30;
+		} else if (bid.getTrump().equals(Clubs.i()) || bid.getTrump().equals(Diamonds.i())) {
+			pointsPerTrick = 20;
+		} else if (bid.getTrump().equals(NoTrump.i())) {
+			pointsPerTrick = 30;
+			/* First trick is worth 40 for no trump */
+			contractWorth = 10;
+		}
+		contractWorth += bid.getValue() * pointsPerTrick;
+		return contractWorth;
+	}
 
 	public ScoreCalculator(Bid highBid, int tricksTakenByDeclarers, Vulnerability vulnerability) {
 		this.highBid = highBid;
@@ -32,10 +53,8 @@ public class ScoreCalculator {
 				pointsPerTrick = 20;
 			} else if (highBid.getTrump().equals(NoTrump.i())) {
 				pointsPerTrick = 30;
-				/* First trick is worth 30 for no trump */
+				/* First trick is worth 40 for no trump */
 				contractWorth = 10;
-			} else {
-				throw new RuntimeException("Unknown trump: " + highBid.getTrump());
 			}
 
 			if (highBid.isDoubled()) {

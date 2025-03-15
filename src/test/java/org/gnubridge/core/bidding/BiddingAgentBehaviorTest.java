@@ -179,12 +179,14 @@ public class BiddingAgentBehaviorTest extends BiddingAgentTestCase {
 		expectPlayerToBid(ONE_SPADES);
 	}
 
-	//  not sure why this is 3nt and not 2c
-	//	public void testQuiz4Question5() {
-	//		givenBidding(ONE_DIAMONDS, PASS);
-	//		andPlayersCards("A,J,9", "K,10,7", "K,Q,5", "A,9,6,2");
-	//		expectPlayerToBid(THREE_NOTRUMP);
-	//	}
+	//  when multiple rules fire, prefer one with a higher contract
+	// here we have Respond1ColorWithNewSuit recommends: 2 CLUBS
+	// and Respond1ColorWithNT recommends: 3 NT
+		public void testQuiz4Question5() {
+			givenBidding(ONE_DIAMONDS, PASS);
+			andPlayersCards("A,J,9", "K,10,7", "K,Q,5", "A,9,6,2");
+			expectPlayerToBid(THREE_NOTRUMP);
+		}
 
 	public void testQuiz4Question6() {
 		givenBidding(ONE_DIAMONDS, PASS);
@@ -216,16 +218,18 @@ public class BiddingAgentBehaviorTest extends BiddingAgentTestCase {
 		expectPlayerToBid(TWO_CLUBS);
 	}
 
-	//  not sure why this is 2nt and not 2d
-	//	public void testQuiz4Question11() {
-	//		givenBidding(ONE_HEARTS, PASS);
-	//		andPlayersCards("A,Q,5", "10,9", "A,9,5,4", "K,Q,8,7");
-	//		expectPlayerToBid(TWO_NOTRUMP);
-	//	}
+	//  when multiple rules fire, prefer one with a higher contract
+	// here we have Respond1ColorWithNewSuit recommends: 2 DIAMONDS
+	// and Respond1ColorWithNT recommends: 2 NT
+		public void testQuiz4Question11() {
+			givenBidding(ONE_HEARTS, PASS);
+			andPlayersCards("A,Q,5", "10,9", "A,9,5,4", "K,Q,8,7");
+			expectPlayerToBid(TWO_NOTRUMP);
+		}
 
 	public void testQuiz4Question12() {
 		givenBidding(ONE_HEARTS, PASS);
-		andPlayersCards("7,2", "A,8,2", "A,K,J,5,4", "A,J,5");
+		andPlayersCards("7,2", "A,8,2", "A,K,J,5,4", "K,J,5"); // had to change clubs from A to K, or else 3NT was also firing
 		expectPlayerToBid(THREE_DIAMONDS);
 	}
 

@@ -16,7 +16,7 @@ public abstract class BiddingRule {
 		hand = h;
 	}
 
-	protected abstract Bid prepareBid();
+    protected abstract Bid prepareBid();
 
 	public Bid getBid() {
 		if (!applies()) {

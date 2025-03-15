@@ -4,6 +4,9 @@ import static org.gnubridge.core.bidding.Bid.*;
 
 import org.gnubridge.core.Hand;
 import org.gnubridge.core.West;
+import org.gnubridge.core.bidding.rules.BiddingRule;
+
+import java.util.ArrayList;
 
 public class BiddingAgentTest extends BiddingAgentTestCase {
 
@@ -46,7 +49,7 @@ public class BiddingAgentTest extends BiddingAgentTestCase {
 
 	public void testRespond1ColorWithNewSuit() {
 		givenBidding(ONE_DIAMONDS, PASS);
-		andPlayersCards("K,3", "K,5,4,3,2", "9,8", "5,4,3,2");
+		andPlayersCards("9,3", "K,5,4,3,2", "9,8", "Q,4,3,2");
 		expectPlayerToBid(ONE_HEARTS);
 	}
 
@@ -132,6 +135,32 @@ public class BiddingAgentTest extends BiddingAgentTestCase {
 		Auctioneer a = new Auctioneer(West.i());
 		BiddingAgent ba = new BiddingAgent(a, RPQuizzes.Basics.Lesson2.hand2());
 		assertEquals(PASS, ba.getBid());
+	}
+
+	public void testPreferRuleWithHigherScore() {
+		Auctioneer a = new Auctioneer(West.i());
+		ArrayList<BiddingRule> additionalRules = new ArrayList<>();
+		additionalRules.add(always(SIX_NOTRUMP));
+		additionalRules.add(always(SEVEN_NOTRUMP));
+		additionalRules.add(always(FIVE_NOTRUMP));
+		BiddingAgent ba = new BiddingAgent(a, RPQuizzes.Basics.Lesson2.hand2(), additionalRules);
+		assertEquals(SEVEN_NOTRUMP, ba.getBid());
+	}
+
+	BiddingRule always(Bid bid) {
+		Auctioneer dummyAuctioneer = new Auctioneer(West.i());
+		Hand dummyHand = RPQuizzes.Basics.Lesson2.hand2();
+		return new BiddingRule(dummyAuctioneer, dummyHand) {
+			@Override
+			protected Bid prepareBid() {
+				return bid;
+			}
+
+			@Override
+			protected boolean applies() {
+				return true;
+			}
+		};
 	}
 
 }

@@ -1,61 +1,53 @@
 package org.gnubridge.core.bidding;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import org.gnubridge.core.Hand;
-import org.gnubridge.core.bidding.rules.AlwaysPass;
-import org.gnubridge.core.bidding.rules.BiddingRule;
-import org.gnubridge.core.bidding.rules.Open1Color;
-import org.gnubridge.core.bidding.rules.Open1NT;
-import org.gnubridge.core.bidding.rules.Overcall1NT;
-import org.gnubridge.core.bidding.rules.OvercallSuit;
-import org.gnubridge.core.bidding.rules.Rebid1ColorOriginalSuit;
-import org.gnubridge.core.bidding.rules.Rebid1ColorRaisePartner;
-import org.gnubridge.core.bidding.rules.Rebid1ColorWithNT;
-import org.gnubridge.core.bidding.rules.Rebid1ColorWithNewSuit;
-import org.gnubridge.core.bidding.rules.Rebid1NT;
-import org.gnubridge.core.bidding.rules.Respond1ColorRaiseMajorSuit;
-import org.gnubridge.core.bidding.rules.Respond1ColorRaiseMinorSuit;
-import org.gnubridge.core.bidding.rules.Respond1ColorWithNT;
-import org.gnubridge.core.bidding.rules.Respond1ColorWithNewSuit;
-import org.gnubridge.core.bidding.rules.Respond1NT;
-import org.gnubridge.core.bidding.rules.RespondOvercallSuit;
+import org.gnubridge.core.bidding.rules.*;
 
 public class BiddingAgent {
 
 	private final List<BiddingRule> rules;
 
 	public BiddingAgent(Auctioneer a, Hand h) {
-		rules = new ArrayList<BiddingRule>();
-		rules.add(new Open1NT(a, h));
-		rules.add(new Open1Color(a, h));
-		rules.add(new Respond1NT(a, h));
-		rules.add(new Respond1ColorRaiseMajorSuit(a, h));
-		rules.add(new Respond1ColorWithNewSuit(a, h));
-		rules.add(new Respond1ColorRaiseMinorSuit(a, h));
-		rules.add(new Respond1ColorWithNT(a, h));
-		rules.add(new Rebid1NT(a, h));
-		rules.add(new Rebid1ColorRaisePartner(a, h));
-		rules.add(new Rebid1ColorWithNewSuit(a, h));
-		rules.add(new Rebid1ColorOriginalSuit(a, h));
-		rules.add(new Rebid1ColorWithNT(a, h));
-		rules.add(new OvercallSuit(a, h));
-		rules.add(new RespondOvercallSuit(a, h));
-		rules.add(new Overcall1NT(a, h));
-		rules.add(new AlwaysPass());
+		rules = createRules(a, h);
+	}
+
+	private ArrayList<BiddingRule> createRules(Auctioneer a, Hand h) {
+		ArrayList<BiddingRule> result = new ArrayList<BiddingRule>();
+		result.add(new Open1NT(a, h));
+		result.add(new Open1Color(a, h));
+		result.add(new Respond1NT(a, h));
+		result.add(new Respond1Color(a, h));
+		result.add(new Rebid1NT(a, h));
+		result.add(new Rebid1ColorRaisePartner(a, h));
+		result.add(new Rebid1ColorWithNewSuit(a, h));
+		result.add(new Rebid1ColorOriginalSuit(a, h));
+		result.add(new Rebid1ColorWithNT(a, h));
+		result.add(new OvercallSuit(a, h));
+		result.add(new RespondOvercallSuit(a, h));
+		result.add(new Overcall1NT(a, h));
+		result.add(new AlwaysPass());
+		return result;
+	}
+
+	public BiddingAgent(Auctioneer a, Hand h, ArrayList<BiddingRule> additionalTestRules) {
+		this(a,h);
+		rules.addAll(additionalTestRules);
 	}
 
 	public Bid getBid() {
-		Bid result = null;
 		for (BiddingRule rule : rules) {
-			result = rule.getBid();
-			if (result != null) {
-				//System.out.println("rule: " + rule.getClass() + " recommends: " + result);
-				break;
+			if (rule.getBid() != null) {
+				System.out.println("Rule "+rule.getClass().getName()+" recommends "+rule.getBid());
 			}
 		}
-		return result;
+		return rules.stream()
+				.map(rule ->  rule.getBid())
+				.filter(result -> result != null)
+				.max(Comparator.comparing(bid -> ScoreCalculator.calculateRawScore(bid))).get();
 	}
 
 }

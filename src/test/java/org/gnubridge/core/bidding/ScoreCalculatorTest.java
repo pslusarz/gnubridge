@@ -163,4 +163,13 @@ public class ScoreCalculatorTest extends TestCase {
 		assertEquals(100 + 200, actualDefenderScore);
 	}
 
+	public void testRaw() {
+		assertEquals(0, ScoreCalculator.calculateRawScore(PASS));
+		assertEquals(20, ScoreCalculator.calculateRawScore(ONE_CLUBS));
+		assertEquals(40, ScoreCalculator.calculateRawScore(TWO_DIAMONDS));
+		assertEquals(100, ScoreCalculator.calculateRawScore(THREE_NOTRUMP));
+		assertEquals(120, ScoreCalculator.calculateRawScore(FOUR_HEARTS));
+		assertEquals(150, ScoreCalculator.calculateRawScore(FIVE_SPADES));
+	}
+
 }
