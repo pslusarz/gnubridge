@@ -2,7 +2,7 @@ package org.gnubridge.core.bidding;
 
 import org.gnubridge.core.deck.*;
 
-import static org.gnubridge.core.bidding.Bid.PASS;
+import static org.gnubridge.core.bidding.Bid.*;
 
 public class ScoreCalculator {
 
@@ -17,6 +17,10 @@ public class ScoreCalculator {
 		int pointsPerTrick = 0;
 		int contractWorth = 0;
 		if (PASS.equals(bid)) {
+			return 0;
+		} else if (DOUBLE.equals(bid)) {
+			return 0;
+		} else if (REDOUBLE.equals(bid)) {
 			return 0;
 		}
 		if (bid.getTrump().equals(Hearts.i()) || bid.getTrump().equals(Spades.i())) {

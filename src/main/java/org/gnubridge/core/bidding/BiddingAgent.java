@@ -29,6 +29,7 @@ public class BiddingAgent {
 		result.add(new OvercallSuit(a, h));
 		result.add(new RespondOvercallSuit(a, h));
 		result.add(new Overcall1NT(a, h));
+		result.add(new TakeoutDouble(a, h));
 		result.add(new AlwaysPass());
 		return result;
 	}
