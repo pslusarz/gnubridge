@@ -37,4 +37,11 @@ public abstract class BiddingAgentTestCase extends TestCase {
 		}
 
 	}
+
+	protected void andGivenBidding(Bid... bids) {
+		for (Bid bid : bids) {
+			auctioneer.bid(bid);
+		}
+
+	}
 }

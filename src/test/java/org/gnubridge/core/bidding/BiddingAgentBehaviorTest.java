@@ -233,4 +233,100 @@ public class BiddingAgentBehaviorTest extends BiddingAgentTestCase {
 		expectPlayerToBid(THREE_DIAMONDS);
 	}
 
+	public void testQuiz5Question1() {
+		givenNoPriorBids();
+		andPlayersCards("A,6,2", "K,Q,10", "A,J,8", "J,9,5,4");
+		expectPlayerToBid(ONE_CLUBS);
+		andGivenBidding(ONE_CLUBS, PASS, ONE_SPADES, PASS);
+		expectPlayerToBid(ONE_NOTRUMP);
+	}
+
+	public void testQuiz5Question2() {
+		givenNoPriorBids();
+		andPlayersCards("Q,8,7,6", "A,K,2", "K,10,9,7,4", "6");
+		expectPlayerToBid(ONE_DIAMONDS);
+		andGivenBidding(ONE_DIAMONDS, PASS, ONE_HEARTS, PASS);
+		expectPlayerToBid(ONE_SPADES);
+	}
+
+	public void testQuiz5Question3() {
+		givenNoPriorBids();
+		andPlayersCards("A,J,5", "K,Q,7", "K,4,3", "A,Q,9,6");
+		expectPlayerToBid(ONE_CLUBS);
+		andGivenBidding(ONE_CLUBS, PASS, ONE_DIAMONDS, PASS);
+		expectPlayerToBid(TWO_NOTRUMP);
+	}
+
+	public void testQuiz5Question4() {
+		givenNoPriorBids();
+		andPlayersCards("K,6", "A,K,J,8,6,4", "J,10,8", "A,2");
+		expectPlayerToBid(ONE_HEARTS);
+		andGivenBidding(ONE_HEARTS, PASS, ONE_SPADES, PASS);
+		expectPlayerToBid(THREE_HEARTS);
+	}
+
+	public void testQuiz5Question5() {
+		givenNoPriorBids();
+		andPlayersCards("A,Q,J,2", "K,Q,9,4", "A,K,3", "7,4");
+		expectPlayerToBid(ONE_DIAMONDS);
+		andGivenBidding(ONE_DIAMONDS, PASS, ONE_HEARTS, PASS);
+		expectPlayerToBid(FOUR_HEARTS);
+	}
+
+	public void testQuiz5Question6() {
+		givenNoPriorBids();
+		andPlayersCards("K,J", "K,8,7,2", "A,J,10,9,6,5", "2");
+		expectPlayerToBid(ONE_DIAMONDS);
+		andGivenBidding(ONE_DIAMONDS, PASS, ONE_NOTRUMP, PASS);
+		expectPlayerToBid(TWO_DIAMONDS);
+	}
+
+	public void testQuiz5Question7() {
+		givenNoPriorBids();
+		andPlayersCards("K,J,8,6", "K,Q,10,7", "K,7,5,3", "2");
+		expectPlayerToBid(ONE_DIAMONDS);
+		andGivenBidding(ONE_DIAMONDS, PASS, ONE_SPADES, PASS);
+		expectPlayerToBid(TWO_SPADES);
+	}
+
+	public void testQuiz5Question8() {
+		givenNoPriorBids();
+		andPlayersCards("6,4", "A,K,8,7", "A,2", "A,Q,J,9,8");
+		expectPlayerToBid(ONE_CLUBS);
+		andGivenBidding(ONE_CLUBS, PASS, ONE_DIAMONDS, PASS);
+		expectPlayerToBid(TWO_HEARTS);
+	}
+
+	public void testQuiz5Question9() {
+		givenNoPriorBids();
+		andPlayersCards("A,2", "7,5", "A,K,10,6,5", "K,8,7,4");
+		expectPlayerToBid(ONE_DIAMONDS);
+		andGivenBidding(ONE_DIAMONDS, PASS, ONE_SPADES, PASS);
+		expectPlayerToBid(TWO_CLUBS);
+	}
+
+	public void testQuiz5Question10() {
+		givenNoPriorBids();
+		andPlayersCards("K,Q,J,9,7,5,4", "A,K,2", "K,2", "3");
+		expectPlayerToBid(ONE_SPADES);
+		andGivenBidding(ONE_SPADES, PASS, ONE_NOTRUMP, PASS);
+		expectPlayerToBid(FOUR_SPADES);
+	}
+
+	public void testQuiz5Question11() {
+		givenNoPriorBids();
+		andPlayersCards("A,10,6,2", "A,K,8,6,2", "Q,8", "9,7");
+		expectPlayerToBid(ONE_HEARTS);
+		andGivenBidding(ONE_HEARTS, PASS, ONE_NOTRUMP, PASS);
+		expectPlayerToBid(PASS);
+	}
+
+	public void testQuiz5Question12() {
+		givenNoPriorBids();
+		andPlayersCards("Q,9,3", "A,2", "A,K,Q,8,5,4", "K,J");
+		expectPlayerToBid(ONE_DIAMONDS);
+		andGivenBidding(ONE_DIAMONDS, PASS, ONE_NOTRUMP, PASS);
+		expectPlayerToBid(THREE_NOTRUMP);
+	}
+
 }
