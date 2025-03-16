@@ -329,4 +329,78 @@ public class BiddingAgentBehaviorTest extends BiddingAgentTestCase {
 		expectPlayerToBid(THREE_NOTRUMP);
 	}
 
+	// quiz 6 is on gameplay, not on bidding
+
+	public void testQuiz7Question1() {
+		givenBidding(ONE_DIAMONDS);
+		andPlayersCards("A,K,J,7", "A,9,6,3", "4,2", "10,8,3");
+		expectPlayerToBid(DOUBLE);
+	}
+
+	public void testQuiz7Question2() {
+		givenBidding(ONE_DIAMONDS);
+		andPlayersCards("2", "A,J,9", "10,9,8,4", "K,J,10,5,2");
+		expectPlayerToBid(PASS);
+	}
+
+	public void testQuiz7Question3() {
+		givenBidding(ONE_DIAMONDS);
+		andPlayersCards("K,10,2", "A,Q,9,4,2", "10,5,2", "7,6");
+		expectPlayerToBid(ONE_HEARTS);
+	}
+
+	public void testQuiz7Question4() {
+		givenBidding(ONE_DIAMONDS);
+		andPlayersCards("Q,J,8", "A,9,4", "A,J,8", "K,Q,9,7");
+		expectPlayerToBid(ONE_NOTRUMP);
+	}
+
+	public void testQuiz7Question5() {
+		givenBidding(ONE_CLUBS, ONE_SPADES, PASS);
+		andPlayersCards("A,J,8", "8,2", "K,10,7,3", "9,8,6,3");
+		expectPlayerToBid(TWO_SPADES);
+	}
+
+	public void testQuiz7Question6() {
+		givenBidding(ONE_CLUBS, ONE_SPADES, PASS);
+		andPlayersCards("K,J,2", "K,Q,9,8,7", "A,5,4,3", "2");
+		expectPlayerToBid(FOUR_SPADES);
+	}
+
+	public void testQuiz7Question7() {
+		givenBidding(ONE_CLUBS, ONE_SPADES, PASS);
+		andPlayersCards("9,5", "A,9,5", "A,J,8,3", "K,J,10,6");
+		expectPlayerToBid(TWO_NOTRUMP);
+	}
+
+	public void testQuiz7Question8() {
+		givenBidding(ONE_CLUBS, ONE_SPADES, PASS);
+		andPlayersCards("8", "A,Q,J,9,4", "K,8,2", "8,6,4,2");
+		expectPlayerToBid(TWO_HEARTS);
+	}
+
+	public void testQuiz7Question9() {
+		givenBidding(ONE_HEARTS, DOUBLE, PASS);
+		andPlayersCards("8,6", "9,8,6,2", "Q,10,3", "J,10,8,4");
+		expectPlayerToBid(TWO_CLUBS);
+	}
+
+	public void testQuiz7Question10() {
+		givenBidding(ONE_HEARTS, DOUBLE, PASS);
+		andPlayersCards("K,Q,9,6", "A,6,3", "6,4", "J,10,6,4");
+		expectPlayerToBid(TWO_SPADES);
+	}
+
+	public void testQuiz7Question11() {
+		givenBidding(ONE_HEARTS, DOUBLE, PASS);
+		andPlayersCards("7,6,2", "Q,J,8,6", "A,10,2", "10,8,4");
+		expectPlayerToBid(ONE_NOTRUMP);
+	}
+
+	public void testQuiz7Question12() {
+		givenBidding(ONE_HEARTS, DOUBLE, PASS);
+		andPlayersCards("A,J,9,7,4", "A,Q,3,2", "2", "8,7,2");
+		expectPlayerToBid(FOUR_SPADES);
+	}
+
 }
