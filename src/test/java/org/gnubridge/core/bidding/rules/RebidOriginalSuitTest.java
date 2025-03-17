@@ -1,66 +1,36 @@
 package org.gnubridge.core.bidding.rules;
 
-import junit.framework.TestCase;
+	import static org.gnubridge.core.bidding.Bid.*;
 
-import org.gnubridge.core.Hand;
-import org.gnubridge.core.West;
-import org.gnubridge.core.bidding.Auctioneer;
-import org.gnubridge.core.bidding.Bid;
-import org.gnubridge.core.bidding.Pass;
-import org.gnubridge.core.deck.Clubs;
-import org.gnubridge.core.deck.Diamonds;
-import org.gnubridge.core.deck.Hearts;
-import org.gnubridge.core.deck.NoTrump;
-import org.gnubridge.core.deck.Spades;
+	public class RebidOriginalSuitTest extends AbstractBiddingRuleTest<Rebid1ColorOriginalSuit> {
 
-public class RebidOriginalSuitTest extends TestCase {
-	public void testRebidAt2Level() {
-		Auctioneer a = new Auctioneer(West.i());
-		a.bid(new Bid(1, Clubs.i()));
-		a.bid(new Pass());
-		a.bid(new Bid(1, Diamonds.i()));
-		a.bid(new Pass());
-		Rebid1ColorOriginalSuit rule = new Rebid1ColorOriginalSuit(a, new Hand("3,2", "K,Q,J", "9,8", "A,K,5,4,3,2"));
-		assertEquals(new Bid(2, Clubs.i()), rule.getBid());
+	    public void testRebidAt2Level() {
+	        givenBidding(ONE_CLUBS, PASS, ONE_DIAMONDS, PASS);
+	        andPlayersCards("3,2", "K,Q,J", "9,8", "A,K,5,4,3,2");
+	        ruleShouldBid(TWO_CLUBS);
+	    }
+
+	    public void testRebidAt3Level() {
+	        givenBidding(ONE_HEARTS, PASS, ONE_SPADES, PASS);
+	        andPlayersCards("3,2", "A,K,5,4,3,2", "K,Q,J", "K,8");
+	        ruleShouldBid(THREE_HEARTS);
+	    }
+
+	    public void testRebidAt4Level() {
+	        givenBidding(ONE_HEARTS, PASS, ONE_SPADES, PASS);
+	        andPlayersCards("K,2", "A,K,J,5,4,3,2", "K,Q", "K,8");
+	        ruleShouldBid(FOUR_HEARTS);
+	    }
+
+	    public void testDoNotRebidIfLessThan6Cards() {
+	        givenBidding(ONE_CLUBS, PASS, ONE_DIAMONDS, PASS);
+	        andPlayersCards("3,2", "K,Q,J", "9,8,2", "A,K,5,4,3");
+	        ruleShouldBid(null);
+	    }
+
+	    public void testDoNotRebidNT() {
+	        givenBidding(ONE_NOTRUMP, PASS, ONE_DIAMONDS, PASS);
+	        andPlayersCards("3,2", "K,Q,J", "9,8", "A,K,5,4,3,2");
+	        ruleShouldBid(null);
+	    }
 	}
-
-	public void testRebidAt3Level() {
-		Auctioneer a = new Auctioneer(West.i());
-		a.bid(new Bid(1, Hearts.i()));
-		a.bid(new Pass());
-		a.bid(new Bid(1, Spades.i()));
-		a.bid(new Pass());
-		Rebid1ColorOriginalSuit rule = new Rebid1ColorOriginalSuit(a, new Hand("3,2", "A,K,5,4,3,2", "K,Q,J", "K,8"));
-		assertEquals(new Bid(3, Hearts.i()), rule.getBid());
-	}
-
-	public void testRebidAt4Level() {
-		Auctioneer a = new Auctioneer(West.i());
-		a.bid(new Bid(1, Hearts.i()));
-		a.bid(new Pass());
-		a.bid(new Bid(1, Spades.i()));
-		a.bid(new Pass());
-		Rebid1ColorOriginalSuit rule = new Rebid1ColorOriginalSuit(a, new Hand("K,2", "A,K,J,5,4,3,2", "K,Q", "K,8"));
-		assertEquals(new Bid(4, Hearts.i()), rule.getBid());
-	}
-
-	public void testDoNotRebidIfLessThan6Cards() {
-		Auctioneer a = new Auctioneer(West.i());
-		a.bid(new Bid(1, Clubs.i()));
-		a.bid(new Pass());
-		a.bid(new Bid(1, Diamonds.i()));
-		a.bid(new Pass());
-		Rebid1ColorOriginalSuit rule = new Rebid1ColorOriginalSuit(a, new Hand("3,2", "K,Q,J", "9,8,2", "A,K,5,4,3"));
-		assertEquals(null, rule.getBid());
-	}
-
-	public void testDoNotRebidNT() {
-		Auctioneer a = new Auctioneer(West.i());
-		a.bid(new Bid(1, NoTrump.i()));
-		a.bid(new Pass());
-		a.bid(new Bid(1, Diamonds.i()));
-		a.bid(new Pass());
-		Rebid1ColorOriginalSuit rule = new Rebid1ColorOriginalSuit(a, new Hand("3,2", "K,Q,J", "9,8", "A,K,5,4,3,2"));
-		assertEquals(null, rule.getBid());
-	}
-}
