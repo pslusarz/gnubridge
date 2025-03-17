@@ -51,8 +51,10 @@ public abstract class AbstractBiddingRuleTest<T extends BiddingRule> extends Tes
         rule = createRule(auctioneer, hand);
     }
 
-    protected void ruleShouldBid(Bid bid) {
-        assertEquals(bid, rule.getBid());
+    protected Bid ruleShouldBid(Bid bid) {
+        Bid result = rule.getBid();
+        assertEquals(bid, result);
+        return result;
     }
 
     protected Hand createHand(String... cardsBySuits) {
