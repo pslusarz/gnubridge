@@ -8,33 +8,7 @@ import org.gnubridge.core.Hand;
 import org.gnubridge.core.bidding.Auctioneer;
 import org.gnubridge.core.bidding.Bid;
 
-public class TakeoutDoubleTest extends TestCase {
-	private Auctioneer auctioneer;
-	private TakeoutDouble rule;
-
-	private void givenNoPriorBids() {
-		auctioneer = new Auctioneer(WEST);
-
-	}
-
-	private void givenBidding(Bid... bids) {
-		givenNoPriorBids();
-		for (Bid bid : bids) {
-			auctioneer.bid(bid);
-		}
-
-	}
-
-	private void ruleShouldBid(Bid bid) {
-		assertEquals(bid, rule.getBid());
-
-	}
-
-	private void andPlayersCards(String... cardsBySuits) {
-		rule = new TakeoutDouble(auctioneer, new Hand(cardsBySuits));
-
-	}
-
+public class TakeoutDoubleTest extends AbstractBiddingRuleTest<TakeoutDouble> {
 
 	public void testTakeout() {
 		givenBidding(ONE_CLUBS);
