@@ -44,6 +44,10 @@ public abstract class AbstractBiddingRuleTest<T extends BiddingRule> extends Tes
 
     protected void andPlayersCards(String... cardsBySuits) {
         Hand hand = createHand(cardsBySuits);
+        andPlayersCards(hand);
+    }
+
+    protected void andPlayersCards(Hand hand) {
         rule = createRule(auctioneer, hand);
     }
 
