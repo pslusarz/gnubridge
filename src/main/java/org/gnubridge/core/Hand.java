@@ -59,7 +59,7 @@ public class Hand {
 
 			String[] cardTokens = colorSuit.split(",");
 			for (String cardToken : cardTokens) {
-				results.add(new Card(cardToken, color));
+				results.add(new Card(cardToken.trim(), color));
 			}
 		}
 		return results;

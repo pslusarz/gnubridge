@@ -11,6 +11,8 @@ import org.gnubridge.core.bidding.Pass;
 import org.gnubridge.presentation.GameUtils;
 import org.jbridge.presentation.gui.MockMainView;
 
+import static org.gnubridge.core.bidding.Bid.*;
+
 public class BiddingAcceptanceTest extends TestCase {
 	private static final int TRICKS_PER_DEAL = 6;
 
@@ -41,9 +43,14 @@ public class BiddingAcceptanceTest extends TestCase {
 
 				Bid humanBid = humanAgent.getBid();
 				System.out.println("  human about to bid: " + humanBid);
-				if (new Pass().equals(humanBid)) {
+				if (PASS.equals(humanBid)) {
 					mainController.getBiddingController().placeBid(-1, "PASS");
-				} else {
+				} else if (DOUBLE.equals(humanBid)) {
+					mainController.getBiddingController().placeBid(-1, "DOUBLE");
+				} else if (REDOUBLE.equals(humanBid)) {
+					mainController.getBiddingController().placeBid(-1, "REDOUBLE");
+				}
+				else {
 					mainController.getBiddingController().placeBid(humanBid.getValue(), humanBid.getTrump().toString());
 				}
 				System.out.println("  Calls after human bid: " + auction.getCalls());

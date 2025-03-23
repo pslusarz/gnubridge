@@ -147,6 +147,8 @@ public class Bid {
 
 		} else if (Double.stringValue().equals(t.toUpperCase())) {
 			return new Double();
+		} else if (Redouble.stringValue().equals(t.toUpperCase())) {
+			return new Redouble();
 		}
 		return new Bid(bidSize, Trump.instance(t));
 	}

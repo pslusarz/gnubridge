@@ -9,4 +9,6 @@ public class Redouble extends Bid {
 	public String toString() {
 		return "REDOUBLE";
 	}
+
+	public static String stringValue() {return "REDOUBLE";}
 }
