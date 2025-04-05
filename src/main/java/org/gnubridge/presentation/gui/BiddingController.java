@@ -18,6 +18,7 @@ public class BiddingController {
 	private final Auctioneer auction;
 	private final Player human;
 	private final MainController parent;
+	private boolean provideHints = false;
 
 	public BiddingController(BiddingView v, MainController p, ScoringTracker scoringTracker) {
 		view = v;
@@ -45,6 +46,20 @@ public class BiddingController {
 		return human;
 	}
 
+	public void setHints(boolean value) {
+		provideHints = value;
+		provideHints();
+	}
+
+	private void provideHints() {
+		if (provideHints && !auction.biddingFinished()) {
+			BiddingAgent ba = new BiddingAgent(auction, new Hand(human.getHand()));
+			view.display("You should bid: "+ba.getBid());
+		} else {
+			view.display("");
+		}
+	}
+
 	private void doAutomatedBidding() {
 		while (!auction.biddingFinished() && !auction.getNextToBid().equals(human.getDirection2())) {
 			Hand hand = new Hand(cardHolder.getPlayer(auction.getNextToBid().getValue()).getHand());
@@ -52,6 +67,7 @@ public class BiddingController {
 			auction.bid(ba.getBid());
 			view.auctionStateChanged();
 		}
+		provideHints();
 
 	}
 

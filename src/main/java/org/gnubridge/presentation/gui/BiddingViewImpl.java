@@ -3,8 +3,7 @@ package org.gnubridge.presentation.gui;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.JRadioButton;
-import javax.swing.JSplitPane;
+import javax.swing.*;
 
 import org.gnubridge.core.Hand;
 import org.gnubridge.core.bidding.Auctioneer;
@@ -90,7 +89,10 @@ public class BiddingViewImpl implements ActionListener, BiddingView {
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() instanceof JRadioButton) {
 			bidSize = Integer.valueOf(e.getActionCommand()).intValue();
-		} else if ("Play game...".equals(e.getActionCommand())) {
+		} else if ("Hints".equals(e.getActionCommand())) {
+			controller.setHints(((JCheckBox)e.getSource()).isSelected());
+		}
+		else if ("Play game...".equals(e.getActionCommand())) {
 			controller.playGame();
 		} else if ("newGame".equals(e.getActionCommand())) {
 			controller.newGame();
