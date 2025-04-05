@@ -22,6 +22,12 @@ public class RespondTakeoutDoubleTest extends AbstractBiddingRuleTest<RespondTak
         ruleShouldBid(ONE_DIAMONDS);
     }
 
+    public void testStillAppliesIfSelfStartedPassing() {
+        givenBidding(ONE_CLUBS, PASS, PASS, DOUBLE, PASS);
+        andPlayersCards("3,2", "9,8,7,6", "9,8,7,6,5", "8,7");
+        ruleShouldBid(ONE_DIAMONDS);
+    }
+
     public void testDoNotBidOpponentTrump() {
         givenBidding(ONE_DIAMONDS, DOUBLE, PASS);
         andPlayersCards("3,2", "9,8,7,6", "9,8,7,6,5", "8,7");
@@ -48,6 +54,12 @@ public class RespondTakeoutDoubleTest extends AbstractBiddingRuleTest<RespondTak
 
     public void testBidGameAt13Points() {
         givenBidding(ONE_CLUBS, DOUBLE, PASS);
+        andPlayersCards("3", "A,Q,8,7,6", "A,K,10,6,5", "8,7");
+        ruleShouldBid(FOUR_HEARTS);
+    }
+
+    public void testStillAppliesIfOpponentsDidNotSwitchSuit() {
+        givenBidding(ONE_CLUBS, DOUBLE, TWO_CLUBS);
         andPlayersCards("3", "A,Q,8,7,6", "A,K,10,6,5", "8,7");
         ruleShouldBid(FOUR_HEARTS);
     }

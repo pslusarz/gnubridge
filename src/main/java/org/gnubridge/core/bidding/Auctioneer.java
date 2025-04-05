@@ -42,7 +42,7 @@ public class Auctioneer {
 	public void bid(Bid b) {
 		Bid bid = Bid.cloneBid(b);
 		beforeLast = last;
-		last = new Call(bid, nextToBid);
+		last = new Call(bid, nextToBid, beforeLast);
 		calls.add(last);
 		bidCount++;
 		if (bid.isPass()) {

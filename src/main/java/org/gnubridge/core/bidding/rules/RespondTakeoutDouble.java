@@ -59,6 +59,9 @@ public class RespondTakeoutDouble extends BiddingRule {
 
     @Override
     protected boolean applies() {
-        return auction.getCalls().size() == 3 && DOUBLE.equals(auction.getPartnersLastCall().getBid()) && PASS.equals(auction.getLastCall().getBid());
+        return auction.getPartnersLastCall() != null && DOUBLE.equals(auction.getPartnersLastCall().getBid())
+        && auction.getPartnersLastCall().getDoubledCall() != null
+                && auction.getPartnersLastCall().getDoubledCall().getBid().getValue() == 1
+                && auction.getHighBid().getTrump() == auction.getPartnersLastCall().getDoubledCall().getBid().getTrump();
     }
 }
